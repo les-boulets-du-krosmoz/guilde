@@ -1,0 +1,326 @@
+/* ---------- Jetons (repris de la maquette) ---------- */
+:root {
+  --fond: #16140f;
+  --fond-nav: #1b1914;
+  --carte: #211e18;
+  --carte-haute: #2a261f;
+  --trait: #2e2a22;
+  --trait-fort: #3a352c;
+  --texte: #efe7d8;
+  --texte-2: #c9bfae;
+  --discret: #a89d89;
+  --or: #e0b25c;
+  --or-clair: #f3cf85;
+  --vert: #5fbf8a;
+  --vert-clair: #8fe0b3;
+  --vert-fond: #1f3a2c;
+  --orange: #f0b45a;
+  --orange-fond: #3a2f1c;
+  --bleu-fond: #1f2c3d;
+  --bleu: #a9cdf2;
+  --titre: "Fraunces", Georgia, serif;
+  --corps: "IBM Plex Sans", system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); color: var(--texte); font-family: var(--corps); font-size: 15px; line-height: 1.5; }
+a { color: var(--or); }
+a:hover { color: var(--or-clair); }
+h1, h2 { font-family: var(--titre); margin: 0; line-height: 1.15; }
+h1 { font-size: 34px; }
+h2 { font-size: 24px; font-weight: 600; }
+:focus-visible { outline: 2px solid var(--or); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.discret { color: var(--discret); font-size: 13px; }
+.vert { color: var(--vert-clair); }
+.erreur { color: var(--orange); font-weight: 600; }
+.vide { color: var(--texte-2); padding: 12px 0; }
+.chargement { padding: 56px; color: var(--discret); }
+
+/* ---------- Contrôles ---------- */
+input, select {
+  height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #4a4336;
+  background: var(--fond); color: var(--texte); font: inherit;
+}
+.bouton {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px;
+  border-radius: 10px; border: 1px solid #4a4336; background: transparent; color: var(--texte);
+  font: inherit; font-weight: 500; text-decoration: none; cursor: pointer;
+}
+.bouton:hover { background: var(--carte-haute); color: var(--texte); }
+.bouton:disabled { opacity: 0.5; cursor: not-allowed; }
+.bouton--or { background: var(--or); border-color: var(--or); color: #1b1914; font-weight: 600; }
+.bouton--or:hover { background: var(--or-clair); color: #1b1914; }
+.bouton--vert { border: 2px solid var(--vert); background: var(--vert-fond); color: #d8f5e5; font-weight: 600; }
+.bouton--discord { background: #5865f2; border-color: #5865f2; color: #fff; font-weight: 600; }
+.bouton--danger { border-color: var(--orange); color: var(--orange); }
+.bouton--discret { border-color: transparent; color: var(--texte-2); }
+.champ { display: flex; flex-direction: column; gap: 6px; }
+.champ label { font-size: 13px; color: var(--texte-2); }
+.champ--large { grid-column: 1 / -1; }
+.case { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.case input { width: 20px; height: 20px; accent-color: var(--vert); }
+
+/* ---------- Navigation ---------- */
+.nav {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 12px 56px; min-height: 72px; border-bottom: 1px solid var(--trait); background: var(--fond-nav);
+}
+.nav__guilde { font-family: var(--titre); font-size: 22px; font-weight: 700; color: var(--texte); text-decoration: none; }
+.nav__liens { display: flex; gap: 4px; flex-wrap: wrap; }
+.nav__liens a { padding: 10px 14px; border-radius: 8px; color: var(--texte-2); text-decoration: none; }
+.nav__liens a.active { background: var(--carte-haute); color: var(--texte); font-weight: 600; }
+.nav__dispo { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.nav__dispo-etat { color: var(--vert-clair); font-weight: 600; font-size: 14px; }
+
+/* ---------- Mise en page ---------- */
+.page { padding: 40px 56px; display: flex; flex-direction: column; gap: 24px; max-width: 1440px; }
+.entete { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+.carte { padding: 24px; background: var(--carte); border: 1px solid var(--trait); border-radius: 16px; display: flex; flex-direction: column; gap: 16px; }
+.carte__entete { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.carte__titre { font-size: 16px; font-weight: 600; text-decoration: none; }
+.deux-colonnes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.acces { max-width: 520px; margin: 12vh auto; padding: 0 24px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+.badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.badge { padding: 5px 12px; border-radius: 999px; background: var(--carte-haute); color: var(--texte-2); font-size: 14px; }
+.badge--bleu { background: var(--bleu-fond); color: var(--bleu); font-weight: 500; }
+.badge--or { background: var(--orange-fond); color: var(--or-clair); font-size: 12px; font-weight: 600; padding: 3px 10px; }
+.puce { padding: 5px 12px; border-radius: 8px; background: var(--carte-haute); font-size: 14px; text-decoration: none; }
+.barre { height: 8px; border-radius: 4px; background: var(--trait); overflow: hidden; }
+.barre > div { height: 100%; background: var(--vert); }
+.barre--large { width: 260px; height: 10px; }
+
+/* ---------- Pastilles ---------- */
+.pastille {
+  flex-shrink: 0; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 600; text-decoration: none; overflow: hidden; border: 2px solid var(--texte);
+}
+.pastille:hover { color: #fff; }
+.pastille img { width: 100%; height: 100%; object-fit: cover; }
+.pastille--mule { border-style: dashed; }
+.pastille--dispo { box-shadow: 0 0 0 3px var(--fond), 0 0 0 5px var(--vert); }
+.pastille--exemple { width: 22px; height: 22px; background: #4a6fa5; vertical-align: middle; margin-right: 6px; }
+.pastilles { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.plus { height: 36px; padding: 0 12px; border-radius: 18px; border: none; background: var(--carte-haute); color: var(--texte-2); font: inherit; font-size: 13px; cursor: pointer; }
+
+/* ---------- Personnages ---------- */
+.grille-persos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.carte--perso { flex-direction: row; align-items: center; padding: 16px; gap: 14px; }
+
+/* ---------- Profil ---------- */
+.profil { flex-direction: row; align-items: flex-start; gap: 24px; }
+.profil__infos { display: flex; flex-direction: column; gap: 12px; flex-grow: 1; }
+.profil__titre { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.profil__titre h1 { font-size: 40px; }
+.profil__classe { font-size: 18px; color: var(--texte-2); }
+.profil__autres { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.profil__actions { display: flex; flex-direction: column; gap: 10px; }
+.liste-metiers { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.liste-metiers li { display: grid; grid-template-columns: 180px 1fr 44px; gap: 14px; align-items: center; }
+.liste-metiers .metier__nom { gap: 10px; text-decoration: none; color: var(--texte); }
+.liste-metiers .metier__nom:hover { color: var(--or); }
+.liste-metiers strong { text-align: right; }
+.grille-dofus { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.dofus { display: flex; gap: 14px; align-items: center; padding: 14px; border-radius: 12px; background: var(--carte-haute); border: 1px solid var(--trait-fort); }
+.dofus > div { display: flex; flex-direction: column; }
+.dofus__oeuf { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
+.dofus__statut { font-size: 13px; color: var(--discret); }
+.dofus--cours .dofus__statut { color: var(--or); }
+.dofus--ok .dofus__statut { color: var(--vert-clair); }
+.dofus--vide { background: var(--fond-nav); border-style: dashed; }
+.dofus--vide .dofus__oeuf { opacity: 0.35; }
+
+/* ---------- Mon compte ---------- */
+.mes-persos { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.mes-persos__ligne { display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 12px; background: var(--carte-haute); }
+.mes-persos__ligne > div { flex-grow: 1; }
+.formulaire { padding: 20px; border-radius: 12px; border: 1px solid var(--trait-fort); background: var(--fond-nav); display: flex; flex-direction: column; gap: 16px; }
+.formulaire__grille { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.formulaire__actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+.grille-saisie-metiers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 20px; }
+.champ--ligne { flex-direction: row; align-items: center; gap: 10px; }
+.champ--ligne label { width: 100px; font-size: 14px; color: var(--texte); }
+.champ--ligne input { width: 80px; }
+
+/* ---------- Métiers ---------- */
+.page--metiers { display: grid; grid-template-columns: minmax(0, 1fr) 440px; align-items: start; }
+.grille-metiers { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.carte--metier { padding: 16px; gap: 10px; text-decoration: none; color: var(--texte); }
+.carte--metier:hover { background: var(--carte-haute); color: var(--texte); }
+.carte--active { background: var(--carte-haute); border: 2px solid var(--or); }
+.compteurs { display: flex; gap: 14px; font-size: 13px; color: var(--texte-2); flex-wrap: wrap; }
+.compteurs b { font-size: 15px; color: var(--texte); }
+.compteurs b.vert { color: var(--vert-clair); }
+.panneau { position: sticky; top: 24px; }
+.tableau { width: 100%; border-collapse: collapse; }
+.tableau th { text-align: left; font-size: 12px; font-weight: 500; color: var(--discret); padding-bottom: 8px; border-bottom: 1px solid var(--trait-fort); }
+.tableau td { padding: 10px 0; border-bottom: 1px solid var(--trait); vertical-align: top; }
+.tableau th:nth-child(n + 2), .tableau td:nth-child(n + 2) { text-align: right; }
+.ancien { color: var(--orange); font-weight: 600; font-size: 13px; }
+
+/* ---------- Quêtes ---------- */
+.onglets { display: flex; gap: 8px; flex-wrap: wrap; }
+.onglet { min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid var(--trait-fort); background: transparent; color: var(--texte-2); font: inherit; cursor: pointer; }
+.onglet--actif { border: 2px solid var(--vert); background: var(--vert-fond); color: #d8f5e5; font-weight: 600; }
+.onglet--vide { border-style: dashed; color: #8a8070; cursor: not-allowed; }
+.progression-globale { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.progression-globale strong { font-size: 22px; }
+.liste-quetes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.quete { display: flex; gap: 16px; align-items: flex-start; padding: 18px 20px; border-radius: 12px; background: var(--carte); border: 1px solid var(--trait); }
+.quete > input { width: 22px; height: 22px; margin-top: 3px; flex-shrink: 0; accent-color: var(--vert); padding: 0; }
+.quete--faite { background: var(--fond-nav); opacity: 0.85; }
+.quete--actuelle { background: var(--carte-haute); border: 2px solid var(--or); opacity: 1; }
+.quete__corps { display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
+.quete__titre { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.quete__titre label { font-size: 17px; font-weight: 600; }
+.etiquettes { display: flex; gap: 8px; flex-wrap: wrap; }
+.etiquette { padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 500; }
+.etiquette--solo { background: var(--orange-fond); color: var(--or-clair); }
+.etiquette--groupe { background: var(--vert-fond); color: #9fe8c0; }
+.etiquette--donjon { background: var(--bleu-fond); color: var(--bleu); }
+.prerequis { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.prerequis li { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.prerequis__icone { font-weight: 700; width: 12px; }
+.prerequis--ok .prerequis__icone { color: var(--vert-clair); }
+.prerequis--manque .prerequis__icone { color: var(--orange); }
+.prerequis--info .prerequis__icone { color: var(--discret); }
+.meme-stade { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; max-width: 220px; }
+.meme-stade .pastilles { justify-content: flex-end; gap: 10px; }
+
+/* ---------- Progression ---------- */
+.legende { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; font-size: 14px; color: var(--texte-2); }
+.etapes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.etape { display: flex; gap: 20px; align-items: center; padding: 14px 20px; border-radius: 12px; min-height: 64px; background: var(--carte); border: 1px solid var(--trait); }
+.etape--moi { background: var(--carte-haute); border: 2px solid var(--or); }
+.etape--fin { background: var(--fond-nav); border-style: dashed; }
+.etape__quete { width: 420px; flex-shrink: 0; display: flex; flex-direction: column; gap: 6px; }
+.etape__numero { display: inline-block; width: 26px; color: var(--discret); }
+.etape .pastilles { flex-grow: 1; }
+.etape__compteurs { width: 130px; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; font-size: 13px; color: var(--discret); }
+.etape__compteurs .vert { font-weight: 600; }
+
+/* ---------- Petits écrans ---------- */
+@media (max-width: 900px) {
+  .nav, .page { padding-left: 20px; padding-right: 20px; }
+  .deux-colonnes, .page--metiers { grid-template-columns: 1fr; }
+  .profil { flex-direction: column; }
+  .formulaire__grille, .grille-saisie-metiers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .etape { flex-direction: column; align-items: flex-start; }
+  .etape__quete, .etape__compteurs { width: auto; align-items: flex-start; }
+  .panneau { position: static; }
+}
+
+/* ---------- Dofus cliquables et ressources ---------- */
+.dofus { position: relative; }
+.dofus__texte { min-width: 0; flex-grow: 1; }
+.dofus__texte strong, .dofus__statut { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dofus--lien { text-decoration: none; color: var(--texte); padding-bottom: 26px; }
+.dofus--lien:hover { border-color: var(--or); color: var(--texte); }
+/* « Voir les étapes » : en bas à droite, au survol ou au focus clavier ; toujours visible sur écran tactile. */
+.dofus__voir { position: absolute; right: 12px; bottom: 8px; white-space: nowrap; font-size: 12px; font-weight: 600; color: var(--or); opacity: 0; transition: opacity 0.15s; }
+.dofus--lien:hover .dofus__voir, .dofus--lien:focus-visible .dofus__voir { opacity: 1; }
+@media (hover: none) { .dofus__voir { opacity: 1; } }
+/* Dofus obtenu : fond teinté et bordure à la couleur du Dofus, texte clair conservé. */
+.dofus--ok { background: color-mix(in srgb, var(--dofus) 24%, var(--carte)); border: 2px solid var(--dofus-accent); }
+.dofus--ok .dofus__statut { color: var(--texte); font-weight: 600; }
+.dofus--ok:hover { border-color: var(--dofus-accent); filter: brightness(1.08); }
+.encart { margin: 0; padding: 14px 18px; border-radius: 12px; background: var(--fond-nav); border: 1px solid var(--trait-fort); color: var(--texte-2); font-size: 14px; }
+.encart strong { color: var(--texte); }
+.ressources { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border-radius: 10px; background: var(--fond-nav); border: 1px solid var(--trait-fort); }
+.ressources__entete { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; }
+.ressources ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ressources li { display: flex; gap: 10px; align-items: center; min-height: 32px; font-size: 14px; flex-wrap: wrap; }
+.ressources input { width: 20px; height: 20px; padding: 0; accent-color: var(--vert); }
+.ressource--ok label { color: var(--discret); text-decoration: line-through; }
+.ou { display: inline-block; margin: 0 8px; padding: 1px 8px; border-radius: 6px; background: var(--carte-haute); color: var(--texte-2); font-size: 12px; font-weight: 600; text-decoration: none; }
+.discret-taille { font-size: 13px; }
+.etiquette--neutre { background: var(--carte-haute); color: var(--texte-2); }
+.encart--avertissement { border-color: #5a4a2a; }
+.quete__deplier { margin-left: auto; min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--trait-fort); background: transparent; color: var(--or); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.quete__deplier:hover { background: var(--carte-haute); }
+.quete__detail { display: flex; flex-direction: column; gap: 10px; }
+.quete__titre { width: 100%; }
+.badge--alerte { background: var(--orange-fond); color: var(--orange); font-size: 12px; font-weight: 600; padding: 3px 10px; }
+.serie { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.serie .ressources { align-self: stretch; }
+
+/* ---------- Badges des Dofus ---------- */
+.badges-dofus { display: flex; gap: 14px; flex-wrap: wrap; padding: 4px 0; }
+.badge-dofus { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.badge-dofus figcaption { font-size: 12px; font-weight: 600; color: var(--texte-2); }
+
+/* ---------- Tableau de bord ---------- */
+.chiffres { list-style: none; margin: 0; padding: 0; display: flex; gap: 12px; flex-wrap: wrap; }
+.chiffres li { display: flex; flex-direction: column; align-items: flex-end; padding: 12px 16px; min-width: 110px; background: var(--carte); border: 1px solid var(--trait); border-radius: 12px; }
+.chiffres strong { font-size: 24px; }
+.chiffres span { font-size: 12px; color: var(--discret); white-space: nowrap; }
+.tdb { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start; }
+.tdb__cote { display: flex; flex-direction: column; gap: 24px; }
+.tdb__cote h2 { font-size: 20px; }
+.carte--forte { border: 2px solid var(--or); }
+.objectifs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.objectif { display: grid; grid-template-columns: 52px 1fr auto; gap: 16px; align-items: center; padding: 16px; background: var(--carte-haute); border: 1px solid var(--trait-fort); border-radius: 12px; }
+.objectif__nb { display: flex; flex-direction: column; align-items: center; }
+.objectif__nb strong { font-size: 26px; color: var(--or); }
+.objectif__nb span { font-size: 11px; color: var(--discret); }
+.objectif__corps { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.objectif__titre { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; font-size: 16px; }
+.objectif .pastilles { gap: 8px; font-size: 13px; }
+.blocages { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.blocages li { display: flex; flex-direction: column; gap: 4px; padding: 12px; background: #2a2116; border: 1px solid #5a4a2a; border-radius: 10px; font-size: 13px; color: var(--texte-2); }
+.blocages strong { font-size: 14px; color: var(--orange); }
+.barres-dofus { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.barres-dofus li { display: grid; grid-template-columns: 88px 1fr 66px; gap: 10px; align-items: center; font-size: 13px; }
+.barres-dofus li > span:first-child { font-weight: 600; }
+.barres-dofus li > span:last-child { text-align: right; }
+.barre-double { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--trait); }
+.barre-double > div:first-child { background: var(--vert); }
+.barre-double > div:last-child { background: var(--or); opacity: 0.6; }
+.activite { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.activite li { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+@media (max-width: 900px) {
+  .tdb { grid-template-columns: 1fr; }
+  .objectif { grid-template-columns: 44px 1fr; }
+  .objectif .bouton { grid-column: 1 / -1; }
+}
+.souhait { align-self: flex-start; padding: 12px 16px; border-radius: 12px; border: 1px dashed var(--vert); background: var(--vert-fond); }
+
+/* ---------- Logo et avatar Discord ---------- */
+.nav__guilde { display: inline-flex; align-items: center; gap: 12px; }
+.nav__guilde img { width: 44px; height: 44px; }
+.acces__logo { width: 180px; height: auto; }
+.champ__action { align-self: flex-start; gap: 8px; }
+.mini-avatar { width: 24px; height: 24px; border-radius: 50%; }
+
+/* ---------- Saisie des métiers groupée ---------- */
+.metiers-saisie { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 20px; align-items: start; }
+.groupe-metiers { margin: 0; padding: 16px 18px; border: 1px solid var(--trait-fort); border-radius: 12px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.groupe-metiers legend { padding: 0 8px; font-family: var(--titre); font-size: 18px; font-weight: 600; }
+.groupe-metiers--craft { grid-row: span 2; }
+.craft-fm { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--trait); }
+.craft-fm:last-child { border-bottom: none; }
+.craft-fm__entete { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; font-size: 12px; color: var(--discret); }
+.craft-fm__vide { padding-left: 110px; }
+.groupe-metiers .champ--ligne label { width: 100px; flex-shrink: 0; }
+@media (max-width: 900px) {
+  .metiers-saisie { grid-template-columns: 1fr; }
+  .groupe-metiers--craft { grid-row: auto; }
+  .craft-fm, .craft-fm__entete { grid-template-columns: 1fr; gap: 6px; }
+  .craft-fm__vide { padding-left: 0; }
+}
+
+/* ---------- Pictogrammes de métier ---------- */
+.icone-metier { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 10px; }
+.metier__nom { display: flex; align-items: center; gap: 12px; }
+
+/* ---------- Alignements ---------- */
+.badge--bonta { background: var(--bleu-fond); color: var(--bleu); font-weight: 500; }
+.badge--brakmar { background: #3d1717; color: #f0a39a; font-weight: 500; border: 1px solid #6b2420; }
+
+/* ---------- Carte personnage entièrement cliquable ---------- */
+.carte--perso { position: relative; transition: border-color 0.15s, background 0.15s; }
+.carte--perso .carte__titre::after { content: ""; position: absolute; inset: 0; border-radius: 16px; }
+.carte--perso:hover { border-color: var(--or); background: var(--carte-haute); }
+.carte--perso:focus-within { outline: 2px solid var(--or); outline-offset: 2px; }
+.carte--perso .carte__titre:focus-visible { outline: none; }
