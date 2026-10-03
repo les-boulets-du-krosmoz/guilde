@@ -22,7 +22,7 @@ export function Personnages() {
     );
   }, [donnees, recherche]);
 
-  if (erreur) return <p className="erreur" role="alert">{erreur}</p>;
+  if (erreur) return <main className="page"><p className="erreur" role="alert">{erreur}</p></main>;
   if (!donnees) return <Chargement />;
 
   return (
@@ -54,8 +54,8 @@ export function Personnages() {
                 <div>
                   {/* Le lien s'étend à toute la carte (voir .carte--perso .carte__titre::after). */}
                   <Link to={`/perso/${p.id}`} className="carte__titre">{p.nom}</Link>
-                  <div className="discret">{p.classe} · niveau {p.niveau}</div>
-                  <div className="discret">@{m?.pseudo ?? "?"} · {p.est_principal ? "principal" : "mule"}</div>
+                  <div className="discret">{p.classe} niveau {p.niveau}</div>
+                  <div className="discret">@{m?.pseudo ?? "?"}, {p.est_principal ? "principal" : "mule"}</div>
                 </div>
               </li>
             );

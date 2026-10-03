@@ -48,6 +48,8 @@ export type Dofus = {
   image?: string;
   /** Couleur des bordures et du texte coloré quand `couleur` est trop sombre sur le fond. */
   accent?: string;
+  /** Ce que compte une étape, pour l'en-tête (« quêtes » par défaut, « boss » pour une série de donjons). */
+  unite?: string;
   /** Quêtes dans l'ordre d'affichage. Vide = données pas encore saisies. */
   quetes: Quete[];
   /** À prévoir sur l'ensemble de la série, sans étape précise connue. */
@@ -63,10 +65,10 @@ export type Dofus = {
 
 // ---------- Aides à la saisie ----------
 
-type Options = { prerequis?: Prerequis[]; contenu?: Contenu[]; ressources?: Ressource[]; facultative?: boolean };
+export type Options = { prerequis?: Prerequis[]; contenu?: Contenu[]; ressources?: Ressource[]; facultative?: boolean };
 
 /** Une quête ; `apres` = quêtes du site à terminer avant (branches parallèles possibles). */
-function q(dofus: string, id: string, nom: string, niv: number, apres: string[], o: Options = {}): Quete {
+export function q(dofus: string, id: string, nom: string, niv: number, apres: string[], o: Options = {}): Quete {
   return {
     id, nom, dofus, niveauConseille: niv,
     prerequis: [...apres.map((a): Prerequis => ({ type: "quete", queteId: a, verifie: true })), ...(o.prerequis ?? [])],
@@ -75,19 +77,19 @@ function q(dofus: string, id: string, nom: string, niv: number, apres: string[],
     facultative: o.facultative,
   };
 }
-const groupe = (...adversaires: string[]): Contenu => ({ type: "combat", adversaires, groupe: true });
-const solo = (...adversaires: string[]): Contenu => ({ type: "combat", adversaires, groupe: false });
-const combat = (...adversaires: string[]): Contenu => ({ type: "combat", adversaires });
-const tactique = (...adversaires: string[]): Contenu => ({ type: "combat", adversaires, groupe: false, tactique: true });
-const donjon = (nom: string): Contenu => ({ type: "donjon", nom });
-const niveau = (n: number): Prerequis => ({ type: "niveau", niveau: n, verifie: true });
-const succes = (nom: string): Prerequis => ({ type: "succes", nom, verifie: true });
-const texte = (description: string, verifie = true): Prerequis => ({ type: "texte", description, verifie });
-const externe = (libelle: string): Prerequis => ({
+export const groupe = (...adversaires: string[]): Contenu => ({ type: "combat", adversaires, groupe: true });
+export const solo = (...adversaires: string[]): Contenu => ({ type: "combat", adversaires, groupe: false });
+export const combat = (...adversaires: string[]): Contenu => ({ type: "combat", adversaires });
+export const tactique = (...adversaires: string[]): Contenu => ({ type: "combat", adversaires, groupe: false, tactique: true });
+export const donjon = (nom: string): Contenu => ({ type: "donjon", nom });
+export const niveau = (n: number): Prerequis => ({ type: "niveau", niveau: n, verifie: true });
+export const succes = (nom: string): Prerequis => ({ type: "succes", nom, verifie: true });
+export const texte = (description: string, verifie = true): Prerequis => ({ type: "texte", description, verifie });
+export const externe = (libelle: string): Prerequis => ({
   type: "quete", queteId: "externe:" + libelle.toLowerCase().replace(/[^a-z0-9]+/g, "-"), libelle, verifie: true,
 });
-const metier = (nom: string, niv: number, personnel: boolean): Prerequis => ({ type: "metier", metier: nom, niveau: niv, personnel, verifie: true });
-const res = (id: string, texteRes: string, o: { alternative?: string; note?: string; verifie?: boolean } = {}): Ressource => ({
+export const metier = (nom: string, niv: number, personnel: boolean): Prerequis => ({ type: "metier", metier: nom, niveau: niv, personnel, verifie: true });
+export const res = (id: string, texteRes: string, o: { alternative?: string; note?: string; verifie?: boolean } = {}): Ressource => ({
   id, texte: texteRes, alternative: o.alternative, note: o.note, verifie: o.verifie ?? true,
 });
 
@@ -223,7 +225,7 @@ export const QUETES_POURPRE: Quete[] = [
 // Les bénédictions se lancent pendant la quête du totem correspondant et la débloquent.
 
 const T = "turquoise";
-const ALTERATIONS = texte("Système d'altérations (ex-idoles) refondu le 7 octobre : conditions à revérifier après la mise à jour", false);
+const ALTERATIONS = texte("Altérations (ex-idoles) : conditions revues à la mise à jour du 7 octobre", false);
 export const QUETES_TURQUOISE: Quete[] = [
   q(T, "tu-1", "Plongeon et dragon", 80, [], {
     prerequis: [succes("Un disciple modèle"), succes("Mais où sont les Dofus ?")],
@@ -263,7 +265,7 @@ export const QUETES_TURQUOISE: Quete[] = [
   }),
   q(T, "tu-10", "Une âme en colère", 160, ["tu-7", "tu-9"], {
     contenu: [combat("Esprits Kelpe, Verak, Goémus, Cyanog, Norie"), tactique("Furye")],
-    ressources: [res("tu-10-r1", "5 × Globe Mystique", { note: "drop Forêt pétrifiée de Frigost (10 %) — absent du récapitulatif DPLN", verifie: false })],
+    ressources: [res("tu-10-r1", "5 × Globe Mystique", { note: "drop Forêt pétrifiée de Frigost (10 %)", verifie: false })],
   }),
 ];
 
@@ -312,7 +314,7 @@ export const QUETES_IVOIRE: Quete[] = [
     contenu: [groupe("Bwork Bibliophile")],
     ressources: [
       res("iv-5-r1", "9 crânes (3 par zone, 2 %)", {
-        note: "Hauts Ténébreux de Srambad, Tannerie Écarlate, Fosse de R'lyugluglu — version Cœur Vaillant",
+        note: "Hauts Ténébreux de Srambad, Tannerie Écarlate, Fosse de R'lyugluglu (version Cœur Vaillant)",
         verifie: false,
       }),
     ],
@@ -364,7 +366,7 @@ export const QUETES_EBENE: Quete[] = [
     ressources: [
       res("eb-3-r1", "12 Songes de Crocobur (rencontres aléatoires dans les Songes infinis)", {
         alternative: "jusqu'à 68 400 Reflets Oniriques payés à Draconiros",
-        note: "Songes infinis Rêve III ou plus ; paiement en reflets selon JOL seulement",
+        note: "Songes infinis, Rêve III ou plus",
         verifie: false,
       }),
     ],
@@ -434,17 +436,17 @@ export const QUETES_VEILLEURS: Quete[] = [
 
 // ---------- Catalogue ----------
 
-const DPLN = (page: string) => ({ nom: "Dofus pour les Noobs", url: "https://www.dofuspourlesnoobs.com/" + page });
-const JOL = (article: string) => ({ nom: "JeuxOnLine (Dofus 2)", url: "https://dofus.jeuxonline.info/article/" + article });
-const AVERT_DETAIL =
-  "Liste des quêtes et récapitulatif vérifiés sur Dofus pour les Noobs (Dofus 3). Le détail quête par quête (combats, ordre des branches) vient de JeuxOnLine (Dofus 2) : à confirmer.";
+export const DPLN = (page: string) => ({ nom: "Dofus pour les Noobs", url: "https://www.dofuspourlesnoobs.com/" + page });
+export const JOL = (article: string) => ({ nom: "JeuxOnLine (Dofus 2)", url: "https://dofus.jeuxonline.info/article/" + article });
+// Liste des quêtes vérifiée sur DPLN (Dofus 3) ; détail des combats et ordre des branches repris de JOL (Dofus 2).
+const AVERT_DETAIL = "Une erreur dans les étapes ? Préviens un officier sur Discord.";
 
 const r = (id: string, t: string) => res(id, t);
 
 export const DOFUS: Dofus[] = [
   {
     id: "emeraude", nom: "Émeraude", succes: "Vert émeraude", couleur: "#3f9b6e", quetes: QUETES_EMERAUDE,
-    notes: ["1 100 kamas sur l'ensemble de la série"],
+    notes: ["1 100 kamas pour toute la série"],
     sources: [DPLN("dofus-emeraude.html"), { nom: "Dofuserie", url: "https://www.dofuserie.com/dofus/dofus-emeraude/" }],
   },
   {
@@ -454,9 +456,8 @@ export const DOFUS: Dofus[] = [
   },
   {
     id: "turquoise", nom: "Turquoise", succes: "Bleu turquoise", couleur: "#2a9aa6", quetes: QUETES_TURQUOISE,
-    avertissement: AVERT_DETAIL + " Les altérations des bénédictions changent le 7 octobre.",
+    avertissement: AVERT_DETAIL,
     sources: [DPLN("quecirctes-du-dofus-turquoise.html"), JOL("14620/quetes-dofus-turquoise")],
-    notes: ["DPLN liste aussi des ressources pour toute la série, sans préciser la quête : voir le bloc ci-dessous"],
     ressourcesSerie: [
       r("tu-s-01", "600 × Pépite"), r("tu-s-02", "10 × Plume de Gobvious"), r("tu-s-03", "10 × Peau de Don Duss Ang"),
       r("tu-s-04", "10 × Corne de Berserkoffre"), r("tu-s-05", "10 × Canine de Mergranlou"), r("tu-s-06", "10 × Coquille de Dragoss Charbon"),
@@ -465,14 +466,14 @@ export const DOFUS: Dofus[] = [
       r("tu-s-13", "10 × Duvet de Truchon"), r("tu-s-14", "10 × Tronc de Kokoko"), r("tu-s-15", "10 × Casque Cassé du Chafer"),
       r("tu-s-16", "10 × Poils de Smilomouth"), r("tu-s-17", "10 × Carpelle de Brouture"), r("tu-s-18", "10 × Croupion de Truchmuche"),
       r("tu-s-19", "10 × Calumet Zoth"), r("tu-s-20", "8 × Estomac de Black Wo Wabbit"), r("tu-s-21", "5 × Substrat de Bosquet"),
-      res("tu-s-22", "10 × Kouartz", { note: "listé deux fois (5 + 5) par DPLN", verifie: false }), r("tu-s-23", "5 × Bakélélite"),
-      r("tu-s-24", "5 × Magnésite"), res("tu-s-25", "10 × Kriptonite", { note: "listé deux fois (5 + 5) par DPLN", verifie: false }),
+      res("tu-s-22", "10 × Kouartz", { verifie: false }), r("tu-s-23", "5 × Bakélélite"),
+      r("tu-s-24", "5 × Magnésite"), res("tu-s-25", "10 × Kriptonite", { verifie: false }),
       r("tu-s-26", "5 × Ebonite"), r("tu-s-27", "5 × Lait de Tortue"), r("tu-s-28", "5 × Substrat de Fascine"), r("tu-s-29", "5 × Substrat de Fourré"),
       r("tu-s-30", "3 × Coquille de Dragoss Ardoise"), r("tu-s-31", "3 × Laine de Dardalaine"), r("tu-s-32", "3 × Écorce de Liroye Merline"),
       r("tu-s-33", "3 × Rotule du Disciple Zoth"), r("tu-s-34", "3 × Aile Atrophiée de Tofu Dodu"), r("tu-s-35", "3 × Corne de Dragoss Calcaire"),
       r("tu-s-36", "3 × Corne de Rhinoféroce"), r("tu-s-37", "3 × Échasse de Molette"), r("tu-s-38", "3 × Morpion de Truchideur"),
       r("tu-s-39", "3 × Arête géante du Shamansot"), r("tu-s-40", "1 × Bière du Feubuk"),
-      res("tu-s-41", "2 × Chaussette trouée de Dramak", { note: "listé deux fois par DPLN", verifie: false }),
+      res("tu-s-41", "2 × Chaussette trouée de Dramak", { verifie: false }),
       r("tu-s-42", "1 × Peau de Moon"), r("tu-s-43", "1 × Carapace du Mantiscore"), r("tu-s-44", "1 × Carniflore"),
       r("tu-s-45", "1 × Feuille de Blop Multicolore Royal"), r("tu-s-46", "1 × Plume du Kwakwa"), r("tu-s-47", "1 × Groin de Dragon Cochon"),
       r("tu-s-48", "1 × Laine du Royalmouth"), r("tu-s-49", "1 × Pixel de Fraktale"),
@@ -492,14 +493,14 @@ export const DOFUS: Dofus[] = [
   {
     id: "ebene", nom: "Ébène", succes: "Noir d'Ébène", couleur: "#5a5a5a", accent: "#a8a8a8", quetes: QUETES_EBENE,
     avertissement: AVERT_DETAIL,
-    notes: ["20 500 kamas sur l'ensemble de la série"],
+    notes: ["20 500 kamas pour toute la série"],
     sources: [DPLN("quetes-du-dofus-ebene.html"), JOL("14691/quetes-dofus-ebene")],
   },
   {
     id: "veilleurs", nom: "Veilleurs", succes: "Odyssée en trois dimensions", couleur: "#3b6fb6", quetes: QUETES_VEILLEURS,
-    avertissement: "Les 15 quêtes et leur ordre concordent entre DPLN et Millenium (Dofus 3). Combats et ressources pas encore détaillés.",
+    avertissement: "Combats et ressources pas encore renseignés.",
     sources: [DPLN("dofus-des-veilleurs.html"), { nom: "Millenium", url: "https://www.millenium.org/guide/420160.html" }],
   },
 ];
 
-export const TOUTES_LES_QUETES: Quete[] = DOFUS.flatMap((d) => d.quetes);
+// La liste de toutes les quêtes (Dofus et autres séries) est dans series.ts.

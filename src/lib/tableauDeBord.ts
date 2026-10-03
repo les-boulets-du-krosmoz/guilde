@@ -1,5 +1,7 @@
+import { AVIS_PAR_ID, nomRegion } from "../data/avis";
 import { DOFUS, type Contenu, type Dofus } from "../data/dofus";
 import { joursDepuis, SEUIL_ANCIEN_JOURS } from "./dates";
+import type { LigneAvis } from "./donnees";
 import { dofusObtenu, quetesDisponibles } from "./quetes";
 import { estDispo, type Membre, type MetierMembre, type Personnage } from "./types";
 
@@ -8,13 +10,17 @@ export type PersoObjectif = { perso: Personnage; dispo: boolean };
 export type Objectif = {
   cle: string;
   titre: string;
-  type: "Donjon" | "Combat de groupe";
-  quetes: string[]; // « Draconanthropie · Dofus Émeraude »
+  type: "Donjon" | "Combat de groupe" | "Avis de recherche";
+  quetes: string[]; // « Draconanthropie (Dofus Émeraude) »
+  /** Identifiants des quêtes concernées (pour retrouver qui peut aider). */
+  queteIds: string[];
   persos: PersoObjectif[];
   nbDispo: number;
 };
 
-export type Blocage = { cle: string; titre: string; quetes: string[]; persos: Personnage[] };
+/** Quête bloquée par un métier : `dofus` et `id` servent au lien vers l'étape dans la page Progression. */
+export type QueteBloquee = { id: string; dofus: string; libelle: string };
+export type Blocage = { cle: string; titre: string; quetes: QueteBloquee[]; persos: Personnage[] };
 
 export type Activite = { texte: string; date: string };
 
@@ -42,6 +48,7 @@ export function calculerBilan(
   metiers: MetierMembre[],
   quetes: { personnage_id: string; quete_id: string; termine_le: string }[],
   souhaits: Map<string, Set<string>> = new Map(),
+  avis: LigneAvis[] = [],
 ): Bilan {
   const faitesParPerso = new Map<string, Set<string>>();
   const derniereActivite = new Map<string, string>();
@@ -92,7 +99,7 @@ export function calculerBilan(
       if (commence) stat.enCours++;
 
       for (const q of quetesDisponibles(d, faites)) {
-        const libelle = `${q.nom} · Dofus ${d.nom}`;
+        const libelle = `${q.nom} (Dofus ${d.nom})`;
         // Un objectif par quête : son donjon et ses combats de groupe sont réunis sur une seule carte.
         const groupes = q.contenu.map(cleGroupe).filter((g) => g !== null);
         if (groupes.length > 0) {
@@ -102,6 +109,7 @@ export function calculerBilan(
               titre: groupes.map((g) => g.titre).join(" + "),
               type: groupes.some((g) => g.type === "Donjon") ? "Donjon" : "Combat de groupe",
               quetes: [libelle],
+              queteIds: [q.id],
               persos: [],
               nbDispo: 0,
             });
@@ -118,11 +126,27 @@ export function calculerBilan(
           const cle = `${nom}:${pr.niveau}`;
           if (!blocages.has(cle)) blocages.set(cle, { cle, titre: `${nom} ${pr.niveau}`, quetes: [], persos: [] });
           const b = blocages.get(cle)!;
-          if (!b.quetes.includes(libelle)) b.quetes.push(libelle);
+          if (!b.quetes.some((x) => x.id === q.id)) b.quetes.push({ id: q.id, dofus: d.id, libelle });
           if (!b.persos.some((x) => x.id === p.id)) b.persos.push(p);
         }
       }
     }
+  }
+
+  // Avis de recherche : un objectif dès que deux personnages chassent le même avis.
+  const persoParId = new Map(personnages.map((p) => [p.id, p]));
+  for (const l of avis) {
+    const a = AVIS_PAR_ID.get(l.avis_id);
+    const p = persoParId.get(l.personnage_id);
+    if (l.etat !== "en_cours" || !a || !p) continue;
+    const cle = "avis:" + a.id;
+    if (!objectifs.has(cle)) {
+      objectifs.set(cle, { cle, titre: a.nom, type: "Avis de recherche", quetes: [`Avis de recherche (${nomRegion(a.region)})`], queteIds: [], persos: [], nbDispo: 0 });
+    }
+    const o = objectifs.get(cle)!;
+    const dispo = estDispo(membres.get(p.membre_id), p.id);
+    o.persos.push({ perso: p, dispo });
+    if (dispo) o.nbDispo++;
   }
 
   // Activité : les quêtes cochées le plus récemment, en signalant les Dofus obtenus.
@@ -131,7 +155,7 @@ export function calculerBilan(
   const nomPerso = new Map(personnages.map((p) => [p.id, p.nom]));
   // Cocher une quête coche aussi les précédentes : on ne garde que la plus récente par personnage et par Dofus.
   const vus = new Set<string>();
-  const activite = [...quetes]
+  const activiteQuetes = [...quetes]
     .sort((a, b) => b.termine_le.localeCompare(a.termine_le) || b.quete_id.localeCompare(a.quete_id, undefined, { numeric: true }))
     .filter((q) => {
       const cle = q.personnage_id + ":" + q.quete_id.split("-")[0];
@@ -148,6 +172,10 @@ export function calculerBilan(
         date: q.termine_le,
       };
     });
+  const activiteAvis = avis
+    .filter((l) => l.etat === "livre" && AVIS_PAR_ID.has(l.avis_id) && nomPerso.has(l.personnage_id))
+    .map((l) => ({ texte: `${nomPerso.get(l.personnage_id)} a livré ${AVIS_PAR_ID.get(l.avis_id)!.nom}`, date: l.maj_le }));
+  const activite = [...activiteQuetes, ...activiteAvis].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
 
   return {
     membresActifs,

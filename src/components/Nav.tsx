@@ -2,10 +2,9 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { DUREES_DISPO_H } from "../data/constantes";
 import { heure } from "../lib/dates";
+import { NOM_GUILDE, SLOGAN } from "../lib/guilde";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
-
-const NOM_GUILDE = import.meta.env.VITE_NOM_GUILDE ?? "Les boulets du Krosmoz";
 
 export function Nav() {
   const { membre, mesPersos, rafraichir, seDeconnecter } = useSession();
@@ -42,13 +41,17 @@ export function Nav() {
     <header className="nav">
       <NavLink to="/" className="nav__guilde">
         <img src="/logo.webp" alt="" width={44} height={44} />
-        <span>{NOM_GUILDE}</span>
+        <span className="nav__titre">
+          <span>{NOM_GUILDE}</span>
+          <span className="nav__slogan">{SLOGAN}</span>
+        </span>
       </NavLink>
       <nav className="nav__liens" aria-label="Navigation principale">
         <NavLink to="/" end>Tableau de bord</NavLink>
         <NavLink to="/personnages">Personnages</NavLink>
         <NavLink to="/metiers">Métiers</NavLink>
         <NavLink to="/quetes">Mes quêtes</NavLink>
+        <NavLink to="/avis">Avis de recherche</NavLink>
         <NavLink to="/progression">Progression guilde</NavLink>
         <NavLink to="/mon-compte">Mon compte</NavLink>
       </nav>

@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Pastille } from "../components/Pastille";
-import { DOFUS, type Dofus } from "../data/dofus";
-import { chargerGuilde, chargerQuetes, prefixeDofus, type DonneesGuilde } from "../lib/donnees";
+import { type Dofus } from "../data/dofus";
+import { aDesQuetes, CATEGORIES, trouverSerie, type Categorie } from "../data/series";
+import { chargerAides, chargerGuilde, chargerQuetes, chargerSouhaits, prefixeDofus, type DonneesGuilde } from "../lib/donnees";
 import { etapeActuelle } from "../lib/quetes";
 import { useSession } from "../lib/session";
-import { estDispo, type Personnage } from "../lib/types";
+import { estDispo, type AideEtape, type Personnage } from "../lib/types";
 import { Chargement } from "./Acces";
-import { Etiquette, OngletsDofus } from "./Quetes";
+import { BarreCategories, Etiquette, OngletsSeries } from "./Quetes";
 
 const MAX_PASTILLES = 12;
 
@@ -14,28 +16,47 @@ type Ligne = { cle: string; numero: string; titre: string; quete?: Dofus["quetes
 
 export function Progression() {
   const { membre: moi } = useSession();
-  const [dofus, setDofus] = useState<Dofus>(DOFUS.find((d) => d.quetes.length > 0)!);
+  const [params, setParams] = useSearchParams();
+  // Lien depuis le tableau de bord : ?dofus=…&etape=… ouvre directement l'étape concernée, quelle que soit la catégorie.
+  const etapeCible = params.get("etape");
+  const lien = trouverSerie(params.get("dofus"));
+  const categorie = CATEGORIES.find((c) => c.id === params.get("cat") && aDesQuetes(c)) ?? lien?.categorie ?? CATEGORIES[0];
+  const disponibles = categorie.series.filter((s) => s.quetes.length > 0);
+  const dofus = disponibles.find((d) => d.id === params.get("dofus")) ?? disponibles[0];
+  const setDofus = (d: Dofus) => setParams({ cat: categorie.id, dofus: d.id }, { replace: true });
+  const setCategorie = (c: Categorie) => setParams({ cat: c.id }, { replace: true });
   const [guilde, setGuilde] = useState<DonneesGuilde | null>(null);
   const [quetes, setQuetes] = useState<Map<string, Set<string>> | null>(null);
+  const [souhaits, setSouhaits] = useState<Map<string, Set<string>>>(new Map());
+  const [aides, setAides] = useState<AideEtape[]>([]);
   const [seulsDispos, setSeulsDispos] = useState(false);
-  const [ouvertes, setOuvertes] = useState<Set<string>>(new Set());
+  const [ouvertes, setOuvertes] = useState<Set<string>>(new Set(etapeCible ? [etapeCible] : []));
   const [erreur, setErreur] = useState<string | null>(null);
 
   useEffect(() => {
     setQuetes(null);
-    Promise.all([chargerGuilde(), chargerQuetes(prefixeDofus(dofus.quetes.map((q) => q.id)))])
-      .then(([g, q]) => {
+    const prefixe = prefixeDofus(dofus.quetes.map((q) => q.id));
+    Promise.all([chargerGuilde(), chargerQuetes(prefixe), chargerSouhaits(), chargerAides(prefixe)])
+      .then(([g, q, s, a]) => {
         setGuilde(g);
         setQuetes(q);
+        setSouhaits(s);
+        setAides(a);
       })
       .catch((e) => setErreur(e.message));
   }, [dofus]);
 
-  const lignes = useMemo<Ligne[]>(() => {
-    if (!guilde || !quetes) return [];
+  const { lignes, pasCommence } = useMemo(() => {
+    if (!guilde || !quetes) return { lignes: [] as Ligne[], pasCommence: 0 };
     const res: Ligne[] = dofus.quetes.map((q, i) => ({ cle: q.id, numero: String(i + 1), titre: q.nom, quete: q, persos: [] }));
-    res.push({ cle: "obtenu", numero: "", titre: `Dofus ${dofus.nom} obtenu`, persos: [] });
+    res.push({ cle: "obtenu", numero: "", titre: categorie.estDofus ? `Dofus ${dofus.nom} obtenu` : `${dofus.nom} : terminé`, persos: [] });
+    let pasCommence = 0;
     for (const p of guilde.personnages) {
+      // Pas commencé et ne cherche pas de groupe pour le commencer : on ne l'affiche pas.
+      if (!quetes.has(p.id) && !souhaits.get(p.id)?.has(dofus.id)) {
+        pasCommence++;
+        continue;
+      }
       const dispo = estDispo(guilde.membres.get(p.membre_id), p.id);
       if (seulsDispos && !dispo) continue;
       res[etapeActuelle(dofus, quetes.get(p.id) ?? new Set())].persos.push({ p, dispo });
@@ -44,8 +65,13 @@ export function Progression() {
     for (const l of res) {
       l.persos.sort((a, b) => Number(b.dispo) - Number(a.dispo) || Number(b.p.est_principal) - Number(a.p.est_principal) || a.p.nom.localeCompare(b.p.nom));
     }
-    return res;
-  }, [guilde, quetes, dofus, seulsDispos]);
+    return { lignes: res, pasCommence };
+  }, [guilde, quetes, souhaits, dofus, seulsDispos, categorie.estDofus]);
+
+  const pret = Boolean(guilde && quetes);
+  useEffect(() => {
+    if (pret && etapeCible) document.getElementById(`progression-${etapeCible}`)?.scrollIntoView({ block: "center" });
+  }, [pret, etapeCible]);
 
   if (erreur) return <main className="page"><p className="erreur" role="alert">{erreur}</p></main>;
   if (!guilde || !quetes) return <Chargement />;
@@ -62,7 +88,10 @@ export function Progression() {
       <div className="entete">
         <div>
           <h1>Où en est la guilde</h1>
-          <p className="discret">Chaque personnage apparaît sur la quête qu'il doit faire ensuite.</p>
+          <p className="discret">
+            Chaque personnage est placé sur sa prochaine étape.
+            {pasCommence > 0 && ` ${pasCommence} n'${pasCommence > 1 ? "ont" : "a"} pas commencé ${categorie.estDofus ? "ce Dofus" : "cette série"}.`}
+          </p>
         </div>
         <div className="legende">
           <span><span className="pastille pastille--exemple" aria-hidden="true" /> Principal</span>
@@ -75,7 +104,10 @@ export function Progression() {
         </div>
       </div>
 
-      <OngletsDofus actif={dofus} onChoix={setDofus} />
+      <BarreCategories actif={categorie} onChoix={setCategorie} />
+      {categorie.series.length > 1 && (
+        <OngletsSeries series={categorie.series} actif={dofus} onChoix={setDofus} libelle={categorie.estDofus ? "Choix du Dofus" : "Choix de la série"} />
+      )}
 
       <ol className="etapes">
         {lignes.map((l) => {
@@ -85,7 +117,7 @@ export function Progression() {
           const reste = l.persos.length - visibles.length;
           const contientMoi = l.persos.some((x) => x.p.membre_id === moi?.id);
           return (
-            <li key={l.cle} className={`etape ${contientMoi ? "etape--moi" : ""} ${l.quete ? "" : "etape--fin"}`}>
+            <li key={l.cle} id={`progression-${l.cle}`} className={`etape ${contientMoi ? "etape--moi" : ""} ${l.quete ? "" : "etape--fin"} ${l.cle === etapeCible ? "etape--cible" : ""}`}>
               <div className="etape__quete">
                 <div>
                   {l.numero && <span className="etape__numero">{l.numero}</span>}
@@ -96,6 +128,27 @@ export function Progression() {
                     {l.quete.contenu.map((c, j) => <Etiquette key={j} contenu={c} />)}
                   </div>
                 )}
+                {(() => {
+                  // « Je peux aider » : ceux qui se sont positionnés sur cette étape.
+                  const ici = aides.filter((a) => a.quete_id === l.cle);
+                  if (ici.length === 0 || !guilde) return null;
+                  return (
+                    <span className="discret-taille">
+                      🤝 Peuvent aider :{" "}
+                      {ici.map((a, i) => {
+                        const x = guilde.personnages.find((p) => p.id === a.personnage_id);
+                        if (!x) return null;
+                        const dispo = estDispo(guilde.membres.get(x.membre_id), x.id);
+                        return (
+                          <span key={a.personnage_id}>
+                            {i > 0 && ", "}
+                            <Link to={`/perso/${x.id}`} className={dispo ? "vert" : undefined} title={a.note ?? undefined}>{x.nom}</Link>
+                          </span>
+                        );
+                      })}
+                    </span>
+                  );
+                })()}
               </div>
               <div className="pastilles">
                 {visibles.map((x) => <Pastille key={x.p.id} perso={x.p} dispo={x.dispo} />)}

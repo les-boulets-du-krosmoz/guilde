@@ -46,22 +46,17 @@ Deno.serve(async (req) => {
   }
 
   // 3. Est-il sur le serveur de la guilde ? Et sous quel pseudo ?
+  // 404 = pas sur le serveur. Toute autre erreur (Discord indisponible, limite de débit) ne change rien.
   const guildeId = Deno.env.get("DISCORD_GUILD_ID");
+  const fiche = await discord(`/users/@me/guilds/${guildeId}/member`);
   let valide = false;
   let pseudo: string = global_name ?? username;
-
-  const fiche = await discord(`/users/@me/guilds/${guildeId}/member`);
   if (fiche.ok) {
-    // Pseudo du serveur en priorité, sinon nom d'affichage Discord.
     const m = await fiche.json();
     valide = true;
-    pseudo = m.nick ?? pseudo;
-  } else {
-    // Ancienne autorisation sans guilds.members.read : on vérifie au moins l'appartenance.
-    const guildes = await discord("/users/@me/guilds");
-    if (!guildes.ok) return json({ erreur: "Impossible de lire les serveurs Discord" }, 502);
-    const liste: { id: string }[] = await guildes.json();
-    valide = liste.some((g) => g.id === guildeId);
+    pseudo = m.nick ?? pseudo; // pseudo du serveur en priorité
+  } else if (fiche.status !== 404) {
+    return json({ erreur: `Discord a répondu ${fiche.status}` }, 502);
   }
 
   await admin.from("membres").update({ valide, pseudo }).eq("id", user.id);

@@ -1,0 +1,44 @@
+# Poste la section « À publier » du CHANGELOG.md sur Discord après chaque déploiement réussi en production,
+# puis l'archive sous la date du jour. Rien n'est posté si la section est vide ou si le déploiement échoue.
+# Secret requis : DISCORD_WEBHOOK_URL (Settings > Secrets and variables > Actions).
+name: Annonce Discord des nouveautés
+
+on:
+  deployment_status:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: annonce-discord
+  cancel-in-progress: false
+
+jobs:
+  annoncer:
+    # Vercel crée un déploiement GitHub par mise en ligne ; seul celui de production réussi compte.
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Poster les nouveautés sur Discord
+        id: publier
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          SITE_URL: https://guilde-nine.vercel.app
+        run: node scripts/publier-changelog.mjs
+
+      # Le message de commit commence par « chore(changelog) » : vercel.json demande à Vercel de ne pas redéployer pour ça.
+      - name: Archiver la section publiée
+        if: steps.publier.outputs.publie == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore(changelog): archive des nouveautés annoncées sur Discord"
+          git push

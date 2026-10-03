@@ -26,10 +26,12 @@ create table public.personnages (
   alignement                text not null default 'Neutre' check (alignement in ('Neutre', 'Bonta', 'Brâkmar')),
   ordre                     text,
   niveau_quete_alignement   int check (niveau_quete_alignement >= 0),
+  rang_ordre                int check (rang_ordre between 1 and 5),
   est_principal             boolean not null default false,
   image_url                 text,
   maj_le                    timestamptz not null default now(),
 
+  constraint rang_ordre_aligne check (alignement <> 'Neutre' or rang_ordre is null),
   constraint ordre_coherent check (
        (alignement = 'Neutre'  and ordre is null and niveau_quete_alignement is null)
     or (alignement = 'Bonta'   and ordre in ('Cœur Vaillant', 'Esprit Salvateur', 'Œil Attentif'))
@@ -200,6 +202,75 @@ create policy ecriture_ressources on public.ressources_cochees for all to authen
 
 -- Souhaits : seulement sur ses propres personnages.
 create policy ecriture_souhaits on public.dofus_souhaites for all to authenticated
+  using (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid())
+         and public.est_membre_valide())
+  with check (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid())
+              and public.est_membre_valide());
+
+
+-- Un avis par personnage : en chasse (quête prise en jeu) ou livré.
+-- Pas de ligne = pas encore pris.
+create table if not exists public.avis_personnage (
+  personnage_id  uuid not null references public.personnages (id) on delete cascade,
+  avis_id        text not null,
+  etat           text not null check (etat in ('en_cours', 'livre')),
+  maj_le         timestamptz not null default now(),
+  primary key (personnage_id, avis_id)
+);
+
+drop trigger if exists avis_maj on public.avis_personnage;
+create trigger avis_maj before update on public.avis_personnage
+  for each row execute function public.toucher_maj();
+
+alter table public.avis_personnage enable row level security;
+
+drop policy if exists lecture_avis on public.avis_personnage;
+create policy lecture_avis on public.avis_personnage for select to authenticated
+  using (public.est_membre_valide());
+
+drop policy if exists ecriture_avis on public.avis_personnage;
+create policy ecriture_avis on public.avis_personnage for all to authenticated
+  using (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid())
+         and public.est_membre_valide())
+  with check (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid())
+              and public.est_membre_valide());
+
+
+-- Lien ou pseudo Metamob, saisi par le membre dans Mon compte.
+alter table public.membres add column if not exists metamob text;
+alter table public.membres drop constraint if exists metamob_longueur;
+alter table public.membres add constraint metamob_longueur check (metamob is null or char_length(metamob) <= 200);
+grant update (metamob) on public.membres to authenticated;
+
+-- Résumé calculé par la fonction metamob, gardé quelques heures pour ménager l'API Metamob
+-- (60 requêtes par minute pour la clé de la guilde). Écrit et lu uniquement par la fonction.
+create table if not exists public.metamob_cache (
+  membre_id  uuid primary key references public.membres (id) on delete cascade,
+  pseudo     text not null,
+  donnees    jsonb not null,
+  maj_le     timestamptz not null default now()
+);
+alter table public.metamob_cache enable row level security;
+
+-- « Je peux aider » (migration 006)
+
+create table if not exists public.aides_etapes (
+  personnage_id uuid not null references public.personnages(id) on delete cascade,
+  quete_id      text not null check (char_length(quete_id) between 1 and 100),
+  note          text check (note is null or char_length(note) <= 140),
+  cree_le       timestamptz not null default now(),
+  primary key (personnage_id, quete_id)
+);
+
+alter table public.aides_etapes enable row level security;
+
+-- Toute la guilde voit qui peut aider ; chacun ne gère que les inscriptions de ses propres personnages.
+drop policy if exists lecture_aides on public.aides_etapes;
+create policy lecture_aides on public.aides_etapes for select to authenticated
+  using (public.est_membre_valide());
+
+drop policy if exists ecriture_aides on public.aides_etapes;
+create policy ecriture_aides on public.aides_etapes for all to authenticated
   using (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid())
          and public.est_membre_valide())
   with check (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid())

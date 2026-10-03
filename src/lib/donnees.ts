@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { Membre, MetierMembre, Personnage, QueteTerminee } from "./types";
+import type { AideEtape, Membre, MetierMembre, Personnage, QueteTerminee } from "./types";
 
 export type DonneesGuilde = {
   membres: Map<string, Membre>;
@@ -83,4 +83,72 @@ export async function chargerSouhaits(personnageId?: string): Promise<Map<string
     res.get(r.personnage_id)!.add(r.dofus_id);
   }
   return res;
+}
+
+export type EtatAvis = "en_cours" | "livre";
+export type LigneAvis = { personnage_id: string; avis_id: string; etat: EtatAvis; maj_le: string };
+
+/** Avis de recherche de toute la guilde (ou d'un personnage), lus par pages de 1 000 lignes. */
+export async function chargerAvis(personnageId?: string): Promise<LigneAvis[]> {
+  const PAGE = 1000;
+  const lignes: LigneAvis[] = [];
+  for (let debut = 0; ; debut += PAGE) {
+    let req = supabase.from("avis_personnage").select("personnage_id, avis_id, etat, maj_le").order("personnage_id").order("avis_id");
+    if (personnageId) req = req.eq("personnage_id", personnageId);
+    const { data, error } = await req.range(debut, debut + PAGE - 1);
+    if (error) throw error;
+    lignes.push(...(data as LigneAvis[]));
+    if (!data || data.length < PAGE) return lignes;
+  }
+}
+
+export type CompteMetamob = { possedes: number; total: number };
+export type QueteMetamob = { personnage: string; etape: number; etapes: number; archis: CompteMetamob; boss: CompteMetamob };
+export type ResumeMetamob = { pseudo: string | null; quetes: QueteMetamob[]; maj_le?: string; ancien?: boolean };
+
+/** Quêtes du Dofus Ocre d'un membre sur Metamob (passe par la fonction serveur, qui garde la clé API). */
+export async function chargerMetamob(membreId: string, forcer = false): Promise<ResumeMetamob> {
+  const { data, error } = await supabase.functions.invoke("metamob", { body: { membre_id: membreId, forcer } });
+  if (error) {
+    // Le message utile est dans le corps de la réponse d'erreur.
+    const corps = await (error as { context?: Response }).context?.json?.().catch(() => null);
+    throw new Error(corps?.erreur ?? "Metamob est injoignable pour le moment.");
+  }
+  return data as ResumeMetamob;
+}
+
+/** Nombre d'avis livrés par un personnage. */
+export async function compterAvisLivres(personnageId: string): Promise<number> {
+  const { count, error } = await supabase
+    .from("avis_personnage")
+    .select("avis_id", { count: "exact", head: true })
+    .eq("personnage_id", personnageId)
+    .eq("etat", "livre");
+  if (error) throw error;
+  return count ?? 0;
+}
+
+/** Inscriptions « Je peux aider ». `prefixe` limite à une série (ex. « etp- »), `personnageId` à un personnage. */
+export async function chargerAides(prefixe?: string, personnageId?: string): Promise<AideEtape[]> {
+  let req = supabase.from("aides_etapes").select("personnage_id, quete_id, note, cree_le").order("cree_le");
+  if (prefixe) req = req.like("quete_id", `${prefixe}%`);
+  if (personnageId) req = req.eq("personnage_id", personnageId);
+  const { data, error } = await req;
+  // Table absente (migration 006 pas encore passée) : on affiche le site sans l'entraide plutôt qu'une erreur.
+  if (error && (error.code === "42P01" || error.code === "PGRST205")) return [];
+  if (error) throw error;
+  return data as AideEtape[];
+}
+
+export async function proposerAide(personnageId: string, queteId: string, note: string): Promise<void> {
+  const texte = note.trim().slice(0, 140);
+  const { error } = await supabase
+    .from("aides_etapes")
+    .upsert({ personnage_id: personnageId, quete_id: queteId, note: texte || null }, { onConflict: "personnage_id,quete_id" });
+  if (error) throw error;
+}
+
+export async function retirerAide(personnageId: string, queteId: string): Promise<void> {
+  const { error } = await supabase.from("aides_etapes").delete().eq("personnage_id", personnageId).eq("quete_id", queteId);
+  if (error) throw error;
 }

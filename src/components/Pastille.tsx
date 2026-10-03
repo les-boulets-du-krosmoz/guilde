@@ -23,7 +23,7 @@ type Props = {
 export function Pastille({ perso, dispo = false, taille = 36, lien = true, infobulle }: Props) {
   const [imageCassee, setImageCassee] = useState(false);
   const titre =
-    infobulle ?? `${perso.nom} · ${perso.est_principal ? "principal" : "mule"}${dispo ? " · dispo" : ""}`;
+    infobulle ?? `${perso.nom} (${perso.est_principal ? "principal" : "mule"}${dispo ? ", dispo" : ""})`;
   const classes = ["pastille", perso.est_principal ? "" : "pastille--mule", dispo ? "pastille--dispo" : ""]
     .filter(Boolean)
     .join(" ");

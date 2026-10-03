@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
+import { TexteEtats } from "../components/Etat";
 import { Pastille } from "../components/Pastille";
 import { DOFUS, type Contenu, type Dofus, type Ressource } from "../data/dofus";
-import { chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, prefixeDofus } from "../lib/donnees";
+import { aDesQuetes, CATEGORIES, type Categorie } from "../data/series";
+import { ilYa } from "../lib/dates";
+import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
 import { avancement, cocher, decocher, etapeActuelle, evaluerPrerequis } from "../lib/quetes";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
-import { estDispo, type Membre, type MetierMembre, type Personnage } from "../lib/types";
+import { estDispo, type AideEtape, type Membre, type MetierMembre, type Personnage } from "../lib/types";
 import { Chargement } from "./Acces";
 
 type AuMemeStade = { perso: Personnage; dispo: boolean }[];
@@ -31,16 +34,22 @@ export function Quetes() {
 
 function QuetesPerso({ persoId }: { persoId: string }) {
   const { membre: moi } = useSession();
-  const disponibles = DOFUS.filter((d) => d.quetes.length > 0);
   const [params, setParams] = useSearchParams();
+  const categorie = CATEGORIES.find((c) => c.id === params.get("cat") && aDesQuetes(c)) ?? CATEGORIES[0];
+  const disponibles = categorie.series.filter((d) => d.quetes.length > 0);
   const dofus = disponibles.find((d) => d.id === params.get("dofus")) ?? disponibles[0];
-  const setDofus = (d: Dofus) => setParams({ dofus: d.id }, { replace: true });
+  const setDofus = (d: Dofus) => setParams({ cat: categorie.id, dofus: d.id }, { replace: true });
+  const setCategorie = (c: Categorie) => setParams({ cat: c.id }, { replace: true });
   const [ressources, setRessources] = useState<Set<string>>(new Set());
   const [souhaits, setSouhaits] = useState<Set<string>>(new Set());
   const [perso, setPerso] = useState<Personnage | null>(null);
   const [metiers, setMetiers] = useState<MetierMembre[]>([]);
   const [faites, setFaites] = useState<Set<string>>(new Set());
-  const [memeStade, setMemeStade] = useState<AuMemeStade>([]);
+  // Entraide : qui en est à chaque étape (hors ce personnage), et qui s'est positionné pour aider.
+  const [positions, setPositions] = useState<Map<string, AuMemeStade>>(new Map());
+  const [aides, setAides] = useState<AideEtape[]>([]);
+  const [annuaire, setAnnuaire] = useState<{ persos: Map<string, Personnage>; membres: Map<string, Membre> } | null>(null);
+  const [saisieAide, setSaisieAide] = useState<{ queteId: string; note: string } | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [enCours, setEnCours] = useState(false);
   // Étapes repliées par défaut : seule l'étape en cours est dépliée.
@@ -53,26 +62,35 @@ function QuetesPerso({ persoId }: { persoId: string }) {
       if (error || !data) throw new Error("Ce personnage n'existe pas ou plus.");
       const p = data as Personnage;
       const prefixe = prefixeDofus(dofus.quetes.map((q) => q.id));
-      const [m, quetes, guilde, res] = await Promise.all([
+      const [m, quetes, guilde, res, tousSouhaits, inscriptions] = await Promise.all([
         chargerMetiers(p.membre_id),
         chargerQuetes(prefixe),
         chargerGuilde(),
         chargerRessources(p.id),
+        chargerSouhaits(),
+        chargerAides(prefixe),
       ]);
+      setAides(inscriptions);
+      setAnnuaire({ persos: new Map(guilde.personnages.map((x) => [x.id, x])), membres: guilde.membres as Map<string, Membre> });
       setRessources(res);
-      chargerSouhaits(p.id).then((m) => setSouhaits(m.get(p.id) ?? new Set())).catch(() => undefined);
+      setSouhaits(tousSouhaits.get(p.id) ?? new Set());
       const mesFaites = quetes.get(p.id) ?? new Set<string>();
       setPerso(p);
       setMetiers(m);
       setFaites(mesFaites);
 
-      // Qui d'autre travaille sur la même quête ?
-      const monEtape = etapeActuelle(dofus, mesFaites);
-      setMemeStade(
-        guilde.personnages
-          .filter((x) => x.id !== p.id && etapeActuelle(dofus, quetes.get(x.id) ?? new Set()) === monEtape)
-          .map((x) => ({ perso: x, dispo: estDispo(guilde.membres.get(x.membre_id) as Membre | undefined, x.id) })),
-      );
+      // Qui d'autre en est à la même quête ? Seulement ceux qui ont commencé ce Dofus ou cherchent un groupe
+      // pour le commencer : sinon, à la première quête, toute la guilde s'afficherait.
+      const concerne = (id: string) => quetes.has(id) || (tousSouhaits.get(id)?.has(dofus.id) ?? false);
+      const parEtape = new Map<string, AuMemeStade>();
+      for (const x of guilde.personnages) {
+        if (x.id === p.id || !concerne(x.id)) continue;
+        const q = dofus.quetes[etapeActuelle(dofus, quetes.get(x.id) ?? new Set())];
+        if (!q) continue; // série terminée
+        if (!parEtape.has(q.id)) parEtape.set(q.id, []);
+        parEtape.get(q.id)!.push({ perso: x, dispo: estDispo(guilde.membres.get(x.membre_id) as Membre | undefined, x.id) });
+      }
+      setPositions(parEtape);
     } catch (e) {
       setErreur((e as Error).message);
     }
@@ -102,6 +120,27 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   const modifiable = perso.membre_id === moi?.id;
   const etape = etapeActuelle(dofus, faites);
   const [terminees, total] = avancement(dofus, faites);
+
+  async function validerAide() {
+    if (!saisieAide || !perso) return;
+    try {
+      await proposerAide(perso.id, saisieAide.queteId, saisieAide.note);
+      setAides(await chargerAides(prefixeDofus(dofus.quetes.map((q) => q.id))));
+      setSaisieAide(null);
+    } catch (e) {
+      setErreur((e as Error).message);
+    }
+  }
+
+  async function retirerMonAide(queteId: string) {
+    if (!perso) return;
+    try {
+      await retirerAide(perso.id, queteId);
+      setAides((a) => a.filter((x) => !(x.personnage_id === perso.id && x.quete_id === queteId)));
+    } catch (e) {
+      setErreur((e as Error).message);
+    }
+  }
 
   async function basculer(queteId: string) {
     if (!modifiable || enCours) return;
@@ -172,13 +211,18 @@ function QuetesPerso({ persoId }: { persoId: string }) {
     }
   }
 
+  const guideDpln = (dofus.sources ?? []).find((src) => src.url.includes("dofuspourlesnoobs.com"))?.url;
+
   return (
     <main className="page">
       <div className="entete">
         <div>
           <Link to={`/perso/${perso.id}`}>Retour à {perso.nom} ({perso.classe} {perso.niveau})</Link>
-          <h1>{modifiable ? `Dofus ${dofus.nom}` : `${perso.nom} · Dofus ${dofus.nom}`}</h1>
-          <p className="discret">Succès « {dofus.succes} » · {total} quêtes{dofus.quetes.length > total ? ` + ${dofus.quetes.length - total} facultative` : ""}</p>
+          <h1>{modifiable ? titreSerie(categorie, dofus) : `${titreSerie(categorie, dofus)} de ${perso.nom}`}</h1>
+          <p className="discret">
+            {dofus.succes && <>Succès « {dofus.succes} », </>}{total} {dofus.unite ?? "quêtes"}
+            {dofus.quetes.length > total ? ` (+ ${dofus.quetes.length - total} facultative${dofus.quetes.length - total > 1 ? "s" : ""})` : ""}
+          </p>
         </div>
         <div className="progression-globale">
           <span><strong className="vert">{terminees}</strong> / {total} terminées</span>
@@ -186,29 +230,26 @@ function QuetesPerso({ persoId }: { persoId: string }) {
         </div>
       </div>
 
-      <OngletsDofus actif={dofus} onChoix={setDofus} />
+      <BarreCategories actif={categorie} onChoix={setCategorie} />
 
-      {!modifiable && <p className="discret">Tu consultes la progression de {perso.nom} : les cases ne sont pas modifiables.</p>}
+      {categorie.series.length > 1 && (
+        <OngletsSeries series={categorie.series} actif={dofus} onChoix={setDofus} libelle={categorie.estDofus ? "Choix du Dofus" : "Choix de la zone"} />
+      )}
 
       {!commence && (modifiable || souhaits.has(dofus.id)) && (
         <label className="case souhait">
           <input type="checkbox" checked={souhaits.has(dofus.id)} disabled={!modifiable} onChange={basculerSouhait} />
-          <span>
-            <strong>Je veux commencer ce Dofus</strong>
-            <span className="discret"> · tu apparais dans les objectifs de groupe de la première quête</span>
-          </span>
+          <strong>Je cherche un groupe pour commencer {categorie.estDofus ? "ce Dofus" : "cette série"}</strong>
         </label>
       )}
 
       {dofus.avertissement && <p className="encart encart--avertissement">{dofus.avertissement}</p>}
 
-      {((dofus.sources ?? []).length > 0 || (dofus.liens ?? []).length > 0) && (
+      {(guideDpln || (dofus.liens ?? []).length > 0) && (
         <p className="discret">
-          {(dofus.sources ?? []).length > 0 && <>Sources : {dofus.sources!.map((src, i) => (
-            <span key={src.url}>{i > 0 && ", "}<a href={src.url} target="_blank" rel="noreferrer">{src.nom}</a></span>
-          ))}. </>}
+          {guideDpln && <><a href={guideDpln} target="_blank" rel="noreferrer">Guide complet sur Dofus pour les Noobs</a>. </>}
           {(dofus.liens ?? []).map((l) => (
-            <span key={l.url}>Outil : <a href={l.url} target="_blank" rel="noreferrer">{l.nom}</a> ({l.description}). </span>
+            <span key={l.url}><a href={l.url} target="_blank" rel="noreferrer">{l.nom}</a> : {l.description}. </span>
           ))}
         </p>
       )}
@@ -216,12 +257,11 @@ function QuetesPerso({ persoId }: { persoId: string }) {
       {(dofus.ressourcesSerie ?? []).length > 0 && (
         <div className="serie">
           <button type="button" className="bouton" aria-expanded={serieOuverte} onClick={() => setSerieOuverte(!serieOuverte)}>
-            {serieOuverte ? "Masquer" : "Afficher"} les ressources de toute la série
-            ({dofus.ressourcesSerie!.filter((r) => ressources.has(r.id)).length} / {dofus.ressourcesSerie!.length} réunies)
+            Ressources de toute la série ({dofus.ressourcesSerie!.filter((r) => ressources.has(r.id)).length} / {dofus.ressourcesSerie!.length})
           </button>
           {serieOuverte && (
             <BlocRessources
-              titre="À réunir pour toute la série"
+              titre="Toute la série"
               liste={dofus.ressourcesSerie!}
               cochees={ressources}
               modifiable={modifiable}
@@ -233,7 +273,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
 
       {(dofus.notes ?? []).length > 0 && (
         <p className="encart">
-          <strong>À prévoir aussi :</strong> {dofus.notes!.join(" · ")}
+          <strong>À prévoir :</strong> {dofus.notes!.join(". ")}.
         </p>
       )}
 
@@ -243,7 +283,10 @@ function QuetesPerso({ persoId }: { persoId: string }) {
           const actuelle = i === etape;
           const prerequis = q.prerequis.map((p) => evaluerPrerequis(p, perso, metiers)).filter((x) => x !== null);
           const ouverte = ouvertes.has(q.id);
-          const aDuDetail = q.contenu.length > 0 || prerequis.length > 0 || (q.ressources ?? []).length > 0 || (actuelle && memeStade.length > 0);
+          const aidesEtape = aides.filter((a) => a.quete_id === q.id);
+          const ici = positions.get(q.id) ?? [];
+          const jAide = aidesEtape.some((a) => a.personnage_id === perso.id);
+          const aDuDetail = q.contenu.length > 0 || prerequis.length > 0 || (q.ressources ?? []).length > 0 || ici.length > 0 || aidesEtape.length > 0 || modifiable;
           const manque = prerequis.some((p) => p.etat === "manque");
           return (
             <li key={q.id} id={`etape-${q.id}`} className={`quete ${fait ? "quete--faite" : ""} ${actuelle ? "quete--actuelle" : ""}`}>
@@ -260,6 +303,9 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                   <span className="discret">niv. {q.niveauConseille}</span>
                   {actuelle && <span className="badge badge--or">Étape actuelle</span>}
                   {q.facultative && <span className="badge">Facultative</span>}
+                  {aidesEtape.length > 0 && (
+                    <span className="badge badge--aide" title="Personnages qui peuvent aider sur cette étape">🤝 {aidesEtape.length}</span>
+                  )}
                   {!ouverte && manque && <span className="badge badge--alerte">Prérequis manquant</span>}
                   {aDuDetail && (
                     <button
@@ -285,7 +331,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                         <span className="prerequis__icone" aria-hidden="true">{p.etat === "ok" ? "✓" : p.etat === "manque" ? "✗" : "•"}</span>
                         <span className="sr-only">{p.etat === "ok" ? "Rempli :" : p.etat === "manque" ? "Manquant :" : "Info :"}</span>
                         <span>{p.texte}</span>
-                        <span className="discret">{p.detail}</span>
+                        {p.detail && <span className={p.detail === "à confirmer" ? "discret a-confirmer" : "discret"}>{p.detail}</span>}
                         {p.lien && <Link to={p.lien}>Trouver quelqu'un dans la guilde</Link>}
                       </li>
                     ))}
@@ -306,12 +352,60 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                 </div>
                 )}
               </div>
-              {ouverte && actuelle && memeStade.length > 0 && (
+              {ouverte && ici.length > 0 && (
                 <div className="meme-stade">
-                  <span className="discret">Au même stade</span>
+                  <span className="discret">{actuelle ? "Au même stade" : "En sont à cette étape"}</span>
                   <div className="pastilles">
-                    {memeStade.map((x) => <Pastille key={x.perso.id} perso={x.perso} dispo={x.dispo} taille={30} />)}
+                    {ici.map((x) => <Pastille key={x.perso.id} perso={x.perso} dispo={x.dispo} taille={30} />)}
                   </div>
+                </div>
+              )}
+              {ouverte && (aidesEtape.length > 0 || modifiable) && (
+                <div className="entraide">
+                  {aidesEtape.length > 0 && (
+                    <>
+                      <span className="discret">Peuvent aider</span>
+                      <ul className="entraide__liste">
+                        {aidesEtape.map((a) => {
+                          const x = annuaire?.persos.get(a.personnage_id);
+                          if (!x) return null;
+                          const dispo = estDispo(annuaire?.membres.get(x.membre_id), x.id);
+                          return (
+                            <li key={a.personnage_id}>
+                              <Link to={`/perso/${x.id}`} className={dispo ? "vert" : undefined}>{x.nom}</Link>
+                              {dispo && <span className="vert discret-taille">dispo</span>}
+                              {a.note && <span>{a.note}</span>}
+                              <span className="discret discret-taille">{ilYa(a.cree_le)}</span>
+                              {modifiable && x.id === perso.id && (
+                                <button type="button" className="lien-bouton" onClick={() => retirerMonAide(q.id)}>Retirer</button>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </>
+                  )}
+                  {modifiable && !jAide && (
+                    saisieAide?.queteId === q.id ? (
+                      <div className="entraide__saisie">
+                        <label className="sr-only" htmlFor={`aide-${q.id}`}>Ce que vous pouvez apporter</label>
+                        <input
+                          id={`aide-${q.id}`}
+                          maxLength={140}
+                          placeholder="Facultatif : strat connue, DD à accoupler, ressources…"
+                          value={saisieAide.note}
+                          onChange={(e) => setSaisieAide({ queteId: q.id, note: e.target.value })}
+                          onKeyDown={(e) => e.key === "Enter" && validerAide()}
+                        />
+                        <button type="button" className="bouton bouton--vert" onClick={validerAide}>Je peux aider</button>
+                        <button type="button" className="bouton" onClick={() => setSaisieAide(null)}>Annuler</button>
+                      </div>
+                    ) : (
+                      <button type="button" className="lien-bouton" onClick={() => setSaisieAide({ queteId: q.id, note: "" })}>
+                        🤝 {perso.nom} peut aider sur cette étape
+                      </button>
+                    )
+                  )}
                 </div>
               )}
             </li>
@@ -322,16 +416,42 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   );
 }
 
-export function OngletsDofus({ actif, onChoix }: { actif: Dofus; onChoix: (d: Dofus) => void }) {
+/** Barre des catégories (Dofus, Frigost, Tour du monde…), partagée avec la page Progression. */
+export function BarreCategories({ actif, onChoix }: { actif: Categorie; onChoix: (c: Categorie) => void }) {
   return (
-    <div className="onglets" role="group" aria-label="Choix du Dofus">
-      {DOFUS.map((d) =>
+    <div className="onglets onglets--categories" role="group" aria-label="Catégorie de quêtes">
+      {CATEGORIES.map((c) =>
+        aDesQuetes(c) ? (
+          <button key={c.id} type="button" className={`onglet ${c.id === actif.id ? "onglet--actif" : ""}`} aria-pressed={c.id === actif.id} onClick={() => onChoix(c)}>
+            {c.nom}
+          </button>
+        ) : (
+          <button key={c.id} type="button" className="onglet onglet--vide" disabled>{c.nom} (à venir)</button>
+        ),
+      )}
+    </div>
+  );
+}
+
+function titreSerie(c: Categorie, s: Dofus): string {
+  if (c.estDofus) return `Dofus ${s.nom}`;
+  return c.series.length > 1 ? `${c.nom} : ${s.nom}` : s.nom;
+}
+
+export function OngletsDofus({ actif, onChoix }: { actif: Dofus; onChoix: (d: Dofus) => void }) {
+  return <OngletsSeries series={DOFUS} actif={actif} onChoix={onChoix} libelle="Choix du Dofus" />;
+}
+
+export function OngletsSeries({ series, actif, onChoix, libelle }: { series: Dofus[]; actif: Dofus; onChoix: (d: Dofus) => void; libelle: string }) {
+  return (
+    <div className="onglets" role="group" aria-label={libelle}>
+      {series.map((d) =>
         d.quetes.length > 0 ? (
           <button key={d.id} type="button" className={`onglet ${d.id === actif.id ? "onglet--actif" : ""}`} aria-pressed={d.id === actif.id} onClick={() => onChoix(d)}>
             {d.nom}
           </button>
         ) : (
-          <button key={d.id} type="button" className="onglet onglet--vide" disabled>{d.nom} · à venir</button>
+          <button key={d.id} type="button" className="onglet onglet--vide" disabled>{d.nom} (à venir)</button>
         ),
       )}
     </div>
@@ -343,13 +463,13 @@ export function Etiquette({ contenu: c }: { contenu: Contenu }) {
     case "combat":
       return (
         <span className={`etiquette ${c.groupe === undefined ? "etiquette--neutre" : c.groupe ? "etiquette--groupe" : "etiquette--solo"}`}>
-          {c.groupe === undefined ? "Combat" : c.groupe ? "Combat de groupe" : c.tactique ? "Tactique solo" : "Solo obligatoire"} · {c.adversaires.join(", ")}
+          {c.groupe === undefined ? "Combat" : c.groupe ? "Combat de groupe" : c.tactique ? "Tactique solo" : "Solo obligatoire"} : {c.adversaires.join(", ")}
         </span>
       );
     case "donjon":
-      return <span className="etiquette etiquette--donjon">Donjon · {c.nom}</span>;
+      return <span className="etiquette etiquette--donjon"><TexteEtats texte={`Donjon : ${c.nom}`} /></span>;
     case "drop_quete":
-      return <span className="etiquette etiquette--groupe">{c.quantite} × {c.objet} · {c.monstre} ({c.zone})</span>;
+      return <span className="etiquette etiquette--groupe">{c.quantite} × {c.objet}, {c.monstre} ({c.zone})</span>;
   }
 }
 
@@ -371,7 +491,7 @@ function BlocRessources({
     <div className="ressources">
       <div className="ressources__entete">
         <strong>{titre}</strong>
-        <span className="discret">{n} / {liste.length} réunies</span>
+        <span className="discret">{n} / {liste.length}</span>
       </div>
       <ul>
         {liste.map((r) => {
@@ -389,7 +509,7 @@ function BlocRessources({
                 )}
               </label>
               {(r.note || !r.verifie) && (
-                <span className="discret">{[r.note, r.verifie ? "" : "à confirmer"].filter(Boolean).join(" · ")}</span>
+                <span className={r.verifie ? "discret" : "discret a-confirmer"}>{[r.note, r.verifie ? "" : "à confirmer"].filter(Boolean).join(", ")}</span>
               )}
             </li>
           );

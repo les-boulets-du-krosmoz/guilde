@@ -49,7 +49,7 @@ export function FournisseurSession({ children }: { children: ReactNode }) {
     const { error } = await supabase.functions.invoke("verifier-guilde", {
       body: { provider_token: s.provider_token },
     });
-    if (error) setErreur("La vérification de ton appartenance à la guilde a échoué. Réessaie de te connecter.");
+    if (error) setErreur("Impossible de vérifier ta présence sur le serveur Discord. Reconnecte-toi.");
   }, []);
 
   useEffect(() => {
@@ -83,8 +83,9 @@ export function FournisseurSession({ children }: { children: ReactNode }) {
     seConnecter: async () => {
       await supabase.auth.signInWithOAuth({
         provider: "discord",
-        // guilds.members.read : pour lire le pseudo utilisé sur le serveur de la guilde.
-        options: { scopes: "identify guilds guilds.members.read", redirectTo: window.location.origin },
+        // guilds.members.read suffit : la fiche membre n'existe que si la personne est sur le serveur,
+        // et elle donne le pseudo du serveur. Pas besoin de lire la liste de tous ses serveurs.
+        options: { scopes: "identify guilds.members.read", redirectTo: window.location.origin },
       });
     },
     seDeconnecter: async () => {

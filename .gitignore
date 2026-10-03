@@ -4,3 +4,6 @@ dist
 .env.local
 *.tsbuildinfo
 supabase/.temp
+# Sauvegardes de la base : jamais dans le dépôt (identifiants Discord des membres)
+sauvegarde*.sql
+*.csv

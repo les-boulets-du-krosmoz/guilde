@@ -39,7 +39,7 @@ export function MonCompte() {
                 <div>
                   <Link to={`/perso/${p.id}`} className="carte__titre">{p.nom}</Link>
                   <div className="discret">
-                    {p.classe} · niveau {p.niveau} · {p.est_principal ? "principal" : "mule"} · mis à jour {ilYa(p.maj_le)}
+                    {p.classe} niveau {p.niveau}, {p.est_principal ? "principal" : "mule"}, mis à jour {ilYa(p.maj_le)}
                   </div>
                 </div>
                 <button type="button" className="bouton" onClick={() => setEdition(p.id)}>Modifier</button>
@@ -50,7 +50,62 @@ export function MonCompte() {
       </section>
 
       <FormMetiers />
+      <FormMetamob />
     </main>
+  );
+}
+
+// ---------- Metamob ----------
+
+function FormMetamob() {
+  const { membre, rafraichir } = useSession();
+  const [valeur, setValeur] = useState(membre?.metamob ?? "");
+  const [message, setMessage] = useState<{ texte: string; erreur: boolean } | null>(null);
+  const [enCours, setEnCours] = useState(false);
+
+  async function enregistrer(e: FormEvent) {
+    e.preventDefault();
+    if (!membre) return;
+    const propre = valeur.trim();
+    if (propre && !/^https?:\/\/(www\.)?metamob\.fr\//i.test(propre) && !/^[\p{L}\p{N}_.-]{2,40}$/u.test(propre)) {
+      setMessage({ texte: "Colle le lien de ton profil Metamob, ou ton pseudo Metamob.", erreur: true });
+      return;
+    }
+    setEnCours(true);
+    const { error } = await supabase.from("membres").update({ metamob: propre || null }).eq("id", membre.id);
+    setEnCours(false);
+    if (error) {
+      setMessage({ texte: "Enregistrement impossible : " + error.message, erreur: true });
+      return;
+    }
+    setMessage({ texte: "Enregistré.", erreur: false });
+    await rafraichir();
+  }
+
+  return (
+    <form className="carte" onSubmit={enregistrer}>
+      <h2>Archimonstres</h2>
+      <div className="champ">
+        <label htmlFor="metamob">Profil Metamob (lien ou pseudo)</label>
+        <input
+          id="metamob"
+          type="text"
+          inputMode="url"
+          placeholder="https://www.metamob.fr/…"
+          value={valeur}
+          maxLength={200}
+          onChange={(e) => setValeur(e.target.value)}
+          aria-describedby="metamob-aide"
+        />
+        <span id="metamob-aide" className="discret">
+          Ta quête du Dofus Ocre doit être visible sur ton profil public Metamob, au nom de ton personnage.
+        </span>
+      </div>
+      <div className="formulaire__actions">
+        <button type="submit" className="bouton bouton--or" disabled={enCours}>Enregistrer</button>
+        {message && <span className={message.erreur ? "erreur" : "vert"} role="status">{message.texte}</span>}
+      </div>
+    </form>
   );
 }
 
@@ -64,6 +119,7 @@ function FormPerso({ perso, estPremier = false, onFini }: { perso?: Personnage; 
   const [alignement, setAlignement] = useState<Alignement>(perso?.alignement ?? "Neutre");
   const [ordre, setOrdre] = useState(perso?.ordre ?? "");
   const [niveauAlign, setNiveauAlign] = useState<string>(perso?.niveau_quete_alignement?.toString() ?? "");
+  const [rangOrdre, setRangOrdre] = useState<string>(perso?.rang_ordre?.toString() ?? "");
   const [principal, setPrincipal] = useState(perso?.est_principal ?? estPremier);
   const [image, setImage] = useState(perso?.image_url ?? "");
   const [erreur, setErreur] = useState<string | null>(null);
@@ -75,7 +131,10 @@ function FormPerso({ perso, estPremier = false, onFini }: { perso?: Personnage; 
   function changerAlignement(a: Alignement) {
     setAlignement(a);
     setOrdre(ORDRES[a][0] ?? "");
-    if (a === "Neutre") setNiveauAlign("");
+    if (a === "Neutre") {
+      setNiveauAlign("");
+      setRangOrdre("");
+    }
   }
 
   async function enregistrer(e: FormEvent) {
@@ -84,10 +143,9 @@ function FormPerso({ perso, estPremier = false, onFini }: { perso?: Personnage; 
     setEnCours(true);
     setErreur(null);
 
-    // Un seul principal par compte : on retire d'abord le statut aux autres.
-    if (principal && !perso?.est_principal) {
-      await supabase.from("personnages").update({ est_principal: false }).eq("membre_id", membre.id).eq("est_principal", true);
-    }
+    // La fiche est enregistrée d'abord, sans changer de principal : si ça échoue (nom déjà pris),
+    // l'ancien principal garde son statut. Le changement de principal vient ensuite.
+    const devientPrincipal = principal && !perso?.est_principal;
 
     const valeurs = {
       membre_id: membre.id,
@@ -97,18 +155,32 @@ function FormPerso({ perso, estPremier = false, onFini }: { perso?: Personnage; 
       alignement,
       ordre: alignement === "Neutre" ? null : ordre,
       niveau_quete_alignement: alignement === "Neutre" || niveauAlign === "" ? null : Number(niveauAlign),
-      est_principal: principal,
+      rang_ordre: alignement === "Neutre" || rangOrdre === "" ? null : Number(rangOrdre),
+      est_principal: principal && !devientPrincipal,
       image_url: image.trim() || null,
     };
-    const { error } = perso
-      ? await supabase.from("personnages").update(valeurs).eq("id", perso.id)
-      : await supabase.from("personnages").insert(valeurs);
+    const { data, error } = perso
+      ? await supabase.from("personnages").update(valeurs).eq("id", perso.id).select("id").single()
+      : await supabase.from("personnages").insert(valeurs).select("id").single();
 
-    setEnCours(false);
-    if (error) {
-      setErreur(error.code === "23505" ? "Ce nom de personnage existe déjà." : "Enregistrement impossible : " + error.message);
+    if (error || !data) {
+      setEnCours(false);
+      setErreur(error?.code === "23505" ? "Ce nom de personnage existe déjà." : "Enregistrement impossible : " + (error?.message ?? "erreur inconnue"));
       return;
     }
+
+    // Un seul principal par compte : on retire le statut à l'ancien, puis on le donne à celui-ci.
+    if (devientPrincipal) {
+      const retrait = await supabase.from("personnages").update({ est_principal: false }).eq("membre_id", membre.id).eq("est_principal", true);
+      const ajout = retrait.error ? retrait : await supabase.from("personnages").update({ est_principal: true }).eq("id", data.id);
+      if (ajout.error) {
+        setEnCours(false);
+        await rafraichir();
+        setErreur("Fiche enregistrée, mais le changement de personnage principal a échoué : " + ajout.error.message);
+        return;
+      }
+    }
+    setEnCours(false);
     await rafraichir();
     onFini();
   }
@@ -158,14 +230,19 @@ function FormPerso({ perso, estPremier = false, onFini }: { perso?: Personnage; 
               <label htmlFor={id("nivalign")}>Niveau de la quête d'alignement</label>
               <input id={id("nivalign")} type="number" min={0} value={niveauAlign} onChange={(e) => setNiveauAlign(e.target.value)} />
             </div>
+            <div className="champ">
+              <label htmlFor={id("rang")}>Rang dans l'ordre</label>
+              <select id={id("rang")} value={rangOrdre} onChange={(e) => setRangOrdre(e.target.value)}>
+                <option value="">Non renseigné</option>
+                {[1, 2, 3, 4, 5].map((r) => <option key={r} value={r}>Rang {r}</option>)}
+              </select>
+            </div>
           </>
         )}
         <div className="champ champ--large">
-          <label htmlFor={id("image")}>Image (adresse https, facultatif)</label>
-          <input id={id("image")} type="url" inputMode="url" placeholder="https://…" value={image} onChange={(e) => setImage(e.target.value)} aria-describedby={id("image-aide")} />
-          <span id={id("image-aide")} className={erreurImage ? "erreur" : "discret"}>
-            {erreurImage ?? "Si l'image ne charge pas, tes initiales s'affichent à la place."}
-          </span>
+          <label htmlFor={id("image")}>Image (lien https, facultatif)</label>
+          <input id={id("image")} type="url" inputMode="url" placeholder="https://…" value={image} onChange={(e) => setImage(e.target.value)} aria-describedby={erreurImage ? id("image-aide") : undefined} />
+          {erreurImage && <span id={id("image-aide")} className="erreur">{erreurImage}</span>}
           {membre?.avatar_url && image.trim() !== membre.avatar_url && (
             <button type="button" className="bouton bouton--discret champ__action" onClick={() => setImage(membre.avatar_url!)}>
               <img src={membre.avatar_url} alt="" width={24} height={24} className="mini-avatar" referrerPolicy="no-referrer" />
@@ -173,7 +250,7 @@ function FormPerso({ perso, estPremier = false, onFini }: { perso?: Personnage; 
             </button>
           )}
           {membre?.avatar_url && image.trim() === membre.avatar_url && (
-            <span className="discret">Avatar Discord utilisé : il suivra tes changements d'avatar à chaque connexion.</span>
+            <span className="discret">Ton avatar Discord est utilisé.</span>
           )}
         </div>
         <label className="case">
@@ -267,7 +344,7 @@ function FormMetiers() {
     <section className="carte">
       <div className="carte__entete">
         <h2>Métiers du compte</h2>
-        <span className="discret">Partagés par tous tes personnages. Laisse vide ou 0 pour un métier non monté.</span>
+        <span className="discret">Communs à tous tes personnages.</span>
       </div>
       <form onSubmit={enregistrer}>
         <div className="metiers-saisie">

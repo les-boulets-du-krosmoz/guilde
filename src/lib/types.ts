@@ -9,6 +9,8 @@ export interface Membre {
   valide: boolean;
   dispo_jusqua: string | null;
   dispo_personnage_id: string | null;
+  /** Lien ou pseudo Metamob. */
+  metamob: string | null;
 }
 
 export interface Personnage {
@@ -20,6 +22,8 @@ export interface Personnage {
   alignement: Alignement;
   ordre: string | null;
   niveau_quete_alignement: number | null;
+  /** Rang dans l'ordre (1 à 5), saisi par le membre. */
+  rang_ordre: number | null;
   est_principal: boolean;
   image_url: string | null;
   maj_le: string;
@@ -42,3 +46,11 @@ export function estDispo(membre: Pick<Membre, "dispo_jusqua" | "dispo_personnage
   if (!membre?.dispo_jusqua || membre.dispo_personnage_id !== persoId) return false;
   return new Date(membre.dispo_jusqua).getTime() > Date.now();
 }
+
+/** « Je peux aider » : un personnage se positionne sur une étape de quête. */
+export type AideEtape = {
+  personnage_id: string;
+  quete_id: string;
+  note: string | null;
+  cree_le: string;
+};

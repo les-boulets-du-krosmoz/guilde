@@ -1,4 +1,5 @@
-import { TOUTES_LES_QUETES, type Dofus, type Prerequis, type Quete } from "../data/dofus";
+import { type Dofus, type Prerequis, type Quete } from "../data/dofus";
+import { TOUTES_LES_QUETES } from "../data/series";
 import type { MetierMembre, Personnage } from "./types";
 
 const INDEX = new Map(TOUTES_LES_QUETES.map((q) => [q.id, q]));
@@ -78,22 +79,22 @@ export function evaluerPrerequis(
   perso: Personnage,
   metiers: MetierMembre[],
 ): EtatPrerequis | null {
-  const aConfirmer = p.verifie ? "" : " (à confirmer)";
+  const aConfirmer = p.verifie ? "" : "à confirmer";
   switch (p.type) {
     case "quete":
       if (!estExterne(p.queteId)) return null; // l'ordre des quêtes suffit
-      return { etat: "info", texte: `Quête « ${p.libelle ?? p.queteId.replace("externe:", "")} »`, detail: "hors du site" + aConfirmer };
+      return { etat: "info", texte: `Quête « ${p.libelle ?? p.queteId.replace("externe:", "")} »`, detail: aConfirmer };
     case "niveau": {
       const ok = perso.niveau >= p.niveau;
-      return { etat: ok ? "ok" : "manque", texte: `Niveau ${p.niveau}`, detail: `ton personnage : ${perso.niveau}` };
+      return { etat: ok ? "ok" : "manque", texte: `Niveau ${p.niveau}`, detail: ok ? "" : `actuellement ${perso.niveau}` };
     }
     case "metier": {
       const candidats = p.metier === "au_choix" ? metiers : metiers.filter((m) => m.metier === p.metier);
       const meilleur = candidats.reduce<MetierMembre | null>((a, m) => (!a || m.niveau > a.niveau ? m : a), null);
       const ok = !!meilleur && meilleur.niveau >= p.niveau;
       const libelle = p.metier === "au_choix" ? `Un métier niveau ${p.niveau}` : `${p.metier} niveau ${p.niveau}`;
-      const actuel = meilleur ? `${meilleur.metier} ${meilleur.niveau}` : "non renseigné";
-      const detail = `ton compte : ${actuel}` + (p.personnel && !ok ? " · à monter toi-même" : "") + aConfirmer;
+      const actuel = meilleur ? `actuellement ${meilleur.metier} ${meilleur.niveau}` : "non renseigné";
+      const detail = [ok ? "" : actuel, p.personnel && !ok ? "à monter toi-même" : "", aConfirmer].filter(Boolean).join(", ");
       const lien =
         !ok && !p.personnel
           ? p.metier === "au_choix"
@@ -103,9 +104,9 @@ export function evaluerPrerequis(
       return { etat: ok ? "ok" : "manque", texte: libelle, detail, lien };
     }
     case "succes":
-      return { etat: "info", texte: `Succès « ${p.nom} »`, detail: "à vérifier toi-même" + aConfirmer };
+      return { etat: "info", texte: `Succès « ${p.nom} »`, detail: aConfirmer };
     case "texte":
-      return { etat: "info", texte: p.description, detail: "à vérifier toi-même" + aConfirmer };
+      return { etat: "info", texte: p.description, detail: aConfirmer };
   }
 }
 

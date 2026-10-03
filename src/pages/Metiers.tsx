@@ -55,7 +55,6 @@ export function Metiers() {
     <main className={`page ${metier ? "page--metiers" : ""}`}>
       <section>
         <h1>Métiers de la guilde</h1>
-        <p className="discret">Nombre de membres par palier. Choisis un métier pour voir qui l'a monté.</p>
         <ul className="grille-metiers">
           {METIERS.map((nom) => {
             const liste = parMetier.get(nom) ?? [];
@@ -124,7 +123,7 @@ export function Metiers() {
               </tbody>
             </table>
           )}
-          <p className="discret">Les niveaux non mis à jour depuis plus de {SEUIL_ANCIEN_JOURS} jours sont signalés en orange.</p>
+          <p className="discret">En orange : pas mis à jour depuis plus de {SEUIL_ANCIEN_JOURS} jours.</p>
         </aside>
       )}
     </main>
