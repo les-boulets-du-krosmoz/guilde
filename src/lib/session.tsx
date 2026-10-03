@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session } from "@supabase/supabase-js";
+import { chargerMetamob } from "./donnees";
 import { supabase } from "./supabase";
 import type { Membre, Personnage } from "./types";
 
@@ -15,6 +16,24 @@ type EtatSession = {
 };
 
 const Ctx = createContext<EtatSession | null>(null);
+
+/**
+ * Relit le Metamob du membre à l'ouverture du site, une fois par onglet : la session Supabase restant ouverte
+ * des semaines, « à chaque connexion » se traduit par « à chaque visite ». En arrière-plan, sans bloquer l'affichage.
+ * La fonction serveur ignore la demande si le résumé a moins de 10 minutes.
+ */
+function actualiserMonMetamob(membreId: string) {
+  try {
+    const cle = `metamob-actualise-${membreId}`;
+    if (sessionStorage.getItem(cle)) return;
+    sessionStorage.setItem(cle, "1");
+  } catch {
+    // Stockage indisponible (navigation privée stricte) : on actualise quand même.
+  }
+  chargerMetamob(membreId, true).catch(() => {
+    // Pas de profil, Metamob injoignable… la fiche affichera le détail le moment venu.
+  });
+}
 
 export function FournisseurSession({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -32,6 +51,7 @@ export function FournisseurSession({ children }: { children: ReactNode }) {
     const { data: m, error } = await supabase.from("membres").select("*").eq("id", s.user.id).single();
     if (error) setErreur("Impossible de charger ton profil : " + error.message);
     setMembre((m as Membre) ?? null);
+    if (m?.valide) actualiserMonMetamob(m.id);
     if (m?.valide) {
       const { data: p } = await supabase
         .from("personnages")

@@ -8,7 +8,8 @@ import { AVIS } from "../data/avis";
 import { DOFUS } from "../data/dofus";
 import { ouEstLaQuete } from "../data/series";
 import { ilYa } from "../lib/dates";
-import { chargerAides, chargerDatesQuetes, chargerMetamob, chargerMetiers, compterAvisLivres, retirerAide, type ResumeMetamob } from "../lib/donnees";
+import { FormulaireOcre } from "../components/FormulaireOcre";
+import { chargerAides, chargerDatesQuetes, chargerMetamob, chargerMetiers, compterAvisLivres, effacerOcre, retirerAide, type ResumeMetamob } from "../lib/donnees";
 import { avancement, etapeActuelle } from "../lib/quetes";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -236,22 +237,28 @@ export function Profil() {
             <div className="barre" aria-hidden="true"><div style={{ width: `${(avisLivres / AVIS.length) * 100}%` }} /></div>
             <strong>{avisLivres} / {AVIS.length}</strong>
           </li>
-          <JaugeMetamob perso={perso} proprietaire={proprietaire} estAMoi={estAMoi} />
+          <JaugeMetamob perso={perso} proprietaire={proprietaire} estAMoi={estAMoi} onMaj={charger} />
         </ul>
       </section>
     </main>
   );
 }
 
-/** Pierres d'archimonstres et de boss réunies pour le Dofus Ocre, lues sur Metamob. */
-function JaugeMetamob({ perso, proprietaire, estAMoi }: { perso: Personnage; proprietaire: Membre | null; estAMoi: boolean }) {
+type Compte = { possedes: number; total: number };
+
+/**
+ * Archimonstres et boss réunis pour le Dofus Ocre : une jauge chacun.
+ * Deux sources : Metamob (automatique) et une saisie à la main sur la fiche (Metamob injoignable ou pas utilisé).
+ * La plus récente des deux est affichée.
+ */
+function JaugeMetamob({ perso, proprietaire, estAMoi, onMaj }: { perso: Personnage; proprietaire: Membre | null; estAMoi: boolean; onMaj: () => void }) {
   const [resume, setResume] = useState<ResumeMetamob | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [enCours, setEnCours] = useState(false);
-  const lien = proprietaire?.metamob && /^https:\/\/(www\.)?metamob\.fr\//i.test(proprietaire.metamob) ? proprietaire.metamob : null;
+  const [saisie, setSaisie] = useState(false);
 
   const charger = useCallback(async (forcer = false) => {
-    if (!proprietaire?.metamob) return;
+    if (!proprietaire) return;
     setEnCours(true);
     setErreur(null);
     try {
@@ -266,50 +273,93 @@ function JaugeMetamob({ perso, proprietaire, estAMoi }: { perso: Personnage; pro
     charger();
   }, [charger]);
 
-  const libelle = lien
-    ? <a href={lien} target="_blank" rel="noreferrer" className="jauge__nom">Pierres du Dofus Ocre</a>
-    : <span className="jauge__nom">Pierres du Dofus Ocre</span>;
+  const lien = resume?.pseudo && !resume.introuvable ? `https://www.metamob.fr/profile/${encodeURIComponent(resume.pseudo)}` : null;
+  const titre = (texte: string) =>
+    lien ? <a href={lien} target="_blank" rel="noreferrer" className="jauge__nom">{texte}</a> : <span className="jauge__nom">{texte}</span>;
+  const aide = estAMoi ? <> Si ton pseudo Metamob est différent, indique-le dans <Link to="/mon-compte">Mon compte</Link>.</> : null;
 
-  if (!proprietaire?.metamob) {
-    return (
-      <li>
-        {libelle}
-        <span className="discret jauge__ligne">
-          {estAMoi ? <>Ajoute ton profil Metamob dans <Link to="/mon-compte">Mon compte</Link>.</> : "Pas de profil Metamob renseigné."}
-        </span>
-      </li>
-    );
-  }
-  if (erreur) return <li>{libelle}<span className="erreur jauge__ligne">{erreur}</span></li>;
-  if (!resume) return <li>{libelle}<span className="discret jauge__ligne">Chargement…</span></li>;
+  // Source Metamob : la quête de ce personnage (même nom, sans tenir compte des majuscules).
+  const quete = resume?.quetes.find((q) => q.personnage.trim().toLowerCase() === perso.nom.trim().toLowerCase());
+  // Source manuelle : seulement si les deux totaux sont renseignés.
+  const manuel =
+    perso.ocre_saisi_le && perso.ocre_archis_total && perso.ocre_boss_total
+      ? {
+          archis: { possedes: perso.ocre_archis ?? 0, total: perso.ocre_archis_total },
+          boss: { possedes: perso.ocre_boss ?? 0, total: perso.ocre_boss_total },
+          date: perso.ocre_saisi_le,
+        }
+      : null;
+  const metamobPlusRecent = quete && (!manuel || (resume?.maj_le ?? "") >= manuel.date);
+  const valeurs: { archis: Compte; boss: Compte } | null = metamobPlusRecent ? quete : manuel;
 
-  // La quête Metamob de ce personnage : même nom, sans tenir compte des majuscules.
-  const quete = resume.quetes.find((q) => q.personnage.trim().toLowerCase() === perso.nom.trim().toLowerCase());
-  if (!quete) {
-    const autres = resume.quetes.map((q) => q.personnage).filter(Boolean);
-    return (
-      <li>
-        {libelle}
-        <span className="discret jauge__ligne">
-          Aucune quête Ocre publique au nom de {perso.nom} sur Metamob
-          {autres.length > 0 ? ` (quêtes trouvées : ${autres.join(", ")}).` : "."}
-        </span>
-      </li>
-    );
+  async function effacerSaisie() {
+    try {
+      await effacerOcre(perso.id);
+      onMaj();
+    } catch (e) {
+      setErreur((e as Error).message);
+    }
   }
 
-  const possedes = quete.archis.possedes + quete.boss.possedes;
-  const total = quete.archis.total + quete.boss.total;
-  return (
+  const jauge = (libelle: string, c: Compte) => (
     <li>
-      {libelle}
-      <div className="barre" aria-hidden="true"><div style={{ width: `${total ? (possedes / total) * 100 : 0}%` }} /></div>
-      <strong>{possedes} / {total}</strong>
-      <span className="discret jauge__ligne">
-        Archimonstres {quete.archis.possedes} / {quete.archis.total}, boss {quete.boss.possedes} / {quete.boss.total}, étape {quete.etape} / {quete.etapes}.
-        {resume.maj_le && ` Lu sur Metamob ${ilYa(resume.maj_le)}.`}{" "}
-        <button type="button" className="lien-bouton" onClick={() => charger(true)} disabled={enCours}>Actualiser</button>
-      </span>
+      {titre(libelle)}
+      <div className="barre" aria-hidden="true"><div style={{ width: `${c.total ? (c.possedes / c.total) * 100 : 0}%` }} /></div>
+      <strong>{c.possedes} / {c.total}</strong>
     </li>
+  );
+
+  // Ligne d'état : d'où viennent les chiffres, ou pourquoi il n'y en a pas.
+  let etat: React.ReactNode;
+  if (valeurs && metamobPlusRecent && quete) {
+    etat = <>Dofus Ocre : étape {quete.etape} / {quete.etapes}.{resume?.maj_le && ` Lu sur Metamob ${ilYa(resume.maj_le)}.`}</>;
+  } else if (valeurs && manuel) {
+    etat = <>Saisi à la main {ilYa(manuel.date)}.{erreur && ` Metamob : ${erreur}`}</>;
+  } else if (erreur) {
+    etat = <>{erreur}{aide}</>;
+  } else if (!resume) {
+    etat = "Chargement de Metamob…";
+  } else if (resume.introuvable || !resume.pseudo) {
+    etat = <>{resume.pseudo ? `Pas de profil Metamob « ${resume.pseudo} ».` : "Pas de profil Metamob."}{aide}</>;
+  } else {
+    const autres = resume.quetes.map((q) => q.personnage).filter(Boolean);
+    etat = (
+      <>
+        Aucune quête Ocre publique au nom de {perso.nom} sur le profil Metamob « {resume.pseudo} »
+        {autres.length > 0 ? ` (quêtes trouvées : ${autres.join(", ")}).` : "."}
+        {aide}
+      </>
+    );
+  }
+
+  return (
+    <>
+      {valeurs ? (
+        <>
+          {jauge("Archimonstres", valeurs.archis)}
+          {jauge("Boss du Dofus Ocre", valeurs.boss)}
+        </>
+      ) : (
+        <li><span className="jauge__nom">Dofus Ocre</span></li>
+      )}
+      <li className="jauge__note">
+        <span className="discret jauge__ligne">
+          {etat}{" "}
+          {proprietaire && <button type="button" className="lien-bouton" onClick={() => charger(true)} disabled={enCours}>Actualiser</button>}
+          {estAMoi && !saisie && <> · <button type="button" className="lien-bouton" onClick={() => setSaisie(true)}>Saisir à la main</button></>}
+          {estAMoi && !saisie && manuel && <> · <button type="button" className="lien-bouton" onClick={effacerSaisie}>Effacer la saisie</button></>}
+        </span>
+      </li>
+      {estAMoi && saisie && (
+        <li className="jauge__saisie">
+          <FormulaireOcre
+            personnageId={perso.id}
+            initial={{ archis: valeurs?.archis.possedes, archisTotal: valeurs?.archis.total, boss: valeurs?.boss.possedes, bossTotal: valeurs?.boss.total }}
+            onFini={() => { setSaisie(false); onMaj(); }}
+            onAnnuler={() => setSaisie(false)}
+          />
+        </li>
+      )}
+    </>
   );
 }

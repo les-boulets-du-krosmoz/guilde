@@ -24,6 +24,12 @@ export interface Personnage {
   niveau_quete_alignement: number | null;
   /** Rang dans l'ordre (1 à 5), saisi par le membre. */
   rang_ordre: number | null;
+  /** Dofus Ocre saisi à la main (quand Metamob ne répond pas ou n'est pas utilisé). */
+  ocre_archis?: number | null;
+  ocre_archis_total?: number | null;
+  ocre_boss?: number | null;
+  ocre_boss_total?: number | null;
+  ocre_saisi_le?: string | null;
   est_principal: boolean;
   image_url: string | null;
   maj_le: string;

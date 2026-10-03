@@ -1,4 +1,5 @@
 // Résumé de la quête du Dofus Ocre d'un membre, lu sur Metamob.
+// Pseudo Metamob : celui saisi dans « Mon compte », sinon le nom du personnage principal du membre.
 // Appelée par la fiche d'un personnage avec { membre_id }. Réservée aux membres validés.
 // Variables : METAMOB_API_KEY (clé créée dans l'onglet API de l'espace Metamob d'un officier).
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -12,6 +13,8 @@ const json = (body: unknown, status = 200) =>
 
 const API = "https://www.metamob.fr/api/v1";
 const DUREE_CACHE_MS = 6 * 3600 * 1000;
+// Une actualisation forcée (visite du site, bouton « Actualiser ») n'est faite que si le résumé a plus de 10 minutes.
+const DELAI_MIN_FORCER_MS = 10 * 60 * 1000;
 const OCRE_UNITY = 1; // modèle de quête « Ocre Dofus Unity »
 const TYPE_BOSS = 2;
 const TYPE_ARCHI = 3;
@@ -49,14 +52,27 @@ Deno.serve(async (req) => {
   const { membre_id, forcer } = await req.json().catch(() => ({}));
   if (!membre_id) return json({ erreur: "membre_id manquant" }, 400);
   const { data: membre } = await admin.from("membres").select("metamob").eq("id", membre_id).single();
-  if (!membre?.metamob) return json({ pseudo: null, quetes: [] });
-  const pseudo = pseudoDepuis(membre.metamob);
-  if (!pseudo) return json({ erreur: "Ce lien ne ressemble pas à un profil Metamob." }, 400);
+  let saisie = membre?.metamob?.trim() ?? "";
+  if (!saisie) {
+    // Pas de pseudo saisi : on suppose que le profil Metamob porte le nom du personnage principal.
+    const { data: persos } = await admin
+      .from("personnages")
+      .select("nom")
+      .eq("membre_id", membre_id)
+      .order("est_principal", { ascending: false })
+      .order("nom")
+      .limit(1);
+    saisie = persos?.[0]?.nom ?? "";
+  }
+  if (!saisie) return json({ pseudo: null, quetes: [] });
+  const pseudo = pseudoDepuis(saisie);
+  if (!pseudo) return json({ erreur: "Ce pseudo ne ressemble pas à un profil Metamob." }, 400);
 
   // 3. Cache encore frais ?
   const { data: cache } = await admin.from("metamob_cache").select("*").eq("membre_id", membre_id).maybeSingle();
   const cacheValide = cache && cache.pseudo === pseudo;
-  if (cacheValide && !forcer && Date.now() - new Date(cache.maj_le).getTime() < DUREE_CACHE_MS) {
+  const age = cacheValide ? Date.now() - new Date(cache.maj_le).getTime() : Infinity;
+  if (cacheValide && age < (forcer ? DELAI_MIN_FORCER_MS : DUREE_CACHE_MS)) {
     return json({ ...cache.donnees, maj_le: cache.maj_le });
   }
 
@@ -110,7 +126,13 @@ Deno.serve(async (req) => {
   } catch (statut) {
     // Metamob indisponible ou limite atteinte : on rend l'ancien résumé s'il existe.
     if (cacheValide) return json({ ...cache.donnees, maj_le: cache.maj_le, ancien: true });
-    if (statut === 404) return json({ erreur: `Aucun profil Metamob « ${pseudo} ».` }, 404);
+    if (statut === 404) {
+      // Profil inexistant : on le met aussi en cache, pour ne pas réinterroger Metamob à chaque visite de la fiche.
+      const donnees = { pseudo, quetes: [], introuvable: true };
+      const maj_le = new Date().toISOString();
+      await admin.from("metamob_cache").upsert({ membre_id, pseudo, donnees, maj_le });
+      return json({ ...donnees, maj_le });
+    }
     if (statut === 401 || statut === 403) return json({ erreur: "Clé Metamob refusée : elle a peut-être expiré." }, 502);
     return json({ erreur: "Metamob ne répond pas, réessaie plus tard." }, 502);
   }

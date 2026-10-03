@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Pastille } from "../components/Pastille";
 import { ALIGNEMENTS, CLASSES, METIERS, METIERS_AUTRES, METIERS_CRAFT, METIERS_RECOLTE, ORDRES } from "../data/constantes";
 import { ilYa } from "../lib/dates";
-import { chargerMetiers } from "../lib/donnees";
+import { FormulaireOcre } from "../components/FormulaireOcre";
+import { chargerMetiers, effacerOcre } from "../lib/donnees";
 import { validerImageUrl } from "../lib/image";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -51,6 +52,7 @@ export function MonCompte() {
 
       <FormMetiers />
       <FormMetamob />
+      <OcreAlaMain />
     </main>
   );
 }
@@ -68,7 +70,7 @@ function FormMetamob() {
     if (!membre) return;
     const propre = valeur.trim();
     if (propre && !/^https?:\/\/(www\.)?metamob\.fr\//i.test(propre) && !/^[\p{L}\p{N}_.-]{2,40}$/u.test(propre)) {
-      setMessage({ texte: "Colle le lien de ton profil Metamob, ou ton pseudo Metamob.", erreur: true });
+      setMessage({ texte: "Indique ton pseudo Metamob, ou colle le lien de ton profil.", erreur: true });
       return;
     }
     setEnCours(true);
@@ -86,19 +88,18 @@ function FormMetamob() {
     <form className="carte" onSubmit={enregistrer}>
       <h2>Archimonstres</h2>
       <div className="champ">
-        <label htmlFor="metamob">Profil Metamob (lien ou pseudo)</label>
+        <label htmlFor="metamob">Pseudo Metamob (facultatif)</label>
         <input
           id="metamob"
           type="text"
-          inputMode="url"
-          placeholder="https://www.metamob.fr/…"
+          placeholder="Vide = nom de ton personnage principal"
           value={valeur}
           maxLength={200}
           onChange={(e) => setValeur(e.target.value)}
           aria-describedby="metamob-aide"
         />
         <span id="metamob-aide" className="discret">
-          Ta quête du Dofus Ocre doit être visible sur ton profil public Metamob, au nom de ton personnage.
+          Par défaut, le site lit metamob.fr/profile/ suivi du nom de ton personnage principal. Remplis ce champ seulement si ton pseudo Metamob est différent. Ta quête du Dofus Ocre doit être publique, au nom de ton personnage.
         </span>
       </div>
       <div className="formulaire__actions">
@@ -106,6 +107,57 @@ function FormMetamob() {
         {message && <span className={message.erreur ? "erreur" : "vert"} role="status">{message.texte}</span>}
       </div>
     </form>
+  );
+}
+
+/** Dofus Ocre saisi à la main, personnage par personnage (utile sans Metamob, ou quand il ne répond pas). */
+function OcreAlaMain() {
+  const { mesPersos, rafraichir } = useSession();
+  const [ouvert, setOuvert] = useState<string | null>(null);
+  if (mesPersos.length === 0) return null;
+  // Les totaux sont les mêmes pour tous : on reprend ceux d'un autre personnage pour éviter de les retaper.
+  const reference = mesPersos.find((p) => p.ocre_archis_total && p.ocre_boss_total);
+
+  return (
+    <section className="carte">
+      <h2>Dofus Ocre à la main</h2>
+      <p className="discret">
+        Sans Metamob, ou s'il ne répond pas, indique ici où en est chaque personnage. La fiche affiche la source la plus récente.
+      </p>
+      <ul className="ocre-compte__liste">
+        {mesPersos.map((p) => (
+          <li key={p.id}>
+            <div className="ocre-compte__ligne">
+              <strong>{p.nom}</strong>
+              <span className="discret">
+                {p.ocre_saisi_le
+                  ? `Archimonstres ${p.ocre_archis} / ${p.ocre_archis_total}, boss ${p.ocre_boss} / ${p.ocre_boss_total}, saisi ${ilYa(p.ocre_saisi_le)}`
+                  : "Pas de saisie"}
+              </span>
+              {ouvert !== p.id && (
+                <button type="button" className="lien-bouton" onClick={() => setOuvert(p.id)}>{p.ocre_saisi_le ? "Modifier" : "Saisir"}</button>
+              )}
+              {ouvert !== p.id && p.ocre_saisi_le && (
+                <button type="button" className="lien-bouton" onClick={() => effacerOcre(p.id).then(rafraichir)}>Effacer</button>
+              )}
+            </div>
+            {ouvert === p.id && (
+              <FormulaireOcre
+                personnageId={p.id}
+                initial={{
+                  archis: p.ocre_archis,
+                  archisTotal: p.ocre_archis_total ?? reference?.ocre_archis_total,
+                  boss: p.ocre_boss,
+                  bossTotal: p.ocre_boss_total ?? reference?.ocre_boss_total,
+                }}
+                onFini={() => { setOuvert(null); rafraichir(); }}
+                onAnnuler={() => setOuvert(null)}
+              />
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 

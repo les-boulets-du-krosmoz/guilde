@@ -410,3 +410,13 @@ a.jauge__nom:hover { color: var(--or); }
 .entraide__liste li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
 .entraide__saisie { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .entraide__saisie input { flex: 1 1 240px; min-width: 0; }
+
+/* Dofus Ocre saisi à la main */
+.liste-jauges li.jauge__saisie { display: flex; flex-direction: column; align-items: stretch; }
+.ocre-saisie { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end; }
+.ocre-saisie label { display: flex; flex-direction: column; gap: 4px; }
+.ocre-saisie__paire { display: flex; align-items: center; gap: 6px; }
+.ocre-saisie__paire input { width: 72px; }
+.ocre-saisie__bloc { display: flex; flex-direction: column; gap: 6px; }
+.ocre-compte__liste { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.ocre-compte__ligne { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }

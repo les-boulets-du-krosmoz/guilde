@@ -104,7 +104,7 @@ export async function chargerAvis(personnageId?: string): Promise<LigneAvis[]> {
 
 export type CompteMetamob = { possedes: number; total: number };
 export type QueteMetamob = { personnage: string; etape: number; etapes: number; archis: CompteMetamob; boss: CompteMetamob };
-export type ResumeMetamob = { pseudo: string | null; quetes: QueteMetamob[]; maj_le?: string; ancien?: boolean };
+export type ResumeMetamob = { pseudo: string | null; quetes: QueteMetamob[]; maj_le?: string; ancien?: boolean; introuvable?: boolean };
 
 /** Quêtes du Dofus Ocre d'un membre sur Metamob (passe par la fonction serveur, qui garde la clé API). */
 export async function chargerMetamob(membreId: string, forcer = false): Promise<ResumeMetamob> {
@@ -150,5 +150,24 @@ export async function proposerAide(personnageId: string, queteId: string, note: 
 
 export async function retirerAide(personnageId: string, queteId: string): Promise<void> {
   const { error } = await supabase.from("aides_etapes").delete().eq("personnage_id", personnageId).eq("quete_id", queteId);
+  if (error) throw error;
+}
+
+/** Dofus Ocre saisi à la main pour un personnage (quand Metamob ne répond pas ou n'est pas utilisé). */
+export type SaisieOcre = { archis: number; archisTotal: number; boss: number; bossTotal: number };
+
+export async function enregistrerOcre(personnageId: string, v: SaisieOcre): Promise<void> {
+  const { error } = await supabase
+    .from("personnages")
+    .update({ ocre_archis: v.archis, ocre_archis_total: v.archisTotal, ocre_boss: v.boss, ocre_boss_total: v.bossTotal, ocre_saisi_le: new Date().toISOString() })
+    .eq("id", personnageId);
+  if (error) throw error;
+}
+
+export async function effacerOcre(personnageId: string): Promise<void> {
+  const { error } = await supabase
+    .from("personnages")
+    .update({ ocre_archis: null, ocre_archis_total: null, ocre_boss: null, ocre_boss_total: null, ocre_saisi_le: null })
+    .eq("id", personnageId);
   if (error) throw error;
 }
