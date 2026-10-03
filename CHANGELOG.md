@@ -6,8 +6,6 @@ Un déploiement sans nouvelle ligne n'annonce rien.
 
 ## À publier
 
-## Publié le 3 octobre 2026
-
 - Les 82 avis de recherche ont leur fiche complète : zone, milice, prérequis et stratégie de combat.
 - Les informations encore à vérifier en jeu s'affichent en orange ; une légende l'explique en haut de la page des avis.
 - Avis d'alignement : nouveau champ « Rang dans l'ordre » dans Mon compte, et le cadenas tient compte de votre niveau d'alignement et de votre rang.
@@ -16,5 +14,5 @@ Un déploiement sans nouvelle ligne n'annonce rien.
 - Tableau de bord : les quêtes bloquées par un métier sont cliquables et mènent à l'étape, pour voir qui est bloqué.
 - Nouveau « Je peux aider » : chaque personnage peut se positionner sur une étape de quête (élevage, combat tactique, strat connue…), avec une petite note. Les aidants apparaissent sur l'étape, dans Progression, sur le tableau de bord et sur leur profil.
 - Profil : deux jauges Metamob pour le Dofus Ocre, archimonstres et boss. Plus besoin de renseigner son profil : le site lit celui qui porte le nom de votre personnage principal (pseudo différent ? indiquez-le dans Mon compte). Sans Metamob, vous pouvez saisir vos chiffres à la main sur votre fiche.
+- Page Métiers et profils : les métiers sont illustrés par les icônes du jeu (blé, bois, minerai, bottes, bouclier…).
 - Le slogan de la guilde s'affiche à la connexion, dans la barre du haut et en bas de chaque page.
-

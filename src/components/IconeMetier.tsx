@@ -1,4 +1,25 @@
-import { METIERS_AUTRES, METIERS_CRAFT, METIERS_RECOLTE } from "../data/constantes";
+import { useState } from "react";
+import { METIERS_CRAFT, METIERS_RECOLTE } from "../data/constantes";
+
+// Icônes du jeu (servies par l'API dofusdude) : l'objet ou la ressource emblématique de chaque métier.
+// Les images restent hébergées par dofusdude ; si l'une ne charge pas, on affiche le pictogramme dessiné ci-dessous.
+const IMG = (id: number, px: 64 | 128) => `https://api.dofusdu.de/dofus3/v1/img/item/${id}-${px}.png`;
+const ICONES: Record<string, number> = {
+  Alchimiste: 12003, // Potion de Soin
+  Bûcheron: 38017, // Bois de Frêne
+  Chasseur: 63483, // Viande Tendre
+  Mineur: 39024, // Fer
+  Paysan: 34009, // Blé
+  Pêcheur: 41294, // Goujon
+  Bijoutier: 1048, // Amulette du Bouftou
+  Cordonnier: 11003, // Bottes du Bouftou
+  Façonneur: 82004, // Bouclier du Bûcheron
+  Forgeron: 7023, // Marteau du Bouftou
+  Sculpteur: 2022, // Arc en Corne de Bouftou
+  Tailleur: 17017, // Cape du Vampire (plus lisible que les capes brunes sur le fond doré)
+  Bricoleur: 84009, // Clef des Pitons Rocheux des Craqueleurs
+  Éleveur: 97043, // Dragodinde Dorée et Émeraude
+};
 
 // Pictogrammes originaux (traits, grille 24 × 24) : l'outil ou l'objet emblématique de chaque métier.
 const DESSINS: Record<string, string> = {
@@ -27,26 +48,44 @@ const CATEGORIES = {
   autre: { fond: "#1f2c3d", trait: "#a9cdf2" },
 };
 
-function decrire(metier: string): { dessin?: string; categorie: keyof typeof CATEGORIES; fm: boolean } {
-  if (METIERS_RECOLTE.includes(metier)) return { dessin: DESSINS[metier], categorie: "recolte", fm: false };
-  const craft = METIERS_CRAFT.find((m) => m.craft === metier);
-  if (craft) return { dessin: DESSINS[metier], categorie: "craft", fm: false };
+/** `base` : le métier dont on reprend l'image (la forgemagie reprend celle de son métier de craft). */
+function decrire(metier: string): { base: string; categorie: keyof typeof CATEGORIES; fm: boolean } {
+  if (METIERS_RECOLTE.includes(metier)) return { base: metier, categorie: "recolte", fm: false };
+  if (METIERS_CRAFT.some((m) => m.craft === metier)) return { base: metier, categorie: "craft", fm: false };
   const fm = METIERS_CRAFT.find((m) => m.fm === metier);
-  if (fm) return { dessin: DESSINS[fm.craft], categorie: "fm", fm: true };
-  if (METIERS_AUTRES.includes(metier)) return { dessin: DESSINS[metier], categorie: "autre", fm: false };
-  return { categorie: "autre", fm: false };
+  if (fm) return { base: fm.craft, categorie: "fm", fm: true };
+  return { base: metier, categorie: "autre", fm: false };
 }
 
 export function IconeMetier({ metier, taille = 36 }: { metier: string; taille?: number }) {
-  const { dessin, categorie, fm } = decrire(metier);
+  const { base, categorie, fm } = decrire(metier);
   const c = CATEGORIES[categorie];
+  const id = ICONES[base];
+  const [enEchec, setEnEchec] = useState(false);
+  const dessin = DESSINS[base];
+
   return (
     <span className="icone-metier" style={{ width: taille, height: taille, background: c.fond }} aria-hidden="true">
-      <svg width={taille * 0.62} height={taille * 0.62} viewBox="0 0 24 24" fill="none" stroke={c.trait}
-        strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-        {dessin ? <path d={dessin} /> : <circle cx="12" cy="12" r="6" />}
-        {fm && <path d={ETINCELLE} fill={c.trait} stroke="none" />}
-      </svg>
+      {id && !enEchec ? (
+        <img
+          src={IMG(id, taille > 48 ? 128 : 64)}
+          srcSet={`${IMG(id, 64)} 1x, ${IMG(id, 128)} 2x`}
+          alt=""
+          loading="lazy"
+          onError={() => setEnEchec(true)}
+        />
+      ) : (
+        <svg width={taille * 0.62} height={taille * 0.62} viewBox="0 0 24 24" fill="none" stroke={c.trait}
+          strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+          {dessin ? <path d={dessin} /> : <circle cx="12" cy="12" r="6" />}
+        </svg>
+      )}
+      {fm && (
+        // Forgemagie : même image que le métier de craft, avec une étincelle dans le coin.
+        <svg className="icone-metier__fm" viewBox="14 0 10 10" width={taille * 0.42} height={taille * 0.42}>
+          <path d={ETINCELLE} fill={c.trait} />
+        </svg>
+      )}
     </span>
   );
 }

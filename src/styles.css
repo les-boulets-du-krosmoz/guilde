@@ -420,3 +420,8 @@ a.jauge__nom:hover { color: var(--or); }
 .ocre-saisie__bloc { display: flex; flex-direction: column; gap: 6px; }
 .ocre-compte__liste { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 .ocre-compte__ligne { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+
+/* Icônes de métiers : image du jeu dans la pastille de couleur de la catégorie */
+.icone-metier { position: relative; }
+.icone-metier img { width: 86%; height: 86%; object-fit: contain; }
+.icone-metier__fm { position: absolute; top: -3px; right: -3px; filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8)); }
