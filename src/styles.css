@@ -480,3 +480,7 @@ a.jauge__nom:hover { color: var(--or); }
 .succes__icone { width: 18px; height: 18px; flex-shrink: 0; background-color: currentColor; -webkit-mask: var(--icone) center / contain no-repeat; mask: var(--icone) center / contain no-repeat; }
 .succes__image { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; object-fit: cover; }
 .succes-restants, .objectif__note { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
+
+/* Avis : qui l'a livré, qui peut encore le faire */
+.ligne-avis__membres { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 24px; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--trait); }
+.ligne-avis__membres .pastilles { margin-top: 6px; }

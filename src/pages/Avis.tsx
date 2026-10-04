@@ -86,6 +86,24 @@ function AvisPerso({ persoId }: { persoId: string }) {
     return res;
   }, [lignes, guilde, persoId]);
 
+  // Pour chaque avis : qui l'a déjà livré, et qui peut encore le faire (prérequis remplis, pas déjà en chasse).
+  const porteurs = useMemo(() => {
+    const res = new Map<string, { livre: Chasseur[]; pasEncore: Chasseur[] }>();
+    if (!guilde) return res;
+    const livres = new Set(lignes.filter((l) => l.etat === "livre").map((l) => `${l.personnage_id}:${l.avis_id}`));
+    const enChasse = new Set(lignes.filter((l) => l.etat === "en_cours").map((l) => `${l.personnage_id}:${l.avis_id}`));
+    for (const a of AVIS) {
+      const r = { livre: [] as Chasseur[], pasEncore: [] as Chasseur[] };
+      for (const p of guilde.personnages) {
+        const c = { perso: p, dispo: estDispo(guilde.membres.get(p.membre_id), p.id) };
+        if (livres.has(`${p.id}:${a.id}`)) r.livre.push(c);
+        else if (!enChasse.has(`${p.id}:${a.id}`) && raisonVerrou(a, p) === null) r.pasEncore.push(c);
+      }
+      res.set(a.id, r);
+    }
+    return res;
+  }, [lignes, guilde]);
+
   if (erreur) return <main className="page"><p className="erreur" role="alert">{erreur}</p></main>;
   if (!perso || !guilde) return <Chargement />;
 
@@ -186,6 +204,8 @@ function AvisPerso({ persoId }: { persoId: string }) {
                 etat={mesEtats.get(a.id)}
                 perso={perso}
                 chasseurs={chasseurs.get(a.id) ?? []}
+                livrePar={porteurs.get(a.id)?.livre ?? []}
+                pasEncore={porteurs.get(a.id)?.pasEncore ?? []}
                 modifiable={modifiable}
                 occupe={occupe}
                 ouvert={ouvert === a.id}
@@ -240,6 +260,8 @@ function LigneAvisUI({
   etat,
   perso,
   chasseurs,
+  livrePar,
+  pasEncore,
   modifiable,
   occupe,
   ouvert,
@@ -250,6 +272,8 @@ function LigneAvisUI({
   etat: EtatAvis | undefined;
   perso: Personnage;
   chasseurs: Chasseur[];
+  livrePar: Chasseur[];
+  pasEncore: Chasseur[];
   modifiable: boolean;
   occupe: boolean;
   ouvert: boolean;
@@ -355,6 +379,26 @@ function LigneAvisUI({
               )}
             </div>
             {url && <a href={url} target="_blank" rel="noreferrer">Guide complet sur Dofus pour les Noobs</a>}
+          </div>
+          <div className="ligne-avis__membres">
+            <div>
+              <span className="discret">{livrePar.length > 0 ? `Livré par ${livrePar.length} personnage${livrePar.length > 1 ? "s" : ""}` : "Personne ne l'a encore livré"}</span>
+              {livrePar.length > 0 && (
+                <div className="pastilles pastilles--serrees">
+                  {livrePar.map((c) => <Pastille key={c.perso.id} perso={c.perso} dispo={c.dispo} taille={28} />)}
+                </div>
+              )}
+            </div>
+            <div>
+              <span className="discret">
+                {pasEncore.length > 0 ? `Pas encore livré par ${pasEncore.length} personnage${pasEncore.length > 1 ? "s" : ""} qui remplissent les prérequis` : "Tous ceux qui remplissent les prérequis l'ont livré ou le chassent"}
+              </span>
+              {pasEncore.length > 0 && (
+                <div className="pastilles pastilles--serrees">
+                  {pasEncore.map((c) => <Pastille key={c.perso.id} perso={c.perso} dispo={c.dispo} taille={28} />)}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
