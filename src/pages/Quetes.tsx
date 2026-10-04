@@ -2,15 +2,18 @@ import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { TexteEtats } from "../components/Etat";
-import { Pastille } from "../components/Pastille";
+import { NomAvecPastille, Pastille } from "../components/Pastille";
 import { DOFUS, type Contenu, type Dofus, type Ressource } from "../data/dofus";
 import { donjonDeLEtape } from "../data/donjons";
-import { donjonDuBoss } from "../data/succesDonjons";
+import { donjonDuBoss, TOTAL_SUCCES } from "../data/succesDonjons";
 import { BoutonDefi } from "../components/BoutonDefi";
+import { TableauSucces } from "../components/TableauSucces";
+import { AideEnMasse } from "../components/AideEnMasse";
 import { IconeDonjon, imageDonjon } from "../components/IconeDonjon";
 import { aDesQuetes, CATEGORIES, type Categorie } from "../data/series";
+import { clicSurCarte } from "../lib/clicCarte";
 import { ilYa } from "../lib/dates";
-import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, chargerSucces, definirSucces, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
+import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, chargerSucces, definirSucces, definirSuccesPlusieurs, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
 import { avancement, cocher, decocher, etapeActuelle, evaluerPrerequis } from "../lib/quetes";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -41,7 +44,9 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   const { membre: moi } = useSession();
   const [params, setParams] = useSearchParams();
   const categorie = CATEGORIES.find((c) => c.id === params.get("cat") && aDesQuetes(c)) ?? CATEGORIES[0];
-  const disponibles = categorie.series.filter((d) => d.quetes.length > 0);
+  // La catégorie « Succès » n'a pas de série : on garde une série par défaut pour le chargement des données.
+  const estSucces = categorie.id === "succes";
+  const disponibles = (estSucces ? CATEGORIES[0] : categorie).series.filter((d) => d.quetes.length > 0);
   const dofus = disponibles.find((d) => d.id === params.get("dofus")) ?? disponibles[0];
   const setDofus = (d: Dofus) => setParams({ cat: categorie.id, dofus: d.id }, { replace: true });
   const setCategorie = (c: Categorie) => setParams({ cat: c.id }, { replace: true });
@@ -55,6 +60,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   const [aides, setAides] = useState<AideEtape[]>([]);
   const [annuaire, setAnnuaire] = useState<{ persos: Map<string, Personnage>; membres: Map<string, Membre> } | null>(null);
   const [saisieAide, setSaisieAide] = useState<{ queteId: string; note: string } | null>(null);
+  const [aideMasse, setAideMasse] = useState(false);
   // Succès de donjon visés ou faits par toute la guilde.
   const [succes, setSucces] = useState<SuccesDonjon[]>([]);
   const [erreur, setErreur] = useState<string | null>(null);
@@ -156,6 +162,21 @@ function QuetesPerso({ persoId }: { persoId: string }) {
     }
   }
 
+  /** « Tout cocher » sur un donjon, ou toutes les victoires affichées. */
+  async function succesPlusieurs(ids: string[], fait: boolean) {
+    if (!perso) return;
+    try {
+      await definirSuccesPlusieurs(perso.id, ids, fait);
+      const maj_le = new Date().toISOString();
+      setSucces((liste) => {
+        const sans = liste.filter((x) => !(x.personnage_id === perso.id && ids.includes(x.succes_id)));
+        return fait ? [...sans, ...ids.map((succes_id) => ({ personnage_id: perso.id, succes_id, statut: "fait" as const, maj_le }))] : sans;
+      });
+    } catch (e) {
+      setErreur((e as Error).message);
+    }
+  }
+
   async function retirerMonAide(queteId: string) {
     if (!perso) return;
     try {
@@ -237,6 +258,35 @@ function QuetesPerso({ persoId }: { persoId: string }) {
 
   const guideDpln = (dofus.sources ?? []).find((src) => src.url.includes("dofuspourlesnoobs.com"))?.url;
 
+  if (estSucces) {
+    const reussis = succes.filter((x) => x.personnage_id === perso.id && x.statut === "fait").length;
+    return (
+      <main className="page">
+        <div className="entete">
+          <div>
+            <Link to={`/perso/${perso.id}`}>Retour à {perso.nom} ({perso.classe} {perso.niveau})</Link>
+            <h1>{modifiable ? "Succès de donjon" : `Succès de donjon de ${perso.nom}`}</h1>
+            <p className="discret">Une ligne par boss, une case par succès, d'après les données du jeu.</p>
+          </div>
+          <div className="progression-globale">
+            <span><strong className="vert">{reussis}</strong> / {TOTAL_SUCCES} réussis</span>
+            <div className="barre barre--large" aria-hidden="true"><div style={{ width: `${(reussis / TOTAL_SUCCES) * 100}%` }} /></div>
+          </div>
+        </div>
+        <BarreCategories actif={categorie} onChoix={setCategorie} />
+        <TableauSucces
+          perso={perso}
+          modifiable={modifiable}
+          succes={succes}
+          persos={annuaire?.persos ?? new Map()}
+          membres={annuaire?.membres ?? new Map()}
+          onBasculer={basculerSucces}
+          onPlusieurs={succesPlusieurs}
+        />
+      </main>
+    );
+  }
+
   return (
     <main className="page">
       <div className="entete">
@@ -257,7 +307,28 @@ function QuetesPerso({ persoId }: { persoId: string }) {
       <BarreCategories actif={categorie} onChoix={setCategorie} />
 
       {categorie.series.length > 1 && (
-        <OngletsSeries series={categorie.series} actif={dofus} onChoix={setDofus} libelle={categorie.estDofus ? "Choix du Dofus" : "Choix de la zone"} />
+        <OngletsSeries series={categorie.series} actif={dofus} onChoix={(d) => { setDofus(d); setAideMasse(false); }} libelle={categorie.estDofus ? "Choix du Dofus" : "Choix de la zone"} />
+      )}
+
+      {modifiable && !aideMasse && (
+        <div className="aide-masse__ouvrir">
+          <button type="button" className="bouton" onClick={() => setAideMasse(true)}>🤝 Aide en masse</button>
+          <span className="discret">Indiquer d'un coup toutes les étapes où {perso.nom} peut aider.</span>
+        </div>
+      )}
+      {modifiable && aideMasse && (
+        <AideEnMasse
+          key={dofus.id}
+          serie={dofus}
+          personnageId={perso.id}
+          nomPerso={perso.nom}
+          aides={aides}
+          onAnnuler={() => setAideMasse(false)}
+          onFini={async () => {
+            setAides(await chargerAides(prefixeDofus(dofus.quetes.map((q) => q.id))));
+            setAideMasse(false);
+          }}
+        />
       )}
 
       {!commence && (modifiable || souhaits.has(dofus.id)) && (
@@ -297,17 +368,24 @@ function QuetesPerso({ persoId }: { persoId: string }) {
           const aDuDetail = q.contenu.length > 0 || prerequis.length > 0 || (q.ressources ?? []).length > 0 || ici.length > 0 || aidesEtape.length > 0 || modifiable;
           const manque = prerequis.some((p) => p.etat === "manque");
           return (
-            <li key={q.id} id={`etape-${q.id}`} className={`quete ${fait ? "quete--faite" : ""} ${actuelle ? "quete--actuelle" : ""}`}>
+            <li
+              key={q.id}
+              id={`etape-${q.id}`}
+              className={`quete ${fait ? "quete--faite" : ""} ${actuelle ? "quete--actuelle" : ""} ${aDuDetail ? "quete--cliquable" : ""}`}
+              onClick={(e) => aDuDetail && clicSurCarte(e, () => basculerOuverture(q.id))}
+            >
+              {/* La case valide l'étape ; le reste de la carte l'ouvre ou la replie. */}
               <input
                 type="checkbox"
                 id={q.id}
                 checked={fait}
                 disabled={!modifiable || enCours}
                 onChange={() => basculer(q.id)}
+                aria-label={`${fait ? "Décocher" : "Terminer"} : ${q.nom}`}
               />
               <div className="quete__corps">
                 <div className="quete__titre">
-                  <label htmlFor={q.id}>{i + 1}. {q.nom}</label>
+                  <span className="quete__nom">{i + 1}. {q.nom}</span>
                   <span className="discret">niv. {q.niveauConseille}</span>
                   {actuelle && <span className="badge badge--or">Étape actuelle</span>}
                   {q.facultative && <span className="badge">Facultative</span>}
@@ -318,12 +396,13 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                   {aDuDetail && (
                     <button
                       type="button"
-                      className="quete__deplier"
+                      className={`quete__deplier ${ouverte ? "quete__deplier--ouvert" : ""}`}
                       aria-expanded={ouverte}
                       aria-controls={`detail-${q.id}`}
+                      aria-label={`${ouverte ? "Replier" : "Déplier"} ${q.nom}`}
                       onClick={() => basculerOuverture(q.id)}
                     >
-                      {ouverte ? "Replier" : "Détails"}
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
                     </button>
                   )}
                 </div>
@@ -418,8 +497,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                           const dispo = estDispo(annuaire?.membres.get(x.membre_id), x.id);
                           return (
                             <li key={a.personnage_id}>
-                              <Link to={`/perso/${x.id}`} className={dispo ? "vert" : undefined}>{x.nom}</Link>
-                              {dispo && <span className="vert discret-taille">dispo</span>}
+                              <NomAvecPastille perso={x} dispo={dispo} />
                               {a.note && <span>{a.note}</span>}
                               <span className="discret discret-taille">{ilYa(a.cree_le)}</span>
                               {modifiable && x.id === perso.id && (
@@ -466,10 +544,10 @@ const SITE_DPLN = "https://www.dofuspourlesnoobs.com/";
 
 
 /** Barre des catégories (Dofus, Frigost, Tour du monde…), partagée avec la page Progression. */
-export function BarreCategories({ actif, onChoix }: { actif: Categorie; onChoix: (c: Categorie) => void }) {
+export function BarreCategories({ actif, onChoix, exclure = [] }: { actif: Categorie; onChoix: (c: Categorie) => void; exclure?: string[] }) {
   return (
     <div className="onglets onglets--categories" role="group" aria-label="Catégorie de quêtes">
-      {CATEGORIES.map((c) =>
+      {CATEGORIES.filter((c) => !exclure.includes(c.id)).map((c) =>
         aDesQuetes(c) ? (
           <button key={c.id} type="button" className={`onglet ${c.id === actif.id ? "onglet--actif" : ""}`} aria-pressed={c.id === actif.id} onClick={() => onChoix(c)}>
             {c.nom}

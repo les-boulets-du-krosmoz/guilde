@@ -13,7 +13,7 @@ union all select 'ressources_cochees', count(*) from public.ressources_cochees
 union all select 'dofus_souhaites', count(*) from public.dofus_souhaites
 order by 1;
 
--- 2. Ce que les migrations 003 à 009 doivent avoir créé (après coup : tout doit être à « oui »).
+-- 2. Ce que les migrations 003 à 010 doivent avoir créé (après coup : tout doit être à « oui »).
 select 'table avis_personnage (003)' as element,
        case when to_regclass('public.avis_personnage') is not null then 'oui' else 'NON' end as present
 union all select 'colonne membres.metamob (004)',
@@ -29,4 +29,6 @@ union all select 'colonnes personnages.ocre_* (007)',
 union all select 'colonne personnages.doplons_depenses (008)',
        case when exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'personnages' and column_name = 'doplons_depenses') then 'oui' else 'NON' end
 union all select 'table succes_donjon (009)',
-       case when to_regclass('public.succes_donjon') is not null then 'oui' else 'NON' end;
+       case when to_regclass('public.succes_donjon') is not null then 'oui' else 'NON' end
+union all select 'colonne membres.bienvenue_le (010)',
+       case when exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'membres' and column_name = 'bienvenue_le') then 'oui' else 'NON' end;

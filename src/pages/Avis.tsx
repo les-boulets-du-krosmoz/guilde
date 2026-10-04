@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { Etat, TexteEtats } from "../components/Etat";
 import { Pastille } from "../components/Pastille";
+import { clicSurCarte } from "../lib/clicCarte";
 import { AVIS, REGIONS, recompense, urlAvis, type Avis } from "../data/avis";
 import { definitionEtat } from "../data/etats";
 import { SimulateurParchos } from "../components/SimulateurParchos";
@@ -290,16 +291,21 @@ function LigneAvisUI({
   const idDetail = `detail-${a.id}`;
 
   return (
-    <li className={`ligne-avis ${ouvert ? "ligne-avis--ouverte" : fait ? "ligne-avis--faite" : ""} ${verrou ? "ligne-avis--verrou" : ""}`}>
+    <li
+      className={`ligne-avis ligne-avis--cliquable ${ouvert ? "ligne-avis--ouverte" : fait ? "ligne-avis--faite" : ""} ${verrou ? "ligne-avis--verrou" : ""}`}
+      onClick={(e) => clicSurCarte(e, onDeplier)}
+    >
       <div className="ligne-avis__tete">
+        {/* La case marque l'avis livré ; le reste de la ligne l'ouvre ou le replie. */}
         <input
           type="checkbox"
           id={idCase}
           checked={fait}
           disabled={!modifiable || occupe || verrou}
           onChange={() => onChange(fait ? null : "livre")}
+          aria-label={`${fait ? "Décocher" : "Marquer livré"} : ${a.nom}`}
         />
-        <label htmlFor={idCase} className="ligne-avis__nom">{a.nom}</label>
+        <span className="ligne-avis__nom">{a.nom}</span>
         {a.protection && (
           <Etat texte={a.protection} definition={definitionEtat(a.protection) ?? a.protection} className="etiquette etiquette--avis" />
         )}

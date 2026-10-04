@@ -8,11 +8,12 @@ import { IconeMetier } from "../components/IconeMetier";
 import { chargerMetiers, effacerOcre } from "../lib/donnees";
 import { validerImageUrl } from "../lib/image";
 import { useSession } from "../lib/session";
+import { estDispo } from "../lib/types";
 import { supabase } from "../lib/supabase";
 import type { Alignement, MetierMembre, Personnage } from "../lib/types";
 
 export function MonCompte() {
-  const { mesPersos } = useSession();
+  const { membre, mesPersos } = useSession();
   const [edition, setEdition] = useState<string | "nouveau" | null>(mesPersos.length === 0 ? "nouveau" : null);
 
   return (
@@ -37,7 +38,7 @@ export function MonCompte() {
               <li key={p.id}><FormPerso perso={p} onFini={() => setEdition(null)} /></li>
             ) : (
               <li key={p.id} className="mes-persos__ligne">
-                <Pastille perso={p} taille={40} />
+                <Pastille perso={p} taille={40} dispo={estDispo(membre ?? undefined, p.id)} />
                 <div>
                   <Link to={`/perso/${p.id}`} className="carte__titre">{p.nom}</Link>
                   <div className="discret">

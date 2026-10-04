@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { IconeMetier } from "../components/IconeMetier";
+import { NomAvecPastille } from "../components/Pastille";
 import { METIERS } from "../data/constantes";
 import { estAncien, ilYa, SEUIL_ANCIEN_JOURS } from "../lib/dates";
 import { chargerGuilde, chargerMetiers, type DonneesGuilde } from "../lib/donnees";
-import type { MetierMembre } from "../lib/types";
+import { estDispo, type MetierMembre } from "../lib/types";
 import { Chargement } from "./Acces";
 
 const PALIERS = [0, 50, 100, 150, 200];
@@ -112,7 +113,7 @@ export function Metiers() {
                   return (
                     <tr key={m.membre_id}>
                       <td>
-                        {perso ? <Link to={`/perso/${perso.id}`}>{perso.nom}</Link> : pseudo}
+                        {perso ? <NomAvecPastille perso={perso} dispo={estDispo(guilde.membres.get(m.membre_id), perso.id)} taille={26} /> : pseudo}
                         <div className="discret">@{pseudo}</div>
                       </td>
                       <td><strong>{m.niveau}</strong></td>

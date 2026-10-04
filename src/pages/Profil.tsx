@@ -3,16 +3,14 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Badge } from "../components/Badge";
 import { IconeMetier } from "../components/IconeMetier";
-import { Pastille } from "../components/Pastille";
+import { NomAvecPastille, Pastille } from "../components/Pastille";
 import { AVIS } from "../data/avis";
 import { DOFUS } from "../data/dofus";
 import { ouEstLaQuete } from "../data/series";
 import { ilYa } from "../lib/dates";
-import { BoutonDefi } from "../components/BoutonDefi";
-import { IconeDonjon, imageDonjon } from "../components/IconeDonjon";
 import { FormulaireOcre } from "../components/FormulaireOcre";
-import { DONJONS_SUCCES, TRANCHES, trancheDe } from "../data/succesDonjons";
-import { chargerAides, chargerDatesQuetes, chargerMetamob, chargerMetiers, chargerSucces, compterAvisLivres, definirSucces, effacerOcre, retirerAide, type ResumeMetamob } from "../lib/donnees";
+import { DONJONS_SUCCES, TOTAL_SUCCES, TRANCHES, trancheDe } from "../data/succesDonjons";
+import { chargerAides, chargerDatesQuetes, chargerMetamob, chargerMetiers, chargerSucces, compterAvisLivres, effacerOcre, retirerAide, type ResumeMetamob } from "../lib/donnees";
 import { avancement, etapeActuelle } from "../lib/quetes";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -31,8 +29,6 @@ type Donnees = {
   /** Défis de donjon réussis par ce personnage. */
   defisFaits: Set<string>;
 };
-
-const TOTAL_SUCCES = DONJONS_SUCCES.reduce((n, dj) => n + dj.succes.length, 0);
 
 export function Profil() {
   const { id } = useParams();
@@ -75,20 +71,6 @@ export function Profil() {
     setD(null);
     charger();
   }, [charger]);
-
-  async function basculerDefi(id: string) {
-    if (!d) return;
-    const fait = d.defisFaits.has(id);
-    try {
-      await definirSucces(d.perso.id, id, fait ? null : "fait");
-      const faits = new Set(d.defisFaits);
-      if (fait) faits.delete(id);
-      else faits.add(id);
-      setD({ ...d, defisFaits: faits });
-    } catch (e) {
-      setErreur((e as Error).message);
-    }
-  }
 
   async function retirerUneAide(queteId: string) {
     if (!d) return;
@@ -151,7 +133,7 @@ export function Profil() {
             <div className="profil__autres">
               <span className="discret">Même compte :</span>
               {autres.map((a) => (
-                <Link key={a.id} to={`/perso/${a.id}`} className="puce">{a.nom}, {a.classe} {a.niveau}</Link>
+                <NomAvecPastille key={a.id} perso={a} dispo={estDispo(proprietaire ?? undefined, a.id)} detail={`${a.classe} ${a.niveau}`} />
               ))}
             </div>
           )}
@@ -257,46 +239,22 @@ export function Profil() {
           <h2>Succès de donjon</h2>
           <span className="discret">{defisFaits.size} / {TOTAL_SUCCES} réussis</span>
         </div>
-        <p className="discret">
-          Tous les succès de chaque donjon, rangés par niveau. En orange, ceux qui restent à faire ; en vert, ceux qui sont réussis.
-          Survole un succès pour lire sa condition{estAMoi ? ", et clique pour le marquer." : "."}
+        <ul className="liste-jauges">
+          {TRANCHES.map((t) => {
+            const ids = DONJONS_SUCCES.filter((dj) => trancheDe(dj.niveau) === t).flatMap((dj) => dj.succes.map((sx) => sx.id));
+            const faits = ids.filter((id) => defisFaits.has(id)).length;
+            return (
+              <li key={t}>
+                <span className="jauge__nom">Niveau {t}</span>
+                <div className="barre" aria-hidden="true"><div style={{ width: `${ids.length ? (faits / ids.length) * 100 : 0}%` }} /></div>
+                <strong>{faits} / {ids.length}</strong>
+              </li>
+            );
+          })}
+        </ul>
+        <p>
+          <Link to={`/quetes/${perso.id}?cat=succes`}>{estAMoi ? "Voir et cocher mes succès dans Mes quêtes" : `Voir le détail des succès de ${perso.nom}`}</Link>
         </p>
-        {TRANCHES.map((t) => {
-          const donjons = DONJONS_SUCCES.filter((dj) => trancheDe(dj.niveau) === t);
-          const total = donjons.reduce((n, dj) => n + dj.succes.length, 0);
-          const faits = donjons.reduce((n, dj) => n + dj.succes.filter((sx) => defisFaits.has(sx.id)).length, 0);
-          return (
-            <details key={t} className="defis-tranche">
-              <summary>
-                Niveau {t} <span className="discret">{faits} / {total}</span>
-              </summary>
-              {donjons.map((dj) => (
-                <div key={dj.nom} className="defis-donjon">
-                  <div className="defis-donjon__titre">
-                    <IconeDonjon fichier={dj.icone} taille={32} titre={dj.boss} />
-                    <strong>{dj.nom}</strong>
-                    <span className="discret">niveau {dj.niveau} · {dj.boss}</span>
-                  </div>
-                  <div className="defis-liste">
-                    {dj.succes.map((sx) => (
-                      <BoutonDefi
-                        key={sx.id}
-                        libelle={sx.libelle}
-                        description={sx.description}
-                        points={sx.points}
-                        icone={sx.icone}
-                        image={sx.icone ? undefined : imageDonjon(dj.icone)}
-                        fait={defisFaits.has(sx.id)}
-                        modifiable={estAMoi}
-                        onBasculer={() => basculerDefi(sx.id)}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </details>
-          );
-        })}
       </section>
 
       <section className="carte">

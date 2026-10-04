@@ -69,12 +69,15 @@ def enregistrer(t, chemin, cible):
         Image.open(io.BytesIO(f.read())).save(cible, "WEBP", quality=90, method=6)
     return True
 
-def icone_donjon(d):
-    icone = ach[next(a for a in d["achievements"]["Array"] if a in ach)]["iconId"]
-    cible = icones / "donjons" / f"{d['id']}.webp"
+def icone_groupe(d, premier_succes, rang_boss):
+    """Icône d'un boss du donjon : celle de ses succès dans le jeu, sinon le portrait du boss."""
+    icone = ach[premier_succes]["iconId"]
+    cible = icones / "donjons" / (f"{d['id']}.webp" if rang_boss == 0 else f"{d['id']}-{rang_boss}.webp")
     if f"{icone}-58.png" in noms_succes:
         return enregistrer(img_succes, noms_succes[f"{icone}-58.png"], cible) and cible.name
-    for b in d["bosses"]["Array"]:
+    bosses = d["bosses"]["Array"]
+    candidats = bosses[rang_boss:rang_boss + 1] + bosses
+    for b in candidats:
         if f"{b}-64.png" in noms_monstres:
             return enregistrer(img_monstres, noms_monstres[f"{b}-64.png"], cible) and cible.name
     return ""
@@ -96,29 +99,44 @@ def rang(libelle):
 
 donjons = []
 for d in donjons_jeu:
-    succes, boss = [], ""
+    # Un donjon à plusieurs boss (Tanière Givrefoux, Eliocalypse…) liste les succès boss par boss,
+    # chaque série commençant par « Vaincre » : on en fait une ligne par boss.
+    groupes, courant = [], []
     for aid in d["achievements"]["Array"]:
-        a = ach.get(aid)
-        if not a:
+        if aid not in ach:
             continue
-        titre, desc = T(a["nameId"]), T(a["descriptionId"])
-        m = re.match(r"^(.*?) \((.+)\)$", titre)
-        libelle = m.group(2) if m else "Vaincre"
-        boss = boss or (m.group(1) if m else "")
-        cm = re.search(r"\[challenge,(\d+)\]", desc)
-        icone_c = icone_challenge(int(cm.group(1))) if cm else 0
-        if cm:
-            nomC, descC, tours = challenge(int(cm.group(1)))
-            if libelle == "Duo" and tours:
-                libelle = f"Duo ({tours} tours)"
-            texte = f"« {nomC} » : {descC}" if libelle.startswith("Spécial") and nomC else (descC or desc)
-        else:
-            texte = desc
-        texte = re.sub(r"<[^>]+>", "", texte).replace("\u00a0", " ").strip()
-        succes.append((aid, libelle, texte, a["points"], icone_c))
-    boss = boss or ", ".join(filter(None, (nom_monstre(b) for b in d["bosses"]["Array"]))) or T(d["nameId"])
-    succes.sort(key=lambda s: rang(s[1]))
-    donjons.append((T(d["nameId"]), d["optimalPlayerLevel"], boss, succes, icone_donjon(d)))
+        est_victoire = not re.match(r"^.*? \(.+\)$", T(ach[aid]["nameId"]))
+        if est_victoire and courant:
+            groupes.append(courant)
+            courant = []
+        courant.append(aid)
+    if courant:
+        groupes.append(courant)
+
+    for rang_boss, groupe in enumerate(groupes):
+        succes, boss = [], ""
+        for aid in groupe:
+            a = ach[aid]
+            titre, desc = T(a["nameId"]), T(a["descriptionId"])
+            m = re.match(r"^(.*?) \((.+)\)$", titre)
+            libelle = m.group(2) if m else "Vaincre"
+            boss = boss or (m.group(1) if m else "")
+            cm = re.search(r"\[challenge,(\d+)\]", desc)
+            icone_c = icone_challenge(int(cm.group(1))) if cm else 0
+            if cm:
+                nomC, descC, tours = challenge(int(cm.group(1)))
+                if libelle == "Duo" and tours:
+                    libelle = f"Duo ({tours} tours)"
+                texte = f"« {nomC} » : {descC}" if libelle.startswith("Spécial") and nomC else (descC or desc)
+            else:
+                texte = desc
+            texte = re.sub(r"<[^>]+>", "", texte).replace("\u00a0", " ").strip()
+            succes.append((aid, libelle, texte, a["points"], icone_c))
+        if not boss:
+            victoire = re.search(r"Vaincre (?:le |la |les |l')?(.+?) dans", T(ach[groupe[0]]["descriptionId"]))
+            boss = victoire.group(1) if victoire else (", ".join(filter(None, (nom_monstre(b) for b in d["bosses"]["Array"]))) or T(d["nameId"]))
+        succes.sort(key=lambda s: rang(s[1]))
+        donjons.append((T(d["nameId"]), d["optimalPlayerLevel"], boss, succes, icone_groupe(d, groupe[0], rang_boss)))
 donjons.sort(key=lambda x: (x[1], x[0]))
 
 j = lambda v: json.dumps(v, ensure_ascii=False)

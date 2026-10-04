@@ -19,7 +19,7 @@ React + TypeScript (Vite) pour le front, Supabase pour la base de données, la c
 ### 1. Supabase
 
 1. Crée un projet sur [supabase.com](https://supabase.com).
-2. Dans **SQL Editor**, colle et exécute `supabase/schema.sql` (une seule fois, sur un projet neuf). Si tu l'as déjà exécuté avec une version plus ancienne, exécute seulement les migrations que tu n'as pas encore passées, dans l'ordre (`supabase/migration-002.sql`, `migration-003.sql`, `migration-004.sql`, `migration-005.sql`, `migration-006.sql`, `migration-007.sql`, `migration-008.sql`, puis `migration-009.sql`).
+2. Dans **SQL Editor**, colle et exécute `supabase/schema.sql` (une seule fois, sur un projet neuf). Si tu l'as déjà exécuté avec une version plus ancienne, exécute seulement les migrations que tu n'as pas encore passées, dans l'ordre (`supabase/migration-002.sql`, `migration-003.sql`, `migration-004.sql`, `migration-005.sql`, `migration-006.sql`, `migration-007.sql`, `migration-008.sql`, `migration-009.sql`, puis `migration-010.sql`).
 3. Note l'URL du projet et la clé `anon` (**Project Settings > API**).
 
 ### 2. Application Discord
@@ -130,11 +130,11 @@ Après chaque déploiement réussi en production, l'Action `.github/workflows/an
 
 ## Déployer sans perdre de données
 
-Les migrations 002 à 009 n'ajoutent que des tables, des colonnes vides et des règles d'accès : aucune ne supprime ni ne modifie de données existantes, et chacune peut être relancée sans risque. Le déploiement Vercel, lui, ne touche jamais à la base.
+Les migrations 002 à 010 n'ajoutent que des tables, des colonnes vides et des règles d'accès : aucune ne supprime ni ne modifie de données existantes, et chacune peut être relancée sans risque. Le déploiement Vercel, lui, ne touche jamais à la base.
 
 1. **Sauvegarde** : exporte les données avant de toucher à quoi que ce soit (voir ci-dessous).
 2. **État avant** : lance `supabase/verification-deploiement.sql` et garde le résultat (nombre de lignes par table).
-3. **Migrations** : exécute, dans l'ordre, celles qui ne sont pas encore passées (003 à 009). L'ancien site continue de fonctionner avec elles.
+3. **Migrations** : exécute, dans l'ordre, celles qui ne sont pas encore passées (003 à 010). L'ancien site continue de fonctionner avec elles.
 4. **État après** : relance `verification-deploiement.sql` : mêmes nombres de lignes (ou plus), et toutes les lignes de la partie 2 à « oui ».
 5. **Site** : seulement maintenant, pousse le code sur GitHub pour que Vercel déploie.
 6. **Retour arrière** si le site pose problème : dans Vercel, remets le déploiement précédent en production. La base n'a pas besoin d'être restaurée, les migrations sont compatibles avec l'ancien site.
@@ -158,3 +158,12 @@ python3 scripts/generer-succes-donjons.py
 ```
 
 Les identifiants des succès (`ach:<numéro>`) viennent du jeu : ils ne changent pas d'une version à l'autre, les succès déjà cochés restent valables.
+
+## Annonce des nouveaux comptes sur Discord
+
+À la première connexion d'un membre confirmé sur le serveur, la fonction `verifier-guilde` poste un message de bienvenue (avec mention du membre) dans un salon Discord. Chaque membre n'est annoncé qu'une fois ; les membres déjà inscrits avant la migration 010 ne le sont pas.
+
+1. Dans le salon voulu : Paramètres > Intégrations > Webhooks > Nouveau webhook, puis copier l'URL.
+2. Dans Supabase : Edge Functions > Secrets (ou `npx supabase secrets set …`), ajouter `DISCORD_WEBHOOK_BIENVENUE` avec cette URL.
+3. Facultatif : `DISCORD_ROLE_BIENVENUE` avec l'identifiant d'un rôle à mentionner en plus (clic droit sur le rôle > Copier l'identifiant, mode développeur activé).
+4. Redéployer la fonction : `npx supabase functions deploy verifier-guilde`.

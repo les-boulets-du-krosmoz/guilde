@@ -1,6 +1,9 @@
 // Vérifie, à chaque connexion, que l'utilisateur est bien sur le serveur Discord de la guilde.
 // Appelée par le front juste après la connexion OAuth, avec le provider_token Discord.
 // Variables : DISCORD_GUILD_ID (SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY sont fournies par Supabase)
+// Facultatives : DISCORD_WEBHOOK_BIENVENUE (salon où annoncer les nouveaux comptes),
+//                DISCORD_ROLE_BIENVENUE (identifiant d'un rôle à mentionner en plus, ex. les officiers).
+// Le site public : SITE_URL (lien dans l'annonce).
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const cors = {
@@ -10,6 +13,35 @@ const cors = {
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...cors, "Content-Type": "application/json" } });
+
+/**
+ * Poste le message de bienvenue. Renvoie true s'il est parti, ou s'il n'y a aucun salon configuré
+ * (rien à rattraper plus tard) ; false si Discord a refusé : on réessaiera à la prochaine connexion.
+ */
+async function annoncerBienvenue(discordId: string, pseudo: string, avatar: string | null): Promise<boolean> {
+  const webhook = Deno.env.get("DISCORD_WEBHOOK_BIENVENUE");
+  if (!webhook) return true;
+  const role = Deno.env.get("DISCORD_ROLE_BIENVENUE");
+  const site = Deno.env.get("SITE_URL") ?? "https://guilde-nine.vercel.app";
+  const corps = {
+    content: `${role ? `<@&${role}> ` : ""}👋 <@${discordId}> vient de créer son compte sur le site de la guilde. Bienvenue !`,
+    // Seuls le nouveau membre et, si configuré, le rôle choisi reçoivent une notification.
+    allowed_mentions: { users: [discordId], roles: role ? [role] : [] },
+    embeds: [{
+      title: `${pseudo} a rejoint le site`,
+      description: "Prochaine étape : créer sa fiche personnage dans Mon compte.",
+      url: site,
+      color: 0xe0b25c,
+      ...(avatar ? { thumbnail: { url: avatar } } : {}),
+    }],
+  };
+  try {
+    const r = await fetch(webhook, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(corps) });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
@@ -32,7 +64,13 @@ Deno.serve(async (req) => {
   if (!moi.ok) return json({ erreur: "Jeton Discord refusé" }, 401);
   const { id: discordId, avatar, global_name, username } = await moi.json();
 
-  const { data: membre } = await admin.from("membres").select("discord_id, avatar_url").eq("id", user.id).single();
+  // Si la migration 010 n'est pas encore passée, la colonne bienvenue_le n'existe pas : on relit sans elle
+  // (pas d'annonce), plutôt que de bloquer la connexion.
+  let { data: membre, error: errMembre } = await admin.from("membres").select("discord_id, avatar_url, bienvenue_le").eq("id", user.id).single();
+  if (errMembre?.code === "42703") {
+    const relu = await admin.from("membres").select("discord_id, avatar_url").eq("id", user.id).single();
+    membre = relu.data ? { ...relu.data, bienvenue_le: "sans-migration" } : null;
+  }
   if (!membre || membre.discord_id !== discordId) return json({ erreur: "Compte Discord incohérent" }, 403);
 
   // Avatar Discord à jour : les personnages qui utilisaient l'ancien avatar suivent le nouveau.
@@ -60,5 +98,11 @@ Deno.serve(async (req) => {
   }
 
   await admin.from("membres").update({ valide, pseudo }).eq("id", user.id);
+
+  // 4. Nouveau membre confirmé sur le serveur : on l'annonce une seule fois sur Discord.
+  if (valide && !membre.bienvenue_le) {
+    const annonce = await annoncerBienvenue(discordId, pseudo, nouvelAvatar);
+    if (annonce) await admin.from("membres").update({ bienvenue_le: new Date().toISOString() }).eq("id", user.id);
+  }
   return json({ valide, pseudo });
 });

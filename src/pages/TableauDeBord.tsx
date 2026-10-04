@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IconeDonjon } from "../components/IconeDonjon";
-import { Pastille } from "../components/Pastille";
+import { NomAvecPastille, Pastille } from "../components/Pastille";
 import { ilYa } from "../lib/dates";
 import { chargerAides, chargerAvis, chargerGuilde, chargerMetiers, chargerSouhaits, chargerSucces, toutesLesQuetes } from "../lib/donnees";
 import { estDispo, type Personnage } from "../lib/types";
@@ -136,9 +136,9 @@ function LigneAidants({ aidants }: { aidants: Aidant[] }) {
     <span className="discret-taille">
       🤝 Peuvent aider :{" "}
       {uniques.map((a, i) => (
-        <span key={a.perso.id}>
-          {i > 0 && ", "}
-          <Link to={`/perso/${a.perso.id}`} className={a.dispo ? "vert" : undefined} title={a.note ?? undefined}>{a.perso.nom}</Link>
+        <span key={a.perso.id} title={a.note ?? undefined}>
+          {i > 0 && " "}
+          <NomAvecPastille perso={a.perso} dispo={a.dispo} taille={20} />
         </span>
       ))}
     </span>

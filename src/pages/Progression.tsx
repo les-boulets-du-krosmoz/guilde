@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { Pastille } from "../components/Pastille";
+import { useSearchParams } from "react-router-dom";
+import { NomAvecPastille, Pastille } from "../components/Pastille";
 import { type Dofus } from "../data/dofus";
 import { aDesQuetes, CATEGORIES, trouverSerie, type Categorie } from "../data/series";
 import { donjonDeLEtape } from "../data/donjons";
@@ -23,7 +23,7 @@ export function Progression() {
   // Lien depuis le tableau de bord : ?dofus=…&etape=… ouvre directement l'étape concernée, quelle que soit la catégorie.
   const etapeCible = params.get("etape");
   const lien = trouverSerie(params.get("dofus"));
-  const categorie = CATEGORIES.find((c) => c.id === params.get("cat") && aDesQuetes(c)) ?? lien?.categorie ?? CATEGORIES[0];
+  const categorie = CATEGORIES.find((c) => c.id === params.get("cat") && c.id !== "succes" && aDesQuetes(c)) ?? lien?.categorie ?? CATEGORIES[0];
   const disponibles = categorie.series.filter((s) => s.quetes.length > 0);
   const dofus = disponibles.find((d) => d.id === params.get("dofus")) ?? disponibles[0];
   const setDofus = (d: Dofus) => setParams({ cat: categorie.id, dofus: d.id }, { replace: true });
@@ -109,7 +109,7 @@ export function Progression() {
         </div>
       </div>
 
-      <BarreCategories actif={categorie} onChoix={setCategorie} />
+      <BarreCategories actif={categorie} onChoix={setCategorie} exclure={["succes"]} />
       {categorie.series.length > 1 && (
         <OngletsSeries series={categorie.series} actif={dofus} onChoix={setDofus} libelle={categorie.estDofus ? "Choix du Dofus" : "Choix de la série"} />
       )}
@@ -168,9 +168,9 @@ export function Progression() {
                         if (!x) return null;
                         const dispo = estDispo(guilde.membres.get(x.membre_id), x.id);
                         return (
-                          <span key={a.personnage_id}>
-                            {i > 0 && ", "}
-                            <Link to={`/perso/${x.id}`} className={dispo ? "vert" : undefined} title={a.note ?? undefined}>{x.nom}</Link>
+                          <span key={a.personnage_id} title={a.note ?? undefined}>
+                            {i > 0 && " "}
+                            <NomAvecPastille perso={x} dispo={dispo} taille={20} />
                           </span>
                         );
                       })}

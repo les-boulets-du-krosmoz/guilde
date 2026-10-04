@@ -173,7 +173,7 @@ input, select {
 .quete--actuelle { background: var(--carte-haute); border: 2px solid var(--or); opacity: 1; }
 .quete__corps { display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
 .quete__titre { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.quete__titre label { font-size: 17px; font-weight: 600; }
+.quete__titre label, .quete__nom { font-size: 17px; font-weight: 600; }
 .etiquettes { display: flex; gap: 8px; flex-wrap: wrap; }
 .etiquette { padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 500; }
 .etiquette--solo { background: var(--orange-fond); color: var(--or-clair); }
@@ -484,3 +484,44 @@ a.jauge__nom:hover { color: var(--or); }
 /* Avis : qui l'a livré, qui peut encore le faire */
 .ligne-avis__membres { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 24px; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--trait); }
 .ligne-avis__membres .pastilles { margin-top: 6px; }
+
+/* Nom précédé de sa pastille (halo vert = dispo pour grouper) */
+.nom-pastille { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; margin: 2px 6px 2px 0; }
+
+/* Mes quêtes > Succès : une ligne par boss, une case par succès */
+.tableau-succes__outils { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 12px 0; }
+.tableau-succes__outils input[type="search"] { flex: 1 1 240px; }
+.onglets--mini .onglet { min-height: 34px; font-size: 13px; }
+.tableau-succes__lignes { list-style: none; margin: 0; padding: 0; }
+.tableau-succes__ligne { display: grid; grid-template-columns: minmax(200px, 260px) 1fr auto; gap: 8px 16px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--trait); }
+.tableau-succes__donjon { display: flex; align-items: center; gap: 10px; }
+.tableau-succes__donjon strong { display: block; }
+.tableau-succes__donjon .discret { font-size: 12px; }
+.tableau-succes__cases { display: flex; flex-wrap: wrap; gap: 6px; }
+.tableau-succes__legende { margin-top: 10px; font-size: 13px; }
+.etat__bulle { white-space: pre-line; }
+@media (max-width: 760px) {
+  .tableau-succes__ligne { grid-template-columns: 1fr; }
+  .tableau-succes__tout { justify-self: start; }
+}
+.tableau-succes__donjon a strong { color: inherit; }
+.tableau-succes__donjon a { text-decoration: none; border-bottom: 1px dotted currentColor; }
+
+/* Aide en masse */
+.aide-masse__ouvrir { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 10px 0; }
+.aide-masse__commun { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 12px 0; }
+.aide-masse__commun input { flex: 1 1 280px; }
+.aide-masse__liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.aide-masse__ligne { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(200px, 1.2fr); gap: 6px 14px; align-items: center; padding: 6px 8px; border-radius: 8px; }
+.aide-masse__ligne--coche { background: rgba(95, 191, 138, 0.08); }
+.aide-masse__ligne input[type="text"], .aide-masse__ligne input:not([type]) { width: 100%; }
+.aide-masse__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; position: sticky; bottom: 0; padding: 10px 0; background: var(--carte); }
+@media (max-width: 640px) { .aide-masse__ligne { grid-template-columns: 1fr; } }
+
+/* Cartes : un clic ouvre ou replie, la case à cocher valide */
+.quete--cliquable, .ligne-avis--cliquable { cursor: pointer; }
+.quete--cliquable:hover, .ligne-avis--cliquable:hover { border-color: #5a4a2a; }
+.quete input[type="checkbox"], .ligne-avis input[type="checkbox"] { cursor: pointer; }
+
+.quete__deplier { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; min-width: 32px; min-height: 32px; padding: 0; border: none; background: transparent; color: var(--discret); cursor: pointer; transition: transform 0.15s; }
+.quete__deplier--ouvert { transform: rotate(180deg); }

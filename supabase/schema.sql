@@ -323,3 +323,6 @@ create policy ecriture_succes on public.succes_donjon for all to authenticated
          and public.est_membre_valide())
   with check (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid())
               and public.est_membre_valide());
+
+-- Annonce de bienvenue sur Discord (migration 010)
+alter table public.membres add column if not exists bienvenue_le timestamptz;

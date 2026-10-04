@@ -193,3 +193,35 @@ export async function definirSucces(personnageId: string, succesId: string, stat
     .upsert({ personnage_id: personnageId, succes_id: succesId, statut, maj_le: new Date().toISOString() }, { onConflict: "personnage_id,succes_id" });
   if (error) throw error;
 }
+
+/** Marque ou retire plusieurs succès d'un coup (« tout cocher » sur un donjon ou une colonne). */
+export async function definirSuccesPlusieurs(personnageId: string, succesIds: string[], fait: boolean): Promise<void> {
+  if (succesIds.length === 0) return;
+  if (!fait) {
+    const { error } = await supabase.from("succes_donjon").delete().eq("personnage_id", personnageId).in("succes_id", succesIds);
+    if (error) throw error;
+    return;
+  }
+  const maj_le = new Date().toISOString();
+  const { error } = await supabase
+    .from("succes_donjon")
+    .upsert(succesIds.map((succes_id) => ({ personnage_id: personnageId, succes_id, statut: "fait", maj_le })), { onConflict: "personnage_id,succes_id" });
+  if (error) throw error;
+}
+
+/** « Aide en masse » : inscrit le personnage sur plusieurs étapes d'un coup (note facultative par étape). */
+export async function proposerAidesPlusieurs(personnageId: string, etapes: { queteId: string; note: string }[]): Promise<void> {
+  if (etapes.length === 0) return;
+  const { error } = await supabase.from("aides_etapes").upsert(
+    etapes.map((e) => ({ personnage_id: personnageId, quete_id: e.queteId, note: e.note.trim().slice(0, 140) || null })),
+    { onConflict: "personnage_id,quete_id" },
+  );
+  if (error) throw error;
+}
+
+/** Retire le personnage de plusieurs étapes d'un coup. */
+export async function retirerAidesPlusieurs(personnageId: string, queteIds: string[]): Promise<void> {
+  if (queteIds.length === 0) return;
+  const { error } = await supabase.from("aides_etapes").delete().eq("personnage_id", personnageId).in("quete_id", queteIds);
+  if (error) throw error;
+}

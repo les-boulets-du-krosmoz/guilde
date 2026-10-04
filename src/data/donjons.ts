@@ -168,3 +168,4 @@ for (const d of Object.values(DONJONS)) {
   const etapes = Object.entries(DONJON_DE_L_ETAPE).filter(([, c]) => c === d.cle).map(([e]) => e);
   for (const s of d.succes) SUCCES_INDEX[s.id] = { nom: s.nom, donjon: d.cle, etapes };
 }
+

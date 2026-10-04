@@ -14,6 +14,8 @@ export const CATEGORIES: Categorie[] = [
   { id: "frigost", nom: "Frigost", series: SERIES_FRIGOST, estDofus: false },
   { id: "tour-du-monde", nom: "Tour du monde", series: [TOUR_DU_MONDE], estDofus: false },
   { id: "emma-tom-pouce", nom: "Emma Tom Pouce", series: [EMMA_TOM_POUCE], estDofus: false },
+  // Pas de série : la page affiche le tableau des succès de donjon (voir components/TableauSucces.tsx).
+  { id: "succes", nom: "Succès", series: [], estDofus: false },
 ];
 
 export const TOUTES_LES_QUETES: Quete[] = CATEGORIES.flatMap((c) => c.series.flatMap((s) => s.quetes));
@@ -31,7 +33,7 @@ export function ouEstLaQuete(id: string): { categorie: Categorie; serie: Dofus; 
 
 /** Une catégorie s'affiche dès qu'une de ses séries a des quêtes saisies. */
 export function aDesQuetes(c: Categorie): boolean {
-  return c.series.some((s) => s.quetes.length > 0);
+  return c.id === "succes" || c.series.some((s) => s.quetes.length > 0);
 }
 
 /** Série (et sa catégorie) à partir de son identifiant, pour les liens ?dofus=… venus d'autres pages. */

@@ -46,3 +46,19 @@ export function Pastille({ perso, dispo = false, taille = 36, lien = true, infob
     </span>
   );
 }
+
+/** Petite pastille suivie du nom cliquable : là où un personnage apparaît dans un texte ou une liste. */
+export function NomAvecPastille({ perso, dispo = false, taille = 22, detail }: {
+  perso: Pick<Personnage, "id" | "nom" | "est_principal" | "image_url">;
+  dispo?: boolean;
+  taille?: number;
+  detail?: string;
+}) {
+  return (
+    <span className="nom-pastille">
+      <Pastille perso={perso} dispo={dispo} taille={taille} />
+      <Link to={`/perso/${perso.id}`} className={dispo ? "vert" : undefined}>{perso.nom}</Link>
+      {detail && <span className="discret">{detail}</span>}
+    </span>
+  );
+}
