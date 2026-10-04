@@ -4,6 +4,7 @@ import { Pastille } from "../components/Pastille";
 import { ALIGNEMENTS, CLASSES, METIERS, METIERS_AUTRES, METIERS_CRAFT, METIERS_RECOLTE, ORDRES } from "../data/constantes";
 import { ilYa } from "../lib/dates";
 import { FormulaireOcre } from "../components/FormulaireOcre";
+import { IconeMetier } from "../components/IconeMetier";
 import { chargerMetiers, effacerOcre } from "../lib/donnees";
 import { validerImageUrl } from "../lib/image";
 import { useSession } from "../lib/session";
@@ -376,7 +377,10 @@ function FormMetiers() {
     const maj = initial.get(metier)?.maj_le;
     return (
       <div key={metier} className="champ champ--ligne">
-        <label htmlFor={`metier-${metier}`}>{metier}</label>
+        <label htmlFor={`metier-${metier}`} className="metier-libelle">
+          <IconeMetier metier={metier} taille={28} />
+          {metier}
+        </label>
         <input
           id={`metier-${metier}`}
           type="number"

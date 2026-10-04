@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Pastille } from "../components/Pastille";
 import { ilYa } from "../lib/dates";
-import { chargerAides, chargerAvis, chargerGuilde, chargerMetiers, chargerSouhaits, toutesLesQuetes } from "../lib/donnees";
+import { chargerAides, chargerAvis, chargerGuilde, chargerMetiers, chargerSouhaits, chargerSucces, toutesLesQuetes } from "../lib/donnees";
 import { estDispo, type Personnage } from "../lib/types";
-import { calculerBilan, type Bilan, type Objectif } from "../lib/tableauDeBord";
+import { calculerBilan, objectifsSeries, type Bilan, type Objectif } from "../lib/tableauDeBord";
 import { Chargement } from "./Acces";
 
 export function TableauDeBord() {
@@ -14,9 +14,13 @@ export function TableauDeBord() {
   const [erreur, setErreur] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([chargerGuilde(), chargerMetiers(), toutesLesQuetes(), chargerSouhaits(), chargerAvis(), chargerAides()])
-      .then(([g, m, q, s, a, aides]) => {
-        setBilan(calculerBilan(g.personnages, g.membres, m, q, s, a));
+    Promise.all([chargerGuilde(), chargerMetiers(), toutesLesQuetes(), chargerSouhaits(), chargerAvis(), chargerAides(), chargerSucces()])
+      .then(([g, m, q, s, a, aides, succes]) => {
+        const b = calculerBilan(g.personnages, g.membres, m, q, s, a);
+        // Les boss du Tour du monde, d'Emma Tom Pouce et de Frigost rejoignent les autres groupes à monter.
+        const objectifs = [...b.objectifs, ...objectifsSeries(g.personnages, g.membres, q, s, succes)]
+          .sort((x, y) => y.persos.length - x.persos.length || y.nbDispo - x.nbDispo);
+        setBilan({ ...b, objectifs });
         const persos = new Map(g.personnages.map((x) => [x.id, x]));
         const parQuete = new Map<string, Aidant[]>();
         for (const aide of aides) {
@@ -165,6 +169,7 @@ function CarteObjectif({ objectif: o, aidants }: { objectif: Objectif; aidants: 
           <span className={`etiquette ${o.type === "Donjon" ? "etiquette--donjon" : o.type === "Avis de recherche" ? "etiquette--avis" : "etiquette--groupe"}`}>{o.type}</span>
         </div>
         <span className="discret-taille">{o.quetes.join(", ")}</span>
+        {o.note && <span className="discret-taille objectif__note">🏆 {o.note}</span>}
         <LigneAidants aidants={aidants} />
         <div className="pastilles">
           {o.persos.map((x) => <Pastille key={x.perso.id} perso={x.perso} dispo={x.dispo} taille={30} />)}

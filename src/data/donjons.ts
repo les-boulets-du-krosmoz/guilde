@@ -1,80 +1,87 @@
-// Généré : pour chaque donjon, sa page DPLN et les quêtes liées qu'elle liste (« Quêtes liées »).
-// Un donjon sans quêtes liées relevées n'affiche que le lien vers son guide.
+// Généré : pour chaque donjon, sa page DPLN, les quêtes liées qu'elle liste et les succès du boss
+// (hors « Vaincre le boss », déjà couvert par l'étape). Un donjon sans données n'affiche que le lien vers son guide.
 
 export type QueteLiee = { nom: string; page: string };
-export type InfosDonjon = { page: string; quetes: QueteLiee[] };
+export type SuccesInfo = { id: string; nom: string };
+export type InfosDonjon = { cle: string; page: string; quetes: QueteLiee[]; succes: SuccesInfo[] };
 
-const D = (page: string, quetes: QueteLiee[] = []): InfosDonjon => ({ page, quetes });
+/** Identifiant stable d'un succès : « clé-du-donjon:nom-simplifié ». */
+const idSucces = (cle: string, nom: string) =>
+  `${cle}:${nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+
+const D = (cle: string, page: string, quetes: QueteLiee[] = [], succes: string[] = []): InfosDonjon => ({
+  cle, page, quetes, succes: succes.map((nom) => ({ id: idSucces(cle, nom), nom })),
+});
 
 export const DONJONS: Record<string, InfosDonjon> = {
-  "akademie-des-gobs": D("akademie-des-gobs.html"),
-  "antichambre-des-gloursons": D("antichambre-des-gloursons.html"),
-  "antre-de-crocabulia": D("antre-de-crocabulia.html"),
-  "antre-de-la-reine-nyeacutee": D("antre-de-la-reine-nyeacutee.html"),
-  "antre-du-blop-multicolore-royal": D("antre-du-blop-multicolore-royal.html"),
-  "antre-du-dragon-cochon": D("antre-du-dragon-cochon.html"),
-  "antre-du-korriandre": D("antre-du-korriandre.html"),
-  "antre-du-kralamoure-geacuteant": D("antre-du-kralamoure-geacuteant.html"),
-  "aquadocircme-de-merkator": D("aquadocircme-de-merkator.html"),
-  "arbre-de-moon": D("arbre-de-moon.html"),
-  "arche-dotomaiuml": D("arche-dotomaiuml.html"),
-  "atelier-du-tanukoui-san": D("atelier-du-tanukoui-san.html"),
-  "bateau-du-chouque": D("bateau-du-chouque.html"),
-  "bibliotheque-du-maitre-corbac": D("bibliotheque-du-maitre-corbac.html"),
-  "cache-de-kankreblath": D("cache-de-kankreblath.html"),
-  "canopeacutee-du-kimbo": D("canopeacutee-du-kimbo.html"),
-  "caverne-du-koulosse": D("caverne-du-koulosse.html"),
-  "cavernes-du-kolosso": D("cavernes-du-kolosso.html"),
-  "centre-du-labyrinthe-du-minotoror": D("centre-du-labyrinthe-du-minotoror.html"),
-  "chapiteau-des-magik-riktus": D("chapiteau-des-magik-riktus.html"),
-  "chateau-du-wa-wabbit": D("chateau-du-wa-wabbit.html"),
-  "chateau-ensable": D("chateau-ensable.html"),
-  "cimetiere-des-mastodontes": D("cimetiere-des-mastodontes.html"),
-  "clairiegravere-du-checircne-mou": D("clairiegravere-du-checircne-mou.html"),
-  "clos-des-blops": D("clos-des-blops.html"),
-  "cour-du-bouftou-royal": D("cour-du-bouftou-royal.html"),
-  "domaine-ancestral": D("domaine-ancestral.html"),
-  "donjon-des-bworks": D("donjon-des-bworks.html"),
-  "donjon-des-forgerons": D("donjon-des-forgerons.html"),
-  "donjon-des-larves": D("donjon-des-larves.html"),
-  "donjon-des-rats-du-chacircteau-damakna": D("donjon-des-rats-du-chacircteau-damakna.html"),
-  "donjon-des-scarafeuilles": D("donjon-des-scarafeuilles.html"),
-  "donjon-des-squelettes": D("donjon-des-squelettes.html"),
-  "donjon-des-tofus": D("donjon-des-tofus.html"),
-  "donjon-du-comte-harebourg": D("donjon-du-comte-harebourg.html"),
-  "epave-du-grolandais-violent": D("epave-du-grolandais-violent.html", [{ nom: "Fais dodo, t'auras du gâteau", page: "fais-dodo-tauras-du-gacircteau.html" }, { nom: "Porte, Ben le Ripate, trésor", page: "porte-ben-le-ripate-treacutesor.html" }, { nom: "Piwates des sept mers et demies", page: "piwates-des-sept-mers-et-demies.html" }, { nom: "La bénédiction de Thomahon", page: "la-beacuteneacutediction-de-thomahon.html" }]),
-  "epreuve-de-draegnerys": D("epreuve-de-draegnerys.html"),
-  "excavation-du-mansot-royal": D("excavation-du-mansot-royal.html", [{ nom: "Les joyeux de la couronne", page: "les-joyeux-de-la-couronne.html" }, { nom: "Porte, Mansot Royal, trésor", page: "porte-mansot-royal-treacutesor.html" }, { nom: "Monarchie parlementaire", page: "monarchie-parlementaire.html" }, { nom: "La bénédiction de Viti", page: "la-beacuteneacutediction-de-viti.html" }, { nom: "Les chasseurs", page: "les-chasseurs.html" }, { nom: "Pêche en eaux gelées", page: "pecircche-en-eaux-geleacutees.html" }]),
-  "fabrique-de-foux-d-artifice": D("fabrique-de-foux-d-artifice.html"),
-  "forgefroide-de-missiz-frizz": D("forgefroide-de-missiz-frizz.html"),
-  "garde-manger-du-rat-blanc": D("garde-manger-du-rat-blanc.html"),
-  "gelaxieme-dimension": D("gelaxieme-dimension.html"),
-  "goulet-du-rasboul": D("goulet-du-rasboul.html"),
-  "grange-du-tournesol-affame": D("grange-du-tournesol-affame.html"),
-  "grotte-du-bworker": D("grotte-du-bworker.html"),
-  "grotte-hesque": D("grotte-hesque.html"),
-  "hypogeacutee-de-lobsidiantre": D("hypogeacutee-de-lobsidiantre.html", [{ nom: "Lavomatique", page: "lavomatique.html" }, { nom: "Porte, Obsidiantre, trésor", page: "porte-obsidiantre-treacutesor.html" }, { nom: "Pour qui sonne le glagla", page: "pour-qui-sonne-le-glagla.html" }, { nom: "La bénédiction de Thomahon", page: "la-beacuteneacutediction-de-thomahon.html" }, { nom: "Chaud du S.L.I.P.", page: "chaud-du-slip.html" }, { nom: "Fleuries mais rougissent", page: "fleuries-mais-rougissent.html" }, { nom: "Champ Pomy", page: "champ-pomy.html" }, { nom: "À la recherche de Dan Lavy (salle 4 seulement)", page: "a-la-recherche-de-dan-lavy.html" }]),
-  "laboratoire-de-brumen-tinctorias": D("laboratoire-de-brumen-tinctorias.html"),
-  "laboratoire-de-nileza": D("laboratoire-de-nileza.html"),
-  "laboratoire-du-tynril": D("laboratoire-du-tynril.html"),
-  "maison-fantome": D("maison-fantome.html"),
-  "minotot": D("minotot.html"),
-  "nid-du-kwakwa": D("nid-du-kwakwa.html"),
-  "pitons-rocheux-des-craqueleurs": D("pitons-rocheux-des-craqueleurs.html"),
-  "refuge-sylvestre": D("refuge-sylvestre.html"),
-  "repaire-de-skeunk": D("repaire-de-skeunk.html"),
-  "repaire-du-kharnozor": D("repaire-du-kharnozor.html"),
-  "salons-priveacutes-de-klime": D("salons-priveacutes-de-klime.html"),
-  "serre-du-royalmouth": D("serre-du-royalmouth.html", [{ nom: "Antiroyaliste", page: "antiroyaliste.html" }, { nom: "Porte, Royalmouth, trésor", page: "porte-royalmouth-treacutesor.html" }, { nom: "Monarchie absolue", page: "monarchie-absolue.html" }, { nom: "Des donjons, encore des donjons", page: "des-donjons-encore-des-donjons.html" }, { nom: "Le mal a dit", page: "le-mal-a-dit.html" }, { nom: "Le pouvoir derrière le trône", page: "le-pouvoir-derriegravere-le-trocircne.html" }, { nom: "Chaud du S.L.I.P.", page: "chaud-du-slip.html" }]),
-  "sousouriciere-du-rat-noir": D("sousouriciere-du-rat-noir.html"),
-  "taniegravere-givrefoux": D("taniegravere-givrefoux.html"),
-  "taniere-du-meulou": D("taniere-du-meulou.html"),
-  "temple-du-grand-ougah": D("temple-du-grand-ougah.html"),
-  "terrier-du-wa-wabbit": D("terrier-du-wa-wabbit.html"),
-  "theacuteacirctre-de-dramak": D("theacuteacirctre-de-dramak.html"),
-  "tofulailler-royal": D("tofulailler-royal.html"),
-  "transporteur-de-sylargh": D("transporteur-de-sylargh.html"),
-  "village-kanniboul": D("village-kanniboul.html"),
+  "akademie-des-gobs": D("akademie-des-gobs", "akademie-des-gobs.html", [], []),
+  "antichambre-des-gloursons": D("antichambre-des-gloursons", "antichambre-des-gloursons.html", [], []),
+  "antre-de-crocabulia": D("antre-de-crocabulia", "antre-de-crocabulia.html", [], []),
+  "antre-de-la-reine-nyeacutee": D("antre-de-la-reine-nyeacutee", "antre-de-la-reine-nyeacutee.html", [], []),
+  "antre-du-blop-multicolore-royal": D("antre-du-blop-multicolore-royal", "antre-du-blop-multicolore-royal.html", [], []),
+  "antre-du-dragon-cochon": D("antre-du-dragon-cochon", "antre-du-dragon-cochon.html", [], []),
+  "antre-du-korriandre": D("antre-du-korriandre", "antre-du-korriandre.html", [], []),
+  "antre-du-kralamoure-geacuteant": D("antre-du-kralamoure-geacuteant", "antre-du-kralamoure-geacuteant.html", [], []),
+  "aquadocircme-de-merkator": D("aquadocircme-de-merkator", "aquadocircme-de-merkator.html", [], []),
+  "arbre-de-moon": D("arbre-de-moon", "arbre-de-moon.html", [], []),
+  "arche-dotomaiuml": D("arche-dotomaiuml", "arche-dotomaiuml.html", [], []),
+  "atelier-du-tanukoui-san": D("atelier-du-tanukoui-san", "atelier-du-tanukoui-san.html", [], []),
+  "bateau-du-chouque": D("bateau-du-chouque", "bateau-du-chouque.html", [], []),
+  "bibliotheque-du-maitre-corbac": D("bibliotheque-du-maitre-corbac", "bibliotheque-du-maitre-corbac.html", [], []),
+  "cache-de-kankreblath": D("cache-de-kankreblath", "cache-de-kankreblath.html", [], []),
+  "canopeacutee-du-kimbo": D("canopeacutee-du-kimbo", "canopeacutee-du-kimbo.html", [], []),
+  "caverne-du-koulosse": D("caverne-du-koulosse", "caverne-du-koulosse.html", [], []),
+  "cavernes-du-kolosso": D("cavernes-du-kolosso", "cavernes-du-kolosso.html", [], []),
+  "centre-du-labyrinthe-du-minotoror": D("centre-du-labyrinthe-du-minotoror", "centre-du-labyrinthe-du-minotoror.html", [], []),
+  "chapiteau-des-magik-riktus": D("chapiteau-des-magik-riktus", "chapiteau-des-magik-riktus.html", [], []),
+  "chateau-du-wa-wabbit": D("chateau-du-wa-wabbit", "chateau-du-wa-wabbit.html", [], []),
+  "chateau-ensable": D("chateau-ensable", "chateau-ensable.html", [], []),
+  "cimetiere-des-mastodontes": D("cimetiere-des-mastodontes", "cimetiere-des-mastodontes.html", [], []),
+  "clairiegravere-du-checircne-mou": D("clairiegravere-du-checircne-mou", "clairiegravere-du-checircne-mou.html", [], []),
+  "clos-des-blops": D("clos-des-blops", "clos-des-blops.html", [], []),
+  "cour-du-bouftou-royal": D("cour-du-bouftou-royal", "cour-du-bouftou-royal.html", [], []),
+  "domaine-ancestral": D("domaine-ancestral", "domaine-ancestral.html", [], []),
+  "donjon-des-bworks": D("donjon-des-bworks", "donjon-des-bworks.html", [], []),
+  "donjon-des-forgerons": D("donjon-des-forgerons", "donjon-des-forgerons.html", [], []),
+  "donjon-des-larves": D("donjon-des-larves", "donjon-des-larves.html", [], []),
+  "donjon-des-rats-du-chacircteau-damakna": D("donjon-des-rats-du-chacircteau-damakna", "donjon-des-rats-du-chacircteau-damakna.html", [], []),
+  "donjon-des-scarafeuilles": D("donjon-des-scarafeuilles", "donjon-des-scarafeuilles.html", [], []),
+  "donjon-des-squelettes": D("donjon-des-squelettes", "donjon-des-squelettes.html", [], []),
+  "donjon-des-tofus": D("donjon-des-tofus", "donjon-des-tofus.html", [], []),
+  "donjon-du-comte-harebourg": D("donjon-du-comte-harebourg", "donjon-du-comte-harebourg.html", [], []),
+  "epave-du-grolandais-violent": D("epave-du-grolandais-violent", "epave-du-grolandais-violent.html", [{ nom: "Fais dodo, t'auras du gâteau", page: "fais-dodo-tauras-du-gacircteau.html" }, { nom: "Porte, Ben le Ripate, trésor", page: "porte-ben-le-ripate-treacutesor.html" }, { nom: "Piwates des sept mers et demies", page: "piwates-des-sept-mers-et-demies.html" }, { nom: "La bénédiction de Thomahon", page: "la-beacuteneacutediction-de-thomahon.html" }], []),
+  "epreuve-de-draegnerys": D("epreuve-de-draegnerys", "epreuve-de-draegnerys.html", [], []),
+  "excavation-du-mansot-royal": D("excavation-du-mansot-royal", "excavation-du-mansot-royal.html", [{ nom: "Les joyeux de la couronne", page: "les-joyeux-de-la-couronne.html" }, { nom: "Porte, Mansot Royal, trésor", page: "porte-mansot-royal-treacutesor.html" }, { nom: "Monarchie parlementaire", page: "monarchie-parlementaire.html" }, { nom: "La bénédiction de Viti", page: "la-beacuteneacutediction-de-viti.html" }, { nom: "Les chasseurs", page: "les-chasseurs.html" }, { nom: "Pêche en eaux gelées", page: "pecircche-en-eaux-geleacutees.html" }], []),
+  "fabrique-de-foux-d-artifice": D("fabrique-de-foux-d-artifice", "fabrique-de-foux-d-artifice.html", [], []),
+  "forgefroide-de-missiz-frizz": D("forgefroide-de-missiz-frizz", "forgefroide-de-missiz-frizz.html", [], []),
+  "garde-manger-du-rat-blanc": D("garde-manger-du-rat-blanc", "garde-manger-du-rat-blanc.html", [], []),
+  "gelaxieme-dimension": D("gelaxieme-dimension", "gelaxieme-dimension.html", [], []),
+  "goulet-du-rasboul": D("goulet-du-rasboul", "goulet-du-rasboul.html", [], []),
+  "grange-du-tournesol-affame": D("grange-du-tournesol-affame", "grange-du-tournesol-affame.html", [], []),
+  "grotte-du-bworker": D("grotte-du-bworker", "grotte-du-bworker.html", [], []),
+  "grotte-hesque": D("grotte-hesque", "grotte-hesque.html", [], []),
+  "hypogeacutee-de-lobsidiantre": D("hypogeacutee-de-lobsidiantre", "hypogeacutee-de-lobsidiantre.html", [{ nom: "Lavomatique", page: "lavomatique.html" }, { nom: "Porte, Obsidiantre, trésor", page: "porte-obsidiantre-treacutesor.html" }, { nom: "Pour qui sonne le glagla", page: "pour-qui-sonne-le-glagla.html" }, { nom: "La bénédiction de Thomahon", page: "la-beacuteneacutediction-de-thomahon.html" }, { nom: "Chaud du S.L.I.P.", page: "chaud-du-slip.html" }, { nom: "Fleuries mais rougissent", page: "fleuries-mais-rougissent.html" }, { nom: "Champ Pomy", page: "champ-pomy.html" }, { nom: "À la recherche de Dan Lavy (salle 4 seulement)", page: "a-la-recherche-de-dan-lavy.html" }], []),
+  "laboratoire-de-brumen-tinctorias": D("laboratoire-de-brumen-tinctorias", "laboratoire-de-brumen-tinctorias.html", [], []),
+  "laboratoire-de-nileza": D("laboratoire-de-nileza", "laboratoire-de-nileza.html", [], []),
+  "laboratoire-du-tynril": D("laboratoire-du-tynril", "laboratoire-du-tynril.html", [], []),
+  "maison-fantome": D("maison-fantome", "maison-fantome.html", [], []),
+  "minotot": D("minotot", "minotot.html", [], []),
+  "nid-du-kwakwa": D("nid-du-kwakwa", "nid-du-kwakwa.html", [], []),
+  "pitons-rocheux-des-craqueleurs": D("pitons-rocheux-des-craqueleurs", "pitons-rocheux-des-craqueleurs.html", [], []),
+  "refuge-sylvestre": D("refuge-sylvestre", "refuge-sylvestre.html", [], []),
+  "repaire-de-skeunk": D("repaire-de-skeunk", "repaire-de-skeunk.html", [], []),
+  "repaire-du-kharnozor": D("repaire-du-kharnozor", "repaire-du-kharnozor.html", [], []),
+  "salons-priveacutes-de-klime": D("salons-priveacutes-de-klime", "salons-priveacutes-de-klime.html", [], []),
+  "serre-du-royalmouth": D("serre-du-royalmouth", "serre-du-royalmouth.html", [{ nom: "Antiroyaliste", page: "antiroyaliste.html" }, { nom: "Porte, Royalmouth, trésor", page: "porte-royalmouth-treacutesor.html" }, { nom: "Monarchie absolue", page: "monarchie-absolue.html" }, { nom: "Des donjons, encore des donjons", page: "des-donjons-encore-des-donjons.html" }, { nom: "Le mal a dit", page: "le-mal-a-dit.html" }, { nom: "Le pouvoir derrière le trône", page: "le-pouvoir-derriegravere-le-trocircne.html" }, { nom: "Chaud du S.L.I.P.", page: "chaud-du-slip.html" }], []),
+  "sousouriciere-du-rat-noir": D("sousouriciere-du-rat-noir", "sousouriciere-du-rat-noir.html", [], []),
+  "taniegravere-givrefoux": D("taniegravere-givrefoux", "taniegravere-givrefoux.html", [], []),
+  "taniere-du-meulou": D("taniere-du-meulou", "taniere-du-meulou.html", [], []),
+  "temple-du-grand-ougah": D("temple-du-grand-ougah", "temple-du-grand-ougah.html", [], []),
+  "terrier-du-wa-wabbit": D("terrier-du-wa-wabbit", "terrier-du-wa-wabbit.html", [], []),
+  "theacuteacirctre-de-dramak": D("theacuteacirctre-de-dramak", "theacuteacirctre-de-dramak.html", [], []),
+  "tofulailler-royal": D("tofulailler-royal", "tofulailler-royal.html", [], []),
+  "transporteur-de-sylargh": D("transporteur-de-sylargh", "transporteur-de-sylargh.html", [], []),
+  "village-kanniboul": D("village-kanniboul", "village-kanniboul.html", [], []),
 };
 
 /** Donjon de chaque étape « boss » (Tour du monde, Emma Tom Pouce, Frigost). */
@@ -153,4 +160,11 @@ const DONJON_DE_L_ETAPE: Record<string, string> = {
 export function donjonDeLEtape(queteId: string): InfosDonjon | undefined {
   const cle = DONJON_DE_L_ETAPE[queteId];
   return cle ? DONJONS[cle] : undefined;
+}
+
+/** Pour chaque succès : son nom, son donjon et les étapes « boss » qui y mènent (tableau de bord, Progression). */
+export const SUCCES_INDEX: Record<string, { nom: string; donjon: string; etapes: string[] }> = {};
+for (const d of Object.values(DONJONS)) {
+  const etapes = Object.entries(DONJON_DE_L_ETAPE).filter(([, c]) => c === d.cle).map(([e]) => e);
+  for (const s of d.succes) SUCCES_INDEX[s.id] = { nom: s.nom, donjon: d.cle, etapes };
 }

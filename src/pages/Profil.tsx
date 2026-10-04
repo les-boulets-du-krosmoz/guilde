@@ -8,8 +8,10 @@ import { AVIS } from "../data/avis";
 import { DOFUS } from "../data/dofus";
 import { ouEstLaQuete } from "../data/series";
 import { ilYa } from "../lib/dates";
+import { BoutonDefi } from "../components/BoutonDefi";
 import { FormulaireOcre } from "../components/FormulaireOcre";
-import { chargerAides, chargerDatesQuetes, chargerMetamob, chargerMetiers, compterAvisLivres, effacerOcre, retirerAide, type ResumeMetamob } from "../lib/donnees";
+import { SUCCES_BOSS, TRANCHES } from "../data/succesDonjons";
+import { chargerAides, chargerDatesQuetes, chargerMetamob, chargerMetiers, chargerSucces, compterAvisLivres, definirSucces, effacerOcre, retirerAide, type ResumeMetamob } from "../lib/donnees";
 import { avancement, etapeActuelle } from "../lib/quetes";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -25,6 +27,8 @@ type Donnees = {
   dates: Map<string, string>;
   avisLivres: number;
   aides: AideEtape[];
+  /** Défis de donjon réussis par ce personnage. */
+  defisFaits: Set<string>;
 };
 
 export function Profil() {
@@ -39,13 +43,14 @@ export function Profil() {
       const { data: perso, error } = await supabase.from("personnages").select("*").eq("id", id).single();
       if (error || !perso) throw new Error("Ce personnage n'existe pas ou plus.");
       const p = perso as Personnage;
-      const [proprio, autres, metiers, quetes, avisLivres, aides] = await Promise.all([
+      const [proprio, autres, metiers, quetes, avisLivres, aides, succes] = await Promise.all([
         supabase.from("membres").select("*").eq("id", p.membre_id).single(),
         supabase.from("personnages").select("*").eq("membre_id", p.membre_id).neq("id", p.id).order("nom"),
         chargerMetiers(p.membre_id),
         chargerDatesQuetes(p.id),
         compterAvisLivres(p.id),
         chargerAides(undefined, p.id),
+        chargerSucces(),
       ]);
       setD({
         perso: p,
@@ -56,6 +61,7 @@ export function Profil() {
         dates: quetes,
         avisLivres,
         aides,
+        defisFaits: new Set(succes.filter((x) => x.personnage_id === p.id && x.statut === "fait").map((x) => x.succes_id)),
       });
     } catch (e) {
       setErreur((e as Error).message);
@@ -66,6 +72,20 @@ export function Profil() {
     setD(null);
     charger();
   }, [charger]);
+
+  async function basculerDefi(id: string) {
+    if (!d) return;
+    const fait = d.defisFaits.has(id);
+    try {
+      await definirSucces(d.perso.id, id, fait ? null : "fait");
+      const faits = new Set(d.defisFaits);
+      if (fait) faits.delete(id);
+      else faits.add(id);
+      setD({ ...d, defisFaits: faits });
+    } catch (e) {
+      setErreur((e as Error).message);
+    }
+  }
 
   async function retirerUneAide(queteId: string) {
     if (!d) return;
@@ -87,7 +107,7 @@ export function Profil() {
   if (erreur) return <main className="page"><p className="erreur" role="alert">{erreur}</p></main>;
   if (!d) return <Chargement />;
 
-  const { perso, proprietaire, autres, metiers, faites, dates, avisLivres, aides } = d;
+  const { perso, proprietaire, autres, metiers, faites, dates, avisLivres, aides, defisFaits } = d;
   // Un badge par Dofus obtenu, daté par la dernière quête de la série.
   const badges = DOFUS.filter((x) => x.quetes.length > 0 && etapeActuelle(x, faites) === x.quetes.length).map((x) => ({
     dofus: x,
@@ -228,6 +248,40 @@ export function Profil() {
           </ul>
         </section>
       )}
+
+      <section className="carte">
+        <div className="carte__entete">
+          <h2>Défis de donjon</h2>
+          <span className="discret">{defisFaits.size} / {SUCCES_BOSS.length} réussis</span>
+        </div>
+        <p className="discret">
+          Un défi par boss. En orange, ceux qui restent à faire ; en vert, ceux qui sont réussis. Survole un boss pour lire son défi
+          {estAMoi ? ", et clique pour le marquer." : "."}
+        </p>
+        {TRANCHES.map((t) => {
+          const liste = SUCCES_BOSS.filter((x) => x.tranche === t);
+          const faits = liste.filter((x) => defisFaits.has(x.id)).length;
+          return (
+            <details key={t} className="defis-tranche">
+              <summary>
+                Niveau {t} <span className="discret">{faits} / {liste.length}</span>
+              </summary>
+              <div className="defis-liste">
+                {liste.map((x) => (
+                  <BoutonDefi
+                    key={x.id}
+                    libelle={x.boss}
+                    description={x.description}
+                    fait={defisFaits.has(x.id)}
+                    modifiable={estAMoi}
+                    onBasculer={() => basculerDefi(x.id)}
+                  />
+                ))}
+              </div>
+            </details>
+          );
+        })}
+      </section>
 
       <section className="carte">
         <h2>Chasses</h2>

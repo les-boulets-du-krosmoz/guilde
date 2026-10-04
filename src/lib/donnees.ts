@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { AideEtape, Membre, MetierMembre, Personnage, QueteTerminee } from "./types";
+import type { AideEtape, Membre, MetierMembre, Personnage, QueteTerminee, SuccesDonjon } from "./types";
 
 export type DonneesGuilde = {
   membres: Map<string, Membre>;
@@ -169,5 +169,27 @@ export async function effacerOcre(personnageId: string): Promise<void> {
     .from("personnages")
     .update({ ocre_archis: null, ocre_archis_total: null, ocre_boss: null, ocre_boss_total: null, ocre_saisi_le: null })
     .eq("id", personnageId);
+  if (error) throw error;
+}
+
+/** Succès de donjon visés ou faits par toute la guilde (petite table, chargée d'un coup). */
+export async function chargerSucces(): Promise<SuccesDonjon[]> {
+  const { data, error } = await supabase.from("succes_donjon").select("personnage_id, succes_id, statut, maj_le");
+  // Table absente (migration 009 pas encore passée) : le site s'affiche sans les succès plutôt qu'en erreur.
+  if (error && (error.code === "42P01" || error.code === "PGRST205")) return [];
+  if (error) throw error;
+  return data as SuccesDonjon[];
+}
+
+/** Statut d'un succès pour un personnage ; `null` retire la ligne. */
+export async function definirSucces(personnageId: string, succesId: string, statut: "vise" | "fait" | null): Promise<void> {
+  if (statut === null) {
+    const { error } = await supabase.from("succes_donjon").delete().eq("personnage_id", personnageId).eq("succes_id", succesId);
+    if (error) throw error;
+    return;
+  }
+  const { error } = await supabase
+    .from("succes_donjon")
+    .upsert({ personnage_id: personnageId, succes_id: succesId, statut, maj_le: new Date().toISOString() }, { onConflict: "personnage_id,succes_id" });
   if (error) throw error;
 }

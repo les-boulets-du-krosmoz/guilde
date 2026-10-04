@@ -3,10 +3,12 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Pastille } from "../components/Pastille";
 import { type Dofus } from "../data/dofus";
 import { aDesQuetes, CATEGORIES, trouverSerie, type Categorie } from "../data/series";
-import { chargerAides, chargerGuilde, chargerQuetes, chargerSouhaits, prefixeDofus, type DonneesGuilde } from "../lib/donnees";
+import { donjonDeLEtape } from "../data/donjons";
+import { succesDuBoss } from "../data/succesDonjons";
+import { chargerAides, chargerGuilde, chargerQuetes, chargerSouhaits, chargerSucces, prefixeDofus, type DonneesGuilde } from "../lib/donnees";
 import { etapeActuelle } from "../lib/quetes";
 import { useSession } from "../lib/session";
-import { estDispo, type AideEtape, type Personnage } from "../lib/types";
+import { estDispo, type AideEtape, type Personnage, type SuccesDonjon } from "../lib/types";
 import { Chargement } from "./Acces";
 import { BarreCategories, Etiquette, OngletsSeries } from "./Quetes";
 
@@ -29,6 +31,7 @@ export function Progression() {
   const [quetes, setQuetes] = useState<Map<string, Set<string>> | null>(null);
   const [souhaits, setSouhaits] = useState<Map<string, Set<string>>>(new Map());
   const [aides, setAides] = useState<AideEtape[]>([]);
+  const [succes, setSucces] = useState<SuccesDonjon[]>([]);
   const [seulsDispos, setSeulsDispos] = useState(false);
   const [ouvertes, setOuvertes] = useState<Set<string>>(new Set(etapeCible ? [etapeCible] : []));
   const [erreur, setErreur] = useState<string | null>(null);
@@ -36,8 +39,9 @@ export function Progression() {
   useEffect(() => {
     setQuetes(null);
     const prefixe = prefixeDofus(dofus.quetes.map((q) => q.id));
-    Promise.all([chargerGuilde(), chargerQuetes(prefixe), chargerSouhaits(), chargerAides(prefixe)])
-      .then(([g, q, s, a]) => {
+    Promise.all([chargerGuilde(), chargerQuetes(prefixe), chargerSouhaits(), chargerAides(prefixe), chargerSucces()])
+      .then(([g, q, s, a, sx]) => {
+        setSucces(sx);
         setGuilde(g);
         setQuetes(q);
         setSouhaits(s);
@@ -128,6 +132,24 @@ export function Progression() {
                     {l.quete.contenu.map((c, j) => <Etiquette key={j} contenu={c} />)}
                   </div>
                 )}
+                {(() => {
+                  // Défi du boss : parmi les personnages à cette étape, qui ne l'a pas encore fait (donc le souhaite).
+                  const defi = donjonDeLEtape(l.cle) && l.quete ? succesDuBoss(l.quete.nom) : undefined;
+                  if (!defi || l.persos.length === 0) return null;
+                  const aFaire = l.persos.filter((x) => !succes.some((sx) => sx.personnage_id === x.p.id && sx.succes_id === defi.id && sx.statut === "fait"));
+                  return (
+                    <span className="discret-taille">
+                      🏆 Défi du boss à faire pour{" "}
+                      <span className="etat" tabIndex={0}>
+                        {aFaire.length} sur {l.persos.length}
+                        <span role="tooltip" className="etat__bulle">
+                          {defi.description}
+                          {aFaire.length > 0 && <><br />À faire : {aFaire.map((x) => x.p.nom).join(", ")}</>}
+                        </span>
+                      </span>
+                    </span>
+                  );
+                })()}
                 {(() => {
                   // « Je peux aider » : ceux qui se sont positionnés sur cette étape.
                   const ici = aides.filter((a) => a.quete_id === l.cle);

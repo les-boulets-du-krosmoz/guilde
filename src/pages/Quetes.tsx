@@ -5,13 +5,15 @@ import { TexteEtats } from "../components/Etat";
 import { Pastille } from "../components/Pastille";
 import { DOFUS, type Contenu, type Dofus, type Ressource } from "../data/dofus";
 import { donjonDeLEtape } from "../data/donjons";
+import { succesDuBoss } from "../data/succesDonjons";
+import { BoutonDefi } from "../components/BoutonDefi";
 import { aDesQuetes, CATEGORIES, type Categorie } from "../data/series";
 import { ilYa } from "../lib/dates";
-import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
+import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, chargerSucces, definirSucces, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
 import { avancement, cocher, decocher, etapeActuelle, evaluerPrerequis } from "../lib/quetes";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
-import { estDispo, type AideEtape, type Membre, type MetierMembre, type Personnage } from "../lib/types";
+import { estDispo, type AideEtape, type Membre, type MetierMembre, type Personnage, type SuccesDonjon } from "../lib/types";
 import { Chargement } from "./Acces";
 
 type AuMemeStade = { perso: Personnage; dispo: boolean }[];
@@ -52,6 +54,8 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   const [aides, setAides] = useState<AideEtape[]>([]);
   const [annuaire, setAnnuaire] = useState<{ persos: Map<string, Personnage>; membres: Map<string, Membre> } | null>(null);
   const [saisieAide, setSaisieAide] = useState<{ queteId: string; note: string } | null>(null);
+  // Succès de donjon visés ou faits par toute la guilde.
+  const [succes, setSucces] = useState<SuccesDonjon[]>([]);
   const [erreur, setErreur] = useState<string | null>(null);
   const [enCours, setEnCours] = useState(false);
   // Étapes repliées par défaut : seule l'étape en cours est dépliée.
@@ -63,15 +67,17 @@ function QuetesPerso({ persoId }: { persoId: string }) {
       if (error || !data) throw new Error("Ce personnage n'existe pas ou plus.");
       const p = data as Personnage;
       const prefixe = prefixeDofus(dofus.quetes.map((q) => q.id));
-      const [m, quetes, guilde, res, tousSouhaits, inscriptions] = await Promise.all([
+      const [m, quetes, guilde, res, tousSouhaits, inscriptions, tousSucces] = await Promise.all([
         chargerMetiers(p.membre_id),
         chargerQuetes(prefixe),
         chargerGuilde(),
         chargerRessources(p.id),
         chargerSouhaits(),
         chargerAides(prefixe),
+        chargerSucces(),
       ]);
       setAides(inscriptions);
+      setSucces(tousSucces);
       setAnnuaire({ persos: new Map(guilde.personnages.map((x) => [x.id, x])), membres: guilde.membres as Map<string, Membre> });
       setRessources(res);
       setSouhaits(tousSouhaits.get(p.id) ?? new Set());
@@ -128,6 +134,22 @@ function QuetesPerso({ persoId }: { persoId: string }) {
       await proposerAide(perso.id, saisieAide.queteId, saisieAide.note);
       setAides(await chargerAides(prefixeDofus(dofus.quetes.map((q) => q.id))));
       setSaisieAide(null);
+    } catch (e) {
+      setErreur((e as Error).message);
+    }
+  }
+
+  /** Clic sur un défi : à faire ↔ fait. Un défi pas encore fait est un défi qu'on souhaite faire. */
+  async function basculerSucces(succesId: string) {
+    if (!perso) return;
+    const fait = succes.some((x) => x.personnage_id === perso.id && x.succes_id === succesId && x.statut === "fait");
+    const suivant = fait ? null : "fait";
+    try {
+      await definirSucces(perso.id, succesId, suivant);
+      setSucces((liste) => {
+        const sans = liste.filter((x) => !(x.personnage_id === perso.id && x.succes_id === succesId));
+        return suivant ? [...sans, { personnage_id: perso.id, succes_id: succesId, statut: suivant, maj_le: new Date().toISOString() }] : sans;
+      });
     } catch (e) {
       setErreur((e as Error).message);
     }
@@ -309,6 +331,24 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                 <div className="etiquettes">
                   {q.contenu.map((c, j) => <Etiquette key={j} contenu={c} />)}
                 </div>
+                {donjon && (() => {
+                  const defi = succesDuBoss(q.nom);
+                  if (!defi) return null;
+                  const faitPar = succes.filter((x) => x.succes_id === defi.id && x.statut === "fait").map((x) => annuaire?.persos.get(x.personnage_id)?.nom ?? "?");
+                  const fait = succes.some((x) => x.personnage_id === perso.id && x.succes_id === defi.id && x.statut === "fait");
+                  return (
+                    <div className="succes-donjon">
+                      <span className="discret">Défi du boss :</span>
+                      <BoutonDefi
+                        description={defi.description}
+                        fait={fait}
+                        faitPar={faitPar}
+                        modifiable={modifiable}
+                        onBasculer={() => basculerSucces(defi.id)}
+                      />
+                    </div>
+                  );
+                })()}
                 {donjon && (
                   <div className="donjon-liens">
                     <a href={`${SITE_DPLN}${donjon.page}`} target="_blank" rel="noreferrer">Guide du donjon</a>
@@ -417,6 +457,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
 }
 
 const SITE_DPLN = "https://www.dofuspourlesnoobs.com/";
+
 
 /** Barre des catégories (Dofus, Frigost, Tour du monde…), partagée avec la page Progression. */
 export function BarreCategories({ actif, onChoix }: { actif: Categorie; onChoix: (c: Categorie) => void }) {

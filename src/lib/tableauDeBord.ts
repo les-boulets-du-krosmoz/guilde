@@ -1,9 +1,11 @@
 import { AVIS_PAR_ID, nomRegion } from "../data/avis";
 import { DOFUS, type Contenu, type Dofus } from "../data/dofus";
+import { CATEGORIES } from "../data/series";
+import { succesDuBoss } from "../data/succesDonjons";
 import { joursDepuis, SEUIL_ANCIEN_JOURS } from "./dates";
 import type { LigneAvis } from "./donnees";
-import { dofusObtenu, quetesDisponibles } from "./quetes";
-import { estDispo, type Membre, type MetierMembre, type Personnage } from "./types";
+import { dofusObtenu, etapeActuelle, quetesDisponibles } from "./quetes";
+import { estDispo, type Membre, type MetierMembre, type Personnage, type SuccesDonjon } from "./types";
 
 export type PersoObjectif = { perso: Personnage; dispo: boolean };
 
@@ -16,6 +18,8 @@ export type Objectif = {
   queteIds: string[];
   persos: PersoObjectif[];
   nbDispo: number;
+  /** Précision affichée sous le titre (ex. défi du boss encore à faire). */
+  note?: string;
 };
 
 /** Quête bloquée par un métier : `dofus` et `id` servent au lien vers l'étape dans la page Progression. */
@@ -190,4 +194,59 @@ export function calculerBilan(
     dofus: statsDofus,
     activite,
   };
+}
+
+/**
+ * Groupes à monter pour les séries de boss (Tour du monde, Emma Tom Pouce, Frigost) : les personnages qui en sont
+ * au même boss. Comme pour les Dofus, ne comptent que ceux qui ont commencé la série ou cherchent un groupe pour elle.
+ * La note indique combien d'entre eux doivent encore faire le défi du boss (un défi pas fait est un défi souhaité).
+ */
+export function objectifsSeries(
+  personnages: Personnage[],
+  membres: Map<string, Membre>,
+  quetes: { personnage_id: string; quete_id: string }[],
+  souhaits: Map<string, Set<string>>,
+  succes: SuccesDonjon[],
+): Objectif[] {
+  const faites = new Map<string, Set<string>>();
+  for (const q of quetes) {
+    if (!faites.has(q.personnage_id)) faites.set(q.personnage_id, new Set());
+    faites.get(q.personnage_id)!.add(q.quete_id);
+  }
+  const res: Objectif[] = [];
+  for (const categorie of CATEGORIES) {
+    if (categorie.estDofus) continue;
+    for (const serie of categorie.series) {
+      if (serie.quetes.length === 0) continue;
+      const parEtape = new Map<string, PersoObjectif[]>();
+      for (const p of personnages) {
+        const f = faites.get(p.id) ?? new Set<string>();
+        const commence = serie.quetes.some((q) => f.has(q.id));
+        if (!commence && !(souhaits.get(p.id)?.has(serie.id) ?? false)) continue;
+        const q = serie.quetes[etapeActuelle(serie, f)];
+        if (!q) continue; // série terminée
+        if (!parEtape.has(q.id)) parEtape.set(q.id, []);
+        parEtape.get(q.id)!.push({ perso: p, dispo: estDispo(membres.get(p.membre_id), p.id) });
+      }
+      for (const [id, persos] of parEtape) {
+        if (persos.length < 2) continue;
+        const q = serie.quetes.find((x) => x.id === id)!;
+        const defi = succesDuBoss(q.nom);
+        const aFaire = defi
+          ? persos.filter((x) => !succes.some((s) => s.personnage_id === x.perso.id && s.succes_id === defi.id && s.statut === "fait")).length
+          : 0;
+        res.push({
+          cle: `serie:${id}`,
+          titre: q.nom,
+          type: "Donjon",
+          quetes: [serie.nom],
+          queteIds: [id],
+          persos,
+          nbDispo: persos.filter((x) => x.dispo).length,
+          note: defi && aFaire > 0 ? `Défi du boss à faire pour ${aFaire} sur ${persos.length} : ${defi.description}` : undefined,
+        });
+      }
+    }
+  }
+  return res;
 }

@@ -62,3 +62,11 @@ export type AideEtape = {
   note: string | null;
   cree_le: string;
 };
+
+/** Succès de donjon visé ou fait par un personnage. */
+export type SuccesDonjon = {
+  personnage_id: string;
+  succes_id: string;
+  statut: "vise" | "fait";
+  maj_le: string;
+};
