@@ -36,7 +36,10 @@ export function App() {
         <Route path="/mon-compte" element={<MonCompte />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <footer className="pied">{NOM_GUILDE} — {SLOGAN.charAt(0).toLowerCase() + SLOGAN.slice(1)}</footer>
+      <footer className="pied">
+        {NOM_GUILDE} — {SLOGAN.charAt(0).toLowerCase() + SLOGAN.slice(1)}
+        <span className="pied__version">Version {__VERSION_SITE__}</span>
+      </footer>
     </>
   );
 }

@@ -119,12 +119,13 @@ Dans `src/data/dofus.ts`, ajoute les quêtes (identifiants avec un préfixe comm
 
 ## Annonces Discord des nouveautés
 
-Après chaque déploiement réussi en production, l'Action `.github/workflows/annonce-discord.yml` poste la section « À publier » de `CHANGELOG.md` dans le canal Discord des mises à jour, puis la range sous sa date.
+Après chaque déploiement réussi en production, l'Action `.github/workflows/annonce-discord.yml` poste la section « À publier » de `CHANGELOG.md` dans le canal Discord des mises à jour, avec le numéro de version de `package.json`, puis vide la section.
 
 - Secret GitHub requis : `DISCORD_WEBHOOK_URL` (Settings > Secrets and variables > Actions).
 - Pour annoncer quelque chose : ajoute une ligne `- …` sous « À publier », écrite pour les membres, et pousse avec le reste.
 - Rien sous « À publier » = rien de posté. Un échec de Discord n'archive rien : la section repartira au déploiement suivant.
-- Le commit d'archive commence par `chore(changelog)` ; `vercel.json` (`ignoreCommand`) empêche Vercel de redéployer pour lui.
+- **Numéro de version** : champ `version` de `package.json`, affiché aussi en pied de page. À augmenter à chaque déploiement annoncé : le deuxième chiffre pour des nouveautés (1.1.0 → 1.2.0), le troisième pour de simples corrections (1.2.0 → 1.2.1).
+- Le commit du bot commence par `chore(changelog)` ; `vercel.json` (`ignoreCommand`) empêche Vercel de redéployer pour lui.
 - Si la branche `main` est protégée, autorise GitHub Actions à y pousser, sinon l'archivage échouera.
 
 ## Déployer sans perdre de données

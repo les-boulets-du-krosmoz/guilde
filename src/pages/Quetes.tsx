@@ -3,6 +3,7 @@ import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { TexteEtats } from "../components/Etat";
 import { Pastille } from "../components/Pastille";
 import { DOFUS, type Contenu, type Dofus, type Ressource } from "../data/dofus";
+import { donjonDeLEtape } from "../data/donjons";
 import { aDesQuetes, CATEGORIES, type Categorie } from "../data/series";
 import { ilYa } from "../lib/dates";
 import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
@@ -286,6 +287,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
           const aidesEtape = aides.filter((a) => a.quete_id === q.id);
           const ici = positions.get(q.id) ?? [];
           const jAide = aidesEtape.some((a) => a.personnage_id === perso.id);
+          const donjon = donjonDeLEtape(q.id);
           const aDuDetail = q.contenu.length > 0 || prerequis.length > 0 || (q.ressources ?? []).length > 0 || ici.length > 0 || aidesEtape.length > 0 || modifiable;
           const manque = prerequis.some((p) => p.etat === "manque");
           return (
@@ -324,6 +326,21 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                 <div className="etiquettes">
                   {q.contenu.map((c, j) => <Etiquette key={j} contenu={c} />)}
                 </div>
+                {donjon && (
+                  <div className="donjon-liens">
+                    <a href={`${SITE_DPLN}${donjon.page}`} target="_blank" rel="noreferrer">Guide du donjon</a>
+                    {donjon.quetes.length > 0 && (
+                      <>
+                        <span className="discret">Autres quêtes dans ce donjon :</span>
+                        {donjon.quetes.map((x) => (
+                          <a key={x.page} className="bulle-lien" href={`${SITE_DPLN}${x.page}`} target="_blank" rel="noreferrer" title="Guide de la quête sur Dofus pour les Noobs">
+                            {x.nom}
+                          </a>
+                        ))}
+                      </>
+                    )}
+                  </div>
+                )}
                 {prerequis.length > 0 && (
                   <ul className="prerequis">
                     {prerequis.map((p, j) => (
@@ -415,6 +432,8 @@ function QuetesPerso({ persoId }: { persoId: string }) {
     </main>
   );
 }
+
+const SITE_DPLN = "https://www.dofuspourlesnoobs.com/";
 
 /** Barre des catégories (Dofus, Frigost, Tour du monde…), partagée avec la page Progression. */
 export function BarreCategories({ actif, onChoix }: { actif: Categorie; onChoix: (c: Categorie) => void }) {
