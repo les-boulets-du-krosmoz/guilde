@@ -429,3 +429,24 @@ a.jauge__nom:hover { color: var(--or); }
 /* Liens d'un donjon : guide et autres quêtes qui s'y déroulent */
 .donjon-liens { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 8px; font-size: 14px; }
 .pied__version { display: block; margin-top: 4px; font-style: normal; font-size: 12px; opacity: 0.7; }
+
+/* Onglets des Dofus : primordiaux colorés (bordure, léger fond, texte assorti), autres Dofus en dessous */
+.onglets-dofus { display: flex; flex-direction: column; gap: 10px; }
+.onglet--primordial { border-color: var(--c); background: var(--f); color: var(--t); }
+.onglet--primordial.onglet--actif { border: 2px solid var(--c); background: var(--fa); color: var(--t); font-weight: 600; }
+.onglets--secondaires .onglet { min-height: 38px; font-size: 14px; }
+
+/* Doplons et simulateur de parchemins (page des avis) */
+.doplons { margin: 12px 0 20px; }
+.doplons__total strong { color: var(--or); font-size: 18px; }
+.doplons__simu { margin-top: 10px; }
+.doplons__simu summary { cursor: pointer; color: var(--texte-2); }
+.doplons__reglages { display: flex; flex-wrap: wrap; gap: 12px 20px; margin: 12px 0; }
+.doplons__reglages input { width: 140px; }
+.doplons__table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.doplons__table th, .doplons__table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--trait); }
+.doplons__table th { color: var(--discret); font-weight: 500; }
+.doplons__bilan { margin: 12px 0 4px; }
+.doplons__passe td { opacity: 0.5; }
+.doplons__depenses { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 10px; }
+.doplons__depenses input { width: 120px; }

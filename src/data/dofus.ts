@@ -50,6 +50,8 @@ export type Dofus = {
   accent?: string;
   /** Ce que compte une étape, pour l'en-tête (« quêtes » par défaut, « boss » pour une série de donjons). */
   unite?: string;
+  /** Dofus primordial : onglet coloré sur la première ligne ; les autres Dofus passent en dessous. */
+  primordial?: boolean;
   /** Quêtes dans l'ordre d'affichage. Vide = données pas encore saisies. */
   quetes: Quete[];
   /** À prévoir sur l'ensemble de la série, sans étape précise connue. */
@@ -57,8 +59,6 @@ export type Dofus = {
   /** Fiabilité des données, affiché en haut de la page. */
   avertissement?: string;
   sources?: { nom: string; url: string }[];
-  /** Ressources connues pour toute la série, sans quête précise : cochables comme les autres. */
-  ressourcesSerie?: Ressource[];
   /** Outils externes utiles (ex. suivi des archimonstres). */
   liens?: { nom: string; url: string; description: string }[];
 };
@@ -247,6 +247,24 @@ export const QUETES_TURQUOISE: Quete[] = [
   q(T, "tu-4", "La bénédiction de Viti", 140, ["tu-3"], {
     prerequis: [ALTERATIONS],
     contenu: [donjon("Fabrique de foux d'artifice (Idole de Viti Roussie)"), donjon("Laboratoire du Tynril (Idole de Viti Végétale)"), donjon("Excavation du Mansot Royal (Idole de Viti Glacée)")],
+    // Idoles à fabriquer en [6,3] avant les combats.
+    ressources: [
+      res("tu-s-04", "10 × Corne de Berserkoffre", { note: "Idole de Viti Glacée" }),
+      res("tu-s-21", "5 × Substrat de Bosquet", { note: "Idole de Viti Glacée" }),
+      res("tu-s-02", "10 × Plume de Gobvious", { note: "Idole de Viti Glacée" }),
+      res("tu-s-41", "1 × Chaussette trouée de Dramak", { note: "Idole de Viti Glacée" }),
+      res("tu-s-30", "3 × Coquille de Dragoss Ardoise", { note: "Idole de Viti Glacée" }),
+      res("tu-s-03", "10 × Peau de Don Duss Ang", { note: "Idole de Viti Roussie" }),
+      res("tu-s-22", "5 × Kouartz", { note: "Idole de Viti Roussie" }),
+      res("tu-s-05", "10 × Canine de Mergranlou", { note: "Idole de Viti Roussie" }),
+      res("tu-s-06", "10 × Coquille de Dragoss Charbon", { note: "Idole de Viti Roussie" }),
+      res("tu-s-42", "1 × Peau de Moon", { note: "Idole de Viti Roussie" }),
+      res("tu-s-20", "8 × Estomac de Black Wo Wabbit", { note: "Idole de Viti Végétale" }),
+      res("tu-s-23", "5 × Bakélélite", { note: "Idole de Viti Végétale" }),
+      res("tu-s-43", "1 × Carapace du Mantiscore", { note: "Idole de Viti Végétale" }),
+      res("tu-s-31", "3 × Laine de Dardalaine", { note: "Idole de Viti Végétale" }),
+      res("tu-s-32", "3 × Écorce de Liroye Merline", { note: "Idole de Viti Végétale" }),
+    ],
   }),
   q(T, "tu-5", "La méchante sorcière de l'Est", 140, ["tu-4"], {
     contenu: [groupe("Tous les monstres du Berceau d'Alma, 7 fois")],
@@ -254,18 +272,62 @@ export const QUETES_TURQUOISE: Quete[] = [
   q(T, "tu-6", "La bénédiction de Thomahon", 150, ["tu-5"], {
     prerequis: [ALTERATIONS],
     contenu: [donjon("Repaire de Sphincter Cell (Idole de Thomahon Nauséabonde)"), donjon("Épave du Grolandais violent (Idole de Thomahon Marine)"), donjon("Canopée du Kimbo (Idole de Thomahon Arboricole)"), donjon("Hypogée de l'Obsidiantre (Idole de Thomahon d'Obsidienne)")],
+    // Idoles à fabriquer en [6,3] avant les combats.
+    ressources: [
+      res("tu-s-24", "5 × Magnésite", { note: "Idole de Thomahon Marine" }),
+      res("tu-s-07", "10 × Aile de Dragodinde", { note: "Idole de Thomahon Marine" }),
+      res("tu-s-08", "10 × Poil de Rat d'Égoutant", { note: "Idole de Thomahon Marine" }),
+      res("tu-s-09", "10 × Fleur de Gloutoblop", { note: "Idole de Thomahon Marine" }),
+      res("tu-s-44", "1 × Carniflore", { note: "Idole de Thomahon Marine" }),
+      res("tu-6-kouartz", "5 × Kouartz", { note: "Idole de Thomahon Nauséabonde" }),
+      res("tu-s-10", "10 × Peau de Don Dorgan", { note: "Idole de Thomahon Nauséabonde" }),
+      res("tu-s-11", "10 × Moustache du Mufafah", { note: "Idole de Thomahon Nauséabonde" }),
+      res("tu-s-12", "10 × Oreille de Rhinoféroce", { note: "Idole de Thomahon Nauséabonde" }),
+      res("tu-6-chaussette", "1 × Chaussette trouée de Dramak", { note: "Idole de Thomahon Nauséabonde" }),
+      res("tu-s-25", "5 × Kriptonite", { note: "Idole de Thomahon Arboricole" }),
+      res("tu-s-33", "3 × Rotule du Disciple Zoth", { note: "Idole de Thomahon Arboricole" }),
+      res("tu-s-34", "3 × Aile Atrophiée de Tofu Dodu", { note: "Idole de Thomahon Arboricole" }),
+      res("tu-s-01", "200 × Pépite", { note: "Idole de Thomahon Arboricole" }),
+      res("tu-s-45", "1 × Feuille de Blop Multicolore Royal", { note: "Idole de Thomahon Arboricole" }),
+      res("tu-s-13", "10 × Duvet de Truchon", { note: "Idole de Thomahon Arboricole" }),
+      res("tu-s-26", "5 × Ebonite", { note: "Idole de Thomahon d'Obsidienne" }),
+      res("tu-s-14", "10 × Tronc de Kokoko", { note: "Idole de Thomahon d'Obsidienne" }),
+      res("tu-s-27", "5 × Lait de Tortue", { note: "Idole de Thomahon d'Obsidienne" }),
+      res("tu-s-15", "10 × Casque Cassé du Chafer", { note: "Idole de Thomahon d'Obsidienne" }),
+      res("tu-s-46", "1 × Plume du Kwakwa", { note: "Idole de Thomahon d'Obsidienne" }),
+    ],
   }),
   q(T, "tu-7", "Autel du Nord", 150, ["tu-6"], { contenu: [solo("Robot Expérimental (avec l'Automate Brigandin)")] }),
   q(T, "tu-8", "La bénédiction de Foluk", 160, ["tu-5"], {
     prerequis: [ALTERATIONS],
     contenu: [donjon("Galerie du Phossile (Idole de Foluk Dorée)"), donjon("Grotte de Kanigroula (Idole de Foluk Griffée)"), donjon("Antre du Korriandre (Idole de Foluk Féérique)")],
+    // Idoles à fabriquer en [6,3] avant les combats.
+    ressources: [
+      res("tu-s-35", "3 × Corne de Dragoss Calcaire", { note: "Idole de Foluk Dorée" }),
+      res("tu-s-36", "3 × Corne de Rhinoféroce", { note: "Idole de Foluk Dorée" }),
+      res("tu-s-28", "5 × Substrat de Fascine", { note: "Idole de Foluk Dorée" }),
+      res("tu-s-47", "1 × Groin de Dragon Cochon", { note: "Idole de Foluk Dorée" }),
+      res("tu-s-37", "3 × Échasse de Molette", { note: "Idole de Foluk Dorée" }),
+      res("tu-s-16", "10 × Poils de Smilomouth", { note: "Idole de Foluk Griffée" }),
+      res("tu-s-17", "10 × Carpelle de Brouture", { note: "Idole de Foluk Griffée" }),
+      res("tu-8-pepite-griffee", "200 × Pépite", { note: "Idole de Foluk Griffée" }),
+      res("tu-s-18", "10 × Croupion de Truchmuche", { note: "Idole de Foluk Griffée" }),
+      res("tu-8-kriptonite", "5 × Kriptonite", { note: "Idole de Foluk Griffée" }),
+      res("tu-s-48", "1 × Laine du Royalmouth", { note: "Idole de Foluk Griffée" }),
+      res("tu-s-29", "5 × Substrat de Fourré", { note: "Idole de Foluk Féérique" }),
+      res("tu-s-19", "10 × Calumet Zoth", { note: "Idole de Foluk Féérique" }),
+      res("tu-s-38", "3 × Morpion de Truchideur", { note: "Idole de Foluk Féérique" }),
+      res("tu-s-39", "3 × Arête géante du Shamansot", { note: "Idole de Foluk Féérique" }),
+      res("tu-8-pepite-feerique", "200 × Pépite", { note: "Idole de Foluk Féérique" }),
+      res("tu-s-49", "1 × Pixel de Fraktale", { note: "Idole de Foluk Féérique" }),
+    ],
   }),
   q(T, "tu-9", "Il était une foi dans l'Ouest", 160, ["tu-8"], {
     contenu: [groupe("Craqueleur de la Baie de Cania")],
   }),
   q(T, "tu-10", "Une âme en colère", 160, ["tu-7", "tu-9"], {
     contenu: [combat("Esprits Kelpe, Verak, Goémus, Cyanog, Norie"), tactique("Furye")],
-    ressources: [res("tu-10-r1", "5 × Globe Mystique", { note: "drop Forêt pétrifiée de Frigost (10 %)", verifie: false })],
+    ressources: [res("tu-10-r1", "5 × Globe Mystique", { note: "sur les monstres de la Forêt pétrifiée de Frigost (12 %, 18 % sur le Korriandre)" })],
   }),
 ];
 
@@ -441,65 +503,157 @@ export const JOL = (article: string) => ({ nom: "JeuxOnLine (Dofus 2)", url: "ht
 // Liste des quêtes vérifiée sur DPLN (Dofus 3) ; détail des combats et ordre des branches repris de JOL (Dofus 2).
 const AVERT_DETAIL = "Une erreur dans les étapes ? Préviens un officier sur Discord.";
 
-const r = (id: string, t: string) => res(id, t);
+// Domakuro : succès « Les grands esprits se rencontrent » (quêtes de Pandala). Source : DPLN, page de chaque quête.
+const DK = "domakuro";
+const PANDAZAHI = (id: string) => res(id, "1 × Pandazahi", { alternative: "1 × Pandaporo", note: "taverne du Pandazaap, 40 kamas" });
+
+export const QUETES_DOMAKURO: Quete[] = [
+  q(DK, "dk-1", "Le réveil de Pandala", 30, [], {
+    prerequis: [texte("Lancée par Moktwa, devant le pont de Pandala en [12,-21]")],
+    contenu: [groupe("Chaque Sidoa de la Carrière d'Astrub, 5 fois (Martoa, Sherpoa, Douzdoa, Pikdoa)")],
+    ressources: [
+      res("dk-1-r1", "5 × Laine de Boufton Noir", { note: "Sérum contre la Pandrista, en atelier d'alchimiste" }),
+      res("dk-1-r2", "50 × Ortie", { note: "Sérum contre la Pandrista" }),
+    ],
+  }),
+  q(DK, "dk-2", "À la croisée des mondes", 100, ["dk-1"], {
+    prerequis: [
+      metier("Façonneur", 10, true),
+      texte("Conseillé : avoir fait « Ça est frugal, une fois », sinon la Filtounga coûte 50 000 kamas"),
+    ],
+    contenu: [
+      tactique("Yokai de la bibliothèque : les rendre somnolents tous les 5 au même tour"),
+      solo("3 Pandissidans, sous la banque en [20,-30]"),
+      tactique("Maître Kwatimbe, invulnérable : le tacler quand il fuit"),
+    ],
+    ressources: [
+      res("dk-2-r1", "2 × Artefact Pandawushu Roc", { note: "Pandaclier, atelier des façonneurs de Pandala [23,-28]" }),
+      res("dk-2-r2", "2 × Artefact Pandawushu Vent", { note: "Pandaclier" }),
+      res("dk-2-r3", "2 × Artefact Pandawushu Bois", { note: "Pandaclier" }),
+      res("dk-2-r4", "2 × Artefact Pandawushu Feu", { note: "Pandaclier" }),
+      res("dk-2-r5", "2 × Artefact Pandawushu Eau", { note: "Pandaclier" }),
+      res("dk-2-r6", "20 × Bois de Bambou", { note: "Pandaclier" }),
+      res("dk-2-r7", "1 × Pandaburg", { note: "Pandaclier, taverne du Pandazaap [20,-29]" }),
+      PANDAZAHI("dk-2-r8"),
+    ],
+  }),
+  q(DK, "dk-3", "Sous le bois de sa colère", 110, ["dk-2"], {
+    prerequis: [texte("Astuce : lancer « Le Saule du Promeneur » avant, il demande le même donjon")],
+    contenu: [
+      groupe("Combat à vagues de Bamboutos, devant la Bambusaie en [26,-30]"),
+      donjon("Bambusaie de Damadrya : lire la page du registre près du squelette, salle 4, avant le boss"),
+      groupe("Négociant amaknéen [18,-29]"),
+      groupe("Fruits de l'arbre Goroku [26,-32]"),
+    ],
+  }),
+  q(DK, "dk-4", "Au nom de l'Art", 130, ["dk-3"], {
+    prerequis: [metier("Alchimiste", 1, true)],
+    contenu: [
+      donjon("Atelier du Tanukouï San [26,-24]"),
+      groupe("Kaskouïs en [27,-28] : les sortir de leur glyphe pour les rendre vulnérables"),
+      groupe("Kaskouïs en [25,-24]"),
+      solo("Tanuki Durtouki [26,-27] : le sortir de son glyphe"),
+    ],
+    ressources: [
+      res("dk-4-r1", "1 × Huile de Riz", { note: "Baume Hakouï, en atelier d'alchimiste" }),
+      res("dk-4-r2", "3 × Poils magiques de Tanuki", { note: "Baume Hakouï" }),
+      res("dk-4-r3", "2 × Poussière de Roche", { note: "à ramasser sur la colonne en [25,-25]" }),
+      res("dk-4-r4", "7 000 kamas", { note: "Alcool à 99 % (1 000), livre des géoglyphes (1 000), carré d'exposition (5 000, l'option la moins chère)" }),
+    ],
+  }),
+  q(DK, "dk-5", "La jetée des enfants perdus", 130, ["dk-4"], {
+    contenu: [
+      groupe("Kwapas autour de Yuminh [18,-25]"),
+      groupe("Chasseur enutrof [20,-24]"),
+      solo("Kwapas devant la Vallée [22,-24], avec Kwatalo"),
+      donjon("Vallée de la Dame des eaux (Nagate)"),
+    ],
+    ressources: [
+      res("dk-5-r1", "6 × Concombre sauvage", { note: "à ramasser en [20,-23], [21,-22], [22,-23], [23,-23], [18,-24] et [18,-22]" }),
+      res("dk-5-r2", "15 kamas", { note: "Granouilles du pont [23,-22] : 8, 4, 2 puis 1 kama, de la plus grosse à la plus petite" }),
+    ],
+  }),
+  q(DK, "dk-6", "Le festival de la lanterne", 140, ["dk-5"], {
+    contenu: [
+      groupe("Feux follets, à la Lanterne primordiale [17,-32]"),
+      solo("Firefoux, pour protéger le Qilin de papier [18,-34] : il ne doit pas mourir"),
+      donjon("Fabrique de foux d'artifice (Founoroshi)"),
+    ],
+    ressources: [
+      res("dk-6-r1", "8 × Énigme du festival des lanternes", { note: "sur les Firefoux de Feudala (12 %)" }),
+      res("dk-6-r2", "100 × Graine de Sésame", { note: "10 Wanchio au sésame, atelier de Stayfun Bonnawa [23,-27]" }),
+      res("dk-6-r3", "100 × Riz", { note: "50 par sorte de Wanchio" }),
+      res("dk-6-r4", "50 × Haricot", { note: "10 Wanchio aux haricots" }),
+      res("dk-6-r5", "20 × Eau Potable", { note: "10 par sorte de Wanchio" }),
+    ],
+  }),
+  q(DK, "dk-7", "L'équilibre des forces", 140, ["dk-6"], {
+    prerequis: [metier("Paysan", 1, true)],
+    contenu: [
+      solo("2 Poseurs de bombe en [19,-32]"),
+      solo("2 Poseurs de bombe en [19,-33]"),
+      groupe("Gardes Kozaru [21,-35]"),
+      donjon("Dojo du Vent [20,-37] (Hanshi)"),
+    ],
+    ressources: [
+      res("dk-7-r1", "3 × Viscères de Scarafeuille", { note: "Offrande à l'esprit du Vent, atelier « moudre »" }),
+      res("dk-7-r2", "3 × Fraise", { note: "Offrande à l'esprit du Vent" }),
+      res("dk-7-r3", "8 × Bananagrume", { note: "Offrande à l'esprit du Vent" }),
+    ],
+  }),
+  q(DK, "dk-8", "Sang d'encre", 140, ["dk-7"], {
+    prerequis: [texte("Garder le Pandaclier : il faut l'équiper pour entrer dans la Pandassemblée")],
+    contenu: [
+      solo("Assassins Pandikazes [19,-34], avec Ikunochi"),
+      solo("Maître Pandore : ignorer les invocations, Ikunochi s'en charge"),
+    ],
+    ressources: [
+      res("dk-8-r1", "1 000 kamas", { note: "Offrande au Grand Pouddah, Marchande aerdalienne" }),
+      PANDAZAHI("dk-8-r2"),
+    ],
+  }),
+];
 
 export const DOFUS: Dofus[] = [
   {
-    id: "emeraude", nom: "Émeraude", succes: "Vert émeraude", couleur: "#3f9b6e", quetes: QUETES_EMERAUDE,
-    notes: ["1 100 kamas pour toute la série"],
+    id: "emeraude", nom: "Émeraude", succes: "Vert émeraude", couleur: "#3f9b6e", primordial: true, quetes: QUETES_EMERAUDE,
     sources: [DPLN("dofus-emeraude.html"), { nom: "Dofuserie", url: "https://www.dofuserie.com/dofus/dofus-emeraude/" }],
   },
   {
-    id: "pourpre", nom: "Pourpre", succes: "Pourpre profond", couleur: "#8e3b8a", quetes: QUETES_POURPRE,
+    id: "pourpre", nom: "Pourpre", succes: "Pourpre profond", couleur: "#b8323f", primordial: true, quetes: QUETES_POURPRE,
     avertissement: AVERT_DETAIL,
     sources: [DPLN("quecirctes-du-dofus-pourpre.html"), JOL("13861/quetes-dofus-pourpre")],
   },
   {
-    id: "turquoise", nom: "Turquoise", succes: "Bleu turquoise", couleur: "#2a9aa6", quetes: QUETES_TURQUOISE,
+    id: "turquoise", nom: "Turquoise", succes: "Bleu turquoise", couleur: "#2a9aa6", primordial: true, quetes: QUETES_TURQUOISE,
     avertissement: AVERT_DETAIL,
     sources: [DPLN("quecirctes-du-dofus-turquoise.html"), JOL("14620/quetes-dofus-turquoise")],
-    ressourcesSerie: [
-      r("tu-s-01", "600 × Pépite"), r("tu-s-02", "10 × Plume de Gobvious"), r("tu-s-03", "10 × Peau de Don Duss Ang"),
-      r("tu-s-04", "10 × Corne de Berserkoffre"), r("tu-s-05", "10 × Canine de Mergranlou"), r("tu-s-06", "10 × Coquille de Dragoss Charbon"),
-      r("tu-s-07", "10 × Aile de Dragodinde"), r("tu-s-08", "10 × Poil de Rat d'Égoutant"), r("tu-s-09", "10 × Fleur de Gloutoblop"),
-      r("tu-s-10", "10 × Peau de Don Dorgan"), r("tu-s-11", "10 × Moustache du Mufafah"), r("tu-s-12", "10 × Oreille de Rhinoféroce"),
-      r("tu-s-13", "10 × Duvet de Truchon"), r("tu-s-14", "10 × Tronc de Kokoko"), r("tu-s-15", "10 × Casque Cassé du Chafer"),
-      r("tu-s-16", "10 × Poils de Smilomouth"), r("tu-s-17", "10 × Carpelle de Brouture"), r("tu-s-18", "10 × Croupion de Truchmuche"),
-      r("tu-s-19", "10 × Calumet Zoth"), r("tu-s-20", "8 × Estomac de Black Wo Wabbit"), r("tu-s-21", "5 × Substrat de Bosquet"),
-      res("tu-s-22", "10 × Kouartz", { verifie: false }), r("tu-s-23", "5 × Bakélélite"),
-      r("tu-s-24", "5 × Magnésite"), res("tu-s-25", "10 × Kriptonite", { verifie: false }),
-      r("tu-s-26", "5 × Ebonite"), r("tu-s-27", "5 × Lait de Tortue"), r("tu-s-28", "5 × Substrat de Fascine"), r("tu-s-29", "5 × Substrat de Fourré"),
-      r("tu-s-30", "3 × Coquille de Dragoss Ardoise"), r("tu-s-31", "3 × Laine de Dardalaine"), r("tu-s-32", "3 × Écorce de Liroye Merline"),
-      r("tu-s-33", "3 × Rotule du Disciple Zoth"), r("tu-s-34", "3 × Aile Atrophiée de Tofu Dodu"), r("tu-s-35", "3 × Corne de Dragoss Calcaire"),
-      r("tu-s-36", "3 × Corne de Rhinoféroce"), r("tu-s-37", "3 × Échasse de Molette"), r("tu-s-38", "3 × Morpion de Truchideur"),
-      r("tu-s-39", "3 × Arête géante du Shamansot"), r("tu-s-40", "1 × Bière du Feubuk"),
-      res("tu-s-41", "2 × Chaussette trouée de Dramak", { verifie: false }),
-      r("tu-s-42", "1 × Peau de Moon"), r("tu-s-43", "1 × Carapace du Mantiscore"), r("tu-s-44", "1 × Carniflore"),
-      r("tu-s-45", "1 × Feuille de Blop Multicolore Royal"), r("tu-s-46", "1 × Plume du Kwakwa"), r("tu-s-47", "1 × Groin de Dragon Cochon"),
-      r("tu-s-48", "1 × Laine du Royalmouth"), r("tu-s-49", "1 × Pixel de Fraktale"),
-    ],
   },
   {
-    id: "ocre", nom: "Ocre", succes: "L'éternelle moisson", couleur: "#c7862d", quetes: QUETES_OCRE,
+    id: "ocre", nom: "Ocre", succes: "L'éternelle moisson", couleur: "#d6a521", primordial: true, quetes: QUETES_OCRE,
     notes: ["Chaque capture est personnelle : à deux, chaque monstre doit être capturé deux fois", "La pierre du Kralamoure Géant n'est pas échangeable"],
     liens: [{ nom: "Metamob", url: "https://www.metamob.fr", description: "suivi des archimonstres capturés" }],
     sources: [JOL("5986/eternelle-moisson-dofus-ocre")],
   },
   {
-    id: "ivoire", nom: "Ivoire", succes: "Blanc Ivoire", couleur: "#e8e0cc", quetes: QUETES_IVOIRE,
+    id: "ivoire", nom: "Ivoire", succes: "Blanc Ivoire", couleur: "#e8e0cc", primordial: true, quetes: QUETES_IVOIRE,
     avertissement: AVERT_DETAIL,
     sources: [DPLN("quecirctes-du-dofus-ivoire.html"), JOL("14284/quetes-dofus-ivoire")],
   },
   {
-    id: "ebene", nom: "Ébène", succes: "Noir d'Ébène", couleur: "#5a5a5a", accent: "#a8a8a8", quetes: QUETES_EBENE,
+    id: "ebene", nom: "Ébène", succes: "Noir d'Ébène", couleur: "#5a5a5a", accent: "#a8a8a8", primordial: true, quetes: QUETES_EBENE,
     avertissement: AVERT_DETAIL,
-    notes: ["20 500 kamas pour toute la série"],
     sources: [DPLN("quetes-du-dofus-ebene.html"), JOL("14691/quetes-dofus-ebene")],
   },
   {
     id: "veilleurs", nom: "Veilleurs", succes: "Odyssée en trois dimensions", couleur: "#3b6fb6", quetes: QUETES_VEILLEURS,
     avertissement: "Combats et ressources pas encore renseignés.",
     sources: [DPLN("dofus-des-veilleurs.html"), { nom: "Millenium", url: "https://www.millenium.org/guide/420160.html" }],
+  },
+  {
+    id: "domakuro", nom: "Domakuro", succes: "Les grands esprits se rencontrent", couleur: "#4a4a5e", accent: "#a9a9c4", quetes: QUETES_DOMAKURO,
+    avertissement: AVERT_DETAIL,
+    sources: [DPLN("quetes-du-domakuro.html"), JOL("2037/quetes-pandala-dofus-domakuro")],
   },
 ];
 

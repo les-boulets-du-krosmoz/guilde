@@ -1,3 +1,4 @@
+import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { TexteEtats } from "../components/Etat";
@@ -55,7 +56,6 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   const [enCours, setEnCours] = useState(false);
   // Étapes repliées par défaut : seule l'étape en cours est dépliée.
   const [ouvertes, setOuvertes] = useState<Set<string>>(new Set());
-  const [serieOuverte, setSerieOuverte] = useState(false);
 
   const charger = useCallback(async () => {
     try {
@@ -255,23 +255,6 @@ function QuetesPerso({ persoId }: { persoId: string }) {
         </p>
       )}
 
-      {(dofus.ressourcesSerie ?? []).length > 0 && (
-        <div className="serie">
-          <button type="button" className="bouton" aria-expanded={serieOuverte} onClick={() => setSerieOuverte(!serieOuverte)}>
-            Ressources de toute la série ({dofus.ressourcesSerie!.filter((r) => ressources.has(r.id)).length} / {dofus.ressourcesSerie!.length})
-          </button>
-          {serieOuverte && (
-            <BlocRessources
-              titre="Toute la série"
-              liste={dofus.ressourcesSerie!}
-              cochees={ressources}
-              modifiable={modifiable}
-              onBascule={basculerRessource}
-            />
-          )}
-        </div>
-      )}
-
       {(dofus.notes ?? []).length > 0 && (
         <p className="encart">
           <strong>À prévoir :</strong> {dofus.notes!.join(". ")}.
@@ -461,18 +444,56 @@ export function OngletsDofus({ actif, onChoix }: { actif: Dofus; onChoix: (d: Do
   return <OngletsSeries series={DOFUS} actif={actif} onChoix={onChoix} libelle="Choix du Dofus" />;
 }
 
+/** Mélange une couleur « #rrggbb » avec du blanc (ratio 0 à 1) : texte clair assorti, lisible sur le fond sombre. */
+function eclaircir(hex: string, ratio: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  const c = [n >> 16, (n >> 8) & 255, n & 255].map((v) => Math.round(v + (255 - v) * ratio));
+  return `rgb(${c.join(", ")})`;
+}
+
+function avecOpacite(hex: string, alpha: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+}
+
+/** Variables CSS d'un onglet de Dofus primordial : bordure, léger fond et texte de sa couleur. */
+function couleursPrimordial(d: Dofus): React.CSSProperties {
+  const trait = d.accent ?? d.couleur; // l'Ébène, trop sombre, prend sa couleur d'accent
+  const clair = d.id === "ivoire"; // une couleur presque blanche : fond plus léger
+  return {
+    "--c": trait,
+    "--t": eclaircir(trait, clair ? 0.3 : 0.45),
+    "--f": avecOpacite(d.couleur, clair ? 0.06 : 0.12),
+    "--fa": avecOpacite(d.couleur, clair ? 0.14 : 0.26),
+  } as React.CSSProperties;
+}
+
 export function OngletsSeries({ series, actif, onChoix, libelle }: { series: Dofus[]; actif: Dofus; onChoix: (d: Dofus) => void; libelle: string }) {
+  const onglet = (d: Dofus) =>
+    d.quetes.length > 0 ? (
+      <button
+        key={d.id}
+        type="button"
+        className={`onglet ${d.primordial ? "onglet--primordial" : ""} ${d.id === actif.id ? "onglet--actif" : ""}`}
+        style={d.primordial ? couleursPrimordial(d) : undefined}
+        aria-pressed={d.id === actif.id}
+        onClick={() => onChoix(d)}
+      >
+        {d.nom}
+      </button>
+    ) : (
+      <button key={d.id} type="button" className="onglet onglet--vide" disabled>{d.nom} (à venir)</button>
+    );
+  // Les primordiaux sur la première ligne, les autres Dofus en dessous.
+  const primordiaux = series.filter((d) => d.primordial);
+  const autres = series.filter((d) => !d.primordial);
+  if (primordiaux.length === 0) {
+    return <div className="onglets" role="group" aria-label={libelle}>{series.map(onglet)}</div>;
+  }
   return (
-    <div className="onglets" role="group" aria-label={libelle}>
-      {series.map((d) =>
-        d.quetes.length > 0 ? (
-          <button key={d.id} type="button" className={`onglet ${d.id === actif.id ? "onglet--actif" : ""}`} aria-pressed={d.id === actif.id} onClick={() => onChoix(d)}>
-            {d.nom}
-          </button>
-        ) : (
-          <button key={d.id} type="button" className="onglet onglet--vide" disabled>{d.nom} (à venir)</button>
-        ),
-      )}
+    <div className="onglets-dofus" role="group" aria-label={libelle}>
+      <div className="onglets">{primordiaux.map(onglet)}</div>
+      {autres.length > 0 && <div className="onglets onglets--secondaires">{autres.map(onglet)}</div>}
     </div>
   );
 }

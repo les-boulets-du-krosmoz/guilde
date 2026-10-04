@@ -30,6 +30,8 @@ export interface Personnage {
   ocre_boss?: number | null;
   ocre_boss_total?: number | null;
   ocre_saisi_le?: string | null;
+  /** Doplons déjà dépensés (saisis par le membre), pour afficher ce qu'il reste. */
+  doplons_depenses?: number | null;
   est_principal: boolean;
   image_url: string | null;
   maj_le: string;

@@ -37,3 +37,7 @@ export const METIERS = [
 ];
 
 export const DUREES_DISPO_H = [1, 2, 3];
+
+/** Quête du Dofus Ocre : nombre total d'archimonstres et de boss à réunir (valeurs par défaut de la saisie à la main). */
+export const OCRE_ARCHIS_TOTAL = 286;
+export const OCRE_BOSS_TOTAL = 51;

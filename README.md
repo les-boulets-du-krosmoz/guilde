@@ -19,7 +19,7 @@ React + TypeScript (Vite) pour le front, Supabase pour la base de données, la c
 ### 1. Supabase
 
 1. Crée un projet sur [supabase.com](https://supabase.com).
-2. Dans **SQL Editor**, colle et exécute `supabase/schema.sql` (une seule fois, sur un projet neuf). Si tu l'as déjà exécuté avec une version plus ancienne, exécute seulement les migrations que tu n'as pas encore passées, dans l'ordre (`supabase/migration-002.sql`, `migration-003.sql`, `migration-004.sql`, `migration-005.sql`, `migration-006.sql`, puis `migration-007.sql`).
+2. Dans **SQL Editor**, colle et exécute `supabase/schema.sql` (une seule fois, sur un projet neuf). Si tu l'as déjà exécuté avec une version plus ancienne, exécute seulement les migrations que tu n'as pas encore passées, dans l'ordre (`supabase/migration-002.sql`, `migration-003.sql`, `migration-004.sql`, `migration-005.sql`, `migration-006.sql`, `migration-007.sql`, puis `migration-008.sql`).
 3. Note l'URL du projet et la clé `anon` (**Project Settings > API**).
 
 ### 2. Application Discord
@@ -130,11 +130,11 @@ Après chaque déploiement réussi en production, l'Action `.github/workflows/an
 
 ## Déployer sans perdre de données
 
-Les migrations 002 à 007 n'ajoutent que des tables, des colonnes vides et des règles d'accès : aucune ne supprime ni ne modifie de données existantes, et chacune peut être relancée sans risque. Le déploiement Vercel, lui, ne touche jamais à la base.
+Les migrations 002 à 008 n'ajoutent que des tables, des colonnes vides et des règles d'accès : aucune ne supprime ni ne modifie de données existantes, et chacune peut être relancée sans risque. Le déploiement Vercel, lui, ne touche jamais à la base.
 
 1. **Sauvegarde** : exporte les données avant de toucher à quoi que ce soit (voir ci-dessous).
 2. **État avant** : lance `supabase/verification-deploiement.sql` et garde le résultat (nombre de lignes par table).
-3. **Migrations** : exécute, dans l'ordre, celles qui ne sont pas encore passées (003 à 007). L'ancien site continue de fonctionner avec elles.
+3. **Migrations** : exécute, dans l'ordre, celles qui ne sont pas encore passées (003 à 008). L'ancien site continue de fonctionner avec elles.
 4. **État après** : relance `verification-deploiement.sql` : mêmes nombres de lignes (ou plus), et toutes les lignes de la partie 2 à « oui ».
 5. **Site** : seulement maintenant, pousse le code sur GitHub pour que Vercel déploie.
 6. **Retour arrière** si le site pose problème : dans Vercel, remets le déploiement précédent en production. La base n'a pas besoin d'être restaurée, les migrations sont compatibles avec l'ancien site.

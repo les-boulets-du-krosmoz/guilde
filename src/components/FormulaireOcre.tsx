@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { OCRE_ARCHIS_TOTAL, OCRE_BOSS_TOTAL } from "../data/constantes";
 import { enregistrerOcre, type SaisieOcre } from "../lib/donnees";
 
 type Initial = { archis?: number | null; archisTotal?: number | null; boss?: number | null; bossTotal?: number | null };
@@ -13,9 +14,9 @@ export function FormulaireOcre({ personnageId, initial, onFini, onAnnuler }: {
   const texte = (v?: number | null) => (v === null || v === undefined ? "" : String(v));
   const [v, setV] = useState({
     archis: texte(initial.archis),
-    archisTotal: texte(initial.archisTotal),
+    archisTotal: texte(initial.archisTotal ?? OCRE_ARCHIS_TOTAL),
     boss: texte(initial.boss),
-    bossTotal: texte(initial.bossTotal),
+    bossTotal: texte(initial.bossTotal ?? OCRE_BOSS_TOTAL),
   });
   const [erreur, setErreur] = useState<string | null>(null);
   const [enCours, setEnCours] = useState(false);

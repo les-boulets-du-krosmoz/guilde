@@ -4,6 +4,7 @@ import { Etat, TexteEtats } from "../components/Etat";
 import { Pastille } from "../components/Pastille";
 import { AVIS, REGIONS, recompense, urlAvis, type Avis } from "../data/avis";
 import { definitionEtat } from "../data/etats";
+import { SimulateurParchos } from "../components/SimulateurParchos";
 import { chargerAvis, chargerGuilde, type DonneesGuilde, type EtatAvis, type LigneAvis } from "../lib/donnees";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -89,7 +90,9 @@ function AvisPerso({ persoId }: { persoId: string }) {
   if (!perso || !guilde) return <Chargement />;
 
   const modifiable = perso.membre_id === moi?.id;
-  const livres = AVIS.filter((a) => mesEtats.get(a.id) === "livre").length;
+  const avisLivres = AVIS.filter((a) => mesEtats.get(a.id) === "livre");
+  const livres = avisLivres.length;
+  const somme = (champ: "avitons" | "alitons" | "kamasGlace") => avisLivres.reduce((s, a) => s + (a[champ] ?? 0), 0);
 
   const visible = (a: Avis) => {
     const fait = mesEtats.get(a.id) === "livre";
@@ -139,6 +142,16 @@ function AvisPerso({ persoId }: { persoId: string }) {
           </div>
         )}
       </div>
+
+      <SimulateurParchos
+        key={perso.id}
+        personnageId={perso.id}
+        modifiable={modifiable}
+        depensesInitiales={perso.doplons_depenses ?? 0}
+        doplonsGagnes={somme("avitons")}
+        alitons={somme("alitons")}
+        kamasGlace={somme("kamasGlace")}
+      />
 
       <div className="onglets" role="group" aria-label="Filtrer les avis">
         {FILTRES.map((f) => (

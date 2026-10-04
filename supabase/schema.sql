@@ -291,3 +291,11 @@ alter table public.personnages add constraint ocre_archis_coherent
 alter table public.personnages drop constraint if exists ocre_boss_coherent;
 alter table public.personnages add constraint ocre_boss_coherent
   check (ocre_boss is null or (ocre_boss >= 0 and ocre_boss_total > 0 and ocre_boss <= ocre_boss_total));
+
+-- Doplons dépensés (migration 008)
+
+alter table public.personnages add column if not exists doplons_depenses int;
+
+alter table public.personnages drop constraint if exists doplons_depenses_positif;
+alter table public.personnages add constraint doplons_depenses_positif
+  check (doplons_depenses is null or doplons_depenses >= 0);

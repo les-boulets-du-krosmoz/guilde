@@ -115,8 +115,6 @@ function OcreAlaMain() {
   const { mesPersos, rafraichir } = useSession();
   const [ouvert, setOuvert] = useState<string | null>(null);
   if (mesPersos.length === 0) return null;
-  // Les totaux sont les mêmes pour tous : on reprend ceux d'un autre personnage pour éviter de les retaper.
-  const reference = mesPersos.find((p) => p.ocre_archis_total && p.ocre_boss_total);
 
   return (
     <section className="carte">
@@ -146,9 +144,9 @@ function OcreAlaMain() {
                 personnageId={p.id}
                 initial={{
                   archis: p.ocre_archis,
-                  archisTotal: p.ocre_archis_total ?? reference?.ocre_archis_total,
+                  archisTotal: p.ocre_archis_total, // vide : 286 par défaut
                   boss: p.ocre_boss,
-                  bossTotal: p.ocre_boss_total ?? reference?.ocre_boss_total,
+                  bossTotal: p.ocre_boss_total, // vide : 51 par défaut
                 }}
                 onFini={() => { setOuvert(null); rafraichir(); }}
                 onAnnuler={() => setOuvert(null)}
