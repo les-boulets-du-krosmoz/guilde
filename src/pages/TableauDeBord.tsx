@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { IconeDonjon } from "../components/IconeDonjon";
 import { Pastille } from "../components/Pastille";
 import { ilYa } from "../lib/dates";
 import { chargerAides, chargerAvis, chargerGuilde, chargerMetiers, chargerSouhaits, chargerSucces, toutesLesQuetes } from "../lib/donnees";
@@ -169,7 +170,7 @@ function CarteObjectif({ objectif: o, aidants }: { objectif: Objectif; aidants: 
           <span className={`etiquette ${o.type === "Donjon" ? "etiquette--donjon" : o.type === "Avis de recherche" ? "etiquette--avis" : "etiquette--groupe"}`}>{o.type}</span>
         </div>
         <span className="discret-taille">{o.quetes.join(", ")}</span>
-        {o.note && <span className="discret-taille objectif__note">🏆 {o.note}</span>}
+        {o.note && <span className="discret-taille objectif__note"><IconeDonjon fichier={o.icone ?? ""} taille={20} /> {o.note}</span>}
         <LigneAidants aidants={aidants} />
         <div className="pastilles">
           {o.persos.map((x) => <Pastille key={x.perso.id} perso={x.perso} dispo={x.dispo} taille={30} />)}

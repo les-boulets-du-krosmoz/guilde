@@ -5,8 +5,9 @@ import { TexteEtats } from "../components/Etat";
 import { Pastille } from "../components/Pastille";
 import { DOFUS, type Contenu, type Dofus, type Ressource } from "../data/dofus";
 import { donjonDeLEtape } from "../data/donjons";
-import { succesDuBoss } from "../data/succesDonjons";
+import { donjonDuBoss } from "../data/succesDonjons";
 import { BoutonDefi } from "../components/BoutonDefi";
+import { IconeDonjon, imageDonjon } from "../components/IconeDonjon";
 import { aDesQuetes, CATEGORIES, type Categorie } from "../data/series";
 import { ilYa } from "../lib/dates";
 import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, chargerSucces, definirSucces, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
@@ -139,7 +140,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
     }
   }
 
-  /** Clic sur un défi : à faire ↔ fait. Un défi pas encore fait est un défi qu'on souhaite faire. */
+  /** Clic sur un succès : à faire ↔ fait. Un succès pas encore fait est un succès qu'on souhaite faire. */
   async function basculerSucces(succesId: string) {
     if (!perso) return;
     const fait = succes.some((x) => x.personnage_id === perso.id && x.succes_id === succesId && x.statut === "fait");
@@ -332,20 +333,25 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                   {q.contenu.map((c, j) => <Etiquette key={j} contenu={c} />)}
                 </div>
                 {donjon && (() => {
-                  const defi = succesDuBoss(q.nom);
-                  if (!defi) return null;
-                  const faitPar = succes.filter((x) => x.succes_id === defi.id && x.statut === "fait").map((x) => annuaire?.persos.get(x.personnage_id)?.nom ?? "?");
-                  const fait = succes.some((x) => x.personnage_id === perso.id && x.succes_id === defi.id && x.statut === "fait");
+                  const dj = donjonDuBoss(q.nom);
+                  if (!dj) return null;
                   return (
                     <div className="succes-donjon">
-                      <span className="discret">Défi du boss :</span>
-                      <BoutonDefi
-                        description={defi.description}
-                        fait={fait}
-                        faitPar={faitPar}
-                        modifiable={modifiable}
-                        onBasculer={() => basculerSucces(defi.id)}
-                      />
+                      <IconeDonjon fichier={dj.icone} titre={`Succès du donjon : ${dj.nom}`} />
+                      {dj.succes.map((sx) => (
+                        <BoutonDefi
+                          key={sx.id}
+                          libelle={sx.libelle}
+                          description={sx.description}
+                          points={sx.points}
+                          icone={sx.icone}
+                          image={sx.icone ? undefined : imageDonjon(dj.icone)}
+                          fait={succes.some((x) => x.personnage_id === perso.id && x.succes_id === sx.id && x.statut === "fait")}
+                          faitPar={succes.filter((x) => x.succes_id === sx.id && x.statut === "fait").map((x) => annuaire?.persos.get(x.personnage_id)?.nom ?? "?")}
+                          modifiable={modifiable}
+                          onBasculer={() => basculerSucces(sx.id)}
+                        />
+                      ))}
                     </div>
                   );
                 })()}

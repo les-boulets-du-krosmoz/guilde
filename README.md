@@ -148,3 +148,13 @@ Les migrations 002 à 009 n'ajoutent que des tables, des colonnes vides et des r
 - **Sans outil** : dans le *Table Editor* de Supabase, exporte chaque table en CSV (membres, personnages, metiers_membre, quetes_terminees, ressources_cochees, dofus_souhaites).
 
 Garde la sauvegarde hors du dépôt GitHub : elle contient les identifiants Discord des membres.
+
+## Succès de donjon
+
+`src/data/succesDonjons.ts` est généré à partir des données du jeu publiées par [dofusdude/dofus3-main](https://github.com/dofusdude/dofus3-main). Après une mise à jour de Dofus, relancer :
+
+```
+python3 scripts/generer-succes-donjons.py
+```
+
+Les identifiants des succès (`ach:<numéro>`) viennent du jeu : ils ne changent pas d'une version à l'autre, les succès déjà cochés restent valables.

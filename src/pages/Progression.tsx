@@ -4,7 +4,8 @@ import { Pastille } from "../components/Pastille";
 import { type Dofus } from "../data/dofus";
 import { aDesQuetes, CATEGORIES, trouverSerie, type Categorie } from "../data/series";
 import { donjonDeLEtape } from "../data/donjons";
-import { succesDuBoss } from "../data/succesDonjons";
+import { donjonDuBoss } from "../data/succesDonjons";
+import { IconeDonjon } from "../components/IconeDonjon";
 import { chargerAides, chargerGuilde, chargerQuetes, chargerSouhaits, chargerSucces, prefixeDofus, type DonneesGuilde } from "../lib/donnees";
 import { etapeActuelle } from "../lib/quetes";
 import { useSession } from "../lib/session";
@@ -133,20 +134,25 @@ export function Progression() {
                   </div>
                 )}
                 {(() => {
-                  // Défi du boss : parmi les personnages à cette étape, qui ne l'a pas encore fait (donc le souhaite).
-                  const defi = donjonDeLEtape(l.cle) && l.quete ? succesDuBoss(l.quete.nom) : undefined;
-                  if (!defi || l.persos.length === 0) return null;
-                  const aFaire = l.persos.filter((x) => !succes.some((sx) => sx.personnage_id === x.p.id && sx.succes_id === defi.id && sx.statut === "fait"));
+                  // Succès du donjon : pour chacun, combien de personnages de cette étape ne l'ont pas encore fait.
+                  const dj = donjonDeLEtape(l.cle) && l.quete ? donjonDuBoss(l.quete.nom) : undefined;
+                  if (!dj || l.persos.length === 0) return null;
+                  const restes = dj.succes
+                    .map((sx) => ({ sx, aFaire: l.persos.filter((x) => !succes.some((r) => r.personnage_id === x.p.id && r.succes_id === sx.id && r.statut === "fait")) }))
+                    .filter((r) => r.aFaire.length > 0);
+                  if (restes.length === 0) return <span className="discret-taille succes-restants"><IconeDonjon fichier={dj.icone} taille={20} /> Tous faits par les personnages ici</span>;
                   return (
-                    <span className="discret-taille">
-                      🏆 Défi du boss à faire pour{" "}
-                      <span className="etat" tabIndex={0}>
-                        {aFaire.length} sur {l.persos.length}
-                        <span role="tooltip" className="etat__bulle">
-                          {defi.description}
-                          {aFaire.length > 0 && <><br />À faire : {aFaire.map((x) => x.p.nom).join(", ")}</>}
+                    <span className="discret-taille succes-restants">
+                      <IconeDonjon fichier={dj.icone} taille={20} /> À faire :{" "}
+                      {restes.map((r, i) => (
+                        <span key={r.sx.id}>
+                          {i > 0 && ", "}
+                          <span className="etat" tabIndex={0}>
+                            {r.sx.libelle} ({r.aFaire.length})
+                            <span role="tooltip" className="etat__bulle">{r.sx.description}<br />À faire : {r.aFaire.map((x) => x.p.nom).join(", ")}</span>
+                          </span>
                         </span>
-                      </span>
+                      ))}
                     </span>
                   );
                 })()}

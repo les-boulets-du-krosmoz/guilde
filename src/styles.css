@@ -469,4 +469,14 @@ a.jauge__nom:hover { color: var(--or); }
 /* Profil : défis de donjon par tranche de niveau */
 .defis-tranche { border-top: 1px solid var(--trait); padding: 10px 0; }
 .defis-tranche summary { cursor: pointer; font-weight: 600; }
-.defis-liste { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.defis-liste { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.defis-donjon { padding: 10px 0; border-bottom: 1px dashed var(--trait); }
+.defis-donjon:last-child { border-bottom: none; }
+.defis-donjon__titre { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+
+/* Icônes des succès : donjon (portrait, comme en jeu) et challenge (silhouette teintée de la couleur du bouton) */
+.icone-donjon { border-radius: 6px; flex-shrink: 0; vertical-align: middle; object-fit: cover; }
+.icone-donjon--vide { display: inline-flex; align-items: center; justify-content: center; font-size: 15px; }
+.succes__icone { width: 18px; height: 18px; flex-shrink: 0; background-color: currentColor; -webkit-mask: var(--icone) center / contain no-repeat; mask: var(--icone) center / contain no-repeat; }
+.succes__image { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; object-fit: cover; }
+.succes-restants, .objectif__note { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }

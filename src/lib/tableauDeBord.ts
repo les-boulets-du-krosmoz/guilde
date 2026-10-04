@@ -1,7 +1,7 @@
 import { AVIS_PAR_ID, nomRegion } from "../data/avis";
 import { DOFUS, type Contenu, type Dofus } from "../data/dofus";
 import { CATEGORIES } from "../data/series";
-import { succesDuBoss } from "../data/succesDonjons";
+import { donjonDuBoss } from "../data/succesDonjons";
 import { joursDepuis, SEUIL_ANCIEN_JOURS } from "./dates";
 import type { LigneAvis } from "./donnees";
 import { dofusObtenu, etapeActuelle, quetesDisponibles } from "./quetes";
@@ -18,8 +18,10 @@ export type Objectif = {
   queteIds: string[];
   persos: PersoObjectif[];
   nbDispo: number;
-  /** Précision affichée sous le titre (ex. défi du boss encore à faire). */
+  /** Précision affichée sous le titre (ex. succès encore à faire). */
   note?: string;
+  /** Icône du donjon (public/icones/donjons/), affichée devant la note. */
+  icone?: string;
 };
 
 /** Quête bloquée par un métier : `dofus` et `id` servent au lien vers l'étape dans la page Progression. */
@@ -154,8 +156,10 @@ export function calculerBilan(
   }
 
   // Activité : les quêtes cochées le plus récemment, en signalant les Dofus obtenus.
-  const finales = new Map(DOFUS.filter((d) => d.quetes.length).map((d) => [[...d.quetes].reverse().find((q) => !q.facultative)!.id, d]));
-  const nomQuete = new Map(DOFUS.flatMap((d) => d.quetes.map((q) => [q.id, q.nom] as const)));
+  // Toutes les séries (Dofus, Tour du monde, Emma Tom Pouce, Frigost…) : sinon les autres s'affichent avec leur identifiant brut.
+  const series = CATEGORIES.flatMap((c) => c.series.filter((d) => d.quetes.length).map((d) => ({ d, estDofus: c.estDofus })));
+  const finales = new Map(series.map((x) => [[...x.d.quetes].reverse().find((q) => !q.facultative)!.id, x]));
+  const etapes = new Map(series.flatMap((x) => x.d.quetes.map((q) => [q.id, { q, ...x }] as const)));
   const nomPerso = new Map(personnages.map((p) => [p.id, p.nom]));
   // Cocher une quête coche aussi les précédentes : on ne garde que la plus récente par personnage et par Dofus.
   const vus = new Set<string>();
@@ -170,11 +174,14 @@ export function calculerBilan(
     .slice(0, 6)
     .map((q) => {
       const qui = nomPerso.get(q.personnage_id) ?? "?";
-      const d = finales.get(q.quete_id);
-      return {
-        texte: d ? `${qui} a obtenu le Dofus ${d.nom}` : `${qui} a terminé « ${nomQuete.get(q.quete_id) ?? q.quete_id} »`,
-        date: q.termine_le,
-      };
+      const fin = finales.get(q.quete_id);
+      const e = etapes.get(q.quete_id);
+      let texte: string;
+      if (fin) texte = fin.estDofus ? `${qui} a obtenu le Dofus ${fin.d.nom}` : `${qui} a terminé ${titreSerie(fin.d)}`;
+      else if (e && e.d.unite === "boss") texte = `${qui} a vaincu ${e.q.nom} (${e.d.nom})`;
+      else if (e) texte = `${qui} a terminé « ${e.q.nom} »${e.estDofus ? "" : ` (${e.d.nom})`}`;
+      else texte = `${qui} a terminé une quête retirée du site`; // identifiant inconnu : jamais affiché tel quel
+      return { texte, date: q.termine_le };
     });
   const activiteAvis = avis
     .filter((l) => l.etat === "livre" && AVIS_PAR_ID.has(l.avis_id) && nomPerso.has(l.personnage_id))
@@ -196,10 +203,20 @@ export function calculerBilan(
   };
 }
 
+/** Nom d'une série dans une phrase du fil d'activité (« a terminé le Tour du monde »). */
+function titreSerie(d: Dofus): string {
+  const noms: Record<string, string> = {
+    "tour-du-monde": "le Tour du monde",
+    "emma-tom-pouce": "les quêtes d'Emma Tom Pouce",
+    frigost: "les donjons de Frigost",
+  };
+  return noms[d.id] ?? `« ${d.nom} »`;
+}
+
 /**
  * Groupes à monter pour les séries de boss (Tour du monde, Emma Tom Pouce, Frigost) : les personnages qui en sont
  * au même boss. Comme pour les Dofus, ne comptent que ceux qui ont commencé la série ou cherchent un groupe pour elle.
- * La note indique combien d'entre eux doivent encore faire le défi du boss (un défi pas fait est un défi souhaité).
+ * La note liste les succès du donjon encore à faire dans le groupe (un succès pas fait est un succès souhaité).
  */
 export function objectifsSeries(
   personnages: Personnage[],
@@ -231,10 +248,11 @@ export function objectifsSeries(
       for (const [id, persos] of parEtape) {
         if (persos.length < 2) continue;
         const q = serie.quetes.find((x) => x.id === id)!;
-        const defi = succesDuBoss(q.nom);
-        const aFaire = defi
-          ? persos.filter((x) => !succes.some((s) => s.personnage_id === x.perso.id && s.succes_id === defi.id && s.statut === "fait")).length
-          : 0;
+        // Succès du donjon qu'au moins un membre du groupe n'a pas encore fait, avec le nombre de personnes concernées.
+        const dj = donjonDuBoss(q.nom);
+        const restes = (dj?.succes ?? [])
+          .map((sx) => ({ sx, n: persos.filter((x) => !succes.some((s) => s.personnage_id === x.perso.id && s.succes_id === sx.id && s.statut === "fait")).length }))
+          .filter((r) => r.n > 0 && r.sx.libelle !== "Vaincre");
         res.push({
           cle: `serie:${id}`,
           titre: q.nom,
@@ -243,7 +261,8 @@ export function objectifsSeries(
           queteIds: [id],
           persos,
           nbDispo: persos.filter((x) => x.dispo).length,
-          note: defi && aFaire > 0 ? `Défi du boss à faire pour ${aFaire} sur ${persos.length} : ${defi.description}` : undefined,
+          note: restes.length > 0 ? `À faire : ${restes.map((r) => `${r.sx.libelle} (${r.n}/${persos.length})`).join(", ")}` : undefined,
+          icone: dj?.icone,
         });
       }
     }

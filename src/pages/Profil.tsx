@@ -9,8 +9,9 @@ import { DOFUS } from "../data/dofus";
 import { ouEstLaQuete } from "../data/series";
 import { ilYa } from "../lib/dates";
 import { BoutonDefi } from "../components/BoutonDefi";
+import { IconeDonjon, imageDonjon } from "../components/IconeDonjon";
 import { FormulaireOcre } from "../components/FormulaireOcre";
-import { SUCCES_BOSS, TRANCHES } from "../data/succesDonjons";
+import { DONJONS_SUCCES, TRANCHES, trancheDe } from "../data/succesDonjons";
 import { chargerAides, chargerDatesQuetes, chargerMetamob, chargerMetiers, chargerSucces, compterAvisLivres, definirSucces, effacerOcre, retirerAide, type ResumeMetamob } from "../lib/donnees";
 import { avancement, etapeActuelle } from "../lib/quetes";
 import { useSession } from "../lib/session";
@@ -30,6 +31,8 @@ type Donnees = {
   /** Défis de donjon réussis par ce personnage. */
   defisFaits: Set<string>;
 };
+
+const TOTAL_SUCCES = DONJONS_SUCCES.reduce((n, dj) => n + dj.succes.length, 0);
 
 export function Profil() {
   const { id } = useParams();
@@ -251,33 +254,46 @@ export function Profil() {
 
       <section className="carte">
         <div className="carte__entete">
-          <h2>Défis de donjon</h2>
-          <span className="discret">{defisFaits.size} / {SUCCES_BOSS.length} réussis</span>
+          <h2>Succès de donjon</h2>
+          <span className="discret">{defisFaits.size} / {TOTAL_SUCCES} réussis</span>
         </div>
         <p className="discret">
-          Un défi par boss. En orange, ceux qui restent à faire ; en vert, ceux qui sont réussis. Survole un boss pour lire son défi
-          {estAMoi ? ", et clique pour le marquer." : "."}
+          Tous les succès de chaque donjon, rangés par niveau. En orange, ceux qui restent à faire ; en vert, ceux qui sont réussis.
+          Survole un succès pour lire sa condition{estAMoi ? ", et clique pour le marquer." : "."}
         </p>
         {TRANCHES.map((t) => {
-          const liste = SUCCES_BOSS.filter((x) => x.tranche === t);
-          const faits = liste.filter((x) => defisFaits.has(x.id)).length;
+          const donjons = DONJONS_SUCCES.filter((dj) => trancheDe(dj.niveau) === t);
+          const total = donjons.reduce((n, dj) => n + dj.succes.length, 0);
+          const faits = donjons.reduce((n, dj) => n + dj.succes.filter((sx) => defisFaits.has(sx.id)).length, 0);
           return (
             <details key={t} className="defis-tranche">
               <summary>
-                Niveau {t} <span className="discret">{faits} / {liste.length}</span>
+                Niveau {t} <span className="discret">{faits} / {total}</span>
               </summary>
-              <div className="defis-liste">
-                {liste.map((x) => (
-                  <BoutonDefi
-                    key={x.id}
-                    libelle={x.boss}
-                    description={x.description}
-                    fait={defisFaits.has(x.id)}
-                    modifiable={estAMoi}
-                    onBasculer={() => basculerDefi(x.id)}
-                  />
-                ))}
-              </div>
+              {donjons.map((dj) => (
+                <div key={dj.nom} className="defis-donjon">
+                  <div className="defis-donjon__titre">
+                    <IconeDonjon fichier={dj.icone} taille={32} titre={dj.boss} />
+                    <strong>{dj.nom}</strong>
+                    <span className="discret">niveau {dj.niveau} · {dj.boss}</span>
+                  </div>
+                  <div className="defis-liste">
+                    {dj.succes.map((sx) => (
+                      <BoutonDefi
+                        key={sx.id}
+                        libelle={sx.libelle}
+                        description={sx.description}
+                        points={sx.points}
+                        icone={sx.icone}
+                        image={sx.icone ? undefined : imageDonjon(dj.icone)}
+                        fait={defisFaits.has(sx.id)}
+                        modifiable={estAMoi}
+                        onBasculer={() => basculerDefi(sx.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
             </details>
           );
         })}
