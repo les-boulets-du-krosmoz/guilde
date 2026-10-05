@@ -2,7 +2,9 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { Nav } from "./components/Nav";
 import { NOM_GUILDE, SLOGAN } from "./lib/guilde";
 import { useSession } from "./lib/session";
+import { FournisseurStatuts } from "./lib/statuts";
 import { Chargement, Connexion, NonMembre } from "./pages/Acces";
+import { Annonces } from "./pages/Annonces";
 import { AvisRecherche } from "./pages/Avis";
 import { Metiers } from "./pages/Metiers";
 import { MonCompte } from "./pages/MonCompte";
@@ -20,7 +22,7 @@ export function App() {
   if (!membre?.valide) return <NonMembre />;
 
   return (
-    <>
+    <FournisseurStatuts actif>
       <Nav />
       <Routes>
         <Route path="/" element={<TableauDeBord />} />
@@ -30,6 +32,7 @@ export function App() {
         <Route path="/metiers/:metier" element={<Metiers />} />
         <Route path="/quetes" element={<Quetes />} />
         <Route path="/quetes/:persoId" element={<Quetes />} />
+        <Route path="/annonces" element={<Annonces />} />
         <Route path="/avis" element={<AvisRecherche />} />
         <Route path="/avis/:persoId" element={<AvisRecherche />} />
         <Route path="/progression" element={<Progression />} />
@@ -40,6 +43,6 @@ export function App() {
         {NOM_GUILDE} — {SLOGAN.charAt(0).toLowerCase() + SLOGAN.slice(1)}
         <span className="pied__version">Version {__VERSION_SITE__}</span>
       </footer>
-    </>
+    </FournisseurStatuts>
   );
 }

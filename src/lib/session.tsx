@@ -93,6 +93,24 @@ export function FournisseurSession({ children }: { children: ReactNode }) {
     return () => abonnement.subscription.unsubscribe();
   }, [charger, verifierGuilde]);
 
+  // Présence : un signe de vie à l'ouverture, puis toutes les 5 minutes tant que l'onglet est visible.
+  // Sans signe de vie depuis 15 minutes (onglet fermé, PC éteint), le membre apparaît hors ligne.
+  const membreValide = membre?.valide ? membre.id : null;
+  useEffect(() => {
+    if (!membreValide) return;
+    const signaler = () => {
+      if (document.visibilityState !== "visible") return;
+      supabase.from("membres").update({ vu_le: new Date().toISOString() }).eq("id", membreValide).then(() => {});
+    };
+    signaler();
+    const t = window.setInterval(signaler, 5 * 60 * 1000);
+    document.addEventListener("visibilitychange", signaler);
+    return () => {
+      window.clearInterval(t);
+      document.removeEventListener("visibilitychange", signaler);
+    };
+  }, [membreValide]);
+
   const valeur: EtatSession = {
     chargement,
     session,
@@ -109,6 +127,8 @@ export function FournisseurSession({ children }: { children: ReactNode }) {
       });
     },
     seDeconnecter: async () => {
+      // Hors ligne tout de suite, sans attendre les 15 minutes ; le statut choisi est conservé pour la prochaine visite.
+      if (membre) await supabase.from("membres").update({ vu_le: null }).eq("id", membre.id);
       await supabase.auth.signOut();
     },
   };

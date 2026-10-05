@@ -326,3 +326,131 @@ create policy ecriture_succes on public.succes_donjon for all to authenticated
 
 -- Annonce de bienvenue sur Discord (migration 010)
 alter table public.membres add column if not exists bienvenue_le timestamptz;
+
+-- Statut de présence (migration 011)
+
+-- Dernier statut choisi : il est conservé d'une visite à l'autre. « dispo » à la première visite.
+alter table public.membres add column if not exists statut text not null default 'dispo';
+alter table public.membres drop constraint if exists statut_valide;
+alter table public.membres add constraint statut_valide check (statut in ('dispo', 'absent', 'indispo'));
+
+-- Mis à jour toutes les 5 minutes tant que le site est ouvert ; au-delà de 15 minutes, le membre est hors ligne.
+alter table public.membres add column if not exists vu_le timestamptz;
+
+-- Chacun peut modifier son propre statut et sa présence (la règle maj_sa_dispo limite déjà à sa propre ligne).
+grant update (statut, vu_le) on public.membres to authenticated;
+
+-- Annonces de sorties (migration 012)
+
+create table if not exists public.annonces (
+  id                 uuid primary key default gen_random_uuid(),
+  auteur_id          uuid not null references public.membres(id) on delete cascade,
+  titre              text not null check (char_length(titre) between 1 and 120),
+  description        text check (description is null or char_length(description) <= 2000),
+  type               text not null check (type in ('donjon', 'quete')),
+  date_prevue        timestamptz,                          -- vide = « en attente », sans date
+  donjon             text check (donjon is null or char_length(donjon) <= 200),  -- ligne du tableau des succès
+  succes             text[] not null default '{}',         -- succès visés (« ach:<numéro> »)
+  quete_id           text check (quete_id is null or char_length(quete_id) <= 100),
+  niveau_min         int check (niveau_min is null or niveau_min between 1 and 200),
+  alignement_min     int check (alignement_min is null or alignement_min between 0 and 100),
+  ordre_min          int check (ordre_min is null or ordre_min between 1 and 5),
+  metiers            jsonb not null default '[]',          -- [{ "metier": "Paysan", "niveau": 100 }]
+  annonce_discord_le timestamptz,
+  cree_le            timestamptz not null default now(),
+  maj_le             timestamptz not null default now()
+);
+
+create table if not exists public.annonces_participants (
+  annonce_id    uuid not null references public.annonces(id) on delete cascade,
+  personnage_id uuid not null references public.personnages(id) on delete cascade,
+  cree_le       timestamptz not null default now(),
+  primary key (annonce_id, personnage_id)
+);
+
+alter table public.annonces enable row level security;
+alter table public.annonces_participants enable row level security;
+
+-- Annonces : tout membre lit et publie ; l'auteur et les officiers modifient ou suppriment.
+drop policy if exists lecture_annonces on public.annonces;
+create policy lecture_annonces on public.annonces for select to authenticated using (public.est_membre_valide());
+drop policy if exists creation_annonces on public.annonces;
+create policy creation_annonces on public.annonces for insert to authenticated
+  with check (auteur_id = auth.uid() and public.est_membre_valide());
+drop policy if exists modif_annonces on public.annonces;
+create policy modif_annonces on public.annonces for update to authenticated
+  using ((auteur_id = auth.uid() or public.est_officier()) and public.est_membre_valide());
+drop policy if exists suppr_annonces on public.annonces;
+create policy suppr_annonces on public.annonces for delete to authenticated
+  using ((auteur_id = auth.uid() or public.est_officier()) and public.est_membre_valide());
+
+-- Inscriptions : chacun inscrit ou retire ses propres personnages ; l'auteur et les officiers peuvent retirer quelqu'un.
+drop policy if exists lecture_participants on public.annonces_participants;
+create policy lecture_participants on public.annonces_participants for select to authenticated using (public.est_membre_valide());
+drop policy if exists inscription_participants on public.annonces_participants;
+create policy inscription_participants on public.annonces_participants for insert to authenticated
+  with check (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid())
+              and public.est_membre_valide());
+drop policy if exists retrait_participants on public.annonces_participants;
+create policy retrait_participants on public.annonces_participants for delete to authenticated
+  using ((exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid())
+          or exists (select 1 from public.annonces a where a.id = annonce_id and a.auteur_id = auth.uid())
+          or public.est_officier())
+         and public.est_membre_valide());
+
+-- Donjon : 8 places au plus, vérifié par la base (deux inscriptions simultanées ne peuvent pas dépasser).
+create or replace function public.limite_places_donjon() returns trigger language plpgsql as $$
+begin
+  if (select type from public.annonces where id = new.annonce_id) = 'donjon'
+     and (select count(*) from public.annonces_participants where annonce_id = new.annonce_id) >= 8 then
+    raise exception 'Les 8 places de ce donjon sont prises.';
+  end if;
+  return new;
+end $$;
+drop trigger if exists places_donjon on public.annonces_participants;
+create trigger places_donjon before insert on public.annonces_participants
+  for each row execute function public.limite_places_donjon();
+
+drop trigger if exists annonces_maj on public.annonces;
+create trigger annonces_maj before update on public.annonces for each row execute function public.toucher_maj();
+
+alter table public.annonces add column if not exists quete_nom text check (quete_nom is null or char_length(quete_nom) <= 120);
+
+-- Invitations aux sorties (migration 013)
+
+create table if not exists public.annonces_invitations (
+  annonce_id  uuid not null references public.annonces(id) on delete cascade,
+  membre_id   uuid not null references public.membres(id) on delete cascade,  -- la personne invitée
+  invite_par  uuid not null references public.membres(id) on delete cascade,
+  statut      text not null default 'en_attente' check (statut in ('en_attente', 'acceptee', 'refusee')),
+  cree_le     timestamptz not null default now(),
+  repondu_le  timestamptz,
+  discord_le  timestamptz,                                                    -- mention Discord envoyée
+  primary key (annonce_id, membre_id)
+);
+
+alter table public.annonces_invitations enable row level security;
+
+drop policy if exists lecture_invitations on public.annonces_invitations;
+create policy lecture_invitations on public.annonces_invitations for select to authenticated using (public.est_membre_valide());
+
+-- Inviter : l'auteur de l'annonce (ou un officier), en son propre nom.
+drop policy if exists envoi_invitations on public.annonces_invitations;
+create policy envoi_invitations on public.annonces_invitations for insert to authenticated
+  with check (invite_par = auth.uid()
+              and (exists (select 1 from public.annonces a where a.id = annonce_id and a.auteur_id = auth.uid()) or public.est_officier())
+              and public.est_membre_valide());
+
+-- Répondre : seulement la personne invitée, sur sa propre invitation.
+drop policy if exists reponse_invitations on public.annonces_invitations;
+create policy reponse_invitations on public.annonces_invitations for update to authenticated
+  using (membre_id = auth.uid() and public.est_membre_valide())
+  with check (membre_id = auth.uid());
+
+-- Annuler : l'auteur de l'annonce, un officier, ou l'invité lui-même.
+drop policy if exists annulation_invitations on public.annonces_invitations;
+create policy annulation_invitations on public.annonces_invitations for delete to authenticated
+  using ((membre_id = auth.uid()
+          or exists (select 1 from public.annonces a where a.id = annonce_id and a.auteur_id = auth.uid())
+          or public.est_officier())
+         and public.est_membre_valide());

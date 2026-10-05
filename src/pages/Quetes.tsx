@@ -147,15 +147,16 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   }
 
   /** Clic sur un succès : à faire ↔ fait. Un succès pas encore fait est un succès qu'on souhaite faire. */
-  async function basculerSucces(succesId: string) {
+  async function basculerSucces(succesId: string, personnageId?: string) {
     if (!perso) return;
-    const fait = succes.some((x) => x.personnage_id === perso.id && x.succes_id === succesId && x.statut === "fait");
+    const pid = personnageId ?? perso.id;
+    const fait = succes.some((x) => x.personnage_id === pid && x.succes_id === succesId && x.statut === "fait");
     const suivant = fait ? null : "fait";
     try {
-      await definirSucces(perso.id, succesId, suivant);
+      await definirSucces(pid, succesId, suivant);
       setSucces((liste) => {
-        const sans = liste.filter((x) => !(x.personnage_id === perso.id && x.succes_id === succesId));
-        return suivant ? [...sans, { personnage_id: perso.id, succes_id: succesId, statut: suivant, maj_le: new Date().toISOString() }] : sans;
+        const sans = liste.filter((x) => !(x.personnage_id === pid && x.succes_id === succesId));
+        return suivant ? [...sans, { personnage_id: pid, succes_id: succesId, statut: suivant, maj_le: new Date().toISOString() }] : sans;
       });
     } catch (e) {
       setErreur((e as Error).message);
@@ -163,14 +164,15 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   }
 
   /** « Tout cocher » sur un donjon, ou toutes les victoires affichées. */
-  async function succesPlusieurs(ids: string[], fait: boolean) {
+  async function succesPlusieurs(ids: string[], fait: boolean, personnageId?: string) {
     if (!perso) return;
+    const pid = personnageId ?? perso.id;
     try {
-      await definirSuccesPlusieurs(perso.id, ids, fait);
+      await definirSuccesPlusieurs(pid, ids, fait);
       const maj_le = new Date().toISOString();
       setSucces((liste) => {
-        const sans = liste.filter((x) => !(x.personnage_id === perso.id && ids.includes(x.succes_id)));
-        return fait ? [...sans, ...ids.map((succes_id) => ({ personnage_id: perso.id, succes_id, statut: "fait" as const, maj_le }))] : sans;
+        const sans = liste.filter((x) => !(x.personnage_id === pid && ids.includes(x.succes_id)));
+        return fait ? [...sans, ...ids.map((succes_id) => ({ personnage_id: pid, succes_id, statut: "fait" as const, maj_le }))] : sans;
       });
     } catch (e) {
       setErreur((e as Error).message);
@@ -280,8 +282,9 @@ function QuetesPerso({ persoId }: { persoId: string }) {
           succes={succes}
           persos={annuaire?.persos ?? new Map()}
           membres={annuaire?.membres ?? new Map()}
-          onBasculer={basculerSucces}
-          onPlusieurs={succesPlusieurs}
+          onBasculer={(id, pid) => basculerSucces(id, pid)}
+          onPlusieurs={(ids, fait, pid) => succesPlusieurs(ids, fait, pid)}
+          moiMembreId={moi?.id}
         />
       </main>
     );

@@ -27,12 +27,31 @@ jobs:
         with:
           node-version: 20
 
+      # Un numéro déjà publié (étiquette existante) = oubli d'augmenter package.json : on n'annonce rien.
+      # « À publier » reste intact, les lignes partiront au prochain déploiement avec un nouveau numéro.
+      - name: Vérifier que la version est nouvelle
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if git ls-remote --tags origin "refs/tags/v$VERSION" | grep -q .; then
+            echo "::error::La version $VERSION a déjà été annoncée. Augmente le numéro dans package.json : l'annonce partira au prochain déploiement."
+            exit 1
+          fi
+
       - name: Poster les nouveautés sur Discord
         id: publier
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           SITE_URL: https://guilde-nine.vercel.app
         run: node scripts/publier-changelog.mjs
+
+      # Étiquette Git et « Release » GitHub pour la version annoncée, sur le commit déployé.
+      - name: Étiqueter la version sur GitHub
+        if: steps.publier.outputs.publie == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          gh release create "v$VERSION" --target "${{ github.event.deployment.sha }}" --title "Version $VERSION" --notes-file notes-version.md
 
       # Le message de commit commence par « chore(changelog) » : vercel.json demande à Vercel de ne pas redéployer pour ça.
       - name: Vider la section publiée

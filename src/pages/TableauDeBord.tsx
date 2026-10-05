@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSession } from "../lib/session";
 import { IconeDonjon } from "../components/IconeDonjon";
+import { IconeSortie } from "../components/IconeSortie";
 import { NomAvecPastille, Pastille } from "../components/Pastille";
 import { ilYa } from "../lib/dates";
-import { chargerAides, chargerAvis, chargerGuilde, chargerMetiers, chargerSouhaits, chargerSucces, toutesLesQuetes } from "../lib/donnees";
+import { chargerAides, chargerAnnonces, chargerAvis, chargerGuilde, chargerMetiers, chargerSouhaits, chargerSucces, toutesLesQuetes } from "../lib/donnees";
+import { dateLisible, donjonDeCle, PLACES_DONJON } from "../lib/annonces";
+import type { Annonce, InvitationAnnonce, ParticipantAnnonce } from "../lib/types";
 import { estDispo, type Personnage } from "../lib/types";
 import { calculerBilan, objectifsSeries, type Bilan, type Objectif } from "../lib/tableauDeBord";
 import { Chargement } from "./Acces";
@@ -13,10 +17,18 @@ export function TableauDeBord() {
   // Qui peut aider sur chaque quête (« Je peux aider »), déjà résolu en personnages.
   const [aidants, setAidants] = useState<Map<string, Aidant[]>>(new Map());
   const [erreur, setErreur] = useState<string | null>(null);
+  const [annonces, setAnnonces] = useState<{ annonces: Annonce[]; participants: ParticipantAnnonce[]; invitations: InvitationAnnonce[] }>({ annonces: [], participants: [], invitations: [] });
+  const { membre: moi } = useSession();
+  const [auteurs, setAuteurs] = useState<Map<string, string>>(new Map());
+
+  useEffect(() => {
+    chargerAnnonces().then(setAnnonces).catch(() => {});
+  }, []);
 
   useEffect(() => {
     Promise.all([chargerGuilde(), chargerMetiers(), toutesLesQuetes(), chargerSouhaits(), chargerAvis(), chargerAides(), chargerSucces()])
       .then(([g, m, q, s, a, aides, succes]) => {
+        setAuteurs(new Map([...g.membres.values()].map((x) => [x.id, x.pseudo])));
         const b = calculerBilan(g.personnages, g.membres, m, q, s, a);
         // Les boss du Tour du monde, d'Emma Tom Pouce et de Frigost rejoignent les autres groupes à monter.
         const objectifs = [...b.objectifs, ...objectifsSeries(g.personnages, g.membres, q, s, succes)]
@@ -55,6 +67,9 @@ export function TableauDeBord() {
           ))}
         </ul>
       </div>
+
+      <BlocAnnonces annonces={annonces.annonces} participants={annonces.participants} auteurs={auteurs}
+        invitations={annonces.invitations.filter((i) => i.membre_id === moi?.id && i.statut === "en_attente")} />
 
       <div className="tdb">
         <section className="carte carte--forte">
@@ -127,6 +142,53 @@ export function TableauDeBord() {
 }
 
 type Aidant = { perso: Personnage; dispo: boolean; note: string | null };
+
+/** Les prochaines sorties et celles en attente, avec la date de publication (« il y a 2 h »). */
+function BlocAnnonces({ annonces, participants, auteurs, invitations }: { annonces: Annonce[]; participants: ParticipantAnnonce[]; auteurs: Map<string, string>; invitations: InvitationAnnonce[] }) {
+  const seuil = Date.now() - 3 * 3600e3;
+  const prochaines = annonces
+    .filter((a) => !a.date_prevue || new Date(a.date_prevue).getTime() >= seuil)
+    .sort((a, b) => (a.date_prevue && b.date_prevue ? a.date_prevue.localeCompare(b.date_prevue) : a.date_prevue ? -1 : b.date_prevue ? 1 : b.cree_le.localeCompare(a.cree_le)))
+    .slice(0, 5);
+  return (
+    <section className="carte bloc-annonces">
+      <div className="carte__entete">
+        <h2>Annonces</h2>
+        <Link to="/annonces">Toutes les annonces et le calendrier</Link>
+      </div>
+      {invitations.map((i) => {
+        const a = annonces.find((x) => x.id === i.annonce_id);
+        if (!a) return null;
+        return (
+          <p key={a.id} className="bloc-annonces__invitation">
+            📨 {auteurs.get(i.invite_par) ?? "Un membre"} t'invite à <Link to={`/annonces#annonce-${a.id}`}>{a.titre}</Link>
+            {a.date_prevue ? ` (${dateLisible(a.date_prevue)})` : ""}. <Link to={`/annonces#annonce-${a.id}`}>Répondre</Link>
+          </p>
+        );
+      })}
+      {prochaines.length === 0 ? (
+        <p className="vide">Aucune sortie prévue. <Link to="/annonces">Propose la première</Link> !</p>
+      ) : (
+        <ul className="bloc-annonces__liste">
+          {prochaines.map((a) => {
+            const n = participants.filter((p) => p.annonce_id === a.id).length;
+            const dj = donjonDeCle(a.donjon);
+            return (
+              <li key={a.id}>
+                <Link to="/annonces" className="bloc-annonces__titre"><IconeSortie type={a.type} /> {a.titre}</Link>
+                <span className="discret-taille">
+                  {a.date_prevue ? dateLisible(a.date_prevue) : "En attente"}
+                  {dj ? ` · ${dj.nom}` : ""} · {a.type === "donjon" ? `${n}/${PLACES_DONJON} places` : `${n} inscrit${n > 1 ? "s" : ""}`}
+                </span>
+                <span className="discret-taille">publiée par {auteurs.get(a.auteur_id) ?? "un membre"} {ilYa(a.cree_le)}</span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
+  );
+}
 
 /** « Peuvent aider : … » sous une carte ; rien si personne ne s'est positionné. */
 function LigneAidants({ aidants }: { aidants: Aidant[] }) {

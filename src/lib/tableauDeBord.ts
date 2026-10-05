@@ -5,7 +5,7 @@ import { donjonDuBoss } from "../data/succesDonjons";
 import { joursDepuis, SEUIL_ANCIEN_JOURS } from "./dates";
 import type { LigneAvis } from "./donnees";
 import { dofusObtenu, etapeActuelle, quetesDisponibles } from "./quetes";
-import { estDispo, type Membre, type MetierMembre, type Personnage, type SuccesDonjon } from "./types";
+import { estDispo, statutDe, type Membre, type MetierMembre, type Personnage, type SuccesDonjon } from "./types";
 
 export type PersoObjectif = { perso: Personnage; dispo: boolean };
 
@@ -78,7 +78,7 @@ export function calculerBilan(
   };
   const persosAJour = personnages.filter(aJour);
   const membresActifs = new Set(persosAJour.map((p) => p.membre_id)).size;
-  const dispoMaintenant = [...membres.values()].filter((m) => m.dispo_personnage_id && estDispo(m, m.dispo_personnage_id)).length;
+  const dispoMaintenant = [...membres.values()].filter((m) => statutDe(m) === "dispo").length;
 
   const objectifs = new Map<string, Objectif>();
   const blocages = new Map<string, Blocage>();

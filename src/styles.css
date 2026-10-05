@@ -15,6 +15,7 @@
   --vert-clair: #8fe0b3;
   --vert-fond: #1f3a2c;
   --orange: #f0b45a;
+  --rouge: #e06c6c;
   --orange-fond: #3a2f1c;
   --bleu-fond: #1f2c3d;
   --bleu: #a9cdf2;
@@ -100,6 +101,8 @@ input, select {
 .pastille img { width: 100%; height: 100%; object-fit: cover; }
 .pastille--mule { border-style: dashed; }
 .pastille--dispo { box-shadow: 0 0 0 3px var(--fond), 0 0 0 5px var(--vert); }
+.pastille--absent { box-shadow: 0 0 0 3px var(--fond), 0 0 0 5px var(--orange); }
+.pastille--indispo { box-shadow: 0 0 0 3px var(--fond), 0 0 0 5px var(--rouge); }
 .pastille--exemple { width: 22px; height: 22px; background: #4a6fa5; vertical-align: middle; margin-right: 6px; }
 .pastilles { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .plus { height: 36px; padding: 0 12px; border-radius: 18px; border: none; background: var(--carte-haute); color: var(--texte-2); font: inherit; font-size: 13px; cursor: pointer; }
@@ -460,7 +463,7 @@ a.jauge__nom:hover { color: var(--or); }
 .succes { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--trait); background: transparent; color: var(--texte-2); font-size: 13px; cursor: pointer; }
 .succes:disabled { cursor: default; }
 .succes { position: relative; }
-.succes--afaire { border-color: var(--orange); color: var(--orange); background: rgba(240, 180, 90, 0.08); }
+.succes--afaire { border-color: var(--rouge); color: var(--rouge); background: rgba(224, 108, 108, 0.08); }
 .succes:hover .etat__bulle, .succes:focus-visible .etat__bulle { visibility: visible; opacity: 1; }
 .succes--fait { border-color: var(--vert); color: var(--vert); background: rgba(95, 191, 138, 0.10); }
 .succes__nb { min-width: 18px; padding: 0 5px; border-radius: 999px; background: var(--fond-nav); color: var(--texte); font-size: 11px; text-align: center; }
@@ -525,3 +528,109 @@ a.jauge__nom:hover { color: var(--or); }
 
 .quete__deplier { display: inline-flex; align-items: center; justify-content: center; margin-left: auto; min-width: 32px; min-height: 32px; padding: 0; border: none; background: transparent; color: var(--discret); cursor: pointer; transition: transform 0.15s; }
 .quete__deplier--ouvert { transform: rotate(180deg); }
+
+/* Texte coloré selon le statut (noms à côté d'une pastille) */
+.statut-texte--dispo { color: var(--vert); }
+.statut-texte--absent { color: var(--orange); }
+.statut-texte--indispo { color: var(--rouge); }
+
+/* Statut dans la barre du haut : dispo (vert), absent (orange), indispo (rouge) */
+.statuts { display: inline-flex; border: 1px solid var(--trait); border-radius: 10px; overflow: hidden; }
+.statut { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: none; background: transparent; color: var(--discret); font: inherit; font-size: 13px; cursor: pointer; }
+.statut + .statut { border-left: 1px solid var(--trait); }
+.statut__point { width: 10px; height: 10px; border-radius: 50%; border: 2px solid currentColor; }
+.statut--dispo { --c: var(--vert); }
+.statut--absent { --c: var(--orange); }
+.statut--indispo { --c: var(--rouge); }
+.statut .statut__point { color: var(--c); }
+.statut--actif { color: var(--c); font-weight: 600; background: rgba(255, 255, 255, 0.04); }
+.statut--actif .statut__point { background: var(--c); }
+.succes__etat { display: inline-block; width: 1em; text-align: center; font-weight: 700; }
+
+/* Menu du statut (barre du haut) */
+.menu-statut { position: relative; }
+.menu-statut__bouton { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--trait); background: transparent; color: var(--c); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.menu-statut__bouton .statut__point { color: var(--c); background: var(--c); }
+.menu-statut__fleche { color: var(--discret); font-size: 12px; }
+.menu-statut__liste { position: absolute; right: 0; top: calc(100% + 6px); z-index: 50; min-width: 220px; display: flex; flex-direction: column; padding: 6px; border-radius: 12px; border: 1px solid var(--trait); background: var(--carte); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); }
+.menu-statut__titre { padding: 8px 10px 4px; font-size: 12px; color: var(--discret); }
+.menu-statut__item { display: flex; align-items: center; gap: 10px; min-height: 38px; padding: 0 10px; border: none; border-radius: 8px; background: transparent; color: var(--texte); font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
+.menu-statut__item:hover, .menu-statut__item:focus-visible { background: rgba(255, 255, 255, 0.05); }
+.menu-statut__item.statut--dispo, .menu-statut__item.statut--absent, .menu-statut__item.statut--indispo { color: var(--c); }
+.menu-statut__item--choisi { font-weight: 600; }
+.menu-statut__item--choisi span:last-child { margin-left: auto; color: var(--vert); }
+
+/* Annonces */
+.annonces { display: grid; grid-template-columns: minmax(280px, 340px) 1fr; gap: 24px; align-items: start; }
+.annonces__listes h2 { margin: 8px 0 12px; }
+.annonces__passees summary { cursor: pointer; color: var(--discret); margin: 16px 0 10px; }
+.calendrier { position: sticky; top: 12px; }
+.calendrier__entete { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; text-transform: capitalize; }
+.calendrier__entete .lien-bouton { font-size: 22px; padding: 0 8px; }
+.calendrier__grille { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.calendrier__jour-nom { text-align: center; font-size: 11px; color: var(--discret); }
+.calendrier__case { position: relative; aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 1px solid transparent; border-radius: 8px; background: rgba(255, 255, 255, 0.02); color: var(--texte); font: inherit; font-size: 13px; cursor: pointer; }
+.calendrier__case:hover { border-color: var(--trait); }
+.calendrier__case--hors { opacity: 0.35; }
+.calendrier__case--aujourdhui { border-color: var(--or); }
+.calendrier__case--choisi { background: rgba(224, 178, 92, 0.18); border-color: var(--or); }
+.calendrier__points { display: flex; gap: 2px; }
+.calendrier__point { width: 6px; height: 6px; border-radius: 50%; }
+.calendrier__point--donjon { background: var(--or); }
+.calendrier__point--quete { background: var(--vert); }
+.annonce { margin-bottom: 14px; }
+.annonce__entete { display: flex; align-items: center; gap: 12px; }
+.annonce__titre { flex: 1; min-width: 0; }
+.annonce__titre h3 { margin: 0; }
+.annonce__type { font-size: 28px; }
+.annonce__description { white-space: pre-line; margin: 10px 0; }
+.annonce__details { margin: 8px 0; padding-left: 18px; color: var(--texte-2); font-size: 14px; }
+.annonce__succes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0; }
+.annonce__metiers { list-style: none; padding: 0; margin: 8px 0; font-size: 14px; }
+.annonce__inscrits { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 10px 0; }
+.annonce__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.annonce__gestion { margin-left: auto; display: inline-flex; gap: 12px; }
+.formulaire-annonce { margin-bottom: 20px; }
+.formulaire-annonce__grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px 16px; margin: 12px 0; }
+.formulaire-annonce .champ { display: flex; flex-direction: column; gap: 4px; }
+.formulaire-annonce .champ--large { grid-column: 1 / -1; }
+.formulaire-annonce textarea { width: 100%; resize: vertical; }
+.formulaire-annonce__bloc { margin: 12px 0; display: flex; flex-direction: column; gap: 10px; }
+.formulaire-annonce__succes, .formulaire-annonce__metiers { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.formulaire-annonce__metier { display: inline-flex; align-items: center; gap: 6px; }
+.formulaire-annonce__metier input { width: 70px; }
+.formulaire-annonce__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.bloc-annonces { margin-bottom: 20px; }
+.bloc-annonces__liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.bloc-annonces__liste li { display: flex; flex-direction: column; gap: 2px; }
+.bloc-annonces__titre { font-weight: 600; }
+@media (max-width: 860px) { .annonces { grid-template-columns: 1fr; } .calendrier { position: static; } }
+
+/* Icônes du jeu pour les types de sortie (clef de donjon, parchemin de quête) */
+.icone-sortie { flex-shrink: 0; vertical-align: middle; object-fit: contain; }
+.onglet--icone, .etiquette--icone { display: inline-flex; align-items: center; gap: 6px; }
+.bloc-annonces__titre { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Invitations aux sorties */
+.invitations { margin-bottom: 20px; border-color: var(--or); }
+.invitations__ligne { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 10px 0; border-bottom: 1px solid var(--trait); }
+.invitations__ligne:last-child { border-bottom: none; }
+.invitations__ligne > div { display: flex; flex-direction: column; gap: 2px; }
+.invitations__titre { font-weight: 600; }
+.reponse-invitation { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.annonce--invite { border-color: var(--or); }
+.annonce--ciblee { box-shadow: 0 0 0 2px var(--or); }
+.annonce__invitation { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; margin: 10px 0; padding: 10px 12px; border-radius: 10px; background: rgba(224, 178, 92, 0.1); }
+.annonce__invites { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 8px 0; font-size: 13px; }
+.invite { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--trait); }
+.invite--en_attente { color: var(--orange); border-color: var(--orange); }
+.invite--acceptee { color: var(--vert); border-color: var(--vert); }
+.invite--refusee { color: var(--rouge); border-color: var(--rouge); }
+.invite .lien-bouton { padding: 0 2px; }
+.panneau-invitation { margin: 10px 0; padding: 12px; border-radius: 10px; border: 1px dashed var(--trait); display: flex; flex-direction: column; gap: 10px; }
+.panneau-invitation__liste { display: flex; flex-wrap: wrap; gap: 6px 16px; max-height: 220px; overflow-y: auto; }
+.panneau-invitation__avatar { border-radius: 50%; }
+.panneau-invitation__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.bloc-annonces__invitation { margin: 0 0 10px; padding: 8px 12px; border-radius: 10px; background: rgba(224, 178, 92, 0.1); }
+.tableau-succes__perso { min-height: 34px; max-width: 280px; }
+.tableau-succes__perso--actif { border-color: var(--or); }

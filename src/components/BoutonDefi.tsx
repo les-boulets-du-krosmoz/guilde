@@ -1,8 +1,7 @@
 import { useId, type CSSProperties } from "react";
 
 /**
- * Défi spécial d'un boss : orange tant qu'il n'est pas fait (un défi pas fait est un défi qu'on souhaite faire),
- * vert une fois fait. Au survol, une bulle donne la description et qui l'a déjà réussi.
+ * Succès : rouge avec ✗ tant qu'il n'est pas obtenu, vert avec ✓ une fois obtenu. Au survol, une bulle donne la description et qui l'a déjà réussi.
  */
 export function BoutonDefi({ libelle, description, points, icone, image, fait, faitPar = [], modifiable, onBasculer }: {
   libelle?: string;
@@ -25,7 +24,9 @@ export function BoutonDefi({ libelle, description, points, icone, image, fait, f
       ) : image ? (
         <img className="succes__image" src={image} alt="" />
       ) : null}
-      {fait ? "✓ " : ""}{libelle ?? (fait ? "Fait" : "À faire")}
+      {/* Un symbole dans les deux états : le bouton garde la même largeur quand on clique. */}
+      <span className="succes__etat" aria-hidden="true">{fait ? "✓" : "✗"}</span>
+      {libelle ?? (fait ? "Fait" : "À faire")}
       {faitPar.length > 0 && <span className="succes__nb" aria-label={`réussi par ${faitPar.length}`}>✓ {faitPar.length}</span>}
       <span role="tooltip" id={id} className="etat__bulle">
         {description}

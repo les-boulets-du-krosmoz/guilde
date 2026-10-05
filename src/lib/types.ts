@@ -11,6 +11,10 @@ export interface Membre {
   dispo_personnage_id: string | null;
   /** Lien ou pseudo Metamob. */
   metamob: string | null;
+  /** Dernier statut choisi (dispo, absent, indispo). */
+  statut?: "dispo" | "absent" | "indispo" | null;
+  /** Dernier signe de vie du site (toutes les 5 minutes tant qu'il est ouvert). */
+  vu_le?: string | null;
 }
 
 export interface Personnage {
@@ -50,9 +54,31 @@ export interface QueteTerminee {
 }
 
 /** Un membre est dispo pour CE personnage si sa dispo court encore et le désigne. */
-export function estDispo(membre: Pick<Membre, "dispo_jusqua" | "dispo_personnage_id"> | undefined, persoId: string): boolean {
-  if (!membre?.dispo_jusqua || membre.dispo_personnage_id !== persoId) return false;
-  return new Date(membre.dispo_jusqua).getTime() > Date.now();
+export type Statut = "dispo" | "absent" | "indispo";
+export const STATUTS: { id: Statut; nom: string }[] = [
+  { id: "dispo", nom: "Dispo" },
+  { id: "absent", nom: "Absent" },
+  { id: "indispo", nom: "Indispo" },
+];
+/** Sans signe de vie du site depuis ce délai, le membre est considéré hors ligne (aucune couleur). */
+export const DELAI_HORS_LIGNE_MS = 15 * 60 * 1000;
+
+type InfosStatut = Pick<Membre, "dispo_personnage_id"> & { statut?: Statut | null; vu_le?: string | null };
+
+/**
+ * Statut affiché pour un personnage : null s'il est hors ligne. « Dispo » vaut pour le personnage choisi
+ * (ou tous, si aucun n'est choisi) ; « absent » et « indispo » concernent la personne, donc tous ses personnages.
+ */
+export function statutDe(membre: InfosStatut | undefined, persoId?: string): Statut | null {
+  if (!membre?.vu_le || Date.now() - new Date(membre.vu_le).getTime() > DELAI_HORS_LIGNE_MS) return null;
+  const s = membre.statut ?? "dispo";
+  if (s === "dispo" && persoId && membre.dispo_personnage_id && membre.dispo_personnage_id !== persoId) return null;
+  return s;
+}
+
+/** Dispo pour grouper (en ligne, statut « dispo », sur ce personnage). */
+export function estDispo(membre: InfosStatut | undefined, persoId: string): boolean {
+  return statutDe(membre, persoId) === "dispo";
 }
 
 /** « Je peux aider » : un personnage se positionne sur une étape de quête. */
@@ -69,4 +95,42 @@ export type SuccesDonjon = {
   succes_id: string;
   statut: "vise" | "fait";
   maj_le: string;
+};
+
+/** Métier demandé par une annonce de quête (au moins un participant doit l'avoir à ce niveau). */
+export type MetierRequis = { metier: string; niveau: number };
+
+/** Annonce de sortie : un donjon (8 places) ou une quête (places illimitées). */
+export type Annonce = {
+  id: string;
+  auteur_id: string;
+  titre: string;
+  description: string | null;
+  type: "donjon" | "quete";
+  date_prevue: string | null; // null = en attente, sans date
+  donjon: string | null; // clé de la ligne du tableau des succès (« nom|boss »)
+  succes: string[];
+  quete_id: string | null;
+  /** Nom saisi à la main quand la quête n'existe pas sur le site. */
+  quete_nom: string | null;
+  niveau_min: number | null;
+  alignement_min: number | null;
+  ordre_min: number | null;
+  metiers: MetierRequis[];
+  annonce_discord_le: string | null;
+  cree_le: string;
+  maj_le: string;
+};
+
+export type ParticipantAnnonce = { annonce_id: string; personnage_id: string; cree_le: string };
+
+/** Invitation d'un membre à une sortie, par l'auteur de l'annonce. */
+export type InvitationAnnonce = {
+  annonce_id: string;
+  membre_id: string;
+  invite_par: string;
+  statut: "en_attente" | "acceptee" | "refusee";
+  cree_le: string;
+  repondu_le: string | null;
+  discord_le: string | null;
 };

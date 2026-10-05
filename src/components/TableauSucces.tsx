@@ -24,8 +24,10 @@ type Props = {
   succes: SuccesDonjon[];
   persos: Map<string, Personnage>;
   membres: Map<string, Membre>;
-  onBasculer: (succesId: string) => void;
-  onPlusieurs: (succesIds: string[], fait: boolean) => void;
+  onBasculer: (succesId: string, personnageId: string) => void;
+  onPlusieurs: (succesIds: string[], fait: boolean, personnageId: string) => void;
+  /** Membre connecté : il peut cocher pour tous ses personnages, et seulement pour eux. */
+  moiMembreId?: string;
 };
 
 /**
@@ -33,7 +35,12 @@ type Props = {
  * « Mes succès » : la checklist du personnage. « Guilde » : pour chaque succès, combien de personnages ayant
  * au moins le niveau du donjon ne l'ont pas encore (un succès pas fait est un succès qu'on souhaite faire).
  */
-export function TableauSucces({ perso, modifiable, succes, persos, membres, onBasculer, onPlusieurs }: Props) {
+export function TableauSucces({ perso, modifiable, succes, persos, membres, onBasculer, onPlusieurs, moiMembreId }: Props) {
+  // Personnage affiché : celui de la page au départ, puis n'importe quel personnage de la guilde.
+  const [vuId, setVuId] = useState(perso.id);
+  const vu = persos.get(vuId) ?? perso;
+  // On ne coche que pour ses propres personnages.
+  const editable = moiMembreId ? vu.membre_id === moiMembreId : modifiable && vu.id === perso.id;
   const [tranche, setTranche] = useState<Tranche>(trancheDe(perso.niveau));
   const [recherche, setRecherche] = useState("");
   const [mode, setMode] = useState<"moi" | "guilde">("moi");
@@ -50,7 +57,19 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
     }
     return m;
   }, [succes]);
-  const mesFaits = (id: string) => faits.get(id)?.has(perso.id) ?? false;
+  const mesFaits = (id: string) => faits.get(id)?.has(vu.id) ?? false;
+
+  // Personnages regroupés par membre (pseudo), pour retrouver quelqu'un facilement dans la liste.
+  const parMembre = useMemo(() => {
+    const groupes = new Map<string, Personnage[]>();
+    for (const p of persos.values()) {
+      const pseudo = membres.get(p.membre_id)?.pseudo ?? "Autres";
+      if (!groupes.has(pseudo)) groupes.set(pseudo, []);
+      groupes.get(pseudo)!.push(p);
+    }
+    return [...groupes.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([pseudo, ps]) => [pseudo, ps.sort((x, y) => Number(y.est_principal) - Number(x.est_principal) || x.nom.localeCompare(y.nom))] as const);
+  }, [persos, membres]);
+  const reussisVu = [...faits.values()].filter((set) => set.has(vu.id)).length;
   const dispo = (p: Personnage) => estDispo(membres.get(p.membre_id), p.id);
 
   // Une recherche parcourt toutes les tranches ; sinon, seule la tranche choisie s'affiche.
@@ -79,9 +98,15 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
       <div className="tableau-succes__outils">
         <input type="search" placeholder="Rechercher un donjon ou un boss…" value={recherche} onChange={(e) => setRecherche(e.target.value)} aria-label="Rechercher un donjon ou un boss" />
         <div className="onglets onglets--mini" role="group" aria-label="Affichage">
-          <button type="button" className={`onglet ${mode === "moi" ? "onglet--actif" : ""}`} aria-pressed={mode === "moi"} onClick={() => setMode("moi")}>
-            {modifiable ? "Mes succès" : `Succès de ${perso.nom}`}
-          </button>
+          <label className="sr-only" htmlFor="succes-perso">Succès du personnage</label>
+          <select id="succes-perso" className={`tableau-succes__perso ${mode === "moi" ? "tableau-succes__perso--actif" : ""}`}
+            value={vu.id} onChange={(e) => { setVuId(e.target.value); setMode("moi"); }} onFocus={() => setMode("moi")}>
+            {parMembre.map(([pseudo, ps]) => (
+              <optgroup key={pseudo} label={pseudo}>
+                {ps.map((p) => <option key={p.id} value={p.id}>{p.nom} ({p.classe} {p.niveau}){p.id === perso.id && modifiable ? " : moi" : ""}</option>)}
+              </optgroup>
+            ))}
+          </select>
           <button type="button" className={`onglet ${mode === "guilde" ? "onglet--actif" : ""}`} aria-pressed={mode === "guilde"} onClick={() => setMode("guilde")}>Guilde</button>
         </div>
         {mode === "moi" ? (
@@ -89,8 +114,11 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
         ) : (
           <label className="case"><input type="checkbox" checked={seulementDispos} onChange={() => setSeulementDispos(!seulementDispos)} /> Seulement les membres dispo</label>
         )}
-        {mode === "moi" && modifiable && victoires.length > 0 && (
-          <button type="button" className="lien-bouton" onClick={() => onPlusieurs(victoires, true)}>Cocher toutes les victoires affichées ({victoires.length})</button>
+        {mode === "moi" && editable && victoires.length > 0 && (
+          <button type="button" className="lien-bouton" onClick={() => onPlusieurs(victoires, true, vu.id)}>Cocher toutes les victoires affichées ({victoires.length})</button>
+        )}
+        {mode === "moi" && (
+          <span className="discret">{vu.nom} : {reussisVu} succès réussis{editable ? "" : " (lecture seule)"}</span>
         )}
       </div>
 
@@ -121,7 +149,7 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
                       return (
                         <BoutonDefi key={s.id} libelle={s.libelle} description={s.description} points={s.points} icone={s.icone} image={image}
                           fait={mesFaits(s.id)} faitPar={[...(faits.get(s.id) ?? [])].map((id) => persos.get(id)?.nom ?? "?")}
-                          modifiable={modifiable} onBasculer={() => onBasculer(s.id)} />
+                          modifiable={editable} onBasculer={() => onBasculer(s.id, vu.id)} />
                       );
                     }
                     const qui = aFaire(s.id, d.niveau);
@@ -133,9 +161,9 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
                     );
                   })}
                 </div>
-                {mode === "moi" && modifiable && (
+                {mode === "moi" && editable && (
                   <button type="button" className="lien-bouton tableau-succes__tout"
-                    onClick={() => (restants.length ? onPlusieurs(restants, true) : onPlusieurs(d.succes.map((s) => s.id), false))}>
+                    onClick={() => (restants.length ? onPlusieurs(restants, true, vu.id) : onPlusieurs(d.succes.map((s) => s.id), false, vu.id))}>
                     {restants.length ? "Tout cocher" : "Tout décocher"}
                   </button>
                 )}
@@ -146,7 +174,7 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
       )}
       <p className="discret tableau-succes__legende">
         {mode === "moi"
-          ? "Orange : à faire. Vert : réussi. Survole un succès pour lire sa condition."
+          ? "✗ rouge : pas encore obtenu. ✓ vert : obtenu. Survole un succès pour lire sa condition."
           : "Le chiffre de chaque case : personnages ayant au moins le niveau du donjon qui n'ont pas encore ce succès. Survole pour voir qui."}
       </p>
     </section>

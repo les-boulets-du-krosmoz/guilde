@@ -78,5 +78,7 @@ for (const content of messages) {
 
 // La section repart vide : les lignes publiées ne restent pas dans le fichier.
 writeFileSync(FICHIER, texte.slice(0, corps) + "\n" + texte.slice(fin));
+// Notes de la version GitHub (fichier de travail, jamais enregistré dans le dépôt).
+writeFileSync(process.env.NOTES ?? "notes-version.md", lignes.map((l) => `- ${l}`).join("\n") + "\n");
 console.log(`${lignes.length} nouveauté(s) postée(s) en ${messages.length} message(s).`);
 sortie("publie", "true");

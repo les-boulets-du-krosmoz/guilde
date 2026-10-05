@@ -7,3 +7,6 @@ supabase/.temp
 # Sauvegardes de la base : jamais dans le dépôt (identifiants Discord des membres)
 sauvegarde*.sql
 *.csv
+
+# Notes de version générées par l'Action d'annonce (jamais enregistrées)
+notes-version.md

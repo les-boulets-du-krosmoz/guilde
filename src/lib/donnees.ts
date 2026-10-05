@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { AideEtape, Membre, MetierMembre, Personnage, QueteTerminee, SuccesDonjon } from "./types";
+import type { AideEtape, Annonce, InvitationAnnonce, Membre, MetierMembre, ParticipantAnnonce, Personnage, QueteTerminee, SuccesDonjon } from "./types";
 
 export type DonneesGuilde = {
   membres: Map<string, Membre>;
@@ -224,4 +224,78 @@ export async function retirerAidesPlusieurs(personnageId: string, queteIds: stri
   if (queteIds.length === 0) return;
   const { error } = await supabase.from("aides_etapes").delete().eq("personnage_id", personnageId).in("quete_id", queteIds);
   if (error) throw error;
+}
+
+// ---------- Annonces de sorties ----------
+
+export type DonneesAnnonces = { annonces: Annonce[]; participants: ParticipantAnnonce[]; invitations: InvitationAnnonce[] };
+
+/** Annonces, inscrits et invitations. Tables absentes (migrations 012 ou 013 pas passées) : listes vides. */
+export async function chargerAnnonces(): Promise<DonneesAnnonces> {
+  const [a, p, i] = await Promise.all([
+    supabase.from("annonces").select("*"),
+    supabase.from("annonces_participants").select("annonce_id, personnage_id, cree_le"),
+    supabase.from("annonces_invitations").select("*"),
+  ]);
+  const absente = (e: { code?: string } | null) => !!e && (e.code === "42P01" || e.code === "PGRST205");
+  if (absente(a.error) || absente(p.error)) return { annonces: [], participants: [], invitations: [] };
+  if (a.error) throw a.error;
+  if (p.error) throw p.error;
+  if (i.error && !absente(i.error)) throw i.error;
+  return { annonces: a.data as Annonce[], participants: p.data as ParticipantAnnonce[], invitations: (i.data ?? []) as InvitationAnnonce[] };
+}
+
+/** Invite des membres à une sortie, puis les mentionne sur Discord (un échec Discord n'annule pas les invitations). */
+export async function inviter(annonceId: string, membreIds: string[], parId: string): Promise<void> {
+  if (membreIds.length === 0) return;
+  const { error } = await supabase
+    .from("annonces_invitations")
+    .upsert(membreIds.map((membre_id) => ({ annonce_id: annonceId, membre_id, invite_par: parId })), { onConflict: "annonce_id,membre_id", ignoreDuplicates: true });
+  if (error) throw error;
+  await supabase.functions.invoke("annoncer-sortie", { body: { annonce_id: annonceId, invitations: true } }).catch(() => {});
+}
+
+export async function repondreInvitation(annonceId: string, membreId: string, statut: "acceptee" | "refusee"): Promise<void> {
+  const { error } = await supabase.from("annonces_invitations")
+    .update({ statut, repondu_le: new Date().toISOString() }).eq("annonce_id", annonceId).eq("membre_id", membreId);
+  if (error) throw error;
+}
+
+export async function annulerInvitation(annonceId: string, membreId: string): Promise<void> {
+  const { error } = await supabase.from("annonces_invitations").delete().eq("annonce_id", annonceId).eq("membre_id", membreId);
+  if (error) throw error;
+}
+
+export type ChampsAnnonce = Omit<Annonce, "id" | "auteur_id" | "annonce_discord_le" | "cree_le" | "maj_le">;
+
+/** Crée (sans id) ou modifie une annonce ; renvoie son identifiant. */
+export async function enregistrerAnnonce(champs: ChampsAnnonce, auteurId: string, id?: string): Promise<string> {
+  if (id) {
+    const { error } = await supabase.from("annonces").update(champs).eq("id", id);
+    if (error) throw error;
+    return id;
+  }
+  const { data, error } = await supabase.from("annonces").insert({ ...champs, auteur_id: auteurId }).select("id").single();
+  if (error) throw error;
+  return (data as { id: string }).id;
+}
+
+export async function supprimerAnnonce(id: string): Promise<void> {
+  const { error } = await supabase.from("annonces").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export async function participer(annonceId: string, personnageId: string): Promise<void> {
+  const { error } = await supabase.from("annonces_participants").insert({ annonce_id: annonceId, personnage_id: personnageId });
+  if (error) throw error;
+}
+
+export async function retirerParticipation(annonceId: string, personnageId: string): Promise<void> {
+  const { error } = await supabase.from("annonces_participants").delete().eq("annonce_id", annonceId).eq("personnage_id", personnageId);
+  if (error) throw error;
+}
+
+/** Demande l'annonce de la sortie sur Discord (fonction « annoncer-sortie ») ; un échec n'empêche pas la création. */
+export async function annoncerSurDiscord(annonceId: string, details: string[]): Promise<void> {
+  await supabase.functions.invoke("annoncer-sortie", { body: { annonce_id: annonceId, details } }).catch(() => {});
 }
