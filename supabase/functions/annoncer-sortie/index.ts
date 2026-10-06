@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
       ? new Intl.DateTimeFormat("fr-FR", { dateStyle: "full", timeStyle: "short", timeZone: "Europe/Paris" }).format(new Date(a.date_prevue))
       : "date à fixer";
     const message = {
-      content: `📨 ${discordIds.map((d: string) => `<@${d}>`).join(" ")} : **${moi?.pseudo ?? "Un membre"}** t'invite à « ${String(a.titre).slice(0, 120)} » (${quand}). Accepte ou refuse sur le site : ${site}/annonces#annonce-${a.id}`,
+      content: `📨 ${discordIds.map((d: string) => `<@${d}>`).join(" ")} : **${moi?.pseudo ?? "Un membre"}** t'invite à « ${String(a.titre).slice(0, 120)} » (${quand}). Accepte ou refuse sur le site : ${site}/groupes#annonce-${a.id}`,
       allowed_mentions: { users: discordIds }, // seuls les invités sont notifiés
     };
     const r = await fetch(webhook, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(message) }).catch(() => null);
@@ -56,20 +56,27 @@ Deno.serve(async (req) => {
     : "Date à fixer";
   // Les détails (donjon, succès, conditions) sont préparés par le site ; on borne leur taille.
   const lignes = (Array.isArray(details) ? details : []).map(String).slice(0, 12).map((l: string) => `• ${l.slice(0, 200)}`);
+  // Invités choisis à la création : mentionnés dans ce même message, une seule fois.
+  const { data: inv } = await admin.from("annonces_invitations").select("membre_id").eq("annonce_id", a.id).is("discord_le", null);
+  const idsInvites = (inv ?? []).map((x: { membre_id: string }) => x.membre_id);
+  const { data: invites } = idsInvites.length ? await admin.from("membres").select("discord_id").in("id", idsInvites) : { data: [] };
+  const discordInvites = (invites ?? []).map((m: { discord_id: string }) => m.discord_id).filter(Boolean);
   const corps = {
-    content: `📅 Nouvelle sortie proposée par **${auteur?.pseudo ?? "un membre"}**`,
-    allowed_mentions: { parse: [] }, // aucune mention ne notifie, même écrite dans le titre
+    content: `🔎 Nouvelle recherche de groupe par **${auteur?.pseudo ?? "un membre"}**`
+      + (discordInvites.length ? `\n📨 ${discordInvites.map((d: string) => `<@${d}>`).join(" ")} : tu es invité ! Accepte ou refuse sur le site : ${site}/groupes#annonce-${a.id}` : ""),
+    allowed_mentions: { users: discordInvites }, // seuls les invités sont notifiés, même si le titre contient des mentions
     embeds: [{
       title: `${a.type === "donjon" ? "🏰" : "📜"} ${a.titre}`.slice(0, 250),
-      url: `${site}/annonces#annonce-${a.id}`,
+      url: `${site}/groupes#annonce-${a.id}`,
       description: [quand, a.description ? `\n${String(a.description).slice(0, 1500)}` : "", lignes.length ? `\n${lignes.join("\n")}` : ""].join(""),
       color: a.type === "donjon" ? 0xd6a521 : 0x5fbf8a,
       ...(auteur?.avatar_url ? { thumbnail: { url: auteur.avatar_url } } : {}),
-      footer: { text: "Inscriptions sur le site de la guilde" },
+      footer: { text: "Inscriptions sur le site de la guilde, page Recherche de groupe" },
     }],
   };
   const r = await fetch(webhook, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(corps) }).catch(() => null);
   if (!r?.ok) return json({ poste: false, raison: "Discord n'a pas accepté le message" }, 502);
   await admin.from("annonces").update({ annonce_discord_le: new Date().toISOString() }).eq("id", a.id);
+  if (idsInvites.length) await admin.from("annonces_invitations").update({ discord_le: new Date().toISOString() }).eq("annonce_id", a.id).in("membre_id", idsInvites);
   return json({ poste: true });
 });

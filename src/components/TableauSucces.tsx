@@ -16,6 +16,7 @@ const GUIDES = new Map(
 const SITE_DPLN = "https://www.dofuspourlesnoobs.com/";
 import { estDispo, type Membre, type Personnage, type SuccesDonjon } from "../lib/types";
 import { BoutonDefi } from "./BoutonDefi";
+import { ChoixPersonnage } from "./ChoixPersonnage";
 import { IconeDonjon, imageDonjon } from "./IconeDonjon";
 
 type Props = {
@@ -59,16 +60,6 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
   }, [succes]);
   const mesFaits = (id: string) => faits.get(id)?.has(vu.id) ?? false;
 
-  // Personnages regroupés par membre (pseudo), pour retrouver quelqu'un facilement dans la liste.
-  const parMembre = useMemo(() => {
-    const groupes = new Map<string, Personnage[]>();
-    for (const p of persos.values()) {
-      const pseudo = membres.get(p.membre_id)?.pseudo ?? "Autres";
-      if (!groupes.has(pseudo)) groupes.set(pseudo, []);
-      groupes.get(pseudo)!.push(p);
-    }
-    return [...groupes.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([pseudo, ps]) => [pseudo, ps.sort((x, y) => Number(y.est_principal) - Number(x.est_principal) || x.nom.localeCompare(y.nom))] as const);
-  }, [persos, membres]);
   const reussisVu = [...faits.values()].filter((set) => set.has(vu.id)).length;
   const dispo = (p: Personnage) => estDispo(membres.get(p.membre_id), p.id);
 
@@ -98,15 +89,8 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
       <div className="tableau-succes__outils">
         <input type="search" placeholder="Rechercher un donjon ou un boss…" value={recherche} onChange={(e) => setRecherche(e.target.value)} aria-label="Rechercher un donjon ou un boss" />
         <div className="onglets onglets--mini" role="group" aria-label="Affichage">
-          <label className="sr-only" htmlFor="succes-perso">Succès du personnage</label>
-          <select id="succes-perso" className={`tableau-succes__perso ${mode === "moi" ? "tableau-succes__perso--actif" : ""}`}
-            value={vu.id} onChange={(e) => { setVuId(e.target.value); setMode("moi"); }} onFocus={() => setMode("moi")}>
-            {parMembre.map(([pseudo, ps]) => (
-              <optgroup key={pseudo} label={pseudo}>
-                {ps.map((p) => <option key={p.id} value={p.id}>{p.nom} ({p.classe} {p.niveau}){p.id === perso.id && modifiable ? " : moi" : ""}</option>)}
-              </optgroup>
-            ))}
-          </select>
+          <ChoixPersonnage persos={[...persos.values()]} membres={membres} valeur={vu} moiId={moiMembreId} actif={mode === "moi"}
+            onChoix={(p) => { setVuId(p.id); setMode("moi"); }} />
           <button type="button" className={`onglet ${mode === "guilde" ? "onglet--actif" : ""}`} aria-pressed={mode === "guilde"} onClick={() => setMode("guilde")}>Guilde</button>
         </div>
         {mode === "moi" ? (

@@ -7,7 +7,7 @@ import { METIERS } from "../data/constantes";
 import { CATEGORIES } from "../data/series";
 import { cleDonjon, DONJONS_SUCCES, SUCCES_PAR_ID } from "../data/succesDonjons";
 import {
-  couvertureMetiers, dateLisible, donjonDeCle, grilleMois, memeJour, PLACES_DONJON, raisonRefus, resumeAnnonce,
+  couvertureMetiers, dateLisible, donjonDeCle, grilleMois, memeJour, PLACES_DONJON, PLACES_DUO, placesDe, raisonRefus, resumeAnnonce,
 } from "../lib/annonces";
 import { ilYa } from "../lib/dates";
 import {
@@ -49,7 +49,7 @@ export function Annonces() {
   }, []);
   useEffect(() => { charger(); }, [charger]);
 
-  // Lien depuis Discord (…/annonces#annonce-<id>) : on fait défiler jusqu'à l'annonce une fois chargée.
+  // Lien depuis Discord (…/groupes#annonce-<id>) : on fait défiler jusqu'à l'annonce une fois chargée.
   const pret = !!guilde;
   useEffect(() => {
     if (!pret || !window.location.hash) return;
@@ -87,10 +87,10 @@ export function Annonces() {
     <main className="page">
       <div className="entete">
         <div>
-          <h1>Annonces</h1>
+          <h1>Recherche de groupe</h1>
           <p className="discret">Les sorties prévues par la guilde : donjons (8 places) et quêtes. Inscris-toi avec le personnage de ton choix.</p>
         </div>
-        {!edition && <button type="button" className="bouton bouton--or" onClick={() => setEdition("nouvelle")}>Nouvelle annonce</button>}
+        {!edition && <button type="button" className="bouton bouton--or" onClick={() => setEdition("nouvelle")}>Nouvelle recherche de groupe</button>}
       </div>
 
       {mesInvitations.length > 0 && (
@@ -105,7 +105,7 @@ export function Annonces() {
                 </span>
               </div>
               <ReponseInvitation annonce={a} invitation={i} mesPersos={mesPersos}
-                complet={a.type === "donjon" && participants.filter((p) => p.annonce_id === a.id).length >= PLACES_DONJON}
+                complet={placesDe(a) !== null && participants.filter((p) => p.annonce_id === a.id).length >= placesDe(a)!}
                 onChange={charger} onErreur={setErreur} />
             </div>
           ))}
@@ -115,7 +115,10 @@ export function Annonces() {
       {edition && (
         <FormulaireAnnonce
           initiale={edition === "nouvelle" ? null : edition}
+          inscrits={edition === "nouvelle" ? 1 : participants.filter((x) => x.annonce_id === edition.id).length}
           auteurId={membre.id}
+          membres={[...guilde.membres.values()].filter((m) => m.valide && m.id !== membre.id)}
+          mesPersos={mesPersos}
           onAnnuler={() => setEdition(null)}
           onFini={async () => { setEdition(null); await charger(); }}
           onErreur={setErreur}
@@ -196,8 +199,12 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
   const mesInscrits = inscrits.filter((p) => p.membre_id === moiId);
   const auteur = guilde.membres.get(a.auteur_id);
   const dj = donjonDeCle(a.donjon);
-  const complet = a.type === "donjon" && inscrits.length >= PLACES_DONJON;
+  const places = placesDe(a);
+  const complet = places !== null && inscrits.length >= places;
   const candidats = mesPersos.filter((p) => !inscrits.some((i) => i.id === p.id));
+  // Groupe privé : seuls l'auteur et les invités peuvent s'inscrire (la base le vérifie aussi).
+  const accesFerme = a.visibilite === "prive" && a.auteur_id !== moiId && !invitations.some((i) => i.membre_id === moiId);
+  const estOrganisateur = (p: Personnage) => p.membre_id === a.auteur_id;
   const [choix, setChoix] = useState<string>(candidats[0]?.id ?? "");
   const persoChoisi = mesPersos.find((p) => p.id === choix) ?? candidats[0];
   const refus = persoChoisi ? raisonRefus(a, persoChoisi) : null;
@@ -221,7 +228,10 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
             {a.date_prevue ? dateLisible(a.date_prevue) : "En attente : date à fixer"} · publiée par {auteur?.pseudo ?? "un membre"} {ilYa(a.cree_le)}
           </span>
         </div>
-        <span className={`etiquette etiquette--icone ${a.type === "donjon" ? "etiquette--donjon" : "etiquette--groupe"}`}><IconeSortie type={a.type} taille={16} />{a.type === "donjon" ? "Donjon" : "Quête"}</span>
+        <span className="annonce__etiquettes">
+          <span className={`etiquette etiquette--icone ${a.type === "donjon" ? "etiquette--donjon" : "etiquette--groupe"}`}><IconeSortie type={a.type} taille={16} />{a.type === "donjon" ? "Donjon" : "Quête"}</span>
+          <span className={`etiquette ${a.visibilite === "prive" ? "etiquette--prive" : "etiquette--ouvert"}`}>{a.visibilite === "prive" ? "🔒 Privé" : "Ouvert"}</span>
+        </span>
       </div>
 
       {monInvitation?.statut === "en_attente" && (
@@ -263,10 +273,14 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
 
       <div className="annonce__inscrits">
         <span className="discret">
-          {a.type === "donjon" ? `${inscrits.length} / ${PLACES_DONJON} places` : `${inscrits.length} inscrit${inscrits.length > 1 ? "s" : ""}`}
+          {places !== null ? `${inscrits.length} / ${places} places` : `${inscrits.length} inscrit${inscrits.length > 1 ? "s" : ""}`}
         </span>
         <div className="pastilles pastilles--serrees">
-          {inscrits.map((p) => <Pastille key={p.id} perso={p} taille={30} />)}
+          {inscrits.map((p) => (
+            <span key={p.id} className={estOrganisateur(p) ? "annonce__organisateur" : undefined} title={estOrganisateur(p) ? `${p.nom}, organisateur` : undefined}>
+              <Pastille perso={p} taille={30} />
+            </span>
+          ))}
         </div>
       </div>
 
@@ -295,10 +309,12 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
       )}
 
       <div className="annonce__actions">
-        {mesInscrits.map((p) => (
+        {mesInscrits.filter((p) => !estOrganisateur(p)).map((p) => (
           <button key={p.id} type="button" className="bouton" onClick={() => action(() => retirerParticipation(a.id, p.id))}>Retirer {p.nom}</button>
         ))}
-        {candidats.length > 0 && !complet && (
+        {mesInscrits.some(estOrganisateur) && <span className="discret">Tu organises cette sortie.</span>}
+        {accesFerme && mesInscrits.length === 0 && <span className="discret">🔒 Groupe privé : sur invitation de l'organisateur.</span>}
+        {candidats.length > 0 && !complet && !accesFerme && !(a.auteur_id === moiId && mesInscrits.length > 0) && (
           <>
             {candidats.length > 1 && (
               <select value={persoChoisi?.id} onChange={(e) => setChoix(e.target.value)} aria-label="Personnage à inscrire">
@@ -398,9 +414,13 @@ function PanneauInvitation({ membres, onEnvoyer, onAnnuler }: { membres: Membre[
 const QUETES_PAR_SERIE = CATEGORIES.flatMap((c) => c.series.filter((s) => s.quetes.length).map((s) => ({ nom: c.estDofus ? `Dofus ${s.nom}` : s.nom, quetes: s.quetes })));
 const ETIQUETTE_DONJON = (d: (typeof DONJONS_SUCCES)[number]) => `${d.nom} — ${d.boss} (niv. ${d.niveau})`;
 
-function FormulaireAnnonce({ initiale, auteurId, onAnnuler, onFini, onErreur }: {
+function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, mesPersos, onAnnuler, onFini, onErreur }: {
   initiale: Annonce | null;
+  /** Personnes déjà inscrites (1 à la création : l'organisateur) : on ne peut pas descendre en dessous. */
+  inscrits: number;
   auteurId: string;
+  membres: Membre[];
+  mesPersos: Personnage[];
   onAnnuler: () => void;
   onFini: () => Promise<void>;
   onErreur: (e: string) => void;
@@ -409,6 +429,10 @@ function FormulaireAnnonce({ initiale, auteurId, onAnnuler, onFini, onErreur }: 
   const [description, setDescription] = useState(initiale?.description ?? "");
   const [date, setDate] = useState(initiale?.date_prevue ? versChampDate(initiale.date_prevue) : "");
   const [type, setType] = useState<"donjon" | "quete">(initiale?.type ?? "donjon");
+  const [visibilite, setVisibilite] = useState<"ouvert" | "prive">(initiale?.visibilite ?? "ouvert");
+  const [places, setPlaces] = useState(initiale?.places ?? PLACES_DONJON);
+  // L'organisateur participe d'office, avec le personnage choisi ici (son principal par défaut).
+  const [persoAuteurId, setPersoAuteurId] = useState((mesPersos.find((p) => p.est_principal) ?? mesPersos[0])?.id ?? "");
   const djInitial = donjonDeCle(initiale?.donjon ?? null);
   const [donjonTexte, setDonjonTexte] = useState(djInitial ? ETIQUETTE_DONJON(djInitial) : "");
   const [succesChoisis, setSuccesChoisis] = useState<string[]>(initiale?.succes ?? []);
@@ -419,8 +443,14 @@ function FormulaireAnnonce({ initiale, auteurId, onAnnuler, onFini, onErreur }: 
   const [ordreMin, setOrdreMin] = useState(initiale?.ordre_min?.toString() ?? "");
   const [metiersReq, setMetiersReq] = useState<MetierRequis[]>(initiale?.metiers ?? []);
   const [enCours, setEnCours] = useState(false);
+  const [invites, setInvites] = useState<string[]>([]);
+  const [rechercheInvite, setRechercheInvite] = useState("");
 
   const dj = DONJONS_SUCCES.find((d) => ETIQUETTE_DONJON(d) === donjonTexte);
+  // Le succès Duo se fait à 2 : la jauge est alors bloquée à 2 places.
+  const duo = type === "donjon" && succesChoisis.some((id) => dj?.succes.find((s) => s.id === id)?.libelle.startsWith("Duo"));
+  const maxPlaces = duo ? PLACES_DUO : PLACES_DONJON;
+  const placesRetenues = Math.min(Math.max(places, Math.max(2, inscrits)), maxPlaces);
   const nombre = (v: string) => (/^\d+$/.test(v.trim()) ? Number(v) : null);
 
   // Choisir une quête du site reprend ses prérequis de niveau et de métiers.
@@ -440,10 +470,13 @@ function FormulaireAnnonce({ initiale, auteurId, onAnnuler, onFini, onErreur }: 
     if (!titre.trim()) { onErreur("Donne un titre à l'annonce."); return; }
     if (type === "donjon" && !dj) { onErreur("Choisis un donjon dans la liste."); return; }
     if (type === "quete" && queteId === "autre" && !queteNom.trim()) { onErreur("Indique le nom de la quête."); return; }
+    if (type === "donjon" && inscrits > maxPlaces) { onErreur(`Il y a déjà ${inscrits} inscrits : impossible de limiter à ${maxPlaces} places.`); return; }
     const champs: ChampsAnnonce = {
       titre: titre.trim(),
       description: description.trim() || null,
       type,
+      visibilite,
+      places: type === "donjon" ? placesRetenues : null,
       date_prevue: date ? new Date(date).toISOString() : null,
       donjon: type === "donjon" && dj ? cleDonjon(dj) : null,
       succes: type === "donjon" ? succesChoisis.filter((id) => dj?.succes.some((s) => s.id === id)) : [],
@@ -455,10 +488,23 @@ function FormulaireAnnonce({ initiale, auteurId, onAnnuler, onFini, onErreur }: 
       ordre_min: type === "quete" ? nombre(ordreMin) : null,
       metiers: type === "quete" ? metiersReq.filter((m) => m.metier && m.niveau > 0) : [],
     };
+    const persoAuteur = mesPersos.find((p) => p.id === persoAuteurId);
+    if (!initiale) {
+      if (!persoAuteur) { onErreur("Crée d'abord un personnage dans Mon compte pour organiser une sortie."); return; }
+      const refus = raisonRefus({ ...champs, id: "", auteur_id: auteurId, annonce_discord_le: null, cree_le: "", maj_le: "" }, persoAuteur);
+      if (refus) { onErreur(`Tu dois toi-même remplir les conditions : ${refus}`); return; }
+    }
     setEnCours(true);
     try {
       const id = await enregistrerAnnonce(champs, auteurId, initiale?.id);
-      if (!initiale) await annoncerSurDiscord(id, resumeAnnonce({ ...champs, id, auteur_id: auteurId, annonce_discord_le: null, cree_le: "", maj_le: "" }));
+      if (!initiale && persoAuteur) {
+        await participer(id, persoAuteur.id); // l'organisateur est le premier inscrit
+      }
+      if (!initiale) {
+        // Les invités sont enregistrés avant le message Discord, qui les mentionne dans la même annonce.
+        if (invites.length) await inviter(id, invites, auteurId, false);
+        await annoncerSurDiscord(id, resumeAnnonce({ ...champs, id, auteur_id: auteurId, annonce_discord_le: null, cree_le: "", maj_le: "" }));
+      }
       await onFini();
     } catch (e) {
       onErreur((e as Error).message);
@@ -468,11 +514,28 @@ function FormulaireAnnonce({ initiale, auteurId, onAnnuler, onFini, onErreur }: 
 
   return (
     <section className="carte formulaire-annonce">
-      <h2>{initiale ? "Modifier l'annonce" : "Nouvelle annonce"}</h2>
+      <h2>{initiale ? "Modifier la recherche de groupe" : "Nouvelle recherche de groupe"}</h2>
       <div className="formulaire-annonce__grille">
         <label className="champ">Titre<input maxLength={120} value={titre} onChange={(e) => setTitre(e.target.value)} placeholder="ex. Kimbo Duo + Statue" /></label>
         <label className="champ">Date et heure <span className="discret">(vide = en attente)</span><input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} /></label>
         <label className="champ champ--large">Description<textarea maxLength={2000} rows={3} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Stuff conseillé, point de rendez-vous, stratégie…" /></label>
+      </div>
+
+      <div className="formulaire-annonce__grille">
+        <div className="champ">
+          <span>Accès</span>
+          <div className="onglets onglets--mini" role="group" aria-label="Accès au groupe">
+            <button type="button" className={`onglet ${visibilite === "ouvert" ? "onglet--actif" : ""}`} aria-pressed={visibilite === "ouvert"} onClick={() => setVisibilite("ouvert")}>Ouvert à tous</button>
+            <button type="button" className={`onglet ${visibilite === "prive" ? "onglet--actif" : ""}`} aria-pressed={visibilite === "prive"} onClick={() => setVisibilite("prive")}>🔒 Privé (sur invitation)</button>
+          </div>
+        </div>
+        {!initiale && mesPersos.length > 0 && (
+          <label className="champ">Tu participes avec
+            <select value={persoAuteurId} onChange={(e) => setPersoAuteurId(e.target.value)}>
+              {mesPersos.map((p) => <option key={p.id} value={p.id}>{p.nom} ({p.classe} {p.niveau})</option>)}
+            </select>
+          </label>
+        )}
       </div>
 
       <div className="onglets onglets--mini" role="group" aria-label="Type de sortie">
@@ -486,6 +549,17 @@ function FormulaireAnnonce({ initiale, auteurId, onAnnuler, onFini, onErreur }: 
             <input list="liste-donjons" value={donjonTexte} onChange={(e) => { setDonjonTexte(e.target.value); setSuccesChoisis([]); }} placeholder="Tape le nom du donjon ou du boss…" />
           </label>
           <datalist id="liste-donjons">{DONJONS_SUCCES.map((d) => <option key={cleDonjon(d)} value={ETIQUETTE_DONJON(d)} />)}</datalist>
+          <label className="champ champ--large formulaire-annonce__places">
+            <span>
+              Places : <strong>{placesRetenues}</strong> <span className="discret">(toi compris, soit {placesRetenues - 1} de plus)</span>
+              {duo && <span className="discret"> · succès Duo : 2 places au maximum</span>}
+            </span>
+            <input type="range" min={2} max={maxPlaces} step={1} value={placesRetenues} disabled={duo}
+              onChange={(e) => setPlaces(Number(e.target.value))} aria-label="Nombre de places, organisateur compris" />
+            <span className="formulaire-annonce__graduations" aria-hidden="true">
+              {Array.from({ length: PLACES_DONJON - 1 }, (_, i) => i + 2).map((n) => <span key={n} className={n > maxPlaces ? "discret" : undefined}>{n}</span>)}
+            </span>
+          </label>
           {dj && (
             <div className="formulaire-annonce__succes">
               <span className="discret">Succès visés (facultatif) :</span>
@@ -547,10 +621,26 @@ function FormulaireAnnonce({ initiale, auteurId, onAnnuler, onFini, onErreur }: 
         )}
       </div>
 
+      {!initiale && (
+        <div className="formulaire-annonce__bloc">
+          <span className="discret">Inviter des membres (facultatif) : ils sont mentionnés sur Discord et acceptent ou refusent sur le site.</span>
+          <input type="search" placeholder="Rechercher un membre…" value={rechercheInvite} onChange={(e) => setRechercheInvite(e.target.value)} aria-label="Rechercher un membre à inviter" />
+          <div className="panneau-invitation__liste">
+            {membres.filter((m) => m.pseudo.toLowerCase().includes(rechercheInvite.toLowerCase())).sort((x, y) => x.pseudo.localeCompare(y.pseudo)).map((m) => (
+              <label key={m.id} className="case">
+                <input type="checkbox" checked={invites.includes(m.id)} onChange={() => setInvites((x) => (x.includes(m.id) ? x.filter((y) => y !== m.id) : [...x, m.id]))} />
+                {m.avatar_url && <img src={m.avatar_url} alt="" width={20} height={20} className="panneau-invitation__avatar" referrerPolicy="no-referrer" />}
+                {m.pseudo}
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="formulaire-annonce__actions">
-        <button type="button" className="bouton bouton--vert" onClick={valider} disabled={enCours}>{initiale ? "Enregistrer" : "Publier"}</button>
+        <button type="button" className="bouton bouton--vert" onClick={valider} disabled={enCours}>{initiale ? "Enregistrer" : invites.length ? `Publier et inviter (${invites.length})` : "Publier"}</button>
         <button type="button" className="bouton" onClick={onAnnuler} disabled={enCours}>Annuler</button>
-        {!initiale && <span className="discret">La sortie sera aussi annoncée sur Discord.</span>}
+        {!initiale && <span className="discret">Tu seras inscrit d'office. La recherche sera aussi annoncée sur Discord{invites.length ? ", avec la mention des invités" : ""}.</span>}
       </div>
     </section>
   );

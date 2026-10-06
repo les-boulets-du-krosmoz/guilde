@@ -35,7 +35,7 @@ export function Quetes() {
         </main>
       );
     }
-    return <Navigate to={`/quetes/${defaut.id}`} replace />;
+    return <Navigate to={{ pathname: `/quetes/${defaut.id}`, search: window.location.search }} replace />;
   }
   return <QuetesPerso key={persoId} persoId={persoId} />;
 }

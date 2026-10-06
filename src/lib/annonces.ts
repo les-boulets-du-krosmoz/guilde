@@ -4,6 +4,12 @@ import type { Annonce, MetierMembre, Personnage } from "./types";
 
 export const PLACES_DONJON = 8;
 
+/** Nombre de places d'une sortie (organisateur compris) : celui choisi pour un donjon, aucune limite pour une quête. */
+export const placesDe = (a: Pick<Annonce, "type" | "places">): number | null => (a.type === "donjon" ? a.places ?? PLACES_DONJON : null);
+
+/** Le succès « Duo » limite le groupe à 2 personnes. */
+export const PLACES_DUO = 2;
+
 export const donjonDeCle = (cle: string | null) => (cle ? DONJONS_SUCCES.find((d) => cleDonjon(d) === cle) : undefined);
 
 /** Raison pour laquelle un personnage ne peut pas s'inscrire (niveau, alignement, ordre), ou null s'il peut. */
@@ -29,7 +35,7 @@ export function resumeAnnonce(a: Annonce): string[] {
   const l: string[] = [];
   const d = donjonDeCle(a.donjon);
   if (a.type === "donjon") {
-    if (d) l.push(`Donjon : ${d.nom} (${d.boss}, niveau ${d.niveau}), ${PLACES_DONJON} places`);
+    if (d) l.push(`Donjon : ${d.nom} (${d.boss}, niveau ${d.niveau}), ${placesDe(a)} places`);
     const succes = a.succes.map((id) => SUCCES_PAR_ID.get(id)?.succes.libelle).filter(Boolean);
     l.push(succes.length ? `Succès visés : ${succes.join(", ")}` : "Sans succès particulier");
   } else {
@@ -37,6 +43,7 @@ export function resumeAnnonce(a: Annonce): string[] {
     if (q) l.push(`Quête : ${q.quete.nom} (${q.categorie.estDofus ? `Dofus ${q.serie.nom}` : q.serie.nom})`);
     else if (a.quete_nom) l.push(`Quête : ${a.quete_nom}`);
   }
+  l.push(a.visibilite === "prive" ? "Groupe privé : sur invitation" : "Groupe ouvert : tout le monde peut rejoindre");
   if (a.niveau_min) l.push(`Niveau ${a.niveau_min} minimum`);
   if (a.alignement_min) l.push(`Alignement ${a.alignement_min} minimum`);
   if (a.ordre_min) l.push(`Ordre ${a.ordre_min} minimum`);

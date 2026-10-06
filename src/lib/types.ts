@@ -107,6 +107,10 @@ export type Annonce = {
   titre: string;
   description: string | null;
   type: "donjon" | "quete";
+  /** « ouvert » : tout le monde peut s'inscrire ; « prive » : seulement l'auteur et les invités. */
+  visibilite: "ouvert" | "prive";
+  /** Donjon : nombre de places, organisateur compris (2 à 8 ; 8 si vide). */
+  places: number | null;
   date_prevue: string | null; // null = en attente, sans date
   donjon: string | null; // clé de la ligne du tableau des succès (« nom|boss »)
   succes: string[];

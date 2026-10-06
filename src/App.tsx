@@ -32,7 +32,8 @@ export function App() {
         <Route path="/metiers/:metier" element={<Metiers />} />
         <Route path="/quetes" element={<Quetes />} />
         <Route path="/quetes/:persoId" element={<Quetes />} />
-        <Route path="/annonces" element={<Annonces />} />
+        <Route path="/groupes" element={<Annonces />} />
+        <Route path="/annonces" element={<Navigate to="/groupes" replace />} />
         <Route path="/avis" element={<AvisRecherche />} />
         <Route path="/avis/:persoId" element={<AvisRecherche />} />
         <Route path="/progression" element={<Progression />} />

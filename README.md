@@ -19,7 +19,7 @@ React + TypeScript (Vite) pour le front, Supabase pour la base de données, la c
 ### 1. Supabase
 
 1. Crée un projet sur [supabase.com](https://supabase.com).
-2. Dans **SQL Editor**, colle et exécute `supabase/schema.sql` (une seule fois, sur un projet neuf). Si tu l'as déjà exécuté avec une version plus ancienne, exécute seulement les migrations que tu n'as pas encore passées, dans l'ordre (`supabase/migration-002.sql`, `migration-003.sql`, `migration-004.sql`, `migration-005.sql`, `migration-006.sql`, `migration-007.sql`, `migration-008.sql`, `migration-009.sql`, puis `migration-010.sql`).
+2. Dans **SQL Editor**, colle et exécute `supabase/schema.sql` (une seule fois, sur un projet neuf). Si tu l'as déjà exécuté avec une version plus ancienne, exécute seulement les migrations que tu n'as pas encore passées, dans l'ordre (`supabase/migration-002.sql`, `migration-003.sql`, `migration-004.sql`, `migration-005.sql`, `migration-006.sql`, `migration-007.sql`, `migration-008.sql`, `migration-009.sql`, `migration-010.sql`, `migration-011.sql`, `migration-012.sql`, `migration-013.sql`, puis `migration-014.sql`).
 3. Note l'URL du projet et la clé `anon` (**Project Settings > API**).
 
 ### 2. Application Discord
@@ -125,16 +125,17 @@ Après chaque déploiement réussi en production, l'Action `.github/workflows/an
 - Pour annoncer quelque chose : ajoute une ligne `- …` sous « À publier », écrite pour les membres, et pousse avec le reste.
 - Rien sous « À publier » = rien de posté. Un échec de Discord n'archive rien : la section repartira au déploiement suivant.
 - **Numéro de version** : champ `version` de `package.json`, affiché aussi en pied de page. À augmenter à chaque déploiement annoncé : le deuxième chiffre pour des nouveautés (1.1.0 → 1.2.0), le troisième pour de simples corrections (1.2.0 → 1.2.1).
+- **Étiquette de version** : après chaque annonce, l'Action crée l'étiquette `vX.Y.Z` et une « Release » GitHub (onglet Releases) sur le commit déployé, avec les mêmes lignes en notes. Si ce numéro a déjà été annoncé, l'Action s'arrête en erreur (onglet Actions) sans rien poster ni vider « À publier » : augmente la version, l'annonce partira au prochain déploiement.
 - Le commit du bot commence par `chore(changelog)` ; `vercel.json` (`ignoreCommand`) empêche Vercel de redéployer pour lui.
 - Si la branche `main` est protégée, autorise GitHub Actions à y pousser, sinon l'archivage échouera.
 
 ## Déployer sans perdre de données
 
-Les migrations 002 à 010 n'ajoutent que des tables, des colonnes vides et des règles d'accès : aucune ne supprime ni ne modifie de données existantes, et chacune peut être relancée sans risque. Le déploiement Vercel, lui, ne touche jamais à la base.
+Les migrations 002 à 014 n'ajoutent que des tables, des colonnes vides et des règles d'accès : aucune ne supprime ni ne modifie de données existantes, et chacune peut être relancée sans risque. Le déploiement Vercel, lui, ne touche jamais à la base.
 
 1. **Sauvegarde** : exporte les données avant de toucher à quoi que ce soit (voir ci-dessous).
 2. **État avant** : lance `supabase/verification-deploiement.sql` et garde le résultat (nombre de lignes par table).
-3. **Migrations** : exécute, dans l'ordre, celles qui ne sont pas encore passées (003 à 010). L'ancien site continue de fonctionner avec elles.
+3. **Migrations** : exécute, dans l'ordre, celles qui ne sont pas encore passées (003 à 014). L'ancien site continue de fonctionner avec elles.
 4. **État après** : relance `verification-deploiement.sql` : mêmes nombres de lignes (ou plus), et toutes les lignes de la partie 2 à « oui ».
 5. **Site** : seulement maintenant, pousse le code sur GitHub pour que Vercel déploie.
 6. **Retour arrière** si le site pose problème : dans Vercel, remets le déploiement précédent en production. La base n'a pas besoin d'être restaurée, les migrations sont compatibles avec l'ancien site.
@@ -167,3 +168,15 @@ Les identifiants des succès (`ach:<numéro>`) viennent du jeu : ils ne changent
 2. Dans Supabase : Edge Functions > Secrets (ou `npx supabase secrets set …`), ajouter `DISCORD_WEBHOOK_BIENVENUE` avec cette URL.
 3. Facultatif : `DISCORD_ROLE_BIENVENUE` avec l'identifiant d'un rôle à mentionner en plus (clic droit sur le rôle > Copier l'identifiant, mode développeur activé).
 4. Redéployer la fonction : `npx supabase functions deploy verifier-guilde`.
+
+## Recherche de groupe (annonces de sorties)
+
+La page « Recherche de groupe » (adresse `/groupes`) permet de proposer des sorties (donjon à 8 places, ou quête sans limite), datées ou « en attente », avec inscriptions. Chaque nouvelle annonce est postée dans un salon Discord dédié par la fonction `annoncer-sortie`.
+
+1. Exécuter `supabase/migration-012.sql`, puis `migration-013.sql` (invitations) et `migration-014.sql` (groupe ouvert ou privé, organisateur inscrit).
+2. Créer un webhook dans le salon des sorties, puis ajouter le secret Supabase `DISCORD_WEBHOOK_ANNONCES` (Edge Functions > Secrets).
+3. Déployer la nouvelle fonction : `npx supabase functions deploy annoncer-sortie`, ou dans l'interface (Edge Functions > nouvelle fonction nommée `annoncer-sortie`, en collant `supabase/functions/annoncer-sortie/index.ts`).
+
+Sans le secret, les annonces fonctionnent sur le site, sans message Discord.
+
+Invitations : l'auteur choisit des invités dès la création (ils sont mentionnés dans le message Discord de l'annonce), ou plus tard depuis la carte de l'annonce, comme un officier. La même fonction `annoncer-sortie` les mentionne dans le salon des sorties, avec un lien direct vers l'annonce ; l'invité accepte (en s'inscrivant) ou refuse sur le site.

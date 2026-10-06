@@ -6,7 +6,7 @@ import { IconeSortie } from "../components/IconeSortie";
 import { NomAvecPastille, Pastille } from "../components/Pastille";
 import { ilYa } from "../lib/dates";
 import { chargerAides, chargerAnnonces, chargerAvis, chargerGuilde, chargerMetiers, chargerSouhaits, chargerSucces, toutesLesQuetes } from "../lib/donnees";
-import { dateLisible, donjonDeCle, PLACES_DONJON } from "../lib/annonces";
+import { dateLisible, donjonDeCle, placesDe } from "../lib/annonces";
 import type { Annonce, InvitationAnnonce, ParticipantAnnonce } from "../lib/types";
 import { estDispo, type Personnage } from "../lib/types";
 import { calculerBilan, objectifsSeries, type Bilan, type Objectif } from "../lib/tableauDeBord";
@@ -153,21 +153,21 @@ function BlocAnnonces({ annonces, participants, auteurs, invitations }: { annonc
   return (
     <section className="carte bloc-annonces">
       <div className="carte__entete">
-        <h2>Annonces</h2>
-        <Link to="/annonces">Toutes les annonces et le calendrier</Link>
+        <h2>Recherche de groupe</h2>
+        <Link to="/groupes">Toutes les recherches et le calendrier</Link>
       </div>
       {invitations.map((i) => {
         const a = annonces.find((x) => x.id === i.annonce_id);
         if (!a) return null;
         return (
           <p key={a.id} className="bloc-annonces__invitation">
-            📨 {auteurs.get(i.invite_par) ?? "Un membre"} t'invite à <Link to={`/annonces#annonce-${a.id}`}>{a.titre}</Link>
-            {a.date_prevue ? ` (${dateLisible(a.date_prevue)})` : ""}. <Link to={`/annonces#annonce-${a.id}`}>Répondre</Link>
+            📨 {auteurs.get(i.invite_par) ?? "Un membre"} t'invite à <Link to={`/groupes#annonce-${a.id}`}>{a.titre}</Link>
+            {a.date_prevue ? ` (${dateLisible(a.date_prevue)})` : ""}. <Link to={`/groupes#annonce-${a.id}`}>Répondre</Link>
           </p>
         );
       })}
       {prochaines.length === 0 ? (
-        <p className="vide">Aucune sortie prévue. <Link to="/annonces">Propose la première</Link> !</p>
+        <p className="vide">Aucune sortie prévue. <Link to="/groupes">Propose la première</Link> !</p>
       ) : (
         <ul className="bloc-annonces__liste">
           {prochaines.map((a) => {
@@ -175,10 +175,10 @@ function BlocAnnonces({ annonces, participants, auteurs, invitations }: { annonc
             const dj = donjonDeCle(a.donjon);
             return (
               <li key={a.id}>
-                <Link to="/annonces" className="bloc-annonces__titre"><IconeSortie type={a.type} /> {a.titre}</Link>
+                <Link to="/groupes" className="bloc-annonces__titre"><IconeSortie type={a.type} /> {a.titre}{a.visibilite === "prive" ? " 🔒" : ""}</Link>
                 <span className="discret-taille">
                   {a.date_prevue ? dateLisible(a.date_prevue) : "En attente"}
-                  {dj ? ` · ${dj.nom}` : ""} · {a.type === "donjon" ? `${n}/${PLACES_DONJON} places` : `${n} inscrit${n > 1 ? "s" : ""}`}
+                  {dj ? ` · ${dj.nom}` : ""} · {placesDe(a) !== null ? `${n}/${placesDe(a)} places` : `${n} inscrit${n > 1 ? "s" : ""}`}
                 </span>
                 <span className="discret-taille">publiée par {auteurs.get(a.auteur_id) ?? "un membre"} {ilYa(a.cree_le)}</span>
               </li>

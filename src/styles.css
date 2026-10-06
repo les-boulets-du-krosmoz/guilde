@@ -552,7 +552,7 @@ a.jauge__nom:hover { color: var(--or); }
 .menu-statut__bouton { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--trait); background: transparent; color: var(--c); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
 .menu-statut__bouton .statut__point { color: var(--c); background: var(--c); }
 .menu-statut__fleche { color: var(--discret); font-size: 12px; }
-.menu-statut__liste { position: absolute; right: 0; top: calc(100% + 6px); z-index: 50; min-width: 220px; display: flex; flex-direction: column; padding: 6px; border-radius: 12px; border: 1px solid var(--trait); background: var(--carte); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); }
+.menu-statut__liste { position: absolute; right: 0; top: calc(100% + 6px); z-index: 50; min-width: 220px; overflow-y: auto; box-sizing: border-box; display: flex; flex-direction: column; padding: 6px; border-radius: 12px; border: 1px solid var(--trait); background: var(--carte); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); }
 .menu-statut__titre { padding: 8px 10px 4px; font-size: 12px; color: var(--discret); }
 .menu-statut__item { display: flex; align-items: center; gap: 10px; min-height: 38px; padding: 0 10px; border: none; border-radius: 8px; background: transparent; color: var(--texte); font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
 .menu-statut__item:hover, .menu-statut__item:focus-visible { background: rgba(255, 255, 255, 0.05); }
@@ -634,3 +634,56 @@ a.jauge__nom:hover { color: var(--or); }
 .bloc-annonces__invitation { margin: 0 0 10px; padding: 8px 12px; border-radius: 10px; background: rgba(224, 178, 92, 0.1); }
 .tableau-succes__perso { min-height: 34px; max-width: 280px; }
 .tableau-succes__perso--actif { border-color: var(--or); }
+
+/* Choix d'un personnage avec recherche (succès) */
+.choix-perso { position: relative; }
+.choix-perso__bouton { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--trait); background: transparent; color: var(--texte); font: inherit; font-size: 14px; cursor: pointer; }
+.choix-perso__bouton--actif { border-color: var(--or); }
+.choix-perso__liste { position: absolute; left: 0; top: calc(100% + 6px); z-index: 50; width: 340px; display: flex; flex-direction: column; gap: 6px; padding: 8px; border-radius: 12px; border: 1px solid var(--trait); background: var(--carte); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); box-sizing: border-box; overflow: hidden; }
+.choix-perso__liste input { width: 100%; box-sizing: border-box; }
+.choix-perso__options { display: flex; flex-direction: column; overflow-y: auto; max-height: 360px; }
+.choix-perso__item, .choix-perso__mules { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 8px; border: none; border-radius: 8px; background: transparent; color: var(--texte); font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
+.choix-perso__item:hover, .choix-perso__item:focus-visible, .choix-perso__mules:hover { background: rgba(255, 255, 255, 0.05); }
+.choix-perso__item--choisi { background: rgba(224, 178, 92, 0.12); }
+.choix-perso__nom { font-weight: 600; }
+.choix-perso__item .discret { margin-left: auto; font-size: 12px; }
+.choix-perso__mules { color: var(--discret); border-top: 1px solid var(--trait); border-radius: 0; margin-top: 4px; }
+.choix-perso__vide { padding: 8px; }
+
+/* Barre du haut allégée : Accueil, Groupes, Progression ▾, Guilde ▾ ; statut et compte à droite */
+.nav__liens { align-items: center; }
+.nav__groupes { display: inline-flex; align-items: center; gap: 6px; }
+.nav__badge { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: var(--or); color: #1b1712; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+.menu-nav { position: relative; }
+.menu-nav__bouton { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; border: none; border-radius: 8px; background: transparent; color: var(--texte-2); font: inherit; cursor: pointer; }
+.menu-nav__bouton:hover { background: rgba(255, 255, 255, 0.04); }
+.menu-nav__bouton--actif { background: var(--carte-haute); color: var(--texte); font-weight: 600; }
+.menu-nav__liste { position: absolute; left: 0; top: calc(100% + 6px); z-index: 60; min-width: 250px; display: flex; flex-direction: column; padding: 6px; border-radius: 12px; border: 1px solid var(--trait); background: var(--carte); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45); box-sizing: border-box; overflow-y: auto; }
+.menu-nav--droite .menu-nav__liste { left: auto; right: 0; }
+.menu-nav__item { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 8px; color: var(--texte); text-decoration: none; border: none; background: transparent; font: inherit; text-align: left; cursor: pointer; }
+.menu-nav__item:hover, .menu-nav__item:focus-visible { background: rgba(255, 255, 255, 0.05); }
+.menu-nav__item small { color: var(--discret); font-size: 12px; }
+.menu-nav__item--actif { background: rgba(224, 178, 92, 0.1); }
+.menu-nav__item--action { color: var(--rouge); border-top: 1px solid var(--trait); border-radius: 0 0 8px 8px; margin-top: 4px; }
+.nav__avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.nav__avatar--initiales { display: inline-flex; align-items: center; justify-content: center; background: var(--carte-haute); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+.menu-nav--droite .menu-nav__bouton { padding: 4px 8px; }
+.nav__hamburger { display: none; align-items: center; gap: 6px; min-height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--trait); background: transparent; color: var(--texte); font: inherit; cursor: pointer; }
+@media (max-width: 860px) {
+  .nav { padding: 10px 16px; }
+  .nav__hamburger { display: inline-flex; }
+  .nav__liens { display: none; order: 3; flex-basis: 100%; flex-direction: column; align-items: stretch; }
+  .nav__liens--ouvert { display: flex; }
+  .nav__liens > a, .nav__liens .menu-nav__bouton { width: 100%; justify-content: flex-start; box-sizing: border-box; }
+}
+
+/* Recherche de groupe : accès et organisateur */
+.annonce__etiquettes { display: inline-flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.etiquette--prive { background: rgba(224, 108, 108, 0.14); color: var(--rouge); }
+.etiquette--ouvert { background: rgba(95, 191, 138, 0.12); color: var(--vert); }
+.annonce__organisateur { position: relative; display: inline-flex; }
+.annonce__organisateur::after { content: "👑"; position: absolute; top: -10px; right: -6px; font-size: 12px; }
+
+/* Jauge du nombre de places (donjon) */
+.formulaire-annonce__places input[type="range"] { width: 100%; max-width: 420px; accent-color: var(--or); }
+.formulaire-annonce__graduations { display: flex; justify-content: space-between; max-width: 420px; font-size: 12px; padding: 0 4px; box-sizing: border-box; }

@@ -245,14 +245,17 @@ export async function chargerAnnonces(): Promise<DonneesAnnonces> {
   return { annonces: a.data as Annonce[], participants: p.data as ParticipantAnnonce[], invitations: (i.data ?? []) as InvitationAnnonce[] };
 }
 
-/** Invite des membres à une sortie, puis les mentionne sur Discord (un échec Discord n'annule pas les invitations). */
-export async function inviter(annonceId: string, membreIds: string[], parId: string): Promise<void> {
+/**
+ * Invite des membres à une sortie, puis les mentionne sur Discord (un échec Discord n'annule pas les invitations).
+ * `mentionner = false` à la création : c'est le message d'annonce lui-même qui les mentionnera.
+ */
+export async function inviter(annonceId: string, membreIds: string[], parId: string, mentionner = true): Promise<void> {
   if (membreIds.length === 0) return;
   const { error } = await supabase
     .from("annonces_invitations")
     .upsert(membreIds.map((membre_id) => ({ annonce_id: annonceId, membre_id, invite_par: parId })), { onConflict: "annonce_id,membre_id", ignoreDuplicates: true });
   if (error) throw error;
-  await supabase.functions.invoke("annoncer-sortie", { body: { annonce_id: annonceId, invitations: true } }).catch(() => {});
+  if (mentionner) await supabase.functions.invoke("annoncer-sortie", { body: { annonce_id: annonceId, invitations: true } }).catch(() => {});
 }
 
 export async function repondreInvitation(annonceId: string, membreId: string, statut: "acceptee" | "refusee"): Promise<void> {
