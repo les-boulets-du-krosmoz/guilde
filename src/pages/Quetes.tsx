@@ -1,5 +1,5 @@
 import type React from "react";
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { TexteEtats } from "../components/Etat";
 import { NomAvecPastille, Pastille } from "../components/Pastille";
@@ -14,7 +14,7 @@ import { aDesQuetes, CATEGORIES, type Categorie } from "../data/series";
 import { clicSurCarte } from "../lib/clicCarte";
 import { ilYa } from "../lib/dates";
 import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, chargerSucces, definirSucces, definirSuccesPlusieurs, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
-import { avancement, cocher, decocher, etapeActuelle, evaluerPrerequis } from "../lib/quetes";
+import { ancetres, avancement, cocher, decocher, etapeActuelle, evaluerPrerequis } from "../lib/quetes";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
 import { estDispo, type AideEtape, type Membre, type MetierMembre, type Personnage, type SuccesDonjon } from "../lib/types";
@@ -129,6 +129,23 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   }, [perso?.id, dofus.id]);
 
   if (erreur) return <main className="page"><p className="erreur" role="alert">{erreur}</p></main>;
+  // Étapes consécutives qu'on peut faire dans n'importe quel ordre : aucune ne dépend d'une autre du groupe.
+  const groupesLibres = useMemo(() => {
+    const res = new Map<number, { debut: boolean; de: number; a: number }>();
+    const qs = dofus.quetes;
+    let courant: number[] = [0];
+    const fermer = () => {
+      if (courant.length > 1) courant.forEach((k, n) => res.set(k, { debut: n === 0, de: courant[0] + 1, a: courant[courant.length - 1] + 1 }));
+    };
+    for (let k = 1; k < qs.length; k++) {
+      const libre = courant.every((j) => !ancetres(qs[k].id).has(qs[j].id) && !ancetres(qs[j].id).has(qs[k].id));
+      if (libre) courant.push(k);
+      else { fermer(); courant = [k]; }
+    }
+    fermer();
+    return res;
+  }, [dofus]);
+
   if (!perso) return <Chargement />;
 
   const modifiable = perso.membre_id === moi?.id;
@@ -360,6 +377,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
 
       <ol className="liste-quetes">
         {dofus.quetes.map((q, i) => {
+          const groupe = groupesLibres.get(i);
           const fait = faites.has(q.id);
           const actuelle = i === etape;
           const prerequis = q.prerequis.map((p) => evaluerPrerequis(p, perso, metiers)).filter((x) => x !== null);
@@ -369,12 +387,19 @@ function QuetesPerso({ persoId }: { persoId: string }) {
           const jAide = aidesEtape.some((a) => a.personnage_id === perso.id);
           const donjon = donjonDeLEtape(q.id);
           const aDuDetail = q.contenu.length > 0 || prerequis.length > 0 || (q.ressources ?? []).length > 0 || (q.deroule ?? []).length > 0 || ici.length > 0 || aidesEtape.length > 0 || modifiable;
+          // Étape indépendante : aucune étape suivante n'en dépend, donc cocher une étape plus loin ne la coche pas.
+          const independante = i < dofus.quetes.length - 1 && !dofus.quetes.slice(i + 1).some((s) => ancetres(s.id).has(q.id));
           const manque = prerequis.some((p) => p.etat === "manque");
           return (
+            <Fragment key={q.id}>
+            {groupe?.debut && (
+              <li className="quete-groupe" aria-hidden="false">
+                ⇄ Étapes {groupe.de} à {groupe.a} : dans n'importe quel ordre
+              </li>
+            )}
             <li
-              key={q.id}
               id={`etape-${q.id}`}
-              className={`quete ${fait ? "quete--faite" : ""} ${actuelle ? "quete--actuelle" : ""} ${aDuDetail ? "quete--cliquable" : ""}`}
+              className={`quete ${fait ? "quete--faite" : ""} ${actuelle ? "quete--actuelle" : ""} ${aDuDetail ? "quete--cliquable" : ""} ${independante ? "quete--independante" : ""} ${groupe ? "quete--libre" : ""}`}
               onClick={(e) => aDuDetail && clicSurCarte(e, () => basculerOuverture(q.id))}
             >
               {/* La case valide l'étape ; le reste de la carte l'ouvre ou la replie. */}
@@ -389,6 +414,12 @@ function QuetesPerso({ persoId }: { persoId: string }) {
               <div className="quete__corps">
                 <div className="quete__titre">
                   <span className="quete__nom">{i + 1}. {q.nom}</span>
+                  {independante && (
+                    <span className="etiquette etiquette--independante etat" tabIndex={0}>
+                      À cocher à part
+                      <span role="tooltip" className="etat__bulle">Étape indépendante : les étapes suivantes n'en dépendent pas, donc les cocher ne la coche pas. Coche-la quand tu l'as faite.</span>
+                    </span>
+                  )}
                   <span className="discret">niv. {q.niveauConseille}</span>
                   {actuelle && <span className="badge badge--or">Étape actuelle</span>}
                   {q.facultative && <span className="badge">Facultative</span>}
@@ -542,6 +573,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                 </div>
               )}
             </li>
+            </Fragment>
           );
         })}
       </ol>

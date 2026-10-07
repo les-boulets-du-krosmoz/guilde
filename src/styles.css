@@ -16,6 +16,8 @@
   --vert-fond: #1f3a2c;
   --orange: #f0b45a;
   --rouge: #e06c6c;
+  --bleu-independant: #6ea8e6;
+  --violet-libre: #b49be8;
   --orange-fond: #3a2f1c;
   --bleu-fond: #1f2c3d;
   --bleu: #a9cdf2;
@@ -493,7 +495,7 @@ a.jauge__nom:hover { color: var(--or); }
 
 /* Mes quêtes > Succès : une ligne par boss, une case par succès */
 .tableau-succes__outils { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 12px 0; }
-.tableau-succes__outils input[type="search"] { flex: 1 1 240px; }
+.tableau-succes__outils > input[type="search"] { flex: 1 1 240px; }
 .onglets--mini .onglet { min-height: 34px; font-size: 13px; }
 .tableau-succes__lignes { list-style: none; margin: 0; padding: 0; }
 .tableau-succes__ligne { display: grid; grid-template-columns: minmax(200px, 260px) 1fr auto; gap: 8px 16px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--trait); }
@@ -696,7 +698,7 @@ a.jauge__nom:hover { color: var(--or); }
 .calendrier__case { aspect-ratio: auto; height: 34px; font-size: 12px; }
 .calendrier { padding: 12px; }
 /* Succès : recherche et choix du personnage plus compacts */
-.tableau-succes__outils input[type="search"] { flex: 0 1 280px; }
+.tableau-succes__outils > input[type="search"] { flex: 0 1 280px; }
 .choix-perso__bouton { max-width: 240px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-height: 34px; padding: 0 10px; font-size: 13px; }
 .choix-perso__liste { width: 290px; }
 .choix-perso__options { max-height: 300px; }
@@ -713,3 +715,14 @@ a.jauge__nom:hover { color: var(--or); }
 .quete__deroule summary { cursor: pointer; color: var(--texte-2); font-size: 14px; }
 .quete__deroule ol { margin: 6px 0 0; padding-left: 22px; font-size: 14px; color: var(--texte-2); }
 .quete__deroule li { margin: 2px 0; }
+
+/* Étapes indépendantes : pas cochées automatiquement par les étapes suivantes */
+.quete--independante { border-style: dashed; }
+.etiquette--independante { background: rgba(110, 168, 230, 0.14); color: var(--bleu-independant); font-size: 12px; }
+/* Recherche dans le choix du personnage : une seule ligne de texte */
+/* flex: none : dans ce menu en colonne, une base « flex » donnerait sa hauteur au champ (280 px). */
+.choix-perso__liste input[type="search"] { flex: none; height: 30px; padding: 0 10px; font-size: 13px; border-radius: 8px; }
+
+/* Étapes faisables dans n'importe quel ordre : repère au-dessus du groupe et barre violette à gauche */
+.quete--libre { border-left: 4px solid var(--violet-libre); }
+.quete-groupe { list-style: none; margin: 14px 0 6px; padding: 4px 12px; border-radius: 8px; background: rgba(170, 140, 230, 0.12); color: var(--violet-libre); font-size: 13px; font-weight: 600; }

@@ -62,7 +62,7 @@ export function ChoixPersonnage({ persos, membres, valeur, moiId, onChoix, actif
       </button>
       {ouvert && (
         <div className="choix-perso__liste" ref={liste} style={place}>
-          <input ref={champ} type="search" placeholder="Rechercher un personnage, un joueur ou une classe…" value={recherche}
+          <input ref={champ} type="search" placeholder="Rechercher…" value={recherche}
             onChange={(e) => setRecherche(e.target.value)} aria-label="Rechercher un personnage" />
           <div role="listbox" aria-label="Personnages" className="choix-perso__options">
             {principaux.map(ligne)}
