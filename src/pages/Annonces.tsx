@@ -85,12 +85,17 @@ export function Annonces() {
 
   return (
     <main className="page">
-      <div className="entete">
-        <div>
-          <h1>Recherche de groupe</h1>
-          <p className="discret">Les sorties prévues par la guilde : donjons (8 places) et quêtes. Inscris-toi avec le personnage de ton choix.</p>
+      <div className="groupes__barre">
+        <h1>Recherche de groupe</h1>
+        <div className="onglets onglets--mini" role="group" aria-label="Type de sortie">
+          {([["tout", "Tout"], ["donjon", "Donjons"], ["quete", "Quêtes"]] as const).map(([id, nom]) => (
+            <button key={id} type="button" className={`onglet onglet--icone ${filtre === id ? "onglet--actif" : ""}`} aria-pressed={filtre === id} onClick={() => setFiltre(id)}>
+              {id !== "tout" && <IconeSortie type={id} />}
+              {nom}
+            </button>
+          ))}
         </div>
-        {!edition && <button type="button" className="bouton bouton--or" onClick={() => setEdition("nouvelle")}>Nouvelle recherche de groupe</button>}
+        {!edition && <button type="button" className="bouton bouton--or groupes__nouvelle" onClick={() => setEdition("nouvelle")}>+ Nouvelle recherche</button>}
       </div>
 
       {mesInvitations.length > 0 && (
@@ -152,14 +157,6 @@ export function Annonces() {
         </section>
 
         <div className="annonces__listes">
-          <div className="onglets onglets--mini" role="group" aria-label="Type de sortie">
-            {([["tout", "Les deux"], ["donjon", "Donjons"], ["quete", "Quêtes"]] as const).map(([id, nom]) => (
-              <button key={id} type="button" className={`onglet onglet--icone ${filtre === id ? "onglet--actif" : ""}`} aria-pressed={filtre === id} onClick={() => setFiltre(id)}>
-                {id === "tout" ? <><IconeSortie type="donjon" /><IconeSortie type="quete" /></> : <IconeSortie type={id} />}
-                {nom}
-              </button>
-            ))}
-          </div>
           <h2>{jour ? `Le ${jour.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}` : "À venir"}</h2>
           {aVenir.length === 0 ? <p className="vide">Aucune sortie prévue{jour ? " ce jour-là" : ""}.</p> : aVenir.map(carte)}
           {!jour && (
@@ -200,7 +197,12 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
   const auteur = guilde.membres.get(a.auteur_id);
   const dj = donjonDeCle(a.donjon);
   const places = placesDe(a);
-  const complet = places !== null && inscrits.length >= places;
+  // L'organisateur occupe toujours une place : son personnage inscrit, ou à défaut son principal (annonces anciennes).
+  const organisateur = inscrits.find((p) => p.membre_id === a.auteur_id)
+    ?? guilde.personnages.filter((p) => p.membre_id === a.auteur_id).sort((x, y) => Number(y.est_principal) - Number(x.est_principal))[0];
+  const autresInscrits = inscrits.filter((p) => p.membre_id !== a.auteur_id);
+  const occupes = autresInscrits.length + (organisateur ? 1 : 0);
+  const complet = places !== null && occupes >= places;
   const candidats = mesPersos.filter((p) => !inscrits.some((i) => i.id === p.id));
   // Groupe privé : seuls l'auteur et les invités peuvent s'inscrire (la base le vérifie aussi).
   const accesFerme = a.visibilite === "prive" && a.auteur_id !== moiId && !invitations.some((i) => i.membre_id === moiId);
@@ -273,14 +275,15 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
 
       <div className="annonce__inscrits">
         <span className="discret">
-          {places !== null ? `${inscrits.length} / ${places} places` : `${inscrits.length} inscrit${inscrits.length > 1 ? "s" : ""}`}
+          {places !== null ? `${occupes} / ${places} places` : `${occupes} inscrit${occupes > 1 ? "s" : ""}`}
         </span>
         <div className="pastilles pastilles--serrees">
-          {inscrits.map((p) => (
-            <span key={p.id} className={estOrganisateur(p) ? "annonce__organisateur" : undefined} title={estOrganisateur(p) ? `${p.nom}, organisateur` : undefined}>
-              <Pastille perso={p} taille={30} />
+          {organisateur && (
+            <span className="annonce__organisateur" title={`${organisateur.nom}, organisateur`}>
+              <Pastille perso={organisateur} taille={30} />
             </span>
-          ))}
+          )}
+          {autresInscrits.map((p) => <Pastille key={p.id} perso={p} taille={30} />)}
         </div>
       </div>
 
@@ -314,7 +317,7 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
         ))}
         {mesInscrits.some(estOrganisateur) && <span className="discret">Tu organises cette sortie.</span>}
         {accesFerme && mesInscrits.length === 0 && <span className="discret">🔒 Groupe privé : sur invitation de l'organisateur.</span>}
-        {candidats.length > 0 && !complet && !accesFerme && !(a.auteur_id === moiId && mesInscrits.length > 0) && (
+        {candidats.length > 0 && !complet && !accesFerme && a.auteur_id !== moiId && (
           <>
             {candidats.length > 1 && (
               <select value={persoChoisi?.id} onChange={(e) => setChoix(e.target.value)} aria-label="Personnage à inscrire">

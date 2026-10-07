@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Pastille } from "../components/Pastille";
+import { useStatuts } from "../lib/statuts";
 import { chargerGuilde, type DonneesGuilde } from "../lib/donnees";
-import { estDispo } from "../lib/types";
+import { statutDe, estDispo } from "../lib/types";
 import { Chargement } from "./Acces";
 
 export function Personnages() {
+  const { statuts } = useStatuts();
   const [donnees, setDonnees] = useState<DonneesGuilde | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [recherche, setRecherche] = useState("");
@@ -48,8 +50,9 @@ export function Personnages() {
         <ul className="grille-persos">
           {liste.map((p) => {
             const m = donnees.membres.get(p.membre_id);
+            const st = statutDe(statuts.get(p.membre_id) ?? m, p.id);
             return (
-              <li key={p.id} className="carte carte--perso">
+              <li key={p.id} className={`carte carte--perso ${st ? `carte--statut-${st}` : ""}`}>
                 <Pastille perso={p} dispo={estDispo(m, p.id)} taille={44} lien={false} />
                 <div>
                   {/* Le lien s'étend à toute la carte (voir .carte--perso .carte__titre::after). */}

@@ -42,7 +42,9 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
   const vu = persos.get(vuId) ?? perso;
   // On ne coche que pour ses propres personnages.
   const editable = moiMembreId ? vu.membre_id === moiMembreId : modifiable && vu.id === perso.id;
-  const [tranche, setTranche] = useState<Tranche>(trancheDe(perso.niveau));
+  const [tranche, setTranche] = useState<Tranche>(TRANCHES[0]);
+  // Comparer les succès du personnage affiché avec ceux de mon personnage (celui de la page).
+  const [comparer, setComparer] = useState(false);
   const [recherche, setRecherche] = useState("");
   const [mode, setMode] = useState<"moi" | "guilde">("moi");
   const [masquerFinis, setMasquerFinis] = useState(false);
@@ -101,6 +103,9 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
         {mode === "moi" && editable && victoires.length > 0 && (
           <button type="button" className="lien-bouton" onClick={() => onPlusieurs(victoires, true, vu.id)}>Cocher toutes les victoires affichées ({victoires.length})</button>
         )}
+        {mode === "moi" && modifiable && vu.id !== perso.id && (
+          <label className="case"><input type="checkbox" checked={comparer} onChange={() => setComparer(!comparer)} /> Comparer avec mes succès ({perso.nom})</label>
+        )}
         {mode === "moi" && (
           <span className="discret">{vu.nom} : {reussisVu} succès réussis{editable ? "" : " (lecture seule)"}</span>
         )}
@@ -133,6 +138,7 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
                       return (
                         <BoutonDefi key={s.id} libelle={s.libelle} description={s.description} points={s.points} icone={s.icone} image={image}
                           fait={mesFaits(s.id)} faitPar={[...(faits.get(s.id) ?? [])].map((id) => persos.get(id)?.nom ?? "?")}
+                          comparaison={comparer && modifiable && vu.id !== perso.id ? (faits.get(s.id)?.has(perso.id) ?? false) : undefined}
                           modifiable={editable} onBasculer={() => onBasculer(s.id, vu.id)} />
                       );
                     }

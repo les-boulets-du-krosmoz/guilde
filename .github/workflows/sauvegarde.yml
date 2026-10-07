@@ -1,0 +1,59 @@
+# Sauvegarde hebdomadaire de la base Supabase (l'offre gratuite n'en fait pas).
+# Chaque dimanche à 4 h (heure de Paris en hiver) : export des données, chiffrement, puis rangement
+# dans les « artefacts » de l'Action, gardés 8 semaines. Lancement manuel possible (onglet Actions).
+# Secrets GitHub nécessaires : SUPABASE_DB_URL (chaîne « Session pooler ») et SAUVEGARDE_PHRASE (mot de passe du chiffrement).
+name: Sauvegarde de la base
+
+on:
+  schedule:
+    - cron: "0 3 * * 0"
+  workflow_dispatch:
+
+jobs:
+  sauvegarder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier les secrets
+        env:
+          URL: ${{ secrets.SUPABASE_DB_URL }}
+          PHRASE: ${{ secrets.SAUVEGARDE_PHRASE }}
+        run: |
+          if [ -z "$URL" ] || [ -z "$PHRASE" ]; then
+            echo "::error::Il manque le secret SUPABASE_DB_URL ou SAUVEGARDE_PHRASE (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+
+      # pg_dump 17 lit aussi les bases plus anciennes. Deux fichiers :
+      #  - public : tout le site (tables, règles, fonctions, données) ;
+      #  - comptes : les comptes Discord connectés (auth.users), nécessaires pour relier les membres.
+      - name: Exporter la base
+        env:
+          URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          mkdir sauvegarde
+          docker run --rm -v "$PWD/sauvegarde:/s" postgres:17 \
+            pg_dump "$URL" --schema=public --no-owner --no-privileges --file=/s/public.sql
+          docker run --rm -v "$PWD/sauvegarde:/s" postgres:17 \
+            pg_dump "$URL" --data-only --table=auth.users --table=auth.identities --no-owner --file=/s/comptes.sql
+          ls -la sauvegarde
+          # Garde-fou : un export presque vide signale un problème de connexion ou de droits.
+          test "$(stat -c%s sauvegarde/public.sql)" -gt 10000
+
+      - name: Chiffrer
+        env:
+          PHRASE: ${{ secrets.SAUVEGARDE_PHRASE }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          tar czf "sauvegarde-$DATE.tar.gz" sauvegarde
+          gpg --batch --yes --pinentry-mode loopback --passphrase "$PHRASE" --symmetric --cipher-algo AES256 \
+            --output "sauvegarde-$DATE.tar.gz.gpg" "sauvegarde-$DATE.tar.gz"
+          rm -rf sauvegarde "sauvegarde-$DATE.tar.gz"
+          echo "FICHIER=sauvegarde-$DATE.tar.gz.gpg" >> "$GITHUB_ENV"
+
+      # Le dépôt est public : seule la version chiffrée est conservée.
+      - name: Conserver la sauvegarde (8 semaines)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FICHIER }}
+          path: ${{ env.FICHIER }}
+          retention-days: 56

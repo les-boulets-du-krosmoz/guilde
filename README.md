@@ -180,3 +180,32 @@ La page « Recherche de groupe » (adresse `/groupes`) permet de proposer des so
 Sans le secret, les annonces fonctionnent sur le site, sans message Discord.
 
 Invitations : l'auteur choisit des invités dès la création (ils sont mentionnés dans le message Discord de l'annonce), ou plus tard depuis la carte de l'annonce, comme un officier. La même fonction `annoncer-sortie` les mentionne dans le salon des sorties, avec un lien direct vers l'annonce ; l'invité accepte (en s'inscrivant) ou refuse sur le site.
+
+## Quêtes des Dofus tirées du jeu
+
+`src/data/quetesJeu.ts` (Veilleurs, Dorigami, Cawotte, Argenté, Vulbis, Tacheté, Dokoko, Glaces, Sylvestre) est généré à partir des données du jeu. Après une mise à jour de Dofus :
+
+```
+python3 scripts/generer-quetes-dofus.py
+```
+
+Les identifiants (`préfixe-numéro de quête du jeu`, et `ve-1` à `ve-15` pour les Veilleurs) ne changent pas : les quêtes déjà cochées restent valables. Les quêtes de classe d'Incarnam sont regroupées en une étape « Quête de ta classe ».
+
+## Sauvegarde automatique de la base
+
+L'Action `.github/workflows/sauvegarde.yml` exporte la base chaque dimanche, la chiffre et la garde 8 semaines (onglet Actions > « Sauvegarde de la base » > exécution > Artifacts). Elle peut aussi être lancée à la main (« Run workflow »).
+
+Mise en place (tout se fait depuis les sites GitHub et Supabase) :
+1. Supabase > bouton **Connect** (en haut du projet) > **Session pooler** : copier la chaîne `postgresql://postgres.xxxx:[YOUR-PASSWORD]@aws-…pooler.supabase.com:5432/postgres` et remplacer `[YOUR-PASSWORD]` par le mot de passe de la base (réinitialisable dans Project Settings > Database). Le « Session pooler » est obligatoire : GitHub ne sait pas joindre la connexion directe.
+2. GitHub > dépôt > Settings > Secrets and variables > Actions > New repository secret :
+   - `SUPABASE_DB_URL` : la chaîne ci-dessus ;
+   - `SAUVEGARDE_PHRASE` : une longue phrase secrète, **à garder aussi dans un gestionnaire de mots de passe** (sans elle, la sauvegarde est illisible).
+3. Onglet Actions > « Sauvegarde de la base » > Run workflow, pour tester : l'exécution doit être verte et proposer un fichier `.gpg` en bas de page.
+
+Restaurer (sur un ordinateur avec PostgreSQL et GnuPG) :
+```
+gpg -d sauvegarde-AAAA-MM-JJ.tar.gz.gpg | tar xz
+psql "<chaîne de connexion>" -f sauvegarde/comptes.sql   # d'abord les comptes
+psql "<chaîne de connexion>" -f sauvegarde/public.sql    # puis le site
+```
+Sur la base actuelle, restaurer une table abîmée se fait plutôt table par table : demander de l'aide avant.

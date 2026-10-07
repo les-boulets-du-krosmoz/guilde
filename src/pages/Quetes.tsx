@@ -368,7 +368,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
           const ici = positions.get(q.id) ?? [];
           const jAide = aidesEtape.some((a) => a.personnage_id === perso.id);
           const donjon = donjonDeLEtape(q.id);
-          const aDuDetail = q.contenu.length > 0 || prerequis.length > 0 || (q.ressources ?? []).length > 0 || ici.length > 0 || aidesEtape.length > 0 || modifiable;
+          const aDuDetail = q.contenu.length > 0 || prerequis.length > 0 || (q.ressources ?? []).length > 0 || (q.deroule ?? []).length > 0 || ici.length > 0 || aidesEtape.length > 0 || modifiable;
           const manque = prerequis.some((p) => p.etat === "manque");
           return (
             <li
@@ -414,6 +414,12 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                 <div className="etiquettes">
                   {q.contenu.map((c, j) => <Etiquette key={j} contenu={c} />)}
                 </div>
+                {(q.deroule ?? []).length > 0 && (
+                  <details className="quete__deroule">
+                    <summary>Déroulé de la quête ({q.deroule!.length} étapes)</summary>
+                    <ol>{q.deroule!.map((d, k) => <li key={k}>{d}</li>)}</ol>
+                  </details>
+                )}
                 {donjon && (() => {
                   const dj = donjonDuBoss(q.nom);
                   if (!dj) return null;

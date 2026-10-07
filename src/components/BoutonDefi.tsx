@@ -3,7 +3,7 @@ import { useId, type CSSProperties } from "react";
 /**
  * Succès : rouge avec ✗ tant qu'il n'est pas obtenu, vert avec ✓ une fois obtenu. Au survol, une bulle donne la description et qui l'a déjà réussi.
  */
-export function BoutonDefi({ libelle, description, points, icone, image, fait, faitPar = [], modifiable, onBasculer }: {
+export function BoutonDefi({ libelle, description, points, icone, image, comparaison, fait, faitPar = [], modifiable, onBasculer }: {
   libelle?: string;
   description: string;
   points?: number;
@@ -11,6 +11,8 @@ export function BoutonDefi({ libelle, description, points, icone, image, fait, f
   icone?: number;
   /** Image affichée telle quelle quand il n'y a pas d'icône de challenge (ex. victoire simple : portrait du donjon). */
   image?: string;
+  /** Comparaison : ce succès est-il fait par mon personnage ? (absent = pas de comparaison) */
+  comparaison?: boolean;
   fait: boolean;
   faitPar?: string[];
   modifiable: boolean;
@@ -27,7 +29,12 @@ export function BoutonDefi({ libelle, description, points, icone, image, fait, f
       {/* Un symbole dans les deux états : le bouton garde la même largeur quand on clique. */}
       <span className="succes__etat" aria-hidden="true">{fait ? "✓" : "✗"}</span>
       {libelle ?? (fait ? "Fait" : "À faire")}
-      {faitPar.length > 0 && <span className="succes__nb" aria-label={`réussi par ${faitPar.length}`}>✓ {faitPar.length}</span>}
+      {comparaison !== undefined && (
+        <span className={`succes__moi ${comparaison ? "succes__moi--ok" : "succes__moi--non"}`} title={comparaison ? "Tu l'as aussi" : "Tu ne l'as pas"}>
+          moi {comparaison ? "✓" : "✗"}
+        </span>
+      )}
+      {faitPar.length > 0 && comparaison === undefined && <span className="succes__nb" aria-label={`réussi par ${faitPar.length}`}>✓ {faitPar.length}</span>}
       <span role="tooltip" id={id} className="etat__bulle">
         {description}
         {points !== undefined && <><br /><span className="discret">{points} points de succès</span></>}

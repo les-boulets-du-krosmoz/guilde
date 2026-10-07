@@ -1,5 +1,5 @@
 # Poste la section « À publier » du CHANGELOG.md sur Discord (avec le numéro de version de package.json)
-# après chaque déploiement réussi en production, puis vide la section. Rien n'est posté si la section est vide ou si le déploiement échoue.
+# après chaque déploiement réussi en production, vide aussitôt la section (pour ne jamais reposter), puis étiquette la version. Rien n'est posté si la section est vide ou si le déploiement échoue.
 # Secret requis : DISCORD_WEBHOOK_URL (Settings > Secrets and variables > Actions).
 name: Annonce Discord des nouveautés
 
@@ -44,15 +44,6 @@ jobs:
           SITE_URL: https://guilde-nine.vercel.app
         run: node scripts/publier-changelog.mjs
 
-      # Étiquette Git et « Release » GitHub pour la version annoncée, sur le commit déployé.
-      - name: Étiqueter la version sur GitHub
-        if: steps.publier.outputs.publie == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          gh release create "v$VERSION" --target "${{ github.event.deployment.sha }}" --title "Version $VERSION" --notes-file notes-version.md
-
       # Le message de commit commence par « chore(changelog) » : vercel.json demande à Vercel de ne pas redéployer pour ça.
       - name: Vider la section publiée
         if: steps.publier.outputs.publie == 'true'
@@ -61,3 +52,14 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -am "chore(changelog): nouveautés annoncées sur Discord"
           git push
+
+      # Étiquette Git et « Release » GitHub pour la version annoncée, sur le commit déployé.
+      # Après le vidage : si elle échoue, l'annonce et le changelog restent cohérents (avertissement seulement).
+      - name: Étiqueter la version sur GitHub
+        if: steps.publier.outputs.publie == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          gh release create "v$VERSION" --target "${{ github.event.deployment.sha }}" --title "Version $VERSION" --notes-file notes-version.md

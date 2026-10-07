@@ -1,3 +1,5 @@
+import { QUETES_JEU } from "./quetesJeu";
+
 // ---------- Modèle ----------
 
 /** Conditions à remplir AVANT de lancer la quête. */
@@ -37,6 +39,8 @@ export type Quete = {
   ressources?: Ressource[];
   /** Ne compte ni pour l'étape en cours ni pour l'obtention du Dofus. */
   facultative?: boolean;
+  /** Déroulé de la quête (objectifs écrits du jeu), dans l'ordre. */
+  deroule?: string[];
 };
 
 export type Dofus = {
@@ -477,24 +481,6 @@ export const QUETES_EBENE: Quete[] = [
 // ---------- Dofus des Veilleurs (4 succès, Dofus 3) ----------
 // Source : https://www.millenium.org/guide/420160.html
 
-const V = "veilleurs";
-export const QUETES_VEILLEURS: Quete[] = [
-  q(V, "ve-1", "Voyage, voyage", 79, [], { prerequis: [niveau(79)] }),
-  q(V, "ve-2", "La porte d'Enutrosor", 80, ["ve-1"]),
-  q(V, "ve-3", "Orichomania", 80, ["ve-2"]),
-  q(V, "ve-4", "La cité de l'indicible mal", 90, ["ve-3"]),
-  q(V, "ve-5", "Messager clandestin", 90, ["ve-4"]),
-  q(V, "ve-6", "La voix de son maître", 90, ["ve-5"]),
-  q(V, "ve-7", "Le maître des zaaps", 100, ["ve-6"]),
-  q(V, "ve-8", "Énergie renouvelable", 100, ["ve-7"]),
-  q(V, "ve-9", "Traitement de choc", 100, ["ve-8"]),
-  q(V, "ve-10", "Le disparu de Sufokia", 100, ["ve-9"]),
-  q(V, "ve-11", "Rendez-vous avec la mort", 100, ["ve-10"]),
-  q(V, "ve-12", "Secret de fabrication", 100, ["ve-11"]),
-  q(V, "ve-13", "S'emparer des commandes", 100, ["ve-11"]),
-  q(V, "ve-14", "C'est dans la boîte", 100, ["ve-11"]),
-  q(V, "ve-15", "Crise d'identité", 100, ["ve-12", "ve-13", "ve-14"]),
-];
 
 // ---------- Catalogue ----------
 
@@ -614,6 +600,9 @@ export const QUETES_DOMAKURO: Quete[] = [
   }),
 ];
 
+/** Avertissement des Dofus remplis depuis les données du jeu : fiable sur l'ordre, les combats et les objets, sans stratégie. */
+const AVERT_JEU = "Quêtes, combats, objets à rapporter et métiers tirés des données du jeu. Pas de conseils de stratégie : demande aux membres qui l'ont fait.";
+
 export const DOFUS: Dofus[] = [
   {
     id: "emeraude", nom: "Émeraude", succes: "Vert émeraude", couleur: "#3f9b6e", primordial: true, quetes: QUETES_EMERAUDE,
@@ -646,8 +635,8 @@ export const DOFUS: Dofus[] = [
     sources: [DPLN("quetes-du-dofus-ebene.html"), JOL("14691/quetes-dofus-ebene")],
   },
   {
-    id: "veilleurs", nom: "Veilleurs", succes: "Odyssée en trois dimensions", couleur: "#3b6fb6", quetes: QUETES_VEILLEURS,
-    avertissement: "Combats et ressources pas encore renseignés.",
+    id: "veilleurs", nom: "Veilleurs", succes: "Odyssée en trois dimensions", couleur: "#3b6fb6", quetes: QUETES_JEU.veilleurs,
+    avertissement: AVERT_JEU,
     sources: [DPLN("dofus-des-veilleurs.html"), { nom: "Millenium", url: "https://www.millenium.org/guide/420160.html" }],
   },
   {
@@ -655,6 +644,15 @@ export const DOFUS: Dofus[] = [
     avertissement: AVERT_DETAIL,
     sources: [DPLN("quetes-du-domakuro.html"), JOL("2037/quetes-pandala-dofus-domakuro")],
   },
+  // Quêtes tirées des données du jeu (scripts/generer-quetes-dofus.py).
+  { id: "dorigami", nom: "Dorigami", succes: "Le gardien de l'immaculé", couleur: "#e8e4dc", accent: "#c9c1ae", quetes: QUETES_JEU.dorigami, avertissement: AVERT_JEU },
+  { id: "cawotte", nom: "Cawotte", succes: "Poil de Cawotte", couleur: "#e07b2e", quetes: QUETES_JEU.cawotte, avertissement: AVERT_JEU },
+  { id: "argente", nom: "Argenté", succes: "D'Incarnam à Astrub", couleur: "#b8c0c8", quetes: QUETES_JEU.argente, avertissement: AVERT_JEU },
+  { id: "vulbis", nom: "Vulbis", succes: "Rêves de dragons", couleur: "#9b3d4a", accent: "#d97a86", quetes: QUETES_JEU.vulbis, avertissement: AVERT_JEU },
+  { id: "tachete", nom: "Tacheté", succes: "Un rêve en clair-obscur", couleur: "#c9a77a", quetes: QUETES_JEU.tachete, avertissement: AVERT_JEU },
+  { id: "dokoko", nom: "Dokoko", succes: "Koko Boy", couleur: "#7b4a2a", accent: "#c49a6c", quetes: QUETES_JEU.dokoko, avertissement: AVERT_JEU },
+  { id: "glaces", nom: "Glaces", succes: "Œuf à la neige", couleur: "#8fd3f0", quetes: QUETES_JEU.glaces, avertissement: AVERT_JEU },
+  { id: "sylvestre", nom: "Sylvestre", succes: "En attendant le printemps", couleur: "#5a9e4b", accent: "#8fcf7e", quetes: QUETES_JEU.sylvestre, avertissement: AVERT_JEU },
 ];
 
 // La liste de toutes les quêtes (Dofus et autres séries) est dans series.ts.
