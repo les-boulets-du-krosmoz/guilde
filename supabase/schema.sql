@@ -503,3 +503,32 @@ begin
   end if;
   return new;
 end $$;
+
+-- Avitons restants (migration 015)
+
+alter table public.personnages add column if not exists avitons_solde int;
+alter table public.personnages add column if not exists avitons_solde_le timestamptz;
+alter table public.personnages drop constraint if exists avitons_solde_positif;
+alter table public.personnages add constraint avitons_solde_positif check (avitons_solde is null or avitons_solde >= 0);
+
+-- Ordre exigé et places des quêtes (migration 016)
+
+alter table public.annonces add column if not exists ordre text check (ordre is null or char_length(ordre) <= 40);
+
+alter table public.annonces drop constraint if exists places_valides;
+alter table public.annonces add constraint places_valides check (places is null or places between 2 and 50);
+
+create or replace function public.limite_places_donjon() returns trigger language plpgsql as $$
+declare
+  limite int;
+begin
+  -- Donjon : 8 par défaut ; quête : seulement si l'organisateur a fixé un nombre de places.
+  select case when type = 'donjon' then coalesce(places, 8) else places end into limite from public.annonces where id = new.annonce_id;
+  if limite is not null and (select count(*) from public.annonces_participants where annonce_id = new.annonce_id) >= limite then
+    raise exception 'Les % places de ce groupe sont prises.', limite;
+  end if;
+  return new;
+end $$;
+
+-- Plusieurs ordres acceptés (migration 017)
+alter table public.annonces add column if not exists ordres jsonb not null default '[]';

@@ -26,7 +26,14 @@ export type Objectif = {
 
 /** Quête bloquée par un métier : `dofus` et `id` servent au lien vers l'étape dans la page Progression. */
 export type QueteBloquee = { id: string; dofus: string; libelle: string };
-export type Blocage = { cle: string; titre: string; quetes: QueteBloquee[]; persos: Personnage[] };
+/**
+ * Personnages bloqués à une étape par un niveau de métier. `personnel` : le personnage doit avoir le métier lui-même
+ * (aucun allié ne peut crafter à sa place) ; sinon `crafteurs` liste les membres qui ont déjà le niveau.
+ */
+export type Blocage = {
+  cle: string; titre: string; metier: string; niveau: number; personnel: boolean;
+  quetes: QueteBloquee[]; persos: Personnage[]; crafteurs: string[];
+};
 
 export type Activite = { texte: string; date: string };
 
@@ -125,12 +132,18 @@ export function calculerBilan(
           if (dispo) o.nbDispo++;
         }
         for (const pr of q.prerequis) {
-          if (pr.type !== "metier" || !pr.personnel) continue;
+          if (pr.type !== "metier") continue;
           const candidats = pr.metier === "au_choix" ? sesMetiers : sesMetiers.filter((m) => m.metier === pr.metier);
           if (candidats.some((m) => m.niveau >= pr.niveau)) continue;
           const nom = pr.metier === "au_choix" ? "Un métier" : pr.metier;
-          const cle = `${nom}:${pr.niveau}`;
-          if (!blocages.has(cle)) blocages.set(cle, { cle, titre: `${nom} ${pr.niveau}`, quetes: [], persos: [] });
+          const cle = `${nom}:${pr.niveau}:${pr.personnel ? "soi" : "allie"}`;
+          if (!blocages.has(cle)) {
+            // Craft possible par un allié : les membres qui ont déjà le niveau dans ce métier.
+            const crafteurs = pr.personnel || pr.metier === "au_choix" ? [] : [...new Set(metiers
+              .filter((m) => m.metier === pr.metier && m.niveau >= pr.niveau && m.membre_id !== p.membre_id)
+              .map((m) => membres.get(m.membre_id)?.pseudo ?? ""))].filter(Boolean);
+            blocages.set(cle, { cle, titre: `${nom} ${pr.niveau}`, metier: nom, niveau: pr.niveau, personnel: !!pr.personnel, quetes: [], persos: [], crafteurs });
+          }
           const b = blocages.get(cle)!;
           if (!b.quetes.some((x) => x.id === q.id)) b.quetes.push({ id: q.id, dofus: d.id, libelle });
           if (!b.persos.some((x) => x.id === p.id)) b.persos.push(p);
@@ -197,7 +210,7 @@ export function calculerBilan(
       .filter((o) => o.persos.length >= 2)
       .sort((a, b) => b.persos.length - a.persos.length || b.nbDispo - a.nbDispo)
       .slice(0, 8),
-    blocages: [...blocages.values()].sort((a, b) => b.persos.length - a.persos.length).slice(0, 5),
+    blocages: [...blocages.values()].sort((a, b) => b.persos.length - a.persos.length),
     dofus: statsDofus,
     activite,
   };

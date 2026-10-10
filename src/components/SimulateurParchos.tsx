@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 
-// Parchemins de caractéristique achetés aux marchands des temples de classe contre des doplons.
+// Parchemins de caractéristique achetés aux marchands des temples de classe contre des avitons.
 // Chaque type ne s'utilise que tant que la caractéristique parchotée est sous son seuil ; maximum 100.
 // On parchote une caractéristique à la fois : le simulateur raisonne sur une seule caractéristique.
 type Type = { id: string; nom: string; prix: number; gain: number; seuil: number };
@@ -20,11 +20,11 @@ function besoin(t: Type, niveau: number): number {
   return Math.ceil((t.seuil - niveau) / t.gain);
 }
 
-/** Une caractéristique, de `depart` vers 100, avec `doplons` : ce qu'on achète à chaque palier et où on arrive. */
-export function simuler(depart: number, doplons: number) {
-  let niveau = depart; // où on arrive vraiment avec les doplons
+/** Une caractéristique, de `depart` vers 100, avec `avitons` : ce qu'on achète à chaque palier et où on arrive. */
+export function simuler(depart: number, avitons: number) {
+  let niveau = depart; // où on arrive vraiment avec les avitons
   let prevu = depart; // où on serait en complétant chaque palier (pour compter les parchemins nécessaires)
-  let reste = doplons;
+  let reste = avitons;
   const achats = new Map<string, { pris: number; besoin: number }>();
   let bloque = false;
   for (const t of TYPES) {
@@ -40,63 +40,78 @@ export function simuler(depart: number, doplons: number) {
   return { niveau, reste, achats, coutTotal };
 }
 
-/** Doplons gagnés avec les avis livrés, et simulateur de parchotage d'une caractéristique. */
-export function SimulateurParchos({ personnageId, modifiable, depensesInitiales, doplonsGagnes, alitons, kamasGlace }: {
+/** Avitons gagnés avec les avis livrés, et simulateur de parchotage d'une caractéristique. */
+export function SimulateurParchos({ personnageId, modifiable, soldeInitial, soldeLeInitial, gagnesDepuis, nbAvisDepuis, totalGagne, alitons, kamasGlace }: {
   personnageId: string;
   modifiable: boolean;
-  depensesInitiales: number;
-  doplonsGagnes: number;
+  /** Avitons restants saisis par le membre (null = jamais saisi) et date de la saisie. */
+  soldeInitial: number | null;
+  soldeLeInitial: string | null;
+  /** Avitons des avis livrés depuis la saisie : ils s'ajoutent au solde. */
+  gagnesDepuis: number;
+  nbAvisDepuis: number;
+  /** Total gagné avec tous les avis livrés (affiché tant qu'aucun solde n'est saisi). */
+  totalGagne: number;
   alitons: number;
   kamasGlace: number;
 }) {
-  const [depenses, setDepenses] = useState(depensesInitiales);
-  const [saisieDepenses, setSaisieDepenses] = useState<string | null>(null); // null = pas en cours d'édition
+  const [solde, setSolde] = useState(soldeInitial);
+  const [soldeLe, setSoldeLe] = useState(soldeLeInitial);
+  const [depuis, setDepuis] = useState({ avitons: gagnesDepuis, avis: nbAvisDepuis });
+  const [saisieSolde, setSaisieSolde] = useState<string | null>(null); // null = pas en cours d'édition
   const [erreur, setErreur] = useState<string | null>(null);
-  const reste = Math.max(0, doplonsGagnes - depenses);
+  const reste = solde === null ? totalGagne : solde + depuis.avitons;
   const [saisie, setSaisie] = useState(String(reste));
   const [deja, setDeja] = useState("0");
-  const doplons = /^\d+$/.test(saisie.trim()) ? Number(saisie) : 0;
+  const avitons = /^\d+$/.test(saisie.trim()) ? Number(saisie) : 0;
   const depart = /^\d+$/.test(deja.trim()) ? Math.min(MAX, Number(deja)) : 0;
-  const r = simuler(depart, doplons);
+  const r = simuler(depart, avitons);
   // Ce qui reste après cette caractéristique, appliqué à une autre en partant de 0.
   const suivante = r.niveau >= MAX && r.reste > 0 ? simuler(0, r.reste).niveau : 0;
 
-  async function enregistrerDepenses() {
-    const v = (saisieDepenses ?? "").trim();
+  async function enregistrerSolde() {
+    const v = (saisieSolde ?? "").trim();
     if (!/^\d+$/.test(v)) {
-      setErreur("Indique un nombre entier de doplons.");
+      setErreur("Indique un nombre entier d'avitons.");
       return;
     }
-    const { error } = await supabase.from("personnages").update({ doplons_depenses: Number(v) }).eq("id", personnageId);
+    const maintenant = new Date().toISOString();
+    const { error } = await supabase.from("personnages").update({ avitons_solde: Number(v), avitons_solde_le: maintenant }).eq("id", personnageId);
     if (error) {
       setErreur("Enregistrement impossible : " + error.message);
       return;
     }
-    const n = Number(v);
-    setDepenses(n);
-    setSaisie(String(Math.max(0, doplonsGagnes - n))); // le simulateur repart du nouveau reste
-    setSaisieDepenses(null);
+    setSolde(Number(v));
+    setSoldeLe(maintenant);
+    setDepuis({ avitons: 0, avis: 0 }); // les prochains avis livrés s'ajouteront à ce nouveau solde
+    setSaisie(v); // le simulateur repart du solde saisi
+    setSaisieSolde(null);
     setErreur(null);
   }
 
+  const dateSolde = soldeLe ? new Date(soldeLe).toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) : "";
+
   return (
-    <section className="carte doplons">
+    <section className="carte avitons">
       <div className="doplons__total">
-        <strong>{nb(reste)} doplons</strong> restants
+        <strong>{nb(reste)} avitons</strong> {solde === null ? "gagnés avec les avis livrés" : "restants"}
         <span className="discret">
-          {" "}: {nb(doplonsGagnes)} gagnés avec les avis livrés{depenses > 0 && `, ${nb(depenses)} dépensés`}
+          {solde === null
+            ? " (dépenses non comptées)"
+            : ` : ${nb(solde)} indiqués le ${dateSolde}${depuis.avis > 0 ? `, + ${nb(depuis.avitons)} gagnés depuis (${depuis.avis} avis)` : ""}`}
           {(alitons > 0 || kamasGlace > 0) && <> (et {[alitons > 0 && `${nb(alitons)} alitons`, kamasGlace > 0 && `${nb(kamasGlace)} kamas de glace`].filter(Boolean).join(", ")})</>}
         </span>
-        {modifiable && saisieDepenses === null && (
-          <> · <button type="button" className="lien-bouton" onClick={() => setSaisieDepenses(String(depenses))}>{depenses > 0 ? "Modifier les dépenses" : "Indiquer les doplons dépensés"}</button></>
+        {modifiable && saisieSolde === null && (
+          <> · <button type="button" className="lien-bouton" onClick={() => setSaisieSolde(String(reste))}>{solde === null ? "Indiquer mes avitons restants" : "Corriger mon solde"}</button></>
         )}
       </div>
-      {modifiable && saisieDepenses !== null && (
+      {modifiable && saisieSolde !== null && (
         <div className="doplons__depenses">
-          <label htmlFor="doplons-depenses">Doplons déjà dépensés</label>
-          <input id="doplons-depenses" inputMode="numeric" value={saisieDepenses} onChange={(e) => setSaisieDepenses(e.target.value)} onKeyDown={(e) => e.key === "Enter" && enregistrerDepenses()} />
-          <button type="button" className="bouton bouton--vert" onClick={enregistrerDepenses}>Enregistrer</button>
-          <button type="button" className="bouton" onClick={() => { setSaisieDepenses(null); setErreur(null); }}>Annuler</button>
+          <label htmlFor="avitons-solde">Avitons restants (dans ton inventaire)</label>
+          <input id="avitons-solde" inputMode="numeric" value={saisieSolde} onChange={(e) => setSaisieSolde(e.target.value)} onKeyDown={(e) => e.key === "Enter" && enregistrerSolde()} />
+          <button type="button" className="bouton bouton--vert" onClick={enregistrerSolde}>Enregistrer</button>
+          <button type="button" className="bouton" onClick={() => { setSaisieSolde(null); setErreur(null); }}>Annuler</button>
+          <span className="discret">Les avis que tu livreras ensuite s'ajouteront tout seuls.</span>
           {erreur && <span className="erreur" role="alert">{erreur}</span>}
         </div>
       )}
@@ -105,7 +120,7 @@ export function SimulateurParchos({ personnageId, modifiable, depensesInitiales,
         <summary>Simulateur de parchemins</summary>
         <div className="doplons__reglages">
           <div className="champ">
-            <label htmlFor="doplons-dispo">Doplons disponibles</label>
+            <label htmlFor="doplons-dispo">Avitons disponibles</label>
             <input id="doplons-dispo" inputMode="numeric" value={saisie} onChange={(e) => setSaisie(e.target.value)} />
           </div>
           <div className="champ">
@@ -137,8 +152,8 @@ export function SimulateurParchos({ personnageId, modifiable, depensesInitiales,
           {depart >= MAX
             ? <>Cette caractéristique est déjà à 100.</>
             : r.niveau >= MAX
-              ? <>La caractéristique monte à <strong>100</strong> pour {nb(r.coutTotal)} doplons. Il te restera {nb(r.reste)} doplons{suivante > 0 && <>, de quoi monter une autre caractéristique jusqu'à <strong>{suivante}</strong></>}.</>
-              : <>La caractéristique monte de {depart} à <strong>{r.niveau}</strong>. Pour aller jusqu'à 100, il faut {nb(r.coutTotal)} doplons au total, soit {nb(r.coutTotal - (doplons - r.reste))} de plus.</>}
+              ? <>La caractéristique monte à <strong>100</strong> pour {nb(r.coutTotal)} avitons. Il te restera {nb(r.reste)} avitons{suivante > 0 && <>, de quoi monter une autre caractéristique jusqu'à <strong>{suivante}</strong></>}.</>
+              : <>La caractéristique monte de {depart} à <strong>{r.niveau}</strong>. Pour aller jusqu'à 100, il faut {nb(r.coutTotal)} avitons au total, soit {nb(r.coutTotal - (avitons - r.reste))} de plus.</>}
         </p>
       </details>
     </section>

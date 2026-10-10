@@ -324,7 +324,7 @@ function FormPerso({ perso, estPremier = false, onFini }: { perso?: Personnage; 
 
 // ---------- Métiers ----------
 
-function FormMetiers() {
+export function FormMetiers({ onEnregistre }: { onEnregistre?: () => void } = {}) {
   const { membre } = useSession();
   const [initial, setInitial] = useState<Map<string, MetierMembre>>(new Map());
   const [valeurs, setValeurs] = useState<Record<string, string>>({});
@@ -371,6 +371,7 @@ function FormMetiers() {
     setEnCours(false);
     setMessage(erreurs.length ? "Erreur : " + erreurs.join(" ; ") : aEcrire.length + aSupprimer.length === 0 ? "Aucun changement." : "Métiers enregistrés.");
     await charger();
+    onEnregistre?.();
   }
 
   // Fonction de rendu (et non composant) : sinon le champ perdrait le focus à chaque frappe.

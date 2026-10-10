@@ -5,6 +5,7 @@ import { useSession } from "./lib/session";
 import { FournisseurStatuts } from "./lib/statuts";
 import { Chargement, Connexion, NonMembre } from "./pages/Acces";
 import { Annonces } from "./pages/Annonces";
+import { MesMetiers } from "./pages/MesMetiers";
 import { AvisRecherche } from "./pages/Avis";
 import { Metiers } from "./pages/Metiers";
 import { MonCompte } from "./pages/MonCompte";
@@ -33,6 +34,7 @@ export function App() {
         <Route path="/quetes" element={<Quetes />} />
         <Route path="/quetes/:persoId" element={<Quetes />} />
         <Route path="/groupes" element={<Annonces />} />
+        <Route path="/mes-metiers" element={<MesMetiers />} />
         <Route path="/annonces" element={<Navigate to="/groupes" replace />} />
         <Route path="/avis" element={<AvisRecherche />} />
         <Route path="/avis/:persoId" element={<AvisRecherche />} />

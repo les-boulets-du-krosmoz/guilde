@@ -34,8 +34,11 @@ export interface Personnage {
   ocre_boss?: number | null;
   ocre_boss_total?: number | null;
   ocre_saisi_le?: string | null;
-  /** Doplons déjà dépensés (saisis par le membre), pour afficher ce qu'il reste. */
+  /** Ancien suivi (« doplons dépensés ») : remplacé par le solde d'avitons ci-dessous. */
   doplons_depenses?: number | null;
+  /** Avitons restants saisis par le membre, et date de la saisie (les avis livrés ensuite s'y ajoutent). */
+  avitons_solde?: number | null;
+  avitons_solde_le?: string | null;
   est_principal: boolean;
   image_url: string | null;
   maj_le: string;
@@ -100,6 +103,9 @@ export type SuccesDonjon = {
 /** Métier demandé par une annonce de quête (au moins un participant doit l'avoir à ce niveau). */
 export type MetierRequis = { metier: string; niveau: number };
 
+/** Ordre accepté par une recherche de groupe, avec son rang minimum (1 à 5). */
+export type OrdreRequis = { ordre: string; rang: number };
+
 /** Annonce de sortie : un donjon (8 places) ou une quête (places illimitées). */
 export type Annonce = {
   id: string;
@@ -120,6 +126,10 @@ export type Annonce = {
   niveau_min: number | null;
   alignement_min: number | null;
   ordre_min: number | null;
+  /** Ancien champ (un seul ordre) : repris dans `ordres`. */
+  ordre: string | null;
+  /** Ordres acceptés : l'inscrit doit faire partie de l'un d'eux, au rang minimum indiqué. */
+  ordres: OrdreRequis[];
   metiers: MetierRequis[];
   annonce_discord_le: string | null;
   cree_le: string;

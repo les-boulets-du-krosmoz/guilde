@@ -1,0 +1,61 @@
+{
+ "version": "3.6.12.16",
+ "metiers": {
+  "Alchimiste": {
+   "fichier": "alchimiste.json",
+   "recettes": 264
+  },
+  "Bijoutier": {
+   "fichier": "bijoutier.json",
+   "recettes": 735
+  },
+  "Bricoleur": {
+   "fichier": "bricoleur.json",
+   "recettes": 179
+  },
+  "Bûcheron": {
+   "fichier": "bucheron.json",
+   "recettes": 32
+  },
+  "Chasseur": {
+   "fichier": "chasseur.json",
+   "recettes": 48
+  },
+  "Cordonnier": {
+   "fichier": "cordonnier.json",
+   "recettes": 720
+  },
+  "Façonneur": {
+   "fichier": "faconneur.json",
+   "recettes": 439
+  },
+  "Forgeron": {
+   "fichier": "forgeron.json",
+   "recettes": 484
+  },
+  "Mineur": {
+   "fichier": "mineur.json",
+   "recettes": 42
+  },
+  "Paysan": {
+   "fichier": "paysan.json",
+   "recettes": 82
+  },
+  "Pêcheur": {
+   "fichier": "pecheur.json",
+   "recettes": 65
+  },
+  "Sculpteur": {
+   "fichier": "sculpteur.json",
+   "recettes": 289
+  },
+  "Tailleur": {
+   "fichier": "tailleur.json",
+   "recettes": 714
+  },
+  "Éleveur": {
+   "fichier": "eleveur.json",
+   "recettes": 211
+  }
+ }
+}

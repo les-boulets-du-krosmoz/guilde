@@ -29,7 +29,7 @@ export type Avis = {
   id: string;
   nom: string;
   region: string;
-  /** Doplons (DPLN les appelle « avitons »). */
+  /** Avitons gagnés en livrant l'avis (anciennement appelés doplons). */
   avitons?: number;
   kamasGlace?: number;
   alitons?: number;
@@ -546,7 +546,7 @@ const DETAILS: Record<string, Pick<Avis, "niveau" | "zone" | "milice" | "acces" 
   "vengeuse-masquee": {
     niveau: 140, zone: "Larmes d'Ouronigride, Frigost", milice: BOURGADE,
     strategie: [
-      "Pas d'état invulnérable, mais 200 % de résistance neutre et eau : frappez en terre, en feu ou en air (à confirmer).",
+      "Pas d'état invulnérable, mais 200 % de résistance neutre et eau (25 % en terre, feu et air, d'après les données du jeu) : frappez en terre, en feu ou en air.",
       "Chaque retrait de portée lui donne 50 % de résistances pendant 2 tours : ne lui en retirez pas pendant que vous la frappez.",
       "Elle frappe fort jusqu'à 15 cases, et très fort au contact en volant de la chance : restez à plus de 11 cases d'elle.",
       "Elle donne à tout son groupe dommages, PM, critiques et portée, presque sans interruption : désenvoûtez-la dès que possible.",
@@ -1010,6 +1010,6 @@ export const urlAvis = (a: Avis) => (a.page ? `https://www.dofuspourlesnoobs.com
 
 export function recompense(a: Avis): string {
   if (a.alitons !== undefined) return `${a.alitons} alitons`;
-  const base = `${(a.avitons ?? 0).toLocaleString("fr-FR")} doplons`;
+  const base = `${(a.avitons ?? 0).toLocaleString("fr-FR")} avitons`;
   return a.kamasGlace ? `${base} + ${a.kamasGlace} kamas de glace` : base;
 }

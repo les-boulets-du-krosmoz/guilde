@@ -34,7 +34,6 @@ export function BoutonDefi({ libelle, description, points, icone, image, compara
           moi {comparaison ? "✓" : "✗"}
         </span>
       )}
-      {faitPar.length > 0 && comparaison === undefined && <span className="succes__nb" aria-label={`réussi par ${faitPar.length}`}>✓ {faitPar.length}</span>}
       <span role="tooltip" id={id} className="etat__bulle">
         {description}
         {points !== undefined && <><br /><span className="discret">{points} points de succès</span></>}

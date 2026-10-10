@@ -577,6 +577,22 @@ function QuetesPerso({ persoId }: { persoId: string }) {
           );
         })}
       </ol>
+
+      <div className={`recompense ${terminees === total ? "recompense--obtenue" : ""}`}
+        style={{ "--dofus": dofus.couleur, "--dofus-accent": dofus.accent ?? dofus.couleur } as React.CSSProperties}>
+        {categorie.estDofus
+          ? <span className="dofus__oeuf recompense__oeuf" style={{ background: dofus.couleur }} aria-hidden="true" />
+          : <span className="recompense__trophee" aria-hidden="true">🏆</span>}
+        <div>
+          <strong>{categorie.estDofus ? `Dofus ${dofus.nom}` : `${dofus.nom} : série terminée`}</strong>
+          <span className="discret">
+            {terminees === total
+              ? (categorie.estDofus ? ` · obtenu par ${perso.nom}` : ` · terminée par ${perso.nom}`)
+              : ` · encore ${total - terminees} étape${total - terminees > 1 ? "s" : ""} sur ${total}`}
+          </span>
+        </div>
+        {terminees === total && <span className="recompense__ok" aria-hidden="true">✓</span>}
+      </div>
     </main>
   );
 }

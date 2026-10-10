@@ -118,7 +118,7 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
           {lignes.map((d) => {
             const restants = d.succes.filter((s) => !mesFaits(s.id)).map((s) => s.id);
             return (
-              <li key={cleDonjon(d)} className="tableau-succes__ligne">
+              <li key={`${cleDonjon(d)}|${d.succes[0]?.id}`} className="tableau-succes__ligne">
                 <div className="tableau-succes__donjon">
                   <IconeDonjon fichier={d.icone} taille={32} titre={d.boss} />
                   <div>

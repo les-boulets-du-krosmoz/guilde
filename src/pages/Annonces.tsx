@@ -2,12 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { BoutonDefi } from "../components/BoutonDefi";
 import { IconeDonjon, imageDonjon } from "../components/IconeDonjon";
 import { IconeSortie } from "../components/IconeSortie";
+import { ChoixMembres } from "../components/ChoixMembres";
+import { ChoixOrdre } from "../components/ChoixOrdre";
 import { Pastille } from "../components/Pastille";
 import { METIERS } from "../data/constantes";
 import { CATEGORIES } from "../data/series";
 import { cleDonjon, DONJONS_SUCCES, SUCCES_PAR_ID } from "../data/succesDonjons";
 import {
-  couvertureMetiers, dateLisible, donjonDeCle, grilleMois, memeJour, PLACES_DONJON, PLACES_DUO, placesDe, raisonRefus, resumeAnnonce,
+  couvertureMetiers, dateLisible, donjonDeCle, grilleMois, memeJour, ordresDe, PLACES_DONJON, PLACES_DUO, placesDe, raisonRefus, resumeAnnonce,
 } from "../lib/annonces";
 import { ilYa } from "../lib/dates";
 import {
@@ -15,7 +17,7 @@ import {
   participer, repondreInvitation, retirerParticipation, supprimerAnnonce, type ChampsAnnonce, type DonneesGuilde,
 } from "../lib/donnees";
 import { useSession } from "../lib/session";
-import type { Annonce, InvitationAnnonce, Membre, MetierMembre, MetierRequis, ParticipantAnnonce, Personnage, SuccesDonjon } from "../lib/types";
+import type { Annonce, InvitationAnnonce, Membre, MetierMembre, MetierRequis, OrdreRequis, ParticipantAnnonce, Personnage, SuccesDonjon } from "../lib/types";
 import { Chargement } from "./Acces";
 
 const JOURS = ["lun.", "mar.", "mer.", "jeu.", "ven.", "sam.", "dim."];
@@ -123,6 +125,7 @@ export function Annonces() {
           inscrits={edition === "nouvelle" ? 1 : participants.filter((x) => x.annonce_id === edition.id).length}
           auteurId={membre.id}
           membres={[...guilde.membres.values()].filter((m) => m.valide && m.id !== membre.id)}
+          persos={guilde.personnages}
           mesPersos={mesPersos}
           onAnnuler={() => setEdition(null)}
           onFini={async () => { setEdition(null); await charger(); }}
@@ -225,7 +228,12 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
       <div className="annonce__entete">
         {dj ? <IconeDonjon fichier={dj.icone} taille={40} titre={dj.boss} /> : <IconeSortie type={a.type} taille={40} />}
         <div className="annonce__titre">
-          <h3>{a.titre}</h3>
+          <h3>
+            {a.titre}
+            {a.visibilite === "prive" && (
+              <span className="annonce__cadenas" title={accesFerme ? "Groupe privé : sur invitation" : "Groupe privé : tu as accès"}>{accesFerme ? " 🔒" : " 🔓"}</span>
+            )}
+          </h3>
           <span className="discret">
             {a.date_prevue ? dateLisible(a.date_prevue) : "En attente : date à fixer"} · publiée par {auteur?.pseudo ?? "un membre"} {ilYa(a.cree_le)}
           </span>
@@ -304,6 +312,7 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
 
       {inviterOuvert && (
         <PanneauInvitation
+          persos={guilde.personnages}
           membres={[...guilde.membres.values()].filter((m) => m.valide && m.id !== a.auteur_id
             && !invitations.some((i) => i.membre_id === m.id) && !inscrits.some((p) => p.membre_id === m.id))}
           onAnnuler={() => setInviterOuvert(false)}
@@ -386,23 +395,12 @@ function ReponseInvitation({ annonce: a, invitation: inv, mesPersos, complet, on
   );
 }
 
-/** Choix des membres à inviter (recherche par pseudo). */
-function PanneauInvitation({ membres, onEnvoyer, onAnnuler }: { membres: Membre[]; onEnvoyer: (ids: string[]) => void; onAnnuler: () => void }) {
-  const [recherche, setRecherche] = useState("");
+/** Choix des membres à inviter après coup, avec la même liste que le formulaire. */
+function PanneauInvitation({ membres, persos, onEnvoyer, onAnnuler }: { membres: Membre[]; persos: Personnage[]; onEnvoyer: (ids: string[]) => void; onAnnuler: () => void }) {
   const [choisis, setChoisis] = useState<string[]>([]);
-  const visibles = membres.filter((m) => m.pseudo.toLowerCase().includes(recherche.toLowerCase())).sort((x, y) => x.pseudo.localeCompare(y.pseudo));
   return (
     <div className="panneau-invitation">
-      <input type="search" placeholder="Rechercher un membre…" value={recherche} onChange={(e) => setRecherche(e.target.value)} aria-label="Rechercher un membre" />
-      <div className="panneau-invitation__liste">
-        {visibles.length === 0 ? <span className="discret">Personne d'autre à inviter.</span> : visibles.map((m) => (
-          <label key={m.id} className="case">
-            <input type="checkbox" checked={choisis.includes(m.id)} onChange={() => setChoisis((x) => (x.includes(m.id) ? x.filter((y) => y !== m.id) : [...x, m.id]))} />
-            {m.avatar_url && <img src={m.avatar_url} alt="" width={20} height={20} className="panneau-invitation__avatar" referrerPolicy="no-referrer" />}
-            {m.pseudo}
-          </label>
-        ))}
-      </div>
+      <ChoixMembres membres={membres} persos={persos} choisis={choisis} onChange={setChoisis} />
       <div className="panneau-invitation__actions">
         <button type="button" className="bouton bouton--vert" disabled={choisis.length === 0} onClick={() => onEnvoyer(choisis)}>
           Inviter {choisis.length > 0 ? `(${choisis.length})` : ""}
@@ -417,12 +415,13 @@ function PanneauInvitation({ membres, onEnvoyer, onAnnuler }: { membres: Membre[
 const QUETES_PAR_SERIE = CATEGORIES.flatMap((c) => c.series.filter((s) => s.quetes.length).map((s) => ({ nom: c.estDofus ? `Dofus ${s.nom}` : s.nom, quetes: s.quetes })));
 const ETIQUETTE_DONJON = (d: (typeof DONJONS_SUCCES)[number]) => `${d.nom} — ${d.boss} (niv. ${d.niveau})`;
 
-function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, mesPersos, onAnnuler, onFini, onErreur }: {
+function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, persos, mesPersos, onAnnuler, onFini, onErreur }: {
   initiale: Annonce | null;
   /** Personnes déjà inscrites (1 à la création : l'organisateur) : on ne peut pas descendre en dessous. */
   inscrits: number;
   auteurId: string;
   membres: Membre[];
+  persos: Personnage[];
   mesPersos: Personnage[];
   onAnnuler: () => void;
   onFini: () => Promise<void>;
@@ -443,17 +442,27 @@ function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, mesPersos, o
   const [queteNom, setQueteNom] = useState(initiale?.quete_nom ?? "");
   const [niveauMin, setNiveauMin] = useState(initiale?.niveau_min?.toString() ?? "");
   const [alignementMin, setAlignementMin] = useState(initiale?.alignement_min?.toString() ?? "");
-  const [ordreMin, setOrdreMin] = useState(initiale?.ordre_min?.toString() ?? "");
+  // Ordres acceptés, comme les métiers : une ligne par ordre (ordre et rang minimum).
+  const [ordresReq, setOrdresReq] = useState<OrdreRequis[]>(initiale ? ordresDe(initiale) : []);
+  // Quête : 8 places par défaut, et le maximum de la jauge se règle (jusqu'à 50).
+  const [maxQuete, setMaxQuete] = useState(String(Math.max(8, initiale?.type === "quete" ? initiale.places ?? 8 : 8)));
+  const [placesQuete, setPlacesQuete] = useState(initiale?.type === "quete" ? initiale.places ?? 8 : 8);
   const [metiersReq, setMetiersReq] = useState<MetierRequis[]>(initiale?.metiers ?? []);
   const [enCours, setEnCours] = useState(false);
   const [invites, setInvites] = useState<string[]>([]);
-  const [rechercheInvite, setRechercheInvite] = useState("");
 
   const dj = DONJONS_SUCCES.find((d) => ETIQUETTE_DONJON(d) === donjonTexte);
   // Le succès Duo se fait à 2 : la jauge est alors bloquée à 2 places.
   const duo = type === "donjon" && succesChoisis.some((id) => dj?.succes.find((s) => s.id === id)?.libelle.startsWith("Duo"));
   const maxPlaces = duo ? PLACES_DUO : PLACES_DONJON;
   const placesRetenues = Math.min(Math.max(places, Math.max(2, inscrits)), maxPlaces);
+  const maxJaugeQuete = Math.min(50, Math.max(2, inscrits, Number(maxQuete) || 8));
+  const placesQueteRetenues = Math.min(Math.max(placesQuete, Math.max(2, inscrits)), maxJaugeQuete);
+  // Titre facultatif : sinon, le boss et les succès visés (donjon) ou le nom de la quête.
+  const queteChoisie = QUETES_PAR_SERIE.flatMap((x) => x.quetes).find((x) => x.id === queteId);
+  const titreAuto = type === "donjon"
+    ? (dj ? `${dj.boss}${succesChoisis.length ? ` : ${dj.succes.filter((x) => succesChoisis.includes(x.id)).map((x) => x.libelle).join(", ")}` : ""}` : "")
+    : (queteId === "autre" ? queteNom.trim() : queteChoisie?.nom ?? "");
   const nombre = (v: string) => (/^\d+$/.test(v.trim()) ? Number(v) : null);
 
   // Choisir une quête du site reprend ses prérequis de niveau et de métiers.
@@ -466,20 +475,20 @@ function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, mesPersos, o
     if (niv && niv.type === "niveau") setNiveauMin(String(niv.niveau));
     const mets = q.prerequis.flatMap((p) => (p.type === "metier" && p.metier !== "au_choix" ? [{ metier: p.metier, niveau: p.niveau }] : []));
     if (mets.length) setMetiersReq(mets);
-    if (!titre) setTitre(q.nom);
   }
 
   async function valider() {
-    if (!titre.trim()) { onErreur("Donne un titre à l'annonce."); return; }
+    const titreFinal = titre.trim() || titreAuto;
+    if (!titreFinal) { onErreur(type === "donjon" ? "Choisis un donjon dans la liste." : "Choisis une quête, ou donne un titre."); return; }
     if (type === "donjon" && !dj) { onErreur("Choisis un donjon dans la liste."); return; }
     if (type === "quete" && queteId === "autre" && !queteNom.trim()) { onErreur("Indique le nom de la quête."); return; }
     if (type === "donjon" && inscrits > maxPlaces) { onErreur(`Il y a déjà ${inscrits} inscrits : impossible de limiter à ${maxPlaces} places.`); return; }
     const champs: ChampsAnnonce = {
-      titre: titre.trim(),
+      titre: titreFinal.slice(0, 120),
       description: description.trim() || null,
       type,
       visibilite,
-      places: type === "donjon" ? placesRetenues : null,
+      places: type === "donjon" ? placesRetenues : placesQueteRetenues,
       date_prevue: date ? new Date(date).toISOString() : null,
       donjon: type === "donjon" && dj ? cleDonjon(dj) : null,
       succes: type === "donjon" ? succesChoisis.filter((id) => dj?.succes.some((s) => s.id === id)) : [],
@@ -488,7 +497,9 @@ function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, mesPersos, o
       niveau_min: nombre(niveauMin),
       // L'alignement et l'ordre ne concernent que les quêtes.
       alignement_min: type === "quete" ? nombre(alignementMin) : null,
-      ordre_min: type === "quete" ? nombre(ordreMin) : null,
+      ordre_min: null,
+      ordre: null,
+      ordres: type === "quete" ? ordresReq.filter((x) => x.ordre && x.rang >= 1) : [],
       metiers: type === "quete" ? metiersReq.filter((m) => m.metier && m.niveau > 0) : [],
     };
     const persoAuteur = mesPersos.find((p) => p.id === persoAuteurId);
@@ -518,132 +529,164 @@ function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, mesPersos, o
   return (
     <section className="carte formulaire-annonce">
       <h2>{initiale ? "Modifier la recherche de groupe" : "Nouvelle recherche de groupe"}</h2>
-      <div className="formulaire-annonce__grille">
-        <label className="champ">Titre<input maxLength={120} value={titre} onChange={(e) => setTitre(e.target.value)} placeholder="ex. Kimbo Duo + Statue" /></label>
-        <label className="champ">Date et heure <span className="discret">(vide = en attente)</span><input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} /></label>
-        <label className="champ champ--large">Description<textarea maxLength={2000} rows={3} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Stuff conseillé, point de rendez-vous, stratégie…" /></label>
-      </div>
-
-      <div className="formulaire-annonce__grille">
-        <div className="champ">
-          <span>Accès</span>
-          <div className="onglets onglets--mini" role="group" aria-label="Accès au groupe">
-            <button type="button" className={`onglet ${visibilite === "ouvert" ? "onglet--actif" : ""}`} aria-pressed={visibilite === "ouvert"} onClick={() => setVisibilite("ouvert")}>Ouvert à tous</button>
-            <button type="button" className={`onglet ${visibilite === "prive" ? "onglet--actif" : ""}`} aria-pressed={visibilite === "prive"} onClick={() => setVisibilite("prive")}>🔒 Privé (sur invitation)</button>
+      <div className="fa-grille">
+        {/* Le cadre */}
+        <div className="fa-champ fa-4">
+          <span>Type</span>
+          <div className="fa-segments" role="group" aria-label="Type de sortie">
+            <button type="button" className={type === "donjon" ? "actif" : ""} aria-pressed={type === "donjon"} onClick={() => setType("donjon")}><IconeSortie type="donjon" /> Donjon</button>
+            <button type="button" className={type === "quete" ? "actif" : ""} aria-pressed={type === "quete"} onClick={() => setType("quete")}><IconeSortie type="quete" /> Quête</button>
           </div>
         </div>
-        {!initiale && mesPersos.length > 0 && (
-          <label className="champ">Tu participes avec
-            <select value={persoAuteurId} onChange={(e) => setPersoAuteurId(e.target.value)}>
-              {mesPersos.map((p) => <option key={p.id} value={p.id}>{p.nom} ({p.classe} {p.niveau})</option>)}
-            </select>
-          </label>
-        )}
-      </div>
-
-      <div className="onglets onglets--mini" role="group" aria-label="Type de sortie">
-        <button type="button" className={`onglet onglet--icone ${type === "donjon" ? "onglet--actif" : ""}`} aria-pressed={type === "donjon"} onClick={() => setType("donjon")}><IconeSortie type="donjon" /> Donjon (8 places)</button>
-        <button type="button" className={`onglet onglet--icone ${type === "quete" ? "onglet--actif" : ""}`} aria-pressed={type === "quete"} onClick={() => setType("quete")}><IconeSortie type="quete" /> Quête</button>
-      </div>
-
-      {type === "donjon" ? (
-        <div className="formulaire-annonce__bloc">
-          <label className="champ champ--large">Donjon
-            <input list="liste-donjons" value={donjonTexte} onChange={(e) => { setDonjonTexte(e.target.value); setSuccesChoisis([]); }} placeholder="Tape le nom du donjon ou du boss…" />
-          </label>
-          <datalist id="liste-donjons">{DONJONS_SUCCES.map((d) => <option key={cleDonjon(d)} value={ETIQUETTE_DONJON(d)} />)}</datalist>
-          <label className="champ champ--large formulaire-annonce__places">
-            <span>
-              Places : <strong>{placesRetenues}</strong> <span className="discret">(toi compris, soit {placesRetenues - 1} de plus)</span>
-              {duo && <span className="discret"> · succès Duo : 2 places au maximum</span>}
-            </span>
-            <input type="range" min={2} max={maxPlaces} step={1} value={placesRetenues} disabled={duo}
-              onChange={(e) => setPlaces(Number(e.target.value))} aria-label="Nombre de places, organisateur compris" />
-            <span className="formulaire-annonce__graduations" aria-hidden="true">
-              {Array.from({ length: PLACES_DONJON - 1 }, (_, i) => i + 2).map((n) => <span key={n} className={n > maxPlaces ? "discret" : undefined}>{n}</span>)}
-            </span>
-          </label>
-          {dj && (
-            <div className="formulaire-annonce__succes">
-              <span className="discret">Succès visés (facultatif) :</span>
-              {dj.succes.map((s) => (
-                <label key={s.id} className="case">
-                  <input type="checkbox" checked={succesChoisis.includes(s.id)}
-                    onChange={() => setSuccesChoisis((x) => (x.includes(s.id) ? x.filter((y) => y !== s.id) : [...x, s.id]))} />
-                  <span title={s.description}>{s.libelle}</span>
-                </label>
-              ))}
-            </div>
-          )}
+        <div className="fa-champ fa-4">
+          <span>Accès</span>
+          <div className="fa-segments" role="group" aria-label="Accès au groupe">
+            <button type="button" className={visibilite === "ouvert" ? "actif" : ""} aria-pressed={visibilite === "ouvert"} onClick={() => setVisibilite("ouvert")}>Ouvert à tous</button>
+            <button type="button" className={visibilite === "prive" ? "actif" : ""} aria-pressed={visibilite === "prive"} onClick={() => setVisibilite("prive")}>🔒 Privé</button>
+          </div>
         </div>
-      ) : (
-        <div className="formulaire-annonce__bloc">
-          <label className="champ champ--large">Quête <span className="discret">(une quête du site reprend ses prérequis)</span>
+        <label className="fa-champ fa-4">
+          <span>{initiale ? "Organisateur" : "Tu participes avec"}</span>
+          <select value={persoAuteurId} onChange={(e) => setPersoAuteurId(e.target.value)} disabled={!!initiale}>
+            {mesPersos.map((p) => <option key={p.id} value={p.id}>{p.nom} ({p.classe} {p.niveau})</option>)}
+          </select>
+        </label>
+
+        {/* Le quoi et le quand */}
+        {type === "donjon" ? (
+          <label className="fa-champ fa-8">
+            <span>Donjon</span>
+            <input list="liste-donjons" value={donjonTexte} onChange={(e) => { setDonjonTexte(e.target.value); setSuccesChoisis([]); }} placeholder="Tape le nom du donjon ou du boss…" />
+            <datalist id="liste-donjons">{DONJONS_SUCCES.map((d) => <option key={`${cleDonjon(d)}|${d.succes[0]?.id}`} value={ETIQUETTE_DONJON(d)} />)}</datalist>
+          </label>
+        ) : (
+          <label className="fa-champ fa-8">
+            <span>Quête <span className="discret">(une quête du site reprend ses prérequis)</span></span>
             <select value={queteId} onChange={(e) => choisirQuete(e.target.value)}>
               <option value="">Choisir une quête…</option>
               <option value="autre">Autre quête, absente du site (saisir son nom)</option>
-              {QUETES_PAR_SERIE.map((s) => (
-                <optgroup key={s.nom} label={s.nom}>{s.quetes.map((q) => <option key={q.id} value={q.id}>{q.nom}</option>)}</optgroup>
+              {QUETES_PAR_SERIE.map((x) => (
+                <optgroup key={x.nom} label={x.nom}>{x.quetes.map((q) => <option key={q.id} value={q.id}>{q.nom}</option>)}</optgroup>
               ))}
             </select>
           </label>
-          {queteId === "autre" && (
-            <label className="champ champ--large">Nom de la quête
-              <input maxLength={120} value={queteNom} onChange={(e) => setQueteNom(e.target.value)} placeholder="ex. Le Tracas du Guerrier" />
-            </label>
-          )}
-          <div className="formulaire-annonce__metiers">
-            <span className="discret">Métiers nécessaires (au moins un inscrit doit les avoir) :</span>
-            {metiersReq.map((m, i) => (
-              <span key={i} className="formulaire-annonce__metier">
-                <select value={m.metier} onChange={(e) => setMetiersReq((x) => x.map((y, j) => (j === i ? { ...y, metier: e.target.value } : y)))} aria-label="Métier">
-                  {METIERS.map((n) => <option key={n} value={n}>{n}</option>)}
-                </select>
-                <input inputMode="numeric" value={m.niveau || ""} placeholder="niv." aria-label="Niveau du métier"
-                  onChange={(e) => setMetiersReq((x) => x.map((y, j) => (j === i ? { ...y, niveau: Number(e.target.value) || 0 } : y)))} />
-                <button type="button" className="lien-bouton" onClick={() => setMetiersReq((x) => x.filter((_, j) => j !== i))}>Retirer</button>
-              </span>
-            ))}
-            <button type="button" className="lien-bouton" onClick={() => setMetiersReq((x) => [...x, { metier: METIERS[0], niveau: 1 }])}>+ Ajouter un métier</button>
-          </div>
-        </div>
-      )}
+        )}
+        <label className="fa-champ fa-4">
+          <span>Date et heure <span className="discret">(vide = en attente)</span></span>
+          <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} />
+        </label>
+        {type === "quete" && queteId === "autre" && (
+          <label className="fa-champ fa-12">
+            <span>Nom de la quête</span>
+            <input maxLength={120} value={queteNom} onChange={(e) => setQueteNom(e.target.value)} placeholder="ex. Le Tracas du Guerrier" />
+          </label>
+        )}
 
-      <div className="formulaire-annonce__grille">
-        <label className="champ">Niveau minimum <span className="discret">(les inscrits en dessous sont refusés)</span><input inputMode="numeric" value={niveauMin} onChange={(e) => setNiveauMin(e.target.value)} placeholder="ex. 160" /></label>
+        {/* Les conditions */}
+        <div className="fa-champ fa-8">
+          {type === "donjon" ? (
+            <>
+              <span>Places : <strong>{placesRetenues}</strong> (toi compris){duo && " · succès Duo : 2 places au maximum"}</span>
+              <div className="fa-jauge">
+                <input type="range" min={2} max={maxPlaces} step={1} value={placesRetenues} disabled={duo}
+                  onChange={(e) => setPlaces(Number(e.target.value))} aria-label="Nombre de places, organisateur compris" />
+              </div>
+            </>
+          ) : (
+            <>
+              <span>Places : <strong>{placesQueteRetenues}</strong> (toi compris)</span>
+              <div className="fa-jauge">
+                <input type="range" min={2} max={maxJaugeQuete} step={1} value={placesQueteRetenues}
+                  onChange={(e) => setPlacesQuete(Number(e.target.value))} aria-label="Nombre de places, organisateur compris" />
+                <label className="fa-max">max <input inputMode="numeric" value={maxQuete} onChange={(e) => setMaxQuete(e.target.value)} aria-label="Maximum de la jauge (jusqu'à 50)" /></label>
+              </div>
+            </>
+          )}
+        </div>
+        <label className="fa-champ fa-4">
+          <span>Niveau minimum</span>
+          <input inputMode="numeric" value={niveauMin} onChange={(e) => setNiveauMin(e.target.value)} placeholder="ex. 160" />
+        </label>
+
+        {type === "donjon" && dj && (
+          <div className="fa-champ fa-12">
+            <span>Succès visés <span className="discret">(facultatif)</span></span>
+            <div className="fa-puces">
+              {dj.succes.map((x) => (
+                <button key={x.id} type="button" title={x.description} aria-pressed={succesChoisis.includes(x.id)}
+                  className={`fa-puce ${succesChoisis.includes(x.id) ? "actif" : ""}`}
+                  onClick={() => setSuccesChoisis((l) => (l.includes(x.id) ? l.filter((y) => y !== x.id) : [...l, x.id]))}>
+                  {x.libelle}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         {type === "quete" && (
           <>
-            <label className="champ">Alignement minimum<input inputMode="numeric" value={alignementMin} onChange={(e) => setAlignementMin(e.target.value)} placeholder="ex. 20" /></label>
-            <label className="champ">Rang d'ordre minimum
-              <select value={ordreMin} onChange={(e) => setOrdreMin(e.target.value)}>
-                <option value="">Aucun</option>
-                {[1, 2, 3, 4, 5].map((r) => <option key={r} value={r}>Ordre {r}</option>)}
-              </select>
+            <label className="fa-champ fa-4">
+              <span>Alignement minimum</span>
+              <input inputMode="numeric" value={alignementMin} onChange={(e) => setAlignementMin(e.target.value)} placeholder="ex. 40" />
             </label>
+            <div className="fa-champ fa-8">
+              <span>Ordres acceptés <span className="discret">(l'inscrit doit faire partie de l'un d'eux)</span></span>
+              <div className="fa-ordres">
+                {ordresReq.map((x, k) => (
+                  <div key={k} className="fa-ordre">
+                    <ChoixOrdre ordre={x.ordre} rang={x.rang}
+                      onChoix={(o, r) => setOrdresReq((l) => (o && r ? l.map((y, n) => (n === k ? { ordre: o, rang: r } : y)) : l.filter((_, n) => n !== k)))} />
+                    <button type="button" className="lien-bouton" aria-label="Retirer cet ordre" onClick={() => setOrdresReq((l) => l.filter((_, n) => n !== k))}>×</button>
+                  </div>
+                ))}
+                <ChoixOrdre key={ordresReq.length} ordre={null} rang={null} libelleVide={ordresReq.length ? "+ Ajouter un autre ordre" : "+ Ajouter un ordre"}
+                  onChoix={(o, r) => { if (o && r && !ordresReq.some((y) => y.ordre === o)) setOrdresReq((l) => [...l, { ordre: o, rang: r }]); }} />
+              </div>
+            </div>
+            <div className="fa-champ fa-12">
+              <span>Métiers nécessaires <span className="discret">(au moins un inscrit doit les avoir)</span></span>
+              <div className="fa-puces">
+                {metiersReq.map((m, k) => (
+                  <span key={k} className="formulaire-annonce__metier">
+                    <select value={m.metier} onChange={(e) => setMetiersReq((x) => x.map((y, n) => (n === k ? { ...y, metier: e.target.value } : y)))} aria-label="Métier">
+                      {METIERS.map((n) => <option key={n} value={n}>{n}</option>)}
+                    </select>
+                    <input inputMode="numeric" value={m.niveau || ""} placeholder="niv." aria-label="Niveau du métier"
+                      onChange={(e) => setMetiersReq((x) => x.map((y, n) => (n === k ? { ...y, niveau: Number(e.target.value) || 0 } : y)))} />
+                    <button type="button" className="lien-bouton" onClick={() => setMetiersReq((x) => x.filter((_, n) => n !== k))}>×</button>
+                  </span>
+                ))}
+                <button type="button" className="lien-bouton" onClick={() => setMetiersReq((x) => [...x, { metier: METIERS[0], niveau: 1 }])}>+ Ajouter un métier</button>
+              </div>
+            </div>
           </>
         )}
-      </div>
 
-      {!initiale && (
-        <div className="formulaire-annonce__bloc">
-          <span className="discret">Inviter des membres (facultatif) : ils sont mentionnés sur Discord et acceptent ou refusent sur le site.</span>
-          <input type="search" placeholder="Rechercher un membre…" value={rechercheInvite} onChange={(e) => setRechercheInvite(e.target.value)} aria-label="Rechercher un membre à inviter" />
-          <div className="panneau-invitation__liste">
-            {membres.filter((m) => m.pseudo.toLowerCase().includes(rechercheInvite.toLowerCase())).sort((x, y) => x.pseudo.localeCompare(y.pseudo)).map((m) => (
-              <label key={m.id} className="case">
-                <input type="checkbox" checked={invites.includes(m.id)} onChange={() => setInvites((x) => (x.includes(m.id) ? x.filter((y) => y !== m.id) : [...x, m.id]))} />
-                {m.avatar_url && <img src={m.avatar_url} alt="" width={20} height={20} className="panneau-invitation__avatar" referrerPolicy="no-referrer" />}
-                {m.pseudo}
-              </label>
-            ))}
+        <div className="fa-separation" />
+
+        {/* La présentation */}
+        <label className="fa-champ fa-12">
+          <span>Titre <span className="discret">(facultatif)</span></span>
+          <input maxLength={120} value={titre} onChange={(e) => setTitre(e.target.value)} placeholder={titreAuto || "Choisis d'abord un donjon ou une quête"} />
+          {!titre.trim() && titreAuto && <span className="discret fa-aide">Laissé vide, le titre sera : <strong>{titreAuto}</strong></span>}
+        </label>
+        <label className="fa-champ fa-12">
+          <span>Description <span className="discret">(facultatif)</span></span>
+          <textarea maxLength={2000} rows={3} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Stuff conseillé, point de rendez-vous, stratégie…" />
+        </label>
+
+        {/* Les invitations */}
+        {!initiale && (
+          <div className="fa-champ fa-12">
+            <span>Inviter des membres <span className="discret">(facultatif : mentionnés sur Discord)</span></span>
+            <ChoixMembres membres={membres} persos={persos} choisis={invites} onChange={setInvites} />
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="formulaire-annonce__actions">
         <button type="button" className="bouton bouton--vert" onClick={valider} disabled={enCours}>{initiale ? "Enregistrer" : invites.length ? `Publier et inviter (${invites.length})` : "Publier"}</button>
         <button type="button" className="bouton" onClick={onAnnuler} disabled={enCours}>Annuler</button>
-        {!initiale && <span className="discret">Tu seras inscrit d'office. La recherche sera aussi annoncée sur Discord{invites.length ? ", avec la mention des invités" : ""}.</span>}
+        {!initiale && <span className="discret">Tu seras inscrit d'office. La recherche sera annoncée sur Discord{invites.length ? ", avec la mention des invités" : ""}.</span>}
       </div>
     </section>
   );

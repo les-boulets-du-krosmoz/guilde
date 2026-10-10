@@ -169,6 +169,22 @@ export function Profil() {
 
         <section className="carte">
           <h2>Dofus</h2>
+          {(() => {
+            const avecQuetes = DOFUS.filter((x) => x.quetes.length > 0);
+            const obtenus = avecQuetes.filter((x) => etapeActuelle(x, faites) === x.quetes.length).length;
+            // Un œuf aux couleurs de tous les Dofus : la complétion de toute la collection.
+            const arcEnCiel = `conic-gradient(${avecQuetes.map((x, k) => `${x.couleur} ${(k / avecQuetes.length) * 100}% ${((k + 1) / avecQuetes.length) * 100}%`).join(", ")})`;
+            return (
+              <div className={`dofus dofus--tous ${obtenus === avecQuetes.length ? "dofus--ok" : obtenus > 0 ? "dofus--cours" : ""}`}>
+                <span className="dofus__oeuf" style={{ background: arcEnCiel }} aria-hidden="true" />
+                <div className="dofus__texte">
+                  <strong>Tous les Dofus</strong>
+                  <span className="dofus__statut">{obtenus} / {avecQuetes.length} obtenus</span>
+                </div>
+                <div className="barre dofus__barre" aria-hidden="true"><div style={{ width: `${(obtenus / avecQuetes.length) * 100}%` }} /></div>
+              </div>
+            );
+          })()}
           <ul className="grille-dofus">
             {DOFUS.map((dofus) => {
               const total = dofus.quetes.length;

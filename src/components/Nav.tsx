@@ -34,10 +34,21 @@ export function Nav() {
   const [menuMobile, setMenuMobile] = useState(false);
   useEffect(() => setMenuMobile(false), [pathname, search]); // on referme le menu mobile après chaque navigation
   const invitations = useInvitationsEnAttente(membre?.id);
+  // Hauteur réelle de la barre (elle passe sur deux lignes en fenêtre étroite) : sert aux éléments collants et aux ancres.
+  const barre = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = barre.current;
+    if (!el) return;
+    const publier = () => document.documentElement.style.setProperty("--hauteur-nav", `${el.offsetHeight}px`);
+    publier();
+    const obs = new ResizeObserver(publier);
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
   const principal = mesPersos.find((p) => p.est_principal) ?? mesPersos[0];
 
   return (
-    <header className="nav">
+    <header className="nav" ref={barre}>
       <NavLink to="/" className="nav__guilde">
         <img src="/logo.webp" alt="" width={44} height={44} />
         <span className="nav__titre">
@@ -58,12 +69,13 @@ export function Nav() {
         </NavLink>
         <MenuDeroulant
           libelle="Progression"
-          actif={["/quetes", "/progression", "/avis"].some((c) => pathname.startsWith(c))}
+          actif={["/quetes", "/progression", "/avis", "/mes-metiers"].some((c) => pathname.startsWith(c))}
           liens={[
             { to: "/quetes", libelle: "Mes quêtes", detail: "Dofus, Frigost, Tour du monde, Emma", actif: pathname.startsWith("/quetes") && !search.includes("cat=succes") },
             { to: "/quetes?cat=succes", libelle: "Succès de donjon", detail: "Les 131 boss et leurs succès", actif: pathname.startsWith("/quetes") && search.includes("cat=succes") },
+            { to: "/mes-metiers", libelle: "Mes métiers", detail: "Niveaux et crafts à prévoir" },
             { to: "/progression", libelle: "Où en est la guilde", detail: "Qui en est à quelle étape" },
-            { to: "/avis", libelle: "Avis de recherche", detail: "Avis, doplons et parchemins" },
+            { to: "/avis", libelle: "Avis de recherche", detail: "Avis, avitons et parchemins" },
           ]}
         />
         <MenuDeroulant

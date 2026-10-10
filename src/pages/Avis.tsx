@@ -3,7 +3,9 @@ import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { Etat, TexteEtats } from "../components/Etat";
 import { Pastille } from "../components/Pastille";
 import { clicSurCarte } from "../lib/clicCarte";
-import { AVIS, REGIONS, recompense, urlAvis, type Avis } from "../data/avis";
+import { Fenetre } from "../components/Fenetre";
+import { AVIS_AVEC_IMAGE } from "../data/imagesAvis";
+import { AVIS, nomRegion, REGIONS, recompense, urlAvis, type Avis } from "../data/avis";
 import { definitionEtat } from "../data/etats";
 import { SimulateurParchos } from "../components/SimulateurParchos";
 import { chargerAvis, chargerGuilde, type DonneesGuilde, type EtatAvis, type LigneAvis } from "../lib/donnees";
@@ -48,6 +50,19 @@ function AvisPerso({ persoId }: { persoId: string }) {
   const [lignes, setLignes] = useState<LigneAvis[]>([]);
   const [filtre, setFiltre] = useState<Filtre>("tous");
   const [ouvert, setOuvert] = useState<string | null>(null);
+  // Pour trouver un avis : recherche, zone, et affichage en grille ou en liste (mémorisé dans ce navigateur).
+  const [recherche, setRecherche] = useState("");
+  const [zone, setZone] = useState<string | null>(null);
+  const [affichage, setAffichage] = useState<"grille" | "liste">(() => {
+    try { return localStorage.getItem("avis:affichage") === "liste" ? "liste" : "grille"; } catch { return "grille"; }
+  });
+  const choisirAffichage = (a: "grille" | "liste") => { setAffichage(a); try { localStorage.setItem("avis:affichage", a); } catch { /* sans importance */ } };
+  // Fiche ouverte en fenêtre (affichage grille), avec un lien direct : /avis#vengeuse-masquee
+  const [fiche, setFiche] = useState<string | null>(() => (window.location.hash.length > 1 ? decodeURIComponent(window.location.hash.slice(1)) : null));
+  const ouvrirFiche = (id: string | null) => {
+    setFiche(id);
+    history.replaceState(null, "", id ? `#${id}` : window.location.pathname + window.location.search);
+  };
   const [erreur, setErreur] = useState<string | null>(null);
   const [alerte, setAlerte] = useState<string | null>(null);
   const [occupe, setOccupe] = useState(false);
@@ -112,10 +127,20 @@ function AvisPerso({ persoId }: { persoId: string }) {
   const avisLivres = AVIS.filter((a) => mesEtats.get(a.id) === "livre");
   const livres = avisLivres.length;
   const somme = (champ: "avitons" | "alitons" | "kamasGlace") => avisLivres.reduce((s, a) => s + (a[champ] ?? 0), 0);
+  // Avis livrés après la saisie du solde d'avitons : ils s'ajoutent au solde.
+  const soldeLe = perso.avitons_solde_le ? new Date(perso.avitons_solde_le).getTime() : null;
+  const livresDepuis = soldeLe === null ? [] : lignes
+    .filter((l) => l.personnage_id === perso.id && l.etat === "livre" && new Date(l.maj_le).getTime() > soldeLe)
+    .map((l) => AVIS.find((a) => a.id === l.avis_id))
+    .filter((a): a is Avis => !!a);
 
+  const sansAccents = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const q = sansAccents(recherche.trim());
   const visible = (a: Avis) => {
     const fait = mesEtats.get(a.id) === "livre";
-    return filtre === "tous" || (filtre === "livre" ? fait : !fait);
+    if (!(filtre === "tous" || (filtre === "livre" ? fait : !fait))) return false;
+    if (zone && a.region !== zone) return false;
+    return !q || sansAccents(`${a.nom} ${nomRegion(a.region)}`).includes(q);
   };
 
   async function changer(avisId: string, etat: EtatAvis | null) {
@@ -166,8 +191,11 @@ function AvisPerso({ persoId }: { persoId: string }) {
         key={perso.id}
         personnageId={perso.id}
         modifiable={modifiable}
-        depensesInitiales={perso.doplons_depenses ?? 0}
-        doplonsGagnes={somme("avitons")}
+        soldeInitial={perso.avitons_solde ?? null}
+        soldeLeInitial={perso.avitons_solde_le ?? null}
+        gagnesDepuis={livresDepuis.reduce((s, a) => s + (a.avitons ?? 0), 0)}
+        nbAvisDepuis={livresDepuis.length}
+        totalGagne={somme("avitons")}
         alitons={somme("alitons")}
         kamasGlace={somme("kamasGlace")}
       />
@@ -186,8 +214,31 @@ function AvisPerso({ persoId }: { persoId: string }) {
         ))}
       </div>
 
+      <div className="avis-outils">
+        <input type="search" className="avis-outils__recherche" placeholder="Rechercher un avis ou une zone…" value={recherche}
+          onChange={(e) => setRecherche(e.target.value)} aria-label="Rechercher un avis ou une zone" />
+        <div className="onglets onglets--mini" role="group" aria-label="Affichage">
+          <button type="button" className={`onglet ${affichage === "grille" ? "onglet--actif" : ""}`} aria-pressed={affichage === "grille"} onClick={() => choisirAffichage("grille")}>▦ Grille</button>
+          <button type="button" className={`onglet ${affichage === "liste" ? "onglet--actif" : ""}`} aria-pressed={affichage === "liste"} onClick={() => choisirAffichage("liste")}>☰ Liste</button>
+        </div>
+      </div>
+      <nav className="avis-zones" aria-label="Zones">
+        <button type="button" className={`avis-zone ${!zone ? "avis-zone--active" : ""}`} aria-pressed={!zone} onClick={() => setZone(null)}>Toutes les zones</button>
+        {REGIONS.map((r) => {
+          const toutes = AVIS.filter((a) => a.region === r.id);
+          if (!toutes.length) return null;
+          const faits = toutes.filter((a) => mesEtats.get(a.id) === "livre").length;
+          return (
+            <button key={r.id} type="button" className={`avis-zone ${zone === r.id ? "avis-zone--active" : ""} ${faits === toutes.length ? "avis-zone--finie" : ""}`}
+              aria-pressed={zone === r.id} onClick={() => setZone(zone === r.id ? null : r.id)}>
+              {r.nom} <span className="avis-zone__nb">{faits}/{toutes.length}</span>
+            </button>
+          );
+        })}
+      </nav>
+
       {alerte && <p className="erreur" role="alert">{alerte}</p>}
-      {regions.length === 0 && <p className="vide">Aucun avis dans cette catégorie.</p>}
+      {regions.length === 0 && <p className="vide">{q || zone ? "Aucun avis ne correspond." : "Aucun avis dans cette catégorie."}</p>}
 
       {regions.map(({ region, toutes, liste }) => (
         <section key={region.id} className="region-avis" aria-labelledby={`region-${region.id}`}>
@@ -197,6 +248,14 @@ function AvisPerso({ persoId }: { persoId: string }) {
               {toutes.filter((a) => mesEtats.get(a.id) === "livre").length} / {toutes.length} livrés
             </span>
           </div>
+          {affichage === "grille" ? (
+            <ul className="grille-avis">
+              {liste.map((a) => (
+                <TuileAvis key={a.id} avis={a} etat={mesEtats.get(a.id)} perso={perso} chasseurs={(chasseurs.get(a.id) ?? []).length}
+                  modifiable={modifiable} occupe={occupe} onOuvrir={() => ouvrirFiche(a.id)} onChange={(e) => changer(a.id, e)} />
+              ))}
+            </ul>
+          ) : (
           <ul className="liste-lignes-avis">
             {liste.map((a) => (
               <LigneAvisUI
@@ -215,10 +274,69 @@ function AvisPerso({ persoId }: { persoId: string }) {
               />
             ))}
           </ul>
+          )}
         </section>
       ))}
+
+      {fiche && (() => {
+        const a = AVIS.find((x) => x.id === fiche);
+        if (!a) return null;
+        return (
+          <Fenetre titre={a.nom} onFermer={() => ouvrirFiche(null)} large>
+            <ul className="liste-lignes-avis fenetre__avis">
+              <LigneAvisUI
+                avis={a}
+                etat={mesEtats.get(a.id)}
+                perso={perso}
+                chasseurs={chasseurs.get(a.id) ?? []}
+                livrePar={porteurs.get(a.id)?.livre ?? []}
+                pasEncore={porteurs.get(a.id)?.pasEncore ?? []}
+                modifiable={modifiable}
+                occupe={occupe}
+                ouvert
+                dansFenetre
+                onDeplier={() => { /* dans la fenêtre, la fiche reste dépliée : on ferme avec × */ }}
+                onChange={(e) => changer(a.id, e)}
+              />
+            </ul>
+          </Fenetre>
+        );
+      })()}
     </main>
   );
+}
+
+/** Tuile de la grille : tête du monstre, nom, état ; la case marque livré, le reste ouvre la fiche. */
+function TuileAvis({ avis: a, etat, perso, chasseurs, modifiable, occupe, onOuvrir, onChange }: {
+  avis: Avis;
+  etat: EtatAvis | undefined;
+  perso: Personnage;
+  chasseurs: number;
+  modifiable: boolean;
+  occupe: boolean;
+  onOuvrir: () => void;
+  onChange: (e: EtatAvis | null) => void;
+}) {
+  const fait = etat === "livre";
+  const verrou = !fait && raisonVerrou(a, perso) !== null;
+  return (
+    <li className={`tuile-avis ${fait ? "tuile-avis--faite" : ""} ${verrou ? "tuile-avis--verrou" : ""} ${etat === "en_cours" ? "tuile-avis--chasse" : ""}`}
+      onClick={(e) => clicSurCarte(e, onOuvrir)}>
+      <ImageAvis avis={a} taille={40} />
+      <button type="button" className="tuile-avis__nom" onClick={onOuvrir}>{a.nom}</button>
+      {chasseurs > 0 && <span className="tuile-avis__chasse" title={`${chasseurs} membre${chasseurs > 1 ? "s" : ""} en chasse`}>{chasseurs}</span>}
+      <input type="checkbox" checked={fait} disabled={!modifiable || occupe || verrou}
+        onChange={() => onChange(fait ? null : "livre")} aria-label={`${fait ? "Décocher" : "Marquer livré"} : ${a.nom}`}
+        title={verrou ? raisonVerrou(a, perso) ?? undefined : undefined} />
+    </li>
+  );
+}
+
+/** Tête du monstre de l'avis (données du jeu) ; une silhouette s'il n'y en a pas. */
+function ImageAvis({ avis: a, taille }: { avis: Avis; taille: number }) {
+  return AVIS_AVEC_IMAGE.has(a.id)
+    ? <img className="image-avis" src={`/icones/avis/${a.id}.webp`} alt="" width={taille} height={taille} loading="lazy" />
+    : <span className="image-avis image-avis--vide" style={{ width: taille, height: taille }} aria-hidden="true">?</span>;
 }
 
 /** Prérequis court affiché sur la ligne : niveau du personnage, niveau d'alignement ou rang d'ordre. */
@@ -268,6 +386,7 @@ function LigneAvisUI({
   ouvert,
   onDeplier,
   onChange,
+  dansFenetre = false,
 }: {
   avis: Avis;
   etat: EtatAvis | undefined;
@@ -280,6 +399,8 @@ function LigneAvisUI({
   ouvert: boolean;
   onDeplier: () => void;
   onChange: (etat: EtatAvis | null) => void;
+  /** Fiche affichée dans une fenêtre : toujours dépliée, sans flèche ni clic sur la ligne. */
+  dansFenetre?: boolean;
 }) {
   const fait = etat === "livre";
   const cherche = etat === "en_cours";
@@ -293,7 +414,7 @@ function LigneAvisUI({
   return (
     <li
       className={`ligne-avis ligne-avis--cliquable ${ouvert ? "ligne-avis--ouverte" : fait ? "ligne-avis--faite" : ""} ${verrou ? "ligne-avis--verrou" : ""}`}
-      onClick={(e) => clicSurCarte(e, onDeplier)}
+      onClick={(e) => { if (!dansFenetre) clicSurCarte(e, onDeplier); }}
     >
       <div className="ligne-avis__tete">
         {/* La case marque l'avis livré ; le reste de la ligne l'ouvre ou le replie. */}
@@ -305,6 +426,7 @@ function LigneAvisUI({
           onChange={() => onChange(fait ? null : "livre")}
           aria-label={`${fait ? "Décocher" : "Marquer livré"} : ${a.nom}`}
         />
+        <ImageAvis avis={a} taille={32} />
         <span className="ligne-avis__nom">{a.nom}</span>
         {a.protection && (
           <Etat texte={a.protection} definition={definitionEtat(a.protection) ?? a.protection} className="etiquette etiquette--avis" />
@@ -319,6 +441,7 @@ function LigneAvisUI({
         {!ouvert && cherche && <span className="etiquette etiquette--groupe">Cherche un groupe</span>}
         {!ouvert && chasseurs.length > 0 && <span className="discret">{chasseurs.length} en chasse</span>}
         <span className="ligne-avis__recompense">{recompense(a)}</span>
+        {!dansFenetre && (
         <button
           type="button"
           className="ligne-avis__deplier"
@@ -331,6 +454,7 @@ function LigneAvisUI({
             <path d="M6 9l6 6 6-6" />
           </svg>
         </button>
+        )}
       </div>
 
       {verrou && (

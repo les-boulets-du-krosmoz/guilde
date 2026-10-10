@@ -1,11 +1,18 @@
+import { ordreParNom } from "../data/ordres";
 import { ouEstLaQuete } from "../data/series";
 import { cleDonjon, DONJONS_SUCCES, SUCCES_PAR_ID } from "../data/succesDonjons";
-import type { Annonce, MetierMembre, Personnage } from "./types";
+import type { Annonce, MetierMembre, OrdreRequis, Personnage } from "./types";
 
 export const PLACES_DONJON = 8;
 
+/** Ordres acceptés d'une annonce, en reprenant l'ancien champ unique (ordre + ordre_min) s'il est seul rempli. */
+export function ordresDe(a: Pick<Annonce, "ordres" | "ordre" | "ordre_min">): OrdreRequis[] {
+  if (a.ordres?.length) return a.ordres;
+  return a.ordre ? [{ ordre: a.ordre, rang: a.ordre_min ?? 1 }] : [];
+}
+
 /** Nombre de places d'une sortie (organisateur compris) : celui choisi pour un donjon, aucune limite pour une quête. */
-export const placesDe = (a: Pick<Annonce, "type" | "places">): number | null => (a.type === "donjon" ? a.places ?? PLACES_DONJON : null);
+export const placesDe = (a: Pick<Annonce, "type" | "places">): number | null => (a.type === "donjon" ? a.places ?? PLACES_DONJON : a.places ?? null);
 
 /** Le succès « Duo » limite le groupe à 2 personnes. */
 export const PLACES_DUO = 2;
@@ -18,7 +25,15 @@ export function raisonRefus(a: Annonce, p: Personnage): string | null {
   if ((a.alignement_min || a.ordre_min) && p.alignement === "Neutre") return `Il faut être aligné (${p.nom} est neutre).`;
   if (a.alignement_min && p.niveau_quete_alignement !== null && p.niveau_quete_alignement < a.alignement_min)
     return `Alignement ${a.alignement_min} requis (${p.nom} est à ${p.niveau_quete_alignement}).`;
-  if (a.ordre_min && p.rang_ordre !== null && p.rang_ordre < a.ordre_min) return `Ordre ${a.ordre_min} requis (${p.nom} est au rang ${p.rang_ordre}).`;
+  // Ordres acceptés : il suffit d'appartenir à l'un d'eux, au rang demandé. Un ordre ou un rang non renseigné
+  // sur la fiche ne bloque pas : on ne refuse pas un membre sur une donnée qu'il n'a pas saisie.
+  const acceptes = ordresDe(a).map((x) => ({ ...x, o: ordreParNom(x.ordre) })).filter((x) => x.o);
+  if (acceptes.length) {
+    const ok = acceptes.some((x) => p.alignement === x.o!.camp && (!p.ordre || p.ordre === x.ordre) && (p.rang_ordre === null || p.rang_ordre >= x.rang));
+    if (!ok) return `Il faut faire partie de l'un de ces ordres : ${acceptes.map((x) => `${x.ordre} rang ${x.rang}`).join(", ")}.`;
+  } else if (a.ordre_min && p.rang_ordre !== null && p.rang_ordre < a.ordre_min) {
+    return `Rang ${a.ordre_min} requis dans l'ordre (${p.nom} est au rang ${p.rang_ordre}).`;
+  }
   return null;
 }
 
@@ -46,7 +61,10 @@ export function resumeAnnonce(a: Annonce): string[] {
   l.push(a.visibilite === "prive" ? "Groupe privé : sur invitation" : "Groupe ouvert : tout le monde peut rejoindre");
   if (a.niveau_min) l.push(`Niveau ${a.niveau_min} minimum`);
   if (a.alignement_min) l.push(`Alignement ${a.alignement_min} minimum`);
-  if (a.ordre_min) l.push(`Ordre ${a.ordre_min} minimum`);
+  const ordres = ordresDe(a);
+  if (ordres.length) l.push(`Ordre${ordres.length > 1 ? "s acceptés" : ""} : ${ordres.map((x) => `${x.ordre} rang ${x.rang} (${ordreParNom(x.ordre)?.rangs[x.rang - 1]?.nom ?? ""})`).join(" ou ")}`);
+  else if (a.ordre_min) l.push(`Rang d'ordre ${a.ordre_min} minimum`);
+  if (a.type === "quete" && a.places) l.push(`${a.places} places`);
   if (a.metiers.length) l.push(`Métiers : ${a.metiers.map((m) => `${m.metier} ${m.niveau}`).join(", ")}`);
   return l;
 }

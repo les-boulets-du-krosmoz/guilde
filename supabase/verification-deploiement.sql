@@ -13,7 +13,7 @@ union all select 'ressources_cochees', count(*) from public.ressources_cochees
 union all select 'dofus_souhaites', count(*) from public.dofus_souhaites
 order by 1;
 
--- 2. Ce que les migrations 003 à 014 doivent avoir créé (après coup : tout doit être à « oui »).
+-- 2. Ce que les migrations 003 à 017 doivent avoir créé (après coup : tout doit être à « oui »).
 select 'table avis_personnage (003)' as element,
        case when to_regclass('public.avis_personnage') is not null then 'oui' else 'NON' end as present
 union all select 'colonne membres.metamob (004)',
@@ -39,4 +39,10 @@ union all select 'tables annonces et annonces_participants (012)',
 union all select 'table annonces_invitations (013)',
        case when to_regclass('public.annonces_invitations') is not null then 'oui' else 'NON' end
 union all select 'colonne annonces.visibilite (014)',
-       case when exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'annonces' and column_name = 'visibilite') then 'oui' else 'NON' end;
+       case when exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'annonces' and column_name = 'visibilite') then 'oui' else 'NON' end
+union all select 'colonne personnages.avitons_solde (015)',
+       case when exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'personnages' and column_name = 'avitons_solde') then 'oui' else 'NON' end
+union all select 'colonne annonces.ordre (016)',
+       case when exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'annonces' and column_name = 'ordre') then 'oui' else 'NON' end
+union all select 'colonne annonces.ordres (017)',
+       case when exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'annonces' and column_name = 'ordres') then 'oui' else 'NON' end;
