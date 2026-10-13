@@ -29,6 +29,7 @@ export function Metiers() {
       .catch((e) => setErreur(e.message));
   }, []);
 
+
   const parMetier = useMemo(() => {
     const map = new Map<string, MetierMembre[]>();
     for (const m of metiers ?? []) {
@@ -56,6 +57,7 @@ export function Metiers() {
     <main className={`page ${metier ? "page--metiers" : ""}`}>
       <section>
         <h1>Métiers de la guilde</h1>
+        <p className="discret">Pour mettre à jour tes propres niveaux : <Link to="/mes-metiers">Mes métiers</Link>.</p>
         <ul className="grille-metiers">
           {METIERS.map((nom) => {
             const liste = parMetier.get(nom) ?? [];

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { BoutonDefi } from "../components/BoutonDefi";
 import { IconeDonjon, imageDonjon } from "../components/IconeDonjon";
 import { IconeSortie } from "../components/IconeSortie";
@@ -13,10 +14,11 @@ import {
 } from "../lib/annonces";
 import { ilYa } from "../lib/dates";
 import {
-  annoncerSurDiscord, annulerInvitation, chargerAnnonces, chargerGuilde, chargerMetiers, chargerSucces, enregistrerAnnonce, inviter,
+  annoncerSurDiscord, annulerInvitation, chargerAbsences, chargerAnnonces, chargerDispos, chargerGuilde, chargerMetiers, chargerSucces, enregistrerAnnonce, inviter,
   participer, repondreInvitation, retirerParticipation, supprimerAnnonce, type ChampsAnnonce, type DonneesGuilde,
 } from "../lib/donnees";
 import { useSession } from "../lib/session";
+import { libelleCase, meilleursCreneaux, prochaineDate, versChampDate as versChampDateLocal, type Absence, type Dispos } from "../lib/disponibilites";
 import type { Annonce, InvitationAnnonce, Membre, MetierMembre, MetierRequis, OrdreRequis, ParticipantAnnonce, Personnage, SuccesDonjon } from "../lib/types";
 import { Chargement } from "./Acces";
 
@@ -35,6 +37,20 @@ export function Annonces() {
   const [jour, setJour] = useState<Date | null>(null);
   const [edition, setEdition] = useState<Annonce | "nouvelle" | null>(null);
   const [filtre, setFiltre] = useState<"tout" | "donjon" | "quete">("tout");
+  const [dispos, setDispos] = useState<Dispos>(new Map());
+  const [absences, setAbsences] = useState<Absence[]>([]);
+  const [params, setParams] = useSearchParams();
+  const [prefill, setPrefill] = useState<{ date?: string; invites?: string[] } | null>(null);
+  useEffect(() => {
+    chargerDispos().then((d) => setDispos(d.dispos)).catch(() => {});
+    chargerAbsences().then(setAbsences).catch(() => {});
+  }, []);
+  useEffect(() => {
+    if (!params.get("nouvelle")) return;
+    setPrefill({ date: params.get("date") ?? undefined, invites: params.get("invites")?.split(",").filter(Boolean) });
+    setEdition("nouvelle");
+    setParams({}, { replace: true });
+  }, [params, setParams]);
 
   const charger = useCallback(async () => {
     try {
@@ -123,11 +139,14 @@ export function Annonces() {
         <FormulaireAnnonce
           initiale={edition === "nouvelle" ? null : edition}
           inscrits={edition === "nouvelle" ? 1 : participants.filter((x) => x.annonce_id === edition.id).length}
+          prefill={edition === "nouvelle" ? prefill : null}
+          dispos={dispos}
+          absences={absences}
           auteurId={membre.id}
           membres={[...guilde.membres.values()].filter((m) => m.valide && m.id !== membre.id)}
           persos={guilde.personnages}
           mesPersos={mesPersos}
-          onAnnuler={() => setEdition(null)}
+          onAnnuler={() => { setEdition(null); setPrefill(null); }}
           onFini={async () => { setEdition(null); await charger(); }}
           onErreur={setErreur}
         />
@@ -415,8 +434,13 @@ function PanneauInvitation({ membres, persos, onEnvoyer, onAnnuler }: { membres:
 const QUETES_PAR_SERIE = CATEGORIES.flatMap((c) => c.series.filter((s) => s.quetes.length).map((s) => ({ nom: c.estDofus ? `Dofus ${s.nom}` : s.nom, quetes: s.quetes })));
 const ETIQUETTE_DONJON = (d: (typeof DONJONS_SUCCES)[number]) => `${d.nom} — ${d.boss} (niv. ${d.niveau})`;
 
-function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, persos, mesPersos, onAnnuler, onFini, onErreur }: {
+function FormulaireAnnonce({ initiale, inscrits, prefill, dispos, absences, auteurId, membres, persos, mesPersos, onAnnuler, onFini, onErreur }: {
   initiale: Annonce | null;
+  /** Valeurs proposées par le Calendrier (date du créneau, membres invités). */
+  prefill: { date?: string; invites?: string[] } | null;
+  /** Disponibilités habituelles de la guilde, pour suggérer des créneaux. */
+  dispos: Dispos;
+  absences: Absence[];
   /** Personnes déjà inscrites (1 à la création : l'organisateur) : on ne peut pas descendre en dessous. */
   inscrits: number;
   auteurId: string;
@@ -429,7 +453,7 @@ function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, persos, mesP
 }) {
   const [titre, setTitre] = useState(initiale?.titre ?? "");
   const [description, setDescription] = useState(initiale?.description ?? "");
-  const [date, setDate] = useState(initiale?.date_prevue ? versChampDate(initiale.date_prevue) : "");
+  const [date, setDate] = useState(initiale?.date_prevue ? versChampDate(initiale.date_prevue) : prefill?.date ?? "");
   const [type, setType] = useState<"donjon" | "quete">(initiale?.type ?? "donjon");
   const [visibilite, setVisibilite] = useState<"ouvert" | "prive">(initiale?.visibilite ?? "ouvert");
   const [places, setPlaces] = useState(initiale?.places ?? PLACES_DONJON);
@@ -449,7 +473,9 @@ function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, persos, mesP
   const [placesQuete, setPlacesQuete] = useState(initiale?.type === "quete" ? initiale.places ?? 8 : 8);
   const [metiersReq, setMetiersReq] = useState<MetierRequis[]>(initiale?.metiers ?? []);
   const [enCours, setEnCours] = useState(false);
-  const [invites, setInvites] = useState<string[]>([]);
+  const [invites, setInvites] = useState<string[]>(prefill?.invites ?? []);
+  // Créneaux suggérés : là où l'organisateur et ses invités sont le plus souvent dispo (toute la guilde s'il n'invite personne).
+  const suggestions = dispos.size ? meilleursCreneaux(dispos, invites.length ? [auteurId, ...invites] : [...dispos.keys()], 3, absences) : [];
 
   const dj = DONJONS_SUCCES.find((d) => ETIQUETTE_DONJON(d) === donjonTexte);
   // Le succès Duo se fait à 2 : la jauge est alors bloquée à 2 places.
@@ -575,6 +601,19 @@ function FormulaireAnnonce({ initiale, inscrits, auteurId, membres, persos, mesP
           <span>Date et heure <span className="discret">(vide = en attente)</span></span>
           <input type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} />
         </label>
+        {suggestions.length > 0 && (
+          <div className="fa-champ fa-12 fa-suggestions">
+            <span>Meilleurs créneaux {invites.length ? "pour toi et tes invités" : "de la guilde"} <span className="discret">(d'après le Calendrier)</span></span>
+            <div className="fa-puces">
+              {suggestions.map(({ c, dispo }) => (
+                <button key={c} type="button" className="fa-puce" onClick={() => setDate(versChampDateLocal(prochaineDate(c)))}
+                  title={`Le prochain : ${prochaineDate(c).toLocaleString("fr-FR", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })}`}>
+                  {libelleCase(c)} · {dispo.length}{invites.length ? ` sur ${invites.length + 1}` : ""} dispo
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         {type === "quete" && queteId === "autre" && (
           <label className="fa-champ fa-12">
             <span>Nom de la quête</span>

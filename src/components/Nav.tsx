@@ -72,18 +72,19 @@ export function Nav() {
           actif={["/quetes", "/progression", "/avis", "/mes-metiers"].some((c) => pathname.startsWith(c))}
           liens={[
             { to: "/quetes", libelle: "Mes quêtes", detail: "Dofus, Frigost, Tour du monde, Emma", actif: pathname.startsWith("/quetes") && !search.includes("cat=succes") },
-            { to: "/quetes?cat=succes", libelle: "Succès de donjon", detail: "Les 131 boss et leurs succès", actif: pathname.startsWith("/quetes") && search.includes("cat=succes") },
-            { to: "/mes-metiers", libelle: "Mes métiers", detail: "Niveaux et crafts à prévoir" },
+            { to: "/quetes?cat=succes", libelle: "Donjons", detail: "Succès et quêtes liées des donjons", actif: pathname.startsWith("/quetes") && search.includes("cat=succes") },
+            { to: "/mes-metiers", libelle: "Mes métiers", detail: "Tes niveaux, enregistrés automatiquement" },
             { to: "/progression", libelle: "Où en est la guilde", detail: "Qui en est à quelle étape" },
             { to: "/avis", libelle: "Avis de recherche", detail: "Avis, avitons et parchemins" },
           ]}
         />
         <MenuDeroulant
           libelle="Guilde"
-          actif={["/personnages", "/metiers", "/perso/"].some((c) => pathname.startsWith(c))}
+          actif={["/personnages", "/metiers", "/perso/", "/calendrier"].some((c) => pathname.startsWith(c))}
           liens={[
             { to: "/personnages", libelle: "Personnages", detail: "Tous les membres et leurs personnages" },
-            { to: "/metiers", libelle: "Métiers", detail: "Qui peut fabriquer quoi" },
+            { to: "/metiers", libelle: "Métiers de la guilde", detail: "Qui peut fabriquer quoi" },
+            { to: "/calendrier", libelle: "Calendrier", detail: "Les dispos de la guilde, trouver un créneau" },
           ]}
         />
       </nav>

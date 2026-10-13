@@ -19,6 +19,8 @@ type Props = {
   taille?: number;
   lien?: boolean;
   infobulle?: string;
+  /** Force l'affichage « absent » (cercle rouge), ex. pour une date future dans le Calendrier. */
+  absent?: boolean;
 };
 
 const NOM_STATUT: Record<Statut, string> = { dispo: "dispo", absent: "absent", indispo: "indispo" };
@@ -31,12 +33,19 @@ export function useStatutPerso(perso: { id: string; membre_id?: string }, repli 
 }
 
 /** Cercle plein = principal, pointillé = mule. Halo : vert dispo, orange absent, rouge indispo, aucun si hors ligne. */
-export function Pastille({ perso, dispo = false, taille = 36, lien = true, infobulle }: Props) {
+export function Pastille({ perso, dispo = false, taille = 36, lien = true, infobulle, absent }: Props) {
   const [imageCassee, setImageCassee] = useState(false);
   const statut = useStatutPerso(perso, dispo);
+  const { statuts, absents } = useStatuts();
+  const officier = !!(perso.membre_id && statuts.get(perso.membre_id)?.est_officier);
+  // Absent (Calendrier) : aujourd'hui, ou à la date que la page affiche (absent forcé).
+  const absence = perso.membre_id ? absents.get(perso.membre_id) : undefined;
+  const estAbsent = absent ?? !!absence;
+  const finAbsence = absence ? new Date(`${absence.fin}T12:00:00`).toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) : "";
+  const etat = estAbsent ? (absence ? `absent${absence.motif ? ` (${absence.motif})` : ""} jusqu'au ${finAbsence}` : "absent") : statut ? NOM_STATUT[statut] : "";
   const titre =
-    infobulle ?? `${perso.nom} (${perso.est_principal ? "principal" : "mule"}${statut ? `, ${NOM_STATUT[statut]}` : ""})`;
-  const classes = ["pastille", perso.est_principal ? "" : "pastille--mule", statut ? `pastille--${statut}` : ""]
+    infobulle ?? `${perso.nom} (${perso.est_principal ? "principal" : "mule"}${officier ? ", officier" : ""}${etat ? `, ${etat}` : ""})`;
+  const classes = ["pastille", perso.est_principal ? "" : "pastille--mule", estAbsent ? "pastille--absence" : statut ? `pastille--${statut}` : "", officier ? "pastille--officier" : ""]
     .filter(Boolean)
     .join(" ");
   const style = { width: taille, height: taille, background: couleurDe(perso.nom), fontSize: taille * 0.36 };

@@ -7,5 +7,17 @@ const { version } = JSON.parse(readFileSync(new URL("./package.json", import.met
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        // Bibliothèques (React, Supabase…) à part : elles changent rarement, le navigateur les garde d'une version à l'autre.
+        // Données du jeu (quêtes, succès, avis) dans un morceau à part, chargé seulement par les pages qui en ont besoin.
+        manualChunks(id) {
+          if (id.includes("node_modules")) return "bibliotheques";
+          if (id.includes("/src/data/")) return "donnees-jeu";
+        },
+      },
+    },
+  },
   define: { __VERSION_SITE__: JSON.stringify(version) },
 });

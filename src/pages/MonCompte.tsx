@@ -1,7 +1,7 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Pastille } from "../components/Pastille";
-import { ALIGNEMENTS, CLASSES, METIERS, METIERS_AUTRES, METIERS_CRAFT, METIERS_RECOLTE, ORDRES } from "../data/constantes";
+import { ALIGNEMENTS, CLASSES, METIERS_AUTRES, METIERS_CRAFT, METIERS_RECOLTE, ORDRES } from "../data/constantes";
 import { ilYa } from "../lib/dates";
 import { FormulaireOcre } from "../components/FormulaireOcre";
 import { IconeMetier } from "../components/IconeMetier";
@@ -52,7 +52,10 @@ export function MonCompte() {
         </ul>
       </section>
 
-      <FormMetiers />
+      <section className="carte">
+        <h2>Mes métiers</h2>
+        <p>Tes niveaux de métier se mettent à jour dans la page <Link to="/mes-metiers">Mes métiers</Link> (menu Progression).</p>
+      </section>
       <FormMetamob />
       <OcreAlaMain />
     </main>
@@ -328,8 +331,9 @@ export function FormMetiers({ onEnregistre }: { onEnregistre?: () => void } = {}
   const { membre } = useSession();
   const [initial, setInitial] = useState<Map<string, MetierMembre>>(new Map());
   const [valeurs, setValeurs] = useState<Record<string, string>>({});
-  const [message, setMessage] = useState<string | null>(null);
-  const [enCours, setEnCours] = useState(false);
+  const [etats, setEtats] = useState<Record<string, "encours" | "ok" | "erreur">>({});
+  const [erreur, setErreur] = useState<string | null>(null);
+  const minuteries = useRef<Record<string, number>>({});
 
   async function charger() {
     if (!membre) return;
@@ -342,36 +346,40 @@ export function FormMetiers({ onEnregistre }: { onEnregistre?: () => void } = {}
     charger();
   }, [membre?.id]);
 
-  async function enregistrer(e: FormEvent) {
-    e.preventDefault();
+  // Sauvegarde automatique d'un métier, un instant après la dernière frappe (ou en quittant le champ).
+  async function sauver(metier: string, texte: string) {
     if (!membre) return;
-    setEnCours(true);
-    setMessage(null);
-
-    // On n'envoie que ce qui a changé, pour ne pas remettre à zéro les dates de mise à jour.
-    const aEcrire: { membre_id: string; metier: string; niveau: number }[] = [];
-    const aSupprimer: string[] = [];
-    for (const metier of METIERS) {
-      const saisi = Number(valeurs[metier] || 0);
-      const avant = initial.get(metier)?.niveau ?? 0;
-      if (saisi === avant) continue;
-      if (saisi > 0) aEcrire.push({ membre_id: membre.id, metier, niveau: saisi });
-      else aSupprimer.push(metier);
+    const saisi = Math.min(200, Math.max(0, Number(texte || 0)));
+    const avant = initial.get(metier)?.niveau ?? 0;
+    if (!Number.isFinite(saisi) || saisi === avant) return;
+    setEtats((e) => ({ ...e, [metier]: "encours" }));
+    const { error } = saisi > 0
+      ? await supabase.from("metiers_membre").upsert({ membre_id: membre.id, metier, niveau: saisi })
+      : await supabase.from("metiers_membre").delete().eq("membre_id", membre.id).eq("metier", metier);
+    if (error) {
+      setEtats((e) => ({ ...e, [metier]: "erreur" }));
+      setErreur(`${metier} : ${error.message}`);
+      return;
     }
-
-    const erreurs: string[] = [];
-    if (aEcrire.length) {
-      const { error } = await supabase.from("metiers_membre").upsert(aEcrire);
-      if (error) erreurs.push(error.message);
-    }
-    if (aSupprimer.length) {
-      const { error } = await supabase.from("metiers_membre").delete().eq("membre_id", membre.id).in("metier", aSupprimer);
-      if (error) erreurs.push(error.message);
-    }
-    setEnCours(false);
-    setMessage(erreurs.length ? "Erreur : " + erreurs.join(" ; ") : aEcrire.length + aSupprimer.length === 0 ? "Aucun changement." : "Métiers enregistrés.");
-    await charger();
+    setInitial((m) => {
+      const n = new Map(m);
+      if (saisi > 0) n.set(metier, { membre_id: membre.id, metier, niveau: saisi, maj_le: new Date().toISOString() } as MetierMembre);
+      else n.delete(metier);
+      return n;
+    });
+    setEtats((e) => ({ ...e, [metier]: "ok" }));
+    setTimeout(() => setEtats((e) => (e[metier] === "ok" ? { ...e, [metier]: undefined as never } : e)), 2000);
+    setErreur(null);
     onEnregistre?.();
+  }
+  function changer(metier: string, texte: string) {
+    setValeurs((v) => ({ ...v, [metier]: texte }));
+    window.clearTimeout(minuteries.current[metier]);
+    minuteries.current[metier] = window.setTimeout(() => sauver(metier, texte), 800);
+  }
+  function quitter(metier: string) {
+    window.clearTimeout(minuteries.current[metier]);
+    sauver(metier, valeurs[metier] ?? "");
   }
 
   // Fonction de rendu (et non composant) : sinon le champ perdrait le focus à chaque frappe.
@@ -389,9 +397,13 @@ export function FormMetiers({ onEnregistre }: { onEnregistre?: () => void } = {}
           min={0}
           max={200}
           value={valeurs[metier] ?? ""}
-          onChange={(e) => setValeurs((v) => ({ ...v, [metier]: e.target.value }))}
+          onChange={(e) => changer(metier, e.target.value)}
+          onBlur={() => quitter(metier)}
         />
-        {maj && <span className="discret">{ilYa(maj)}</span>}
+        {etats[metier] === "encours" ? <span className="discret">…</span>
+          : etats[metier] === "ok" ? <span className="vert">✓ enregistré</span>
+          : etats[metier] === "erreur" ? <span className="erreur">erreur</span>
+          : maj && <span className="discret">{ilYa(maj)}</span>}
       </div>
     );
   }
@@ -399,10 +411,10 @@ export function FormMetiers({ onEnregistre }: { onEnregistre?: () => void } = {}
   return (
     <section className="carte">
       <div className="carte__entete">
-        <h2>Métiers du compte</h2>
+        <h2>Mes métiers</h2>
         <span className="discret">Communs à tous tes personnages.</span>
       </div>
-      <form onSubmit={enregistrer}>
+      <div>
         <div className="metiers-saisie">
           <fieldset className="groupe-metiers">
             <legend>Récolte</legend>
@@ -425,11 +437,9 @@ export function FormMetiers({ onEnregistre }: { onEnregistre?: () => void } = {}
             {METIERS_AUTRES.map(champMetier)}
           </fieldset>
         </div>
-        <div className="formulaire__actions">
-          <button type="submit" className="bouton bouton--or" disabled={enCours}>Enregistrer les métiers</button>
-          {message && <span role="status">{message}</span>}
-        </div>
-      </form>
+        <p className="discret-taille">Chaque niveau s'enregistre tout seul. Mets 0 ou vide pour retirer un métier.</p>
+        {erreur && <p className="erreur" role="alert">{erreur}</p>}
+      </div>
     </section>
   );
 }

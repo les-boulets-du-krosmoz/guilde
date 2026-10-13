@@ -302,3 +302,86 @@ export async function retirerParticipation(annonceId: string, personnageId: stri
 export async function annoncerSurDiscord(annonceId: string, details: string[]): Promise<void> {
   await supabase.functions.invoke("annoncer-sortie", { body: { annonce_id: annonceId, details } }).catch(() => {});
 }
+
+// ---------- Disponibilités (semaine type) ----------
+
+/** Disponibilités de toute la guilde, et la date de mise à jour de chaque membre. Table absente : rien. */
+export async function chargerDispos(): Promise<{ dispos: Map<string, Set<number>>; majLe: Map<string, string> }> {
+  const { data, error } = await supabase.from("disponibilites").select("membre_id, creneaux, maj_le");
+  if (error) {
+    if (error.code === "42P01" || error.code === "PGRST205") return { dispos: new Map(), majLe: new Map() };
+    throw error;
+  }
+  const lignes = (data ?? []) as { membre_id: string; creneaux: number[]; maj_le: string }[];
+  return {
+    dispos: new Map(lignes.map((l) => [l.membre_id, new Set(l.creneaux)])),
+    majLe: new Map(lignes.map((l) => [l.membre_id, l.maj_le])),
+  };
+}
+
+export async function enregistrerDispos(membreId: string, creneaux: number[]): Promise<void> {
+  const { error } = await supabase.from("disponibilites").upsert({ membre_id: membreId, creneaux: [...creneaux].sort((a, b) => a - b) });
+  if (error) throw error;
+}
+
+// ---------- Absences datées et liens utiles ----------
+
+const tableAbsente = (e: { code?: string } | null) => !!e && (e.code === "42P01" || e.code === "PGRST205");
+
+export async function chargerAbsences(): Promise<import("./disponibilites").Absence[]> {
+  const aujourdhui = new Date().toISOString().slice(0, 10);
+  const { data, error } = await supabase.from("absences").select("id, membre_id, debut, fin, motif").gte("fin", aujourdhui).order("debut");
+  if (tableAbsente(error)) return [];
+  if (error) throw error;
+  return (data ?? []) as import("./disponibilites").Absence[];
+}
+
+export async function ajouterAbsence(membreId: string, debut: string, fin: string, motif: string | null): Promise<void> {
+  const { error } = await supabase.from("absences").insert({ membre_id: membreId, debut, fin, motif });
+  if (error) throw error;
+}
+
+export async function supprimerAbsence(id: string): Promise<void> {
+  const { error } = await supabase.from("absences").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export type LienUtile = { id: string; titre: string; url: string; description: string | null; ordre: number };
+
+export async function chargerLiens(): Promise<LienUtile[]> {
+  const { data, error } = await supabase.from("liens_utiles").select("id, titre, url, description, ordre").order("ordre").order("cree_le");
+  if (tableAbsente(error)) return [];
+  if (error) throw error;
+  return (data ?? []) as LienUtile[];
+}
+
+export async function enregistrerLien(lien: Omit<LienUtile, "id"> & { id?: string }, auteurId: string): Promise<void> {
+  const { id, ...champs } = lien;
+  const { error } = id
+    ? await supabase.from("liens_utiles").update(champs).eq("id", id)
+    : await supabase.from("liens_utiles").insert({ ...champs, cree_par: auteurId });
+  if (error) throw error;
+}
+
+export async function supprimerLien(id: string): Promise<void> {
+  const { error } = await supabase.from("liens_utiles").delete().eq("id", id);
+  if (error) throw error;
+}
+
+// ---------- Quêtes liées aux donjons ----------
+
+/** Parmi ces quêtes, celles qu'un personnage a terminées. */
+export async function chargerQuetesFaites(personnageId: string, ids: string[]): Promise<Set<string>> {
+  if (!ids.length) return new Set();
+  const { data, error } = await supabase.from("quetes_terminees").select("quete_id").eq("personnage_id", personnageId).in("quete_id", ids);
+  if (error) throw error;
+  return new Set((data ?? []).map((x: { quete_id: string }) => x.quete_id));
+}
+
+/** Coche ou décoche une seule quête (sans toucher aux autres étapes). */
+export async function marquerQuete(personnageId: string, queteId: string, faite: boolean): Promise<void> {
+  const { error } = faite
+    ? await supabase.from("quetes_terminees").upsert({ personnage_id: personnageId, quete_id: queteId })
+    : await supabase.from("quetes_terminees").delete().eq("personnage_id", personnageId).eq("quete_id", queteId);
+  if (error) throw error;
+}

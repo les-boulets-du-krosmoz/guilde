@@ -18,6 +18,7 @@
   --rouge: #e06c6c;
   --bleu-independant: #6ea8e6;
   --violet-libre: #b49be8;
+  --violet-absence: #9b6fe0;
   --orange-fond: #3a2f1c;
   --bleu-fond: #1f2c3d;
   --bleu: #a9cdf2;
@@ -80,7 +81,7 @@ input, select {
 .nav__dispo-etat { color: var(--vert-clair); font-weight: 600; font-size: 14px; }
 
 /* ---------- Mise en page ---------- */
-.page { padding: 40px 56px; display: flex; flex-direction: column; gap: 24px; max-width: 1440px; }
+.page { padding: 40px 56px; display: flex; flex-direction: column; gap: 24px; max-width: 1440px; width: 100%; margin: 0 auto; box-sizing: border-box; }
 .entete { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
 .carte { padding: 24px; background: var(--carte); border: 1px solid var(--trait); border-radius: 16px; display: flex; flex-direction: column; gap: 16px; }
 .carte__entete { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
@@ -99,10 +100,10 @@ input, select {
 /* ---------- Pastilles ---------- */
 .pastille {
   flex-shrink: 0; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
-  color: #fff; font-weight: 600; text-decoration: none; overflow: hidden; border: 2px solid var(--texte);
+  color: #fff; font-weight: 600; text-decoration: none; overflow: visible; border: 2px solid var(--texte); position: relative;
 }
 .pastille:hover { color: #fff; }
-.pastille img { width: 100%; height: 100%; object-fit: cover; }
+.pastille img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .pastille--mule { border-style: dashed; }
 .pastille--dispo { box-shadow: 0 0 0 3px var(--fond), 0 0 0 5px var(--vert); }
 .pastille--absent { box-shadow: 0 0 0 3px var(--fond), 0 0 0 5px var(--orange); }
@@ -179,7 +180,7 @@ input, select {
 .quete--faite { background: var(--fond-nav); opacity: 0.85; }
 .quete--actuelle { background: var(--carte-haute); border: 2px solid var(--or); opacity: 1; }
 .quete__corps { display: flex; flex-direction: column; gap: 10px; flex-grow: 1; }
-.quete__titre { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.quete__titre { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; }
 .quete__titre label, .quete__nom { font-size: 17px; font-weight: 600; }
 .etiquettes { display: flex; gap: 8px; flex-wrap: wrap; }
 .etiquette { padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 500; }
@@ -784,34 +785,6 @@ a.jauge__nom:hover { color: var(--or); }
   .groupes-sections > div + div { border-left: none; padding-left: 0; border-top: 1px solid var(--trait); padding-top: 16px; }
 }
 
-/* Mes métiers : planificateur de crafts */
-.planif__outils { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 16px; }
-.planif__outils .champ { display: flex; flex-direction: column; gap: 4px; }
-.planif__outils input[type="search"] { flex: 0 1 280px; }
-.planif__niveau { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
-.planif__regle { font-size: 13px; margin: 0; }
-.planif__grille { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
-.planif__recettes ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto; padding-right: 4px; }
-.recette { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; background: var(--carte-haute); border: 1px solid var(--trait); }
-.recette__icone { flex-shrink: 0; }
-.recette__corps { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
-.recette__titre { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
-.recette__ingredients { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; color: var(--texte-2); }
-.recette__ingredient { display: inline-flex; align-items: center; gap: 4px; }
-.recette__ajout { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.recette__ajout input { width: 56px; height: 36px; min-height: 0; text-align: center; }
-.recette__ajout .bouton { min-height: 36px; padding: 0 12px; }
-.repere { font-size: 11px; padding: 1px 8px; border-radius: 999px; }
-.repere--top { background: rgba(95, 191, 138, 0.15); color: var(--vert); }
-.repere--nul { background: rgba(224, 108, 108, 0.14); color: var(--rouge); }
-.repere--haut { background: rgba(255, 255, 255, 0.06); color: var(--discret); }
-.planif__plan { position: sticky; top: calc(var(--hauteur-nav, 72px) + 12px); padding: 14px; border-radius: 12px; border: 1px solid var(--trait-fort); background: var(--carte-haute); display: flex; flex-direction: column; gap: 10px; }
-.planif__plan h3 { margin: 0; font-size: 15px; }
-.planif__lignes, .planif__courses { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
-.planif__lignes li, .planif__courses li { display: flex; align-items: center; gap: 8px; }
-.planif__lignes li span { flex: 1; }
-.planif__actions { display: flex; align-items: center; gap: 12px; }
-@media (max-width: 960px) { .planif__grille { grid-template-columns: 1fr; } .planif__plan { position: static; } }
 
 /* Groupes à monter : sections l'une sous l'autre, aperçu de 3, filtre par allié, métiers à droite */
 .groupes-a-monter__recherche { flex: 0 1 240px; height: 34px; min-height: 0; font-size: 13px; padding: 0 10px; }
@@ -832,8 +805,6 @@ a.jauge__nom:hover { color: var(--or); }
 .groupes-section__entete { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 16px; }
 .groupes-section__entete .case { font-size: 13px; color: var(--texte-2); }
 .etiquette--soi { background: rgba(255, 255, 255, 0.06); color: var(--discret); font-size: 11px; }
-.planif__reference input { width: 90px; }
-.planif__pagination { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
 
 /* Avis : recherche, zones, grille de tuiles, fiche en fenêtre */
 .avis-outils { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
@@ -942,3 +913,96 @@ a.jauge__nom:hover { color: var(--or); }
 .bloc-annonces__quand { flex-shrink: 0; white-space: nowrap; }
 .titre-lien { color: inherit; text-decoration: none; }
 .titre-lien:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Alignement : une ligne d'onglets par camp, et la raison de l'aide sur chaque quête */
+.onglets--groupe { align-items: center; }
+.onglets__groupe { min-width: 76px; font-weight: 700; color: var(--texte-2); font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
+.etiquette--aide { background: rgba(95, 191, 138, 0.12); color: var(--vert); font-size: 12px; }
+.filtre-aide { margin: 4px 0 10px; font-size: 14px; color: var(--texte-2); }
+/* Onglets des Dofus primordiaux : l'onglet choisi se voit nettement (fond plein, anneau, autres atténués) */
+.onglet--primordial { transition: opacity 0.15s, box-shadow 0.15s; }
+.onglets:has(.onglet--primordial.onglet--actif) .onglet--primordial:not(.onglet--actif) { opacity: 0.6; }
+.onglets:has(.onglet--primordial.onglet--actif) .onglet--primordial:not(.onglet--actif):hover { opacity: 1; }
+.onglet--primordial.onglet--actif { background: var(--fa); color: var(--t); border: 2px solid var(--c); font-weight: 700;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 60%, transparent), 0 0 12px 3px color-mix(in srgb, var(--c) 45%, transparent), 0 0 26px 6px color-mix(in srgb, var(--c) 18%, transparent); }
+.onglet:focus-visible { outline: 2px solid var(--or); outline-offset: 3px; }
+.quete__objectif { margin: 6px 0; }
+.etiquette--theme { background: rgba(156, 199, 224, 0.12); color: #9cc7e0; font-size: 12px; }
+
+/* Calendrier des disponibilités */
+.calendrier-page { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.calendrier-page .cal-trouver { grid-column: 1 / -1; }
+.cal-grille { display: grid; grid-template-columns: 92px repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cal-grille__ligne { display: contents; }
+.cal-grille__jour { text-align: center; font-size: 12px; color: var(--discret); }
+.cal-grille__tranche { font-size: 12px; color: var(--texte-2); align-self: center; }
+.cal-case { height: 38px; min-height: 0; padding: 0; border-radius: 8px; border: 1px solid var(--trait); background: transparent; color: var(--texte); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.cal-case:hover { border-color: var(--trait-fort); }
+.cal-case--mienne { background: rgba(95, 191, 138, 0.25); border-color: var(--vert); color: var(--vert); }
+.cal-case--chaleur { background: rgba(224, 178, 92, calc(0.08 + var(--part, 0) * 0.62)); border-color: transparent; color: #f6ead3; }
+.cal-case--tous { box-shadow: inset 0 0 0 2px var(--vert); }
+.cal-case--vue { outline: 2px solid var(--or); outline-offset: 2px; }
+.cal-vue { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.cal-vue__membre { display: inline-flex; align-items: center; gap: 6px; }
+.cal-creneaux { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.cal-creneaux li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--trait); }
+.cal-creneaux li.cal-creneau--complet { border-color: var(--vert); }
+.cal-creneau__nb { font-weight: 600; }
+@media (max-width: 860px) { .calendrier-page { grid-template-columns: 1fr; } .cal-grille { grid-template-columns: 70px repeat(7, minmax(0, 1fr)); } }
+.fa-suggestions .fa-puce { border-color: var(--or); color: var(--or); }
+.objectif__creneau strong { color: var(--or); font-weight: 600; }
+
+/* Calendrier : absences datées */
+.cal-absences__titre { margin: 18px 0 0; font-size: 16px; }
+.cal-absences { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.cal-absences li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--trait); font-size: 14px; }
+.cal-absences__ajout { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; }
+.cal-absences__ajout input { height: 40px; min-height: 0; }
+.cal-absences__motif { flex: 1 1 140px; }
+
+/* Accueil : colonne de droite (liens utiles, Dofus) et liens utiles */
+.accueil-colonne { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.liens-utiles__liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.liens-utiles__liste li { display: flex; flex-direction: column; gap: 2px; }
+.liens-utiles__haut { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.liens-utiles__haut a { font-weight: 600; }
+.liens-utiles__gestion { display: inline-flex; gap: 6px; }
+.liens-utiles__form { display: flex; flex-direction: column; gap: 8px; }
+.liens-utiles__form input { height: 38px; min-height: 0; font-size: 14px; }
+.liens-utiles__actions { display: flex; gap: 8px; }
+.liens-utiles__plus { align-self: flex-start; }
+
+/* Absent (Calendrier, vacances…) : cercle violet, distinct du rouge « indispo » ; officier : étoile dorée en bas à droite de la pastille */
+.pastille--absence { box-shadow: 0 0 0 3px var(--fond), 0 0 0 5px var(--violet-absence); }
+.pastille--officier::after {
+  content: "★"; position: absolute; right: -0.35em; bottom: -0.35em; width: 1.25em; height: 1.25em; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: max(9px, 0.9em); line-height: 1;
+  background: var(--or); color: #1b1712; box-shadow: 0 0 0 2px var(--fond);
+}
+
+/* Application installée (plein écran) : ne pas passer sous l'encoche ou la barre d'état du téléphone */
+@media (display-mode: standalone) {
+  .nav { padding-top: max(12px, env(safe-area-inset-top)); }
+  body { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+/* Onglets d'alignement aux couleurs du jeu : Bonta bleu et blanc, Brâkmar rouge sombre */
+.onglet-camp { display: contents; }
+.onglet-camp--bonta .onglet { background: linear-gradient(135deg, rgba(79, 143, 214, 0.28), rgba(240, 245, 255, 0.10)); border-color: #8db8ee; color: #e8f0ff; }
+.onglet-camp--brakmar .onglet { background: linear-gradient(135deg, rgba(122, 22, 34, 0.45), rgba(60, 10, 16, 0.35)); border-color: #8e1f2a; color: #f2c4c8; }
+.onglet-camp .onglet:not(.onglet--actif) { opacity: 0.7; }
+.onglet-camp .onglet:not(.onglet--actif):hover { opacity: 1; }
+.onglet-camp--bonta .onglet--actif { border: 2px solid #b9d4f6; box-shadow: 0 0 12px 3px rgba(141, 184, 238, 0.45); font-weight: 700; }
+.onglet-camp--brakmar .onglet--actif { border: 2px solid #b8323f; box-shadow: 0 0 12px 3px rgba(184, 50, 63, 0.45); font-weight: 700; }
+.onglets__groupe--bonta { color: #8db8ee; }
+.onglets__groupe--brakmar { color: #d0505e; }
+
+/* Quêtes liées à un donjon (catégorie Donjons et étapes de donjon) */
+.quetes-liees { display: flex; flex-direction: column; gap: 6px; margin: 8px 0; }
+.quetes-liees__titre { font-size: 13px; font-weight: 600; color: var(--texte-2); }
+.quetes-liees ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.quetes-liees li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.quetes-liees__nom { font-size: 14px; }
+.quetes-liees--faite .quetes-liees__nom { color: var(--discret); text-decoration: line-through; }
+.tableau-succes__liees { font-size: 13px; white-space: nowrap; }
+.tableau-succes__panneau { grid-column: 1 / -1; flex-basis: 100%; padding: 4px 0 4px 44px; }

@@ -5,6 +5,7 @@ import { TexteEtats } from "../components/Etat";
 import { NomAvecPastille, Pastille } from "../components/Pastille";
 import { DOFUS, type Contenu, type Dofus, type Ressource } from "../data/dofus";
 import { donjonDeLEtape } from "../data/donjons";
+import { QuetesLiees, quetesLiees, TOUS_IDS_LIEES } from "../components/QuetesLiees";
 import { donjonDuBoss, TOTAL_SUCCES } from "../data/succesDonjons";
 import { BoutonDefi } from "../components/BoutonDefi";
 import { TableauSucces } from "../components/TableauSucces";
@@ -13,7 +14,7 @@ import { IconeDonjon, imageDonjon } from "../components/IconeDonjon";
 import { aDesQuetes, CATEGORIES, type Categorie } from "../data/series";
 import { clicSurCarte } from "../lib/clicCarte";
 import { ilYa } from "../lib/dates";
-import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerRessources, chargerSouhaits, chargerSucces, definirSucces, definirSuccesPlusieurs, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
+import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerQuetesFaites, chargerRessources, chargerSouhaits, chargerSucces, definirSucces, definirSuccesPlusieurs, marquerQuete, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
 import { ancetres, avancement, cocher, decocher, etapeActuelle, evaluerPrerequis } from "../lib/quetes";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -61,6 +62,19 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   const [annuaire, setAnnuaire] = useState<{ persos: Map<string, Personnage>; membres: Map<string, Membre> } | null>(null);
   const [saisieAide, setSaisieAide] = useState<{ queteId: string; note: string } | null>(null);
   const [aideMasse, setAideMasse] = useState(false);
+  // Alignement : par défaut, seulement les quêtes où l'aide d'un membre est utile (les chaînes font 100 quêtes).
+  const [seulementAide, setSeulementAide] = useState(true);
+  // Quêtes liées aux donjons des étapes : celles déjà faites par le personnage.
+  const [liees, setLiees] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    if (!persoId) return;
+    chargerQuetesFaites(persoId, TOUS_IDS_LIEES).then(setLiees).catch(() => {});
+  }, [persoId]);
+  async function basculerLiee(queteId: string, faite: boolean) {
+    if (!persoId) return;
+    setLiees((l) => { const n = new Set(l); if (faite) n.add(queteId); else n.delete(queteId); return n; });
+    try { await marquerQuete(persoId, queteId, faite); } catch { /* l'état est rechargé à la prochaine visite */ }
+  }
   // Succès de donjon visés ou faits par toute la guilde.
   const [succes, setSucces] = useState<SuccesDonjon[]>([]);
   const [erreur, setErreur] = useState<string | null>(null);
@@ -275,6 +289,8 @@ function QuetesPerso({ persoId }: { persoId: string }) {
     }
   }
 
+  const filtrable = !!dofus.filtreAide;
+  const filtreAide = filtrable && seulementAide;
   const guideDpln = (dofus.sources ?? []).find((src) => src.url.includes("dofuspourlesnoobs.com"))?.url;
 
   if (estSucces) {
@@ -284,7 +300,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
         <div className="entete">
           <div>
             <Link to={`/perso/${perso.id}`}>Retour à {perso.nom} ({perso.classe} {perso.niveau})</Link>
-            <h1>{modifiable ? "Succès de donjon" : `Succès de donjon de ${perso.nom}`}</h1>
+            <h1>{modifiable ? "Donjons" : `Donjons de ${perso.nom}`}</h1>
             <p className="discret">Une ligne par boss, une case par succès, d'après les données du jeu.</p>
           </div>
           <div className="progression-globale">
@@ -330,6 +346,12 @@ function QuetesPerso({ persoId }: { persoId: string }) {
         <OngletsSeries series={categorie.series} actif={dofus} onChoix={(d) => { setDofus(d); setAideMasse(false); }} libelle={categorie.estDofus ? "Choix du Dofus" : "Choix de la zone"} />
       )}
 
+      {filtrable && (
+        <label className="case filtre-aide">
+          <input type="checkbox" checked={seulementAide} onChange={() => setSeulementAide(!seulementAide)} />
+          Seulement les quêtes où l'aide d'un membre est utile ({dofus.quetes.filter((q) => q.aide).length} sur {dofus.quetes.length})
+        </label>
+      )}
       {modifiable && !aideMasse && (
         <div className="aide-masse__ouvrir">
           <button type="button" className="bouton" onClick={() => setAideMasse(true)}>🤝 Aide en masse</button>
@@ -377,6 +399,8 @@ function QuetesPerso({ persoId }: { persoId: string }) {
 
       <ol className="liste-quetes">
         {dofus.quetes.map((q, i) => {
+          // Quête sans aide utile masquée (sauf l'étape en cours, pour savoir où on en est).
+          if (filtreAide && !q.aide && i !== etape) return null;
           const groupe = groupesLibres.get(i);
           const fait = faites.has(q.id);
           const actuelle = i === etape;
@@ -413,7 +437,13 @@ function QuetesPerso({ persoId }: { persoId: string }) {
               />
               <div className="quete__corps">
                 <div className="quete__titre">
+                  {dofus.unite === "boss" && (() => {
+                    const dj = donjonDuBoss(q.nom);
+                    return dj ? <IconeDonjon fichier={dj.icone} taille={30} titre={dj.boss} /> : null;
+                  })()}
                   <span className="quete__nom">{i + 1}. {q.nom}</span>
+                  {q.theme && <span className="etiquette etiquette--theme" title="Succès du jeu qui regroupe cette quête">{q.theme}</span>}
+                  {q.aide && <span className="etiquette etiquette--aide" title="Pourquoi l'aide d'un membre est utile">🤝 {q.aide.join(" · ")}</span>}
                   {independante && (
                     <span className="etiquette etiquette--independante etat" tabIndex={0}>
                       À cocher à part
@@ -445,7 +475,9 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                 <div className="etiquettes">
                   {q.contenu.map((c, j) => <Etiquette key={j} contenu={c} />)}
                 </div>
-                {(q.deroule ?? []).length > 0 && (
+                {/* Objectifs écrits du jeu : une ligne s'il n'y en a qu'un, sinon le déroulé complet à déplier. */}
+                {(q.deroule ?? []).length === 1 && <p className="quete__objectif discret-taille">Objectif : {q.deroule![0]}</p>}
+                {(q.deroule ?? []).length > 1 && (
                   <details className="quete__deroule">
                     <summary>Déroulé de la quête ({q.deroule!.length} étapes)</summary>
                     <ol>{q.deroule!.map((d, k) => <li key={k}>{d}</li>)}</ol>
@@ -474,19 +506,17 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                     </div>
                   );
                 })()}
+                {(() => {
+                  // Quêtes liées au donjon de cette étape, à cocher (partagées avec la catégorie Donjons).
+                  const nomDonjon = donjonDuBoss(q.nom)?.nom;
+                  return nomDonjon && quetesLiees(nomDonjon).length > 0 ? (
+                    <QuetesLiees donjon={nomDonjon} faites={new Set([...liees, ...faites])} modifiable={modifiable}
+                      onBasculer={(id, faite) => (dofus.quetes.some((x) => x.id === id) ? basculer(id) : basculerLiee(id, faite))} />
+                  ) : null;
+                })()}
                 {donjon && (
                   <div className="donjon-liens">
                     <a href={`${SITE_DPLN}${donjon.page}`} target="_blank" rel="noreferrer">Guide du donjon</a>
-                    {donjon.quetes.length > 0 && (
-                      <>
-                        <span className="discret">Autres quêtes dans ce donjon :</span>
-                        {donjon.quetes.map((x) => (
-                          <a key={x.page} className="bulle-lien" href={`${SITE_DPLN}${x.page}`} target="_blank" rel="noreferrer" title="Guide de la quête sur Dofus pour les Noobs">
-                            {x.nom}
-                          </a>
-                        ))}
-                      </>
-                    )}
                   </div>
                 )}
                 {prerequis.length > 0 && (
@@ -666,6 +696,22 @@ export function OngletsSeries({ series, actif, onChoix, libelle }: { series: Dof
     ) : (
       <button key={d.id} type="button" className="onglet onglet--vide" disabled>{d.nom} (à venir)</button>
     );
+  // Séries regroupées (alignement) : une ligne par groupe, avec son nom.
+  const groupes = [...new Set(series.map((d) => d.groupe).filter((g): g is string => !!g))];
+  if (groupes.length) {
+    return (
+      <div className="onglets-dofus" role="group" aria-label={libelle}>
+        {groupes.map((g) => (
+          <div key={g} className="onglets onglets--groupe">
+            <span className={`onglets__groupe onglets__groupe--${g === "Bonta" ? "bonta" : "brakmar"}`}>{g}</span>
+            {series.filter((d) => d.groupe === g).map((d) => (
+              <span key={d.id} className={`onglet-camp onglet-camp--${g === "Bonta" ? "bonta" : "brakmar"}`}>{onglet(d)}</span>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  }
   // Les primordiaux sur la première ligne, les autres Dofus en dessous.
   const primordiaux = series.filter((d) => d.primordial);
   const autres = series.filter((d) => !d.primordial);

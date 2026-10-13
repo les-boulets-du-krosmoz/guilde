@@ -2,18 +2,25 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 import { supabase } from "./supabase";
 import type { Membre } from "./types";
 
-type Infos = Pick<Membre, "id" | "statut" | "vu_le" | "dispo_personnage_id">;
-type Contexte = { statuts: Map<string, Infos>; rafraichirStatuts: () => Promise<void> };
+type Infos = Pick<Membre, "id" | "statut" | "vu_le" | "dispo_personnage_id" | "est_officier">;
+/** Absence du jour d'un membre (Calendrier). */
+export type AbsenceDuJour = { motif: string | null; fin: string };
+type Contexte = { statuts: Map<string, Infos>; absents: Map<string, AbsenceDuJour>; rafraichirStatuts: () => Promise<void> };
 
-const ContexteStatuts = createContext<Contexte>({ statuts: new Map(), rafraichirStatuts: async () => {} });
+const ContexteStatuts = createContext<Contexte>({ statuts: new Map(), absents: new Map(), rafraichirStatuts: async () => {} });
 
 /** Charge le statut de présence de tous les membres et le rafraîchit chaque minute, pour colorer les pastilles partout. */
 export function FournisseurStatuts({ actif, children }: { actif: boolean; children: ReactNode }) {
   const [statuts, setStatuts] = useState<Map<string, Infos>>(new Map());
+  const [absents, setAbsents] = useState<Map<string, AbsenceDuJour>>(new Map());
 
   const rafraichirStatuts = useCallback(async () => {
-    const { data, error } = await supabase.from("membres").select("id, statut, vu_le, dispo_personnage_id");
+    const { data, error } = await supabase.from("membres").select("id, statut, vu_le, dispo_personnage_id, est_officier");
     if (!error && data) setStatuts(new Map((data as Infos[]).map((m) => [m.id, m])));
+    // Absents aujourd'hui (table absente avant la migration 019 : on ignore l'erreur).
+    const j = new Date(); const jour = `${j.getFullYear()}-${String(j.getMonth() + 1).padStart(2, "0")}-${String(j.getDate()).padStart(2, "0")}`;
+    const abs = await supabase.from("absences").select("membre_id, motif, fin").lte("debut", jour).gte("fin", jour);
+    if (!abs.error && abs.data) setAbsents(new Map((abs.data as { membre_id: string; motif: string | null; fin: string }[]).map((a) => [a.membre_id, { motif: a.motif, fin: a.fin }])));
   }, []);
 
   useEffect(() => {
@@ -23,7 +30,7 @@ export function FournisseurStatuts({ actif, children }: { actif: boolean; childr
     return () => window.clearInterval(t);
   }, [actif, rafraichirStatuts]);
 
-  return <ContexteStatuts.Provider value={{ statuts, rafraichirStatuts }}>{children}</ContexteStatuts.Provider>;
+  return <ContexteStatuts.Provider value={{ statuts, absents, rafraichirStatuts }}>{children}</ContexteStatuts.Provider>;
 }
 
 export const useStatuts = () => useContext(ContexteStatuts);

@@ -6,7 +6,8 @@ import type { MouseEvent } from "react";
  */
 export function clicSurCarte(e: MouseEvent, action: () => void) {
   const cible = e.target as HTMLElement;
-  if (cible.closest("input, button, a, select, textarea, label, [role='button'], [role='tooltip'], .etat")) return;
+  // « summary » / « details » : déplier le déroulé d'une quête ne doit pas replier la carte qui le contient.
+  if (cible.closest("input, button, a, select, textarea, label, summary, details, [role='button'], [role='tooltip'], .etat")) return;
   if (window.getSelection()?.toString()) return;
   action();
 }

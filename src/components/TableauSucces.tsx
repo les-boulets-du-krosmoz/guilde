@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { donjonDeLEtape } from "../data/donjons";
 import { CATEGORIES } from "../data/series";
 import { cleDonjon, donjonDuBoss, DONJONS_SUCCES, normaliser, TRANCHES, trancheDe, type Tranche } from "../data/succesDonjons";
@@ -17,6 +17,8 @@ const SITE_DPLN = "https://www.dofuspourlesnoobs.com/";
 import { estDispo, type Membre, type Personnage, type SuccesDonjon } from "../lib/types";
 import { BoutonDefi } from "./BoutonDefi";
 import { ChoixPersonnage } from "./ChoixPersonnage";
+import { QuetesLiees, quetesLiees, TOUS_IDS_LIEES } from "./QuetesLiees";
+import { chargerQuetesFaites, marquerQuete } from "../lib/donnees";
 import { IconeDonjon, imageDonjon } from "./IconeDonjon";
 
 type Props = {
@@ -45,6 +47,17 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
   const [tranche, setTranche] = useState<Tranche>(TRANCHES[0]);
   // Comparer les succès du personnage affiché avec ceux de mon personnage (celui de la page).
   const [comparer, setComparer] = useState(false);
+  // Quêtes liées aux donjons : celles faites par le personnage affiché, et les donjons dépliés.
+  const [liees, setLiees] = useState<Set<string>>(new Set());
+  const [deplies, setDeplies] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    const ids = TOUS_IDS_LIEES;
+    chargerQuetesFaites(vu.id, ids).then(setLiees).catch(() => setLiees(new Set()));
+  }, [vu.id]);
+  async function basculerLiee(queteId: string, faite: boolean) {
+    setLiees((l) => { const n = new Set(l); if (faite) n.add(queteId); else n.delete(queteId); return n; });
+    try { await marquerQuete(vu.id, queteId, faite); } catch { setLiees((l) => { const n = new Set(l); if (faite) n.delete(queteId); else n.add(queteId); return n; }); }
+  }
   const [recherche, setRecherche] = useState("");
   const [mode, setMode] = useState<"moi" | "guilde">("moi");
   const [masquerFinis, setMasquerFinis] = useState(false);
@@ -116,7 +129,6 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
       ) : (
         <ul className="tableau-succes__lignes">
           {lignes.map((d) => {
-            const restants = d.succes.filter((s) => !mesFaits(s.id)).map((s) => s.id);
             return (
               <li key={`${cleDonjon(d)}|${d.succes[0]?.id}`} className="tableau-succes__ligne">
                 <div className="tableau-succes__donjon">
@@ -151,11 +163,23 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
                     );
                   })}
                 </div>
-                {mode === "moi" && editable && (
-                  <button type="button" className="lien-bouton tableau-succes__tout"
-                    onClick={() => (restants.length ? onPlusieurs(restants, true, vu.id) : onPlusieurs(d.succes.map((s) => s.id), false, vu.id))}>
-                    {restants.length ? "Tout cocher" : "Tout décocher"}
-                  </button>
+                {(() => {
+                  // Quêtes liées : sur la première ligne du donjon seulement (un donjon à plusieurs boss a plusieurs lignes).
+                  const liste = quetesLiees(d.nom);
+                  if (!liste.length || lignes.find((x) => x.nom === d.nom) !== d) return null;
+                  const nb = liste.filter((x) => liees.has(x.id)).length;
+                  const ouvert = deplies.has(d.nom);
+                  return (
+                    <button type="button" className={`lien-bouton tableau-succes__liees ${nb === liste.length ? "vert" : ""}`} aria-expanded={ouvert}
+                      onClick={() => setDeplies((s) => { const n = new Set(s); if (ouvert) n.delete(d.nom); else n.add(d.nom); return n; })}>
+                      {ouvert ? "▾" : "▸"} Quêtes liées {nb}/{liste.length}
+                    </button>
+                  );
+                })()}
+                {deplies.has(d.nom) && lignes.find((x) => x.nom === d.nom) === d && (
+                  <div className="tableau-succes__panneau">
+                    <QuetesLiees donjon={d.nom} faites={liees} modifiable={editable} onBasculer={basculerLiee} />
+                  </div>
                 )}
               </li>
             );

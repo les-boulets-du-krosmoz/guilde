@@ -252,7 +252,7 @@ export function Profil() {
 
       <section className="carte">
         <div className="carte__entete">
-          <h2>Succès de donjon</h2>
+          <h2>Donjons</h2>
           <span className="discret">{defisFaits.size} / {TOTAL_SUCCES} réussis</span>
         </div>
         <ul className="liste-jauges">

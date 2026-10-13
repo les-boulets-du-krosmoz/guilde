@@ -41,6 +41,10 @@ export type Quete = {
   facultative?: boolean;
   /** Déroulé de la quête (objectifs écrits du jeu), dans l'ordre. */
   deroule?: string[];
+  /** Pourquoi l'aide d'un membre est utile (combat de groupe, objet à crafter par un métier…). */
+  aide?: string[];
+  /** Thème de la quête (le succès du jeu qui la regroupe, ex. « La maire dénie »). */
+  theme?: string;
 };
 
 export type Dofus = {
@@ -56,6 +60,10 @@ export type Dofus = {
   unite?: string;
   /** Dofus primordial : onglet coloré sur la première ligne ; les autres Dofus passent en dessous. */
   primordial?: boolean;
+  /** Ligne d'onglets à laquelle appartient la série (ex. « Bonta », « Brâkmar » pour l'alignement). */
+  groupe?: string;
+  /** Longue série : par défaut, seules les quêtes où l'aide d'un membre est utile s'affichent. */
+  filtreAide?: boolean;
   /** Quêtes dans l'ordre d'affichage. Vide = données pas encore saisies. */
   quetes: Quete[];
   /** À prévoir sur l'ensemble de la série, sans étape précise connue. */

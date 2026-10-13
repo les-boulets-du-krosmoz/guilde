@@ -532,3 +532,66 @@ end $$;
 
 -- Plusieurs ordres acceptés (migration 017)
 alter table public.annonces add column if not exists ordres jsonb not null default '[]';
+
+-- Disponibilités habituelles (migration 018)
+
+create table if not exists public.disponibilites (
+  membre_id uuid primary key references public.membres(id) on delete cascade,
+  creneaux  int[] not null default '{}',
+  maj_le    timestamptz not null default now()
+);
+
+alter table public.disponibilites enable row level security;
+
+drop policy if exists lecture_disponibilites on public.disponibilites;
+create policy lecture_disponibilites on public.disponibilites for select to authenticated using (public.est_membre_valide());
+
+-- Chacun ne remplit que ses propres disponibilités.
+drop policy if exists ecriture_disponibilites on public.disponibilites;
+create policy ecriture_disponibilites on public.disponibilites for insert to authenticated
+  with check (membre_id = auth.uid() and public.est_membre_valide());
+drop policy if exists modif_disponibilites on public.disponibilites;
+create policy modif_disponibilites on public.disponibilites for update to authenticated
+  using (membre_id = auth.uid() and public.est_membre_valide()) with check (membre_id = auth.uid());
+
+drop trigger if exists disponibilites_maj on public.disponibilites;
+create trigger disponibilites_maj before update on public.disponibilites for each row execute function public.toucher_maj();
+
+-- Absences et liens utiles (migration 019)
+
+create table if not exists public.absences (
+  id        uuid primary key default gen_random_uuid(),
+  membre_id uuid not null references public.membres(id) on delete cascade,
+  debut     date not null,
+  fin       date not null,
+  motif     text check (motif is null or char_length(motif) <= 80),
+  cree_le   timestamptz not null default now(),
+  check (fin >= debut)
+);
+alter table public.absences enable row level security;
+drop policy if exists lecture_absences on public.absences;
+create policy lecture_absences on public.absences for select to authenticated using (public.est_membre_valide());
+drop policy if exists ecriture_absences on public.absences;
+create policy ecriture_absences on public.absences for insert to authenticated with check (membre_id = auth.uid() and public.est_membre_valide());
+drop policy if exists suppression_absences on public.absences;
+create policy suppression_absences on public.absences for delete to authenticated using (membre_id = auth.uid() and public.est_membre_valide());
+
+create table if not exists public.liens_utiles (
+  id          uuid primary key default gen_random_uuid(),
+  titre       text not null check (char_length(titre) between 1 and 60),
+  url         text not null check (url ~ '^https?://' and char_length(url) <= 500),
+  description text check (description is null or char_length(description) <= 140),
+  ordre       int not null default 0,
+  cree_par    uuid references public.membres(id) on delete set null,
+  cree_le     timestamptz not null default now()
+);
+alter table public.liens_utiles enable row level security;
+drop policy if exists lecture_liens on public.liens_utiles;
+create policy lecture_liens on public.liens_utiles for select to authenticated using (public.est_membre_valide());
+-- Seuls les officiers ajoutent, modifient ou retirent des liens.
+drop policy if exists ajout_liens on public.liens_utiles;
+create policy ajout_liens on public.liens_utiles for insert to authenticated with check (public.est_officier() and public.est_membre_valide());
+drop policy if exists modif_liens on public.liens_utiles;
+create policy modif_liens on public.liens_utiles for update to authenticated using (public.est_officier() and public.est_membre_valide());
+drop policy if exists suppr_liens on public.liens_utiles;
+create policy suppr_liens on public.liens_utiles for delete to authenticated using (public.est_officier() and public.est_membre_valide());
