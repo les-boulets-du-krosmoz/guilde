@@ -4,6 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { FournisseurSession } from "./lib/session";
 import "./styles.css";
+import { appliquerModeDaltonien, modeDaltonienMemorise } from "./lib/affichage";
+
+// Mode daltonien : appliqué tout de suite, avant l'affichage, pour éviter un clignotement de couleurs.
+appliquerModeDaltonien(modeDaltonienMemorise());
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

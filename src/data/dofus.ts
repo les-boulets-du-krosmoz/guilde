@@ -45,6 +45,8 @@ export type Quete = {
   aide?: string[];
   /** Thème de la quête (le succès du jeu qui la regroupe, ex. « La maire dénie »). */
   theme?: string;
+  /** Numéro affiché à la place de la position (alignement : le niveau d'alignement de la quête). */
+  numero?: number;
 };
 
 export type Dofus = {

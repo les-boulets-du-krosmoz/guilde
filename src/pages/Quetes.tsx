@@ -441,7 +441,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                     const dj = donjonDuBoss(q.nom);
                     return dj ? <IconeDonjon fichier={dj.icone} taille={30} titre={dj.boss} /> : null;
                   })()}
-                  <span className="quete__nom">{i + 1}. {q.nom}</span>
+                  <span className="quete__nom">{q.numero ?? (q.facultative && dofus.quetes.some((x) => x.numero !== undefined) ? "·" : i + 1)}. {q.nom}</span>
                   {q.theme && <span className="etiquette etiquette--theme" title="Succès du jeu qui regroupe cette quête">{q.theme}</span>}
                   {q.aide && <span className="etiquette etiquette--aide" title="Pourquoi l'aide d'un membre est utile">🤝 {q.aide.join(" · ")}</span>}
                   {independante && (

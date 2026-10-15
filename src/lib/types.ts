@@ -15,6 +15,8 @@ export interface Membre {
   statut?: "dispo" | "absent" | "indispo" | null;
   /** Dernier signe de vie du site (toutes les 5 minutes tant qu'il est ouvert). */
   vu_le?: string | null;
+  /** Mode daltonien choisi (page Paramètres) ; null = couleurs habituelles. */
+  mode_daltonien?: ModeDaltonien | null;
 }
 
 export interface Personnage {
@@ -148,3 +150,6 @@ export type InvitationAnnonce = {
   repondu_le: string | null;
   discord_le: string | null;
 };
+
+/** Modes daltoniens : palette adaptée et formes en plus des couleurs. */
+export type ModeDaltonien = "deuteranopie" | "protanopie" | "tritanopie";

@@ -595,3 +595,13 @@ drop policy if exists modif_liens on public.liens_utiles;
 create policy modif_liens on public.liens_utiles for update to authenticated using (public.est_officier() and public.est_membre_valide());
 drop policy if exists suppr_liens on public.liens_utiles;
 create policy suppr_liens on public.liens_utiles for delete to authenticated using (public.est_officier() and public.est_membre_valide());
+
+-- Mode daltonien (migration 020)
+
+alter table public.membres add column if not exists mode_daltonien text;
+alter table public.membres drop constraint if exists mode_daltonien_valide;
+alter table public.membres add constraint mode_daltonien_valide
+  check (mode_daltonien is null or mode_daltonien in ('deuteranopie', 'protanopie', 'tritanopie'));
+
+-- Chacun ne modifie que sa propre ligne (règle existante) : on autorise seulement cette colonne en plus.
+grant update (mode_daltonien) on public.membres to authenticated;

@@ -110,7 +110,7 @@ export function GuildeAccueil({ donnees }: { donnees: DonneesAccueil }) {
               </li>
             ))}
           </ul>
-          <span className="discret">Vert : obtenu, doré : en cours</span>
+          <span className="legende"><span><i className="legende__obtenu" /> obtenu</span><span><i className="legende__encours" /> en cours</span></span>
         </section>
         </div>
       </div>

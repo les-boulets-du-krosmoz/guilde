@@ -188,7 +188,7 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
       )}
       <p className="discret tableau-succes__legende">
         {mode === "moi"
-          ? "✗ rouge : pas encore obtenu. ✓ vert : obtenu. Survole un succès pour lire sa condition."
+          ? "✗ : pas encore obtenu. ✓ : obtenu. Survole un succès pour lire sa condition."
           : "Le chiffre de chaque case : personnages ayant au moins le niveau du donjon qui n'ont pas encore ce succès. Survole pour voir qui."}
       </p>
     </section>

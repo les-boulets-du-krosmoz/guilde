@@ -305,16 +305,53 @@ for dofus_id, pref, aid in DOFUS + [(a, p, None) for a, p, _ in ALIGNEMENT]:
             else:  # boucle dans les données : on garde l'ordre restant tel quel plutôt que de bloquer
                 sortie += restant; break
         return sortie
-    resultat = tri_topologique(resultat)
+    if aid or dofus_id == "frigost-quetes":
+        resultat = tri_topologique(resultat)
 
     # Alignement : le jeu impose l'ordre, une quête par niveau d'alignement, de 1 à 100. Les données ne relient pas
     # toujours deux quêtes voisines (« Pa=N » au lieu de « Qf ») : chaque quête dépend uniquement de la précédente.
-    if not aid and dofus_id != "frigost-quetes":
+    if dofus_id in ("align-coeur-vaillant", "align-esprit-salvateur", "align-oeil-attentif", "align-coeur-saignant", "align-esprit-malsain", "align-oeil-assassin"):
+        # Apprentissages d'un ordre : les 5 rangs, l'un après l'autre.
         ids_serie = {r["id"] for r in resultat}
         for k, r in enumerate(resultat):
             r["prerequis"] = [p for p in r["prerequis"] if not (p.get("type") == "quete" and p.get("queteId") in ids_serie)]
-            if k > 0:
-                r["prerequis"].insert(0, prereq_quete(resultat[k - 1]["id"]))
+            if k > 0: r["prerequis"].insert(0, prereq_quete(resultat[k - 1]["id"]))
+    elif not aid and dofus_id != "frigost-quetes":
+        # Une quête par niveau d'alignement : la quête n° N se fait à l'alignement N − 1 (« Cliquetis fou » = n° 1, alignement 0).
+        # À un même niveau, la quête de la chaîne est celle qui suit la précédente (« Qf ») ; les autres, et celles sans
+        # niveau d'alignement, sont des quêtes annexes : facultatives, sans numéro, et rien n'en dépend.
+        ids_serie = {r["id"] for r in resultat}
+        jeu = {r["id"]: next((q for q in ordre if id_site(q) == r["id"]), None) for r in resultat}
+        def niveau_align(r):
+            m = re.search(r"Pa=(\d+)", quetes[jeu[r["id"]]]["startCriterion"] or "") if jeu[r["id"]] else None
+            return int(m.group(1)) if m else None
+        principale, annexes, precedente = [], [], None
+        for r in resultat:
+            n = niveau_align(r)
+            qf = {int(x) for x in re.findall(r"Qf=(\d+)", quetes[jeu[r["id"]]]["startCriterion"] or "")} if jeu[r["id"]] else set()
+            deja_a_ce_niveau = principale and niveau_align(principale[-1]) == n
+            suit_la_precedente = precedente is not None and jeu[precedente["id"]] in qf
+            if n is None or (deja_a_ce_niveau and not suit_la_precedente):
+                annexes.append((r, principale[-1]["id"] if principale else None))
+            elif deja_a_ce_niveau and suit_la_precedente:
+                # La vraie suite arrive après une annexe classée au même niveau : on échange
+                annexes.append((principale.pop(), principale[-1]["id"] if principale else None)); principale.append(r); precedente = r
+            else:
+                principale.append(r); precedente = r
+        for k, r in enumerate(principale):
+            r["prerequis"] = [p for p in r["prerequis"] if not (p.get("type") == "quete" and p.get("queteId") in ids_serie)]
+            if k > 0: r["prerequis"].insert(0, prereq_quete(principale[k - 1]["id"]))
+            n = niveau_align(r)
+            if n is not None: r["numero"] = n + 1  # la quête demandant l'alignement 0 est la quête d'alignement n° 1
+        ordre_final = list(principale)
+        for r, apres in annexes:
+            r["prerequis"] = [p for p in r["prerequis"] if not (p.get("type") == "quete" and p.get("queteId") in ids_serie)]
+            if apres: r["prerequis"].insert(0, prereq_quete(apres))
+            r["facultative"] = True
+            # placée juste après la quête de la chaîne dont elle dépend
+            pos = next((k for k, x in enumerate(ordre_final) if x["id"] == apres), -1)
+            ordre_final.insert(pos + 1 if pos >= 0 else len(ordre_final), r)
+        resultat = ordre_final
 
     # Dernières étapes qui ne sont pas des quêtes, à faire une fois les quêtes terminées.
     for oid, nom in (etapes_hors_quetes(aid, set()) if aid else []):

@@ -106,10 +106,11 @@ export function Nav() {
             ? <img src={membre.avatar_url} alt={`Compte de ${membre.pseudo}`} width={32} height={32} className="nav__avatar" referrerPolicy="no-referrer" />
             : <span className="nav__avatar nav__avatar--initiales">{(membre?.pseudo ?? "?").slice(0, 2)}</span>}
           etiquette="Mon compte"
-          actif={pathname.startsWith("/mon-compte")}
+          actif={pathname.startsWith("/mon-compte") || pathname.startsWith("/parametres")}
           aDroite
           liens={[
-            { to: "/mon-compte", libelle: "Mon compte", detail: "Personnages, métiers, Metamob" },
+            { to: "/mon-compte", libelle: "Mon compte", detail: "Personnages, Metamob" },
+            { to: "/parametres", libelle: "Paramètres", detail: "Mode daltonien" },
             ...(principal ? [{ to: `/perso/${principal.id}`, libelle: "Ma fiche", detail: `Profil de ${principal.nom}` }] : []),
           ]}
           action={{ libelle: "Déconnexion", onClick: seDeconnecter }}

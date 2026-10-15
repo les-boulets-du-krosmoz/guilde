@@ -11,11 +11,15 @@
   --discret: #a89d89;
   --or: #e0b25c;
   --or-clair: #f3cf85;
+  --or-rgb: 224, 178, 92;
   --vert: #5fbf8a;
   --vert-clair: #8fe0b3;
   --vert-fond: #1f3a2c;
+  --texte-sur-vert: #d8f5e5;
+  --vert-rgb: 95, 191, 138;
   --orange: #f0b45a;
   --rouge: #e06c6c;
+  --rouge-rgb: 224, 108, 108;
   --bleu-independant: #6ea8e6;
   --violet-libre: #b49be8;
   --violet-absence: #9b6fe0;
@@ -56,7 +60,7 @@ input, select {
 .bouton:disabled { opacity: 0.5; cursor: not-allowed; }
 .bouton--or { background: var(--or); border-color: var(--or); color: #1b1914; font-weight: 600; }
 .bouton--or:hover { background: var(--or-clair); color: #1b1914; }
-.bouton--vert { border: 2px solid var(--vert); background: var(--vert-fond); color: #d8f5e5; font-weight: 600; }
+.bouton--vert { border: 2px solid var(--vert); background: var(--vert-fond); color: var(--texte-sur-vert); font-weight: 600; }
 .bouton--discord { background: #5865f2; border-color: #5865f2; color: #fff; font-weight: 600; }
 .bouton--danger { border-color: var(--orange); color: var(--orange); }
 .bouton--discret { border-color: transparent; color: var(--texte-2); }
@@ -170,7 +174,7 @@ input, select {
 /* ---------- Quêtes ---------- */
 .onglets { display: flex; gap: 8px; flex-wrap: wrap; }
 .onglet { min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid var(--trait-fort); background: transparent; color: var(--texte-2); font: inherit; cursor: pointer; }
-.onglet--actif { border: 2px solid var(--vert); background: var(--vert-fond); color: #d8f5e5; font-weight: 600; }
+.onglet--actif { border: 2px solid var(--vert); background: var(--vert-fond); color: var(--texte-sur-vert); font-weight: 600; }
 .onglet--vide { border-style: dashed; color: #8a8070; cursor: not-allowed; }
 .progression-globale { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
 .progression-globale strong { font-size: 22px; }
@@ -185,7 +189,7 @@ input, select {
 .etiquettes { display: flex; gap: 8px; flex-wrap: wrap; }
 .etiquette { padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 500; }
 .etiquette--solo { background: var(--orange-fond); color: var(--or-clair); }
-.etiquette--groupe { background: var(--vert-fond); color: #9fe8c0; }
+.etiquette--groupe { background: var(--vert-fond); color: var(--vert-clair); }
 .etiquette--donjon { background: var(--bleu-fond); color: var(--bleu); }
 .prerequis { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
 .prerequis li { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
@@ -411,7 +415,7 @@ a.jauge__nom:hover { color: var(--or); }
 .pied { margin-top: 48px; padding: 20px 24px; border-top: 1px solid var(--bord, #3a3226); text-align: center; font-size: 13px; font-style: italic; color: var(--discret); }
 
 /* « Je peux aider » */
-.badge--aide { background: #1f3a2a; color: #8fd6a8; font-size: 12px; font-weight: 600; padding: 3px 10px; }
+.badge--aide { background: var(--vert-fond); color: var(--vert-clair); font-size: 12px; font-weight: 600; padding: 3px 10px; }
 .quete { flex-wrap: wrap; }
 .entraide { flex-basis: 100%; padding-left: 38px; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #3a3226; }
 .entraide__liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
@@ -468,9 +472,9 @@ a.jauge__nom:hover { color: var(--or); }
 .succes { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--trait); background: transparent; color: var(--texte-2); font-size: 13px; cursor: pointer; }
 .succes:disabled { cursor: default; }
 .succes { position: relative; }
-.succes--afaire { border-color: var(--rouge); color: var(--rouge); background: rgba(224, 108, 108, 0.08); }
+.succes--afaire { border-color: var(--rouge); color: var(--rouge); background: rgba(var(--rouge-rgb), 0.08); }
 .succes:hover .etat__bulle, .succes:focus-visible .etat__bulle { visibility: visible; opacity: 1; }
-.succes--fait { border-color: var(--vert); color: var(--vert); background: rgba(95, 191, 138, 0.10); }
+.succes--fait { border-color: var(--vert); color: var(--vert); background: rgba(var(--vert-rgb), 0.10); }
 .succes__nb { min-width: 18px; padding: 0 5px; border-radius: 999px; background: var(--fond-nav); color: var(--texte); font-size: 11px; text-align: center; }
 .objectif__note { color: var(--orange); }
 
@@ -521,7 +525,7 @@ a.jauge__nom:hover { color: var(--or); }
 .aide-masse__commun input { flex: 1 1 280px; }
 .aide-masse__liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .aide-masse__ligne { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(200px, 1.2fr); gap: 6px 14px; align-items: center; padding: 6px 8px; border-radius: 8px; }
-.aide-masse__ligne--coche { background: rgba(95, 191, 138, 0.08); }
+.aide-masse__ligne--coche { background: rgba(var(--vert-rgb), 0.08); }
 .aide-masse__ligne input[type="text"], .aide-masse__ligne input:not([type]) { width: 100%; }
 .aide-masse__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; position: sticky; bottom: 0; padding: 10px 0; background: var(--carte); }
 @media (max-width: 640px) { .aide-masse__ligne { grid-template-columns: 1fr; } }
@@ -578,7 +582,7 @@ a.jauge__nom:hover { color: var(--or); }
 .calendrier__case:hover { border-color: var(--trait); }
 .calendrier__case--hors { opacity: 0.35; }
 .calendrier__case--aujourdhui { border-color: var(--or); }
-.calendrier__case--choisi { background: rgba(224, 178, 92, 0.18); border-color: var(--or); }
+.calendrier__case--choisi { background: rgba(var(--or-rgb), 0.18); border-color: var(--or); }
 .calendrier__points { display: flex; gap: 2px; }
 .calendrier__point { width: 6px; height: 6px; border-radius: 50%; }
 .calendrier__point--donjon { background: var(--or); }
@@ -625,7 +629,7 @@ a.jauge__nom:hover { color: var(--or); }
 .reponse-invitation { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .annonce--invite { border-color: var(--or); }
 .annonce--ciblee { box-shadow: 0 0 0 2px var(--or); }
-.annonce__invitation { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; margin: 10px 0; padding: 10px 12px; border-radius: 10px; background: rgba(224, 178, 92, 0.1); }
+.annonce__invitation { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; margin: 10px 0; padding: 10px 12px; border-radius: 10px; background: rgba(var(--or-rgb), 0.1); }
 .annonce__invites { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 8px 0; font-size: 13px; }
 .invite { display: inline-flex; align-items: center; gap: 4px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--trait); }
 .invite--en_attente { color: var(--orange); border-color: var(--orange); }
@@ -636,7 +640,7 @@ a.jauge__nom:hover { color: var(--or); }
 .panneau-invitation__liste { display: flex; flex-wrap: wrap; gap: 6px 16px; max-height: 220px; overflow-y: auto; }
 .panneau-invitation__avatar { border-radius: 50%; }
 .panneau-invitation__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.bloc-annonces__invitation { margin: 0 0 10px; padding: 8px 12px; border-radius: 10px; background: rgba(224, 178, 92, 0.1); }
+.bloc-annonces__invitation { margin: 0 0 10px; padding: 8px 12px; border-radius: 10px; background: rgba(var(--or-rgb), 0.1); }
 .tableau-succes__perso { min-height: 34px; max-width: 280px; }
 .tableau-succes__perso--actif { border-color: var(--or); }
 
@@ -649,7 +653,7 @@ a.jauge__nom:hover { color: var(--or); }
 .choix-perso__options { display: flex; flex-direction: column; overflow-y: auto; max-height: 360px; }
 .choix-perso__item, .choix-perso__mules { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 8px; border: none; border-radius: 8px; background: transparent; color: var(--texte); font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
 .choix-perso__item:hover, .choix-perso__item:focus-visible, .choix-perso__mules:hover { background: rgba(255, 255, 255, 0.05); }
-.choix-perso__item--choisi { background: rgba(224, 178, 92, 0.12); }
+.choix-perso__item--choisi { background: rgba(var(--or-rgb), 0.12); }
 .choix-perso__nom { font-weight: 600; }
 .choix-perso__item .discret { margin-left: auto; font-size: 12px; }
 .choix-perso__mules { color: var(--discret); border-top: 1px solid var(--trait); border-radius: 0; margin-top: 4px; }
@@ -668,7 +672,7 @@ a.jauge__nom:hover { color: var(--or); }
 .menu-nav__item { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 8px; color: var(--texte); text-decoration: none; border: none; background: transparent; font: inherit; text-align: left; cursor: pointer; }
 .menu-nav__item:hover, .menu-nav__item:focus-visible { background: rgba(255, 255, 255, 0.05); }
 .menu-nav__item small { color: var(--discret); font-size: 12px; }
-.menu-nav__item--actif { background: rgba(224, 178, 92, 0.1); }
+.menu-nav__item--actif { background: rgba(var(--or-rgb), 0.1); }
 .menu-nav__item--action { color: var(--rouge); border-top: 1px solid var(--trait); border-radius: 0 0 8px 8px; margin-top: 4px; }
 .nav__avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
 .nav__avatar--initiales { display: inline-flex; align-items: center; justify-content: center; background: var(--carte-haute); font-size: 12px; font-weight: 700; text-transform: uppercase; }
@@ -684,8 +688,8 @@ a.jauge__nom:hover { color: var(--or); }
 
 /* Recherche de groupe : accès et organisateur */
 .annonce__etiquettes { display: inline-flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
-.etiquette--prive { background: rgba(224, 108, 108, 0.14); color: var(--rouge); }
-.etiquette--ouvert { background: rgba(95, 191, 138, 0.12); color: var(--vert); }
+.etiquette--prive { background: rgba(var(--rouge-rgb), 0.14); color: var(--rouge); }
+.etiquette--ouvert { background: rgba(var(--vert-rgb), 0.12); color: var(--vert); }
 .annonce__organisateur { position: relative; display: inline-flex; }
 .annonce__organisateur::after { content: "👑"; position: absolute; top: -10px; right: -6px; font-size: 12px; }
 
@@ -736,7 +740,7 @@ a.jauge__nom:hover { color: var(--or); }
 @media (max-width: 860px) { .accueil__haut { grid-template-columns: 1fr; } }
 .almanax__jour { display: flex; gap: 12px; align-items: flex-start; }
 .almanax__icone { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 10px; background: rgba(255, 255, 255, 0.04); }
-.almanax__type { display: inline-block; padding: 2px 10px; border-radius: 999px; background: rgba(224, 178, 92, 0.15); color: var(--or); font-size: 12px; font-weight: 600; }
+.almanax__type { display: inline-block; padding: 2px 10px; border-radius: 999px; background: rgba(var(--or-rgb), 0.15); color: var(--or); font-size: 12px; font-weight: 600; }
 .almanax__bonus { margin: 6px 0; }
 .almanax__offrande { margin: 0; font-size: 14px; }
 .almanax__demain { display: flex; gap: 10px; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--trait); font-size: 14px; }
@@ -796,7 +800,7 @@ a.jauge__nom:hover { color: var(--or); }
 .groupes-metiers__liste { display: flex; flex-direction: column; gap: 4px; }
 .groupes-metiers__choix { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 10px; border-radius: 8px; border: 1px solid transparent; background: transparent; color: var(--texte-2); font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
 .groupes-metiers__choix:hover { background: rgba(255, 255, 255, 0.04); }
-.groupes-metiers__choix--actif { border-color: var(--or); color: var(--texte); background: rgba(224, 178, 92, 0.08); }
+.groupes-metiers__choix--actif { border-color: var(--or); color: var(--texte); background: rgba(var(--or-rgb), 0.08); }
 .groupes-metiers__nb { margin-left: auto; min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--carte-haute); font-size: 11px; text-align: center; }
 .blocage__titre { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .blocage__persos { display: flex; flex-wrap: wrap; gap: 2px 4px; }
@@ -812,14 +816,14 @@ a.jauge__nom:hover { color: var(--or); }
 .avis-zones { display: flex; flex-wrap: wrap; gap: 6px; }
 .avis-zone { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--trait); background: transparent; color: var(--texte-2); font: inherit; font-size: 13px; cursor: pointer; }
 .avis-zone:hover { border-color: var(--trait-fort); }
-.avis-zone--active { border-color: var(--or); color: var(--texte); background: rgba(224, 178, 92, 0.1); }
+.avis-zone--active { border-color: var(--or); color: var(--texte); background: rgba(var(--or-rgb), 0.1); }
 .avis-zone--finie .avis-zone__nb { color: var(--vert); }
 .avis-zone__nb { font-size: 11px; color: var(--discret); }
 .grille-avis { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
 .tuile-avis { position: relative; display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--trait); background: var(--carte); cursor: pointer; }
 .tuile-avis:hover { border-color: var(--trait-fort); }
 .tuile-avis__nom { flex: 1; min-width: 0; padding: 0; border: none; background: none; color: var(--texte); font: inherit; font-size: 14px; font-weight: 600; text-align: left; cursor: pointer; line-height: 1.2; }
-.tuile-avis--faite { border-color: rgba(95, 191, 138, 0.6); background: rgba(95, 191, 138, 0.07); }
+.tuile-avis--faite { border-color: rgba(var(--vert-rgb), 0.6); background: rgba(var(--vert-rgb), 0.07); }
 .tuile-avis--faite .tuile-avis__nom { color: var(--discret); text-decoration: line-through; font-weight: 500; }
 .tuile-avis--verrou { opacity: 0.55; }
 .tuile-avis--chasse { border-color: var(--orange); }
@@ -854,14 +858,14 @@ a.jauge__nom:hover { color: var(--or); }
 .fa-segments { display: flex; height: 42px; border: 1px solid var(--trait-fort); border-radius: 10px; overflow: hidden; }
 .fa-segments button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: none; background: transparent; color: var(--texte-2); font: inherit; font-size: 14px; cursor: pointer; }
 .fa-segments button + button { border-left: 1px solid var(--trait-fort); }
-.fa-segments button.actif { background: rgba(224, 178, 92, 0.12); color: var(--texte); font-weight: 600; }
+.fa-segments button.actif { background: rgba(var(--or-rgb), 0.12); color: var(--texte); font-weight: 600; }
 .fa-jauge { display: flex; align-items: center; gap: 12px; height: 42px; }
 .fa-jauge input[type="range"] { flex: 1; accent-color: var(--or); }
 .fa-max { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--texte-2); }
 .fa-max input { width: 64px !important; height: 34px !important; text-align: center; }
 .fa-puces { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
 .fa-puce { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--trait-fort); background: transparent; color: var(--texte-2); font: inherit; font-size: 13px; cursor: pointer; }
-.fa-puce.actif { border-color: var(--or); color: var(--or); background: rgba(224, 178, 92, 0.08); }
+.fa-puce.actif { border-color: var(--or); color: var(--or); background: rgba(var(--or-rgb), 0.08); }
 .fa-separation { grid-column: span 12; border-top: 1px solid var(--trait); }
 .fa-aide { font-size: 12px; }
 @media (max-width: 760px) { .fa-4, .fa-8 { grid-column: span 12; } }
@@ -874,7 +878,7 @@ a.jauge__nom:hover { color: var(--or); }
 .choix-ordre__ordre { padding-left: 22px; color: var(--texte-2); }
 .choix-ordre__rang { padding-left: 42px; font-size: 13px; }
 .choix-ordre__camp:hover, .choix-ordre__ordre:hover, .choix-ordre__item:hover { background: rgba(255, 255, 255, 0.05); }
-.choix-ordre__item--choisi { background: rgba(224, 178, 92, 0.12); }
+.choix-ordre__item--choisi { background: rgba(var(--or-rgb), 0.12); }
 .choix-membres { position: relative; }
 .choix-membres__champ { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 42px; padding: 4px 8px; border-radius: 10px; border: 1px solid var(--trait-fort); box-sizing: border-box; cursor: text; }
 .choix-membres__etiquette { display: inline-flex; align-items: center; gap: 4px; padding: 2px 4px 2px 10px; border-radius: 999px; border: 1px solid var(--or); color: var(--or); font-size: 13px; }
@@ -917,7 +921,7 @@ a.jauge__nom:hover { color: var(--or); }
 /* Alignement : une ligne d'onglets par camp, et la raison de l'aide sur chaque quête */
 .onglets--groupe { align-items: center; }
 .onglets__groupe { min-width: 76px; font-weight: 700; color: var(--texte-2); font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
-.etiquette--aide { background: rgba(95, 191, 138, 0.12); color: var(--vert); font-size: 12px; }
+.etiquette--aide { background: rgba(var(--vert-rgb), 0.12); color: var(--vert); font-size: 12px; }
 .filtre-aide { margin: 4px 0 10px; font-size: 14px; color: var(--texte-2); }
 /* Onglets des Dofus primordiaux : l'onglet choisi se voit nettement (fond plein, anneau, autres atténués) */
 .onglet--primordial { transition: opacity 0.15s, box-shadow 0.15s; }
@@ -938,8 +942,8 @@ a.jauge__nom:hover { color: var(--or); }
 .cal-grille__tranche { font-size: 12px; color: var(--texte-2); align-self: center; }
 .cal-case { height: 38px; min-height: 0; padding: 0; border-radius: 8px; border: 1px solid var(--trait); background: transparent; color: var(--texte); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 .cal-case:hover { border-color: var(--trait-fort); }
-.cal-case--mienne { background: rgba(95, 191, 138, 0.25); border-color: var(--vert); color: var(--vert); }
-.cal-case--chaleur { background: rgba(224, 178, 92, calc(0.08 + var(--part, 0) * 0.62)); border-color: transparent; color: #f6ead3; }
+.cal-case--mienne { background: rgba(var(--vert-rgb), 0.25); border-color: var(--vert); color: var(--vert); }
+.cal-case--chaleur { background: rgba(var(--or-rgb), calc(0.08 + var(--part, 0) * 0.62)); border-color: transparent; color: #f6ead3; }
 .cal-case--tous { box-shadow: inset 0 0 0 2px var(--vert); }
 .cal-case--vue { outline: 2px solid var(--or); outline-offset: 2px; }
 .cal-vue { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
@@ -1006,3 +1010,70 @@ a.jauge__nom:hover { color: var(--or); }
 .quetes-liees--faite .quetes-liees__nom { color: var(--discret); text-decoration: line-through; }
 .tableau-succes__liees { font-size: 13px; white-space: nowrap; }
 .tableau-succes__panneau { grid-column: 1 / -1; flex-basis: 100%; padding: 4px 0 4px 44px; }
+
+/* ---------- Modes daltoniens (page Paramètres) ----------
+   Palettes adaptées à chaque forme de daltonisme, sans aucun jaune (difficile à distinguer), et des FORMES PLEINES :
+   chaque statut garde un cercle plein, plus un petit symbole plein (● ■ ✖ ◆) ; aucun pointillé ni trait double. */
+[data-daltonien="deuteranopie"] {
+  --texte-sur-vert: #e3f3fc; --rouge-rgb: 213, 94, 0; --bleu-independant: #56b4e9;
+  --vert: #56b4e9; --vert-clair: #9fd6f5; --vert-fond: #18303f; --vert-rgb: 86, 180, 233;
+  --orange: #e69f00; --rouge: #d55e00; --violet-absence: #cc79a7;
+}
+[data-daltonien="protanopie"] {
+  --texte-sur-vert: #e3f3fc; --rouge-rgb: 204, 121, 167; --bleu-independant: #56b4e9;
+  --vert: #56b4e9; --vert-clair: #9fd6f5; --vert-fond: #18303f; --vert-rgb: 86, 180, 233;
+  --orange: #e69f00; --rouge: #cc79a7; --violet-absence: #c8c8c8;
+}
+/* Tritanopie : les jaunes et le doré sont remplacés (rose, blanc, turquoise), y compris les accents du site */
+[data-daltonien="tritanopie"] {
+  --texte-sur-vert: #e0faf7; --rouge-rgb: 229, 72, 77; --violet-libre: #c8c8c8; --bleu-independant: #8ee6dd;
+  --vert: #2ec4b6; --vert-clair: #8ee6dd; --vert-fond: #143633; --vert-rgb: 46, 196, 182;
+  --orange: #f4f4f4; --rouge: #e5484d; --violet-absence: #ff6fb5;
+  --or: #ff8fc8; --or-clair: #ffc2e0; --or-rgb: 255, 143, 200; --orange-fond: #3a1f2e;
+}
+/* Statuts : un cercle PLEIN et épais, et un symbole plein en haut à droite de la photo */
+[data-daltonien] .pastille--dispo,
+[data-daltonien] .pastille--absent,
+[data-daltonien] .pastille--indispo,
+[data-daltonien] .pastille--absence { box-shadow: 0 0 0 2px var(--fond), 0 0 0 5px var(--c-statut); }
+[data-daltonien] .pastille--dispo   { --c-statut: var(--vert); }
+[data-daltonien] .pastille--absent  { --c-statut: var(--orange); }
+[data-daltonien] .pastille--indispo { --c-statut: var(--rouge); }
+[data-daltonien] .pastille--absence { --c-statut: var(--violet-absence); }
+[data-daltonien] .pastille--dispo::before,
+[data-daltonien] .pastille--absent::before,
+[data-daltonien] .pastille--indispo::before,
+[data-daltonien] .pastille--absence::before {
+  position: absolute; top: -0.45em; right: -0.45em; width: 1.3em; height: 1.3em; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: max(9px, 0.85em); line-height: 1;
+  background: var(--fond); color: var(--c-statut); box-shadow: 0 0 0 2px var(--c-statut);
+}
+[data-daltonien] .pastille--dispo::before   { content: "●"; }
+[data-daltonien] .pastille--absent::before  { content: "■"; }
+[data-daltonien] .pastille--indispo::before { content: "✖"; }
+[data-daltonien] .pastille--absence::before { content: "◆"; }
+/* Dofus de la guilde : « en cours » d'une couleur pleine distincte (pas de hachures) */
+[data-daltonien] .barre-double > div:last-child { opacity: 1; }
+/* Quêtes : l'étape en cours repérée par une flèche pleine */
+[data-daltonien] .quete--actuelle .quete__nom::before { content: "▶ "; color: var(--or); }
+/* Page Paramètres */
+.modes-daltoniens { display: flex; flex-direction: column; gap: 10px; }
+.mode-daltonien { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--trait); cursor: pointer; }
+.mode-daltonien--choisi { border-color: var(--or); background: rgba(var(--or-rgb), 0.07); }
+.mode-daltonien__texte { display: flex; flex-direction: column; gap: 2px; flex: 1 1 220px; }
+.mode-daltonien__apercu { display: flex; align-items: center; gap: 16px; padding: 6px 10px; }
+.mode-daltonien__apercu .pastille { width: 22px; height: 22px; background: #6b5d4a; }
+.mode-daltonien__succes { font-weight: 700; font-size: 16px; }
+.mode-daltonien__barre { width: 90px; height: 8px; display: inline-flex; }
+
+/* Modes daltoniens : le même symbole plein dans le menu du statut (barre du haut) */
+[data-daltonien] .statut__point { width: auto; height: auto; border: none; background: none !important; font-size: 13px; line-height: 1; }
+[data-daltonien] .statut--dispo .statut__point::before { content: "●"; }
+[data-daltonien] .statut--absent .statut__point::before { content: "■"; }
+[data-daltonien] .statut--indispo .statut__point::before { content: "✖"; }
+/* Légende colorée (Dofus dans la guilde) : de vraies pastilles de couleur plutôt que des noms de couleur */
+.legende { display: inline-flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--discret); }
+.legende span { display: inline-flex; align-items: center; gap: 6px; }
+.legende i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; }
+.legende__obtenu { background: var(--vert); }
+.legende__encours { background: var(--or); }

@@ -5286,7 +5286,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 1
   },
   {
    "id": "alb-56",
@@ -5310,7 +5311,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 2
   },
   {
    "id": "alb-57",
@@ -5345,7 +5347,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Paysan)"
-   ]
+   ],
+   "numero": 3
   },
   {
    "id": "alb-58",
@@ -5372,7 +5375,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Extraire des dents de Chafer et les apporter à Ned Etsith"
-   ]
+   ],
+   "numero": 4
   },
   {
    "id": "alb-59",
@@ -5407,7 +5411,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 5
   },
   {
    "id": "alb-60",
@@ -5434,7 +5439,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Apporter la carte et une bière Feubuk à Amayiro"
-   ]
+   ],
+   "numero": 6
   },
   {
    "id": "alb-61",
@@ -5469,7 +5475,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 7
   },
   {
    "id": "alb-62",
@@ -5496,7 +5503,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Apporter les badges des miliciens fainéants à Amayiro"
-   ]
+   ],
+   "numero": 8
   },
   {
    "id": "alb-63",
@@ -5525,7 +5533,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Trouver une faille dans les portes",
     "Détourner l'attention du Guerrier Brank Thoof",
     "Examiner les environs des portes"
-   ]
+   ],
+   "numero": 9
   },
   {
    "id": "alb-64",
@@ -5560,7 +5569,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 10
   },
   {
    "id": "alb-65",
@@ -5604,7 +5614,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "objet à crafter (Sculpteur)",
     "combat de groupe"
-   ]
+   ],
+   "numero": 11
   },
   {
    "id": "alb-66",
@@ -5640,7 +5651,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 12
   },
   {
    "id": "alb-67",
@@ -5669,7 +5681,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher l'espion Bishom Pot dans Brâkmar",
     "Passer au port de Brâkmar",
     "Rattraper les Brâkmariens avant leur arrivée à la Tour des Ordres"
-   ]
+   ],
+   "numero": 13
   },
   {
    "id": "alb-68",
@@ -5693,7 +5706,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 14
   },
   {
    "id": "alb-69",
@@ -5720,7 +5734,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Réquisitionner une pioche dans l'atelier des mineurs"
-   ]
+   ],
+   "numero": 15
   },
   {
    "id": "alb-70",
@@ -5749,7 +5764,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Dérober un pot d'alcool de cawotte",
     "Fouiller les égouts à la recherche de la source du mal",
     "Récupérer du sang de Rat contaminé et l'apporter à Amayiro"
-   ]
+   ],
+   "numero": 16
   },
   {
    "id": "alb-71",
@@ -5773,7 +5789,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 17
   },
   {
    "id": "alb-72",
@@ -5802,7 +5819,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Faire remplir le formulaire par Leonzi Trool",
     "Rapporter le formulaire à Amayiro",
     "Acheter un Burger de Trool à Maxims, à la foire du Trool, puis l'apporter à Amayiro"
-   ]
+   ],
+   "numero": 18
   },
   {
    "id": "alb-73",
@@ -5829,7 +5847,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Récupérer de l'huile de Blop Royal dans le Clos des Blops"
-   ]
+   ],
+   "numero": 19
   },
   {
    "id": "alb-74",
@@ -5858,7 +5877,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Entrez dans le caveau de Tsog",
     "Communiquez avec Tsog",
     "Trouver le coffre caché par Tsog"
-   ]
+   ],
+   "numero": 20
   },
   {
    "id": "alb-75",
@@ -5920,7 +5940,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "objet à crafter (Bijoutier)",
     "combat de groupe"
-   ]
+   ],
+   "numero": 21
   },
   {
    "id": "alb-76",
@@ -5955,7 +5976,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 22
   },
   {
    "id": "alb-77",
@@ -5996,7 +6018,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Tailleur)"
-   ]
+   ],
+   "numero": 23
   },
   {
    "id": "alb-78",
@@ -6043,7 +6066,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Base)"
-   ]
+   ],
+   "numero": 24
   },
   {
    "id": "alb-79",
@@ -6084,7 +6108,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "deroule": [
     "Vaincre les Gobelins"
-   ]
+   ],
+   "numero": 25
   },
   {
    "id": "alb-80",
@@ -6120,7 +6145,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Apporter les ingrédients de la liste à Danathor",
     "Déposer le blopisier dans la maison de Rimaraf"
-   ]
+   ],
+   "numero": 26
   },
   {
    "id": "alb-81",
@@ -6144,7 +6170,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 27
   },
   {
    "id": "alb-82",
@@ -6171,7 +6198,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Donner l'identité du coupable à Amayiro"
-   ]
+   ],
+   "numero": 28
   },
   {
    "id": "alb-83",
@@ -6206,7 +6234,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 29
   },
   {
    "id": "alb-84",
@@ -6233,7 +6262,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Combattre Dike Tarak sans oublier la mise en garde d'Amayiro"
-   ]
+   ],
+   "numero": 30
   },
   {
    "id": "alb-85",
@@ -6260,7 +6290,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Enquêter dans le port de Bonta"
-   ]
+   ],
+   "numero": 31
   },
   {
    "id": "alb-86",
@@ -6287,7 +6318,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Évaluer les défenses des remparts"
-   ]
+   ],
+   "numero": 32
   },
   {
    "id": "alb-87",
@@ -6314,7 +6346,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Arracher son gland à l'Abraknyde Ancestral"
-   ]
+   ],
+   "numero": 33
   },
   {
    "id": "alb-88",
@@ -6342,7 +6375,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Récupérer de la bave de Crapopo dans les lacs enchantés",
     "Amener 200 kamas et de la poussière magik à Paro Cabanne"
-   ]
+   ],
+   "numero": 34
   },
   {
    "id": "alb-89",
@@ -6377,7 +6411,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "deroule": [
     "Apporter un gland à un animal quelque part dans le bois de Litneg"
-   ]
+   ],
+   "numero": 35
   },
   {
    "id": "alb-90",
@@ -6412,7 +6447,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 36
   },
   {
    "id": "alb-91",
@@ -6439,7 +6475,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Amener de la cervelle de tortue de Moon et trois grappes de boules de Trukikol au cuisinier"
-   ]
+   ],
+   "numero": 37
   },
   {
    "id": "alb-92",
@@ -6466,7 +6503,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Mettre une râclée à William Lenglad"
-   ]
+   ],
+   "numero": 38
   },
   {
    "id": "alb-93",
@@ -6504,7 +6542,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 39
   },
   {
    "id": "alb-94",
@@ -6540,7 +6579,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 40
   },
   {
    "id": "alb-257",
@@ -6576,7 +6616,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 41
   },
   {
    "id": "alb-258",
@@ -6611,7 +6652,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "deroule": [
     "Interroger les taverniers de Bonta"
-   ]
+   ],
+   "numero": 42
   },
   {
    "id": "alb-259",
@@ -6639,7 +6681,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Interroger les bandits des plaines",
     "Inspecter le repaire des bandits"
-   ]
+   ],
+   "numero": 43
   },
   {
    "id": "alb-260",
@@ -6667,7 +6710,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Rencontrer le chef des convois",
     "Amenez le bijou à Amayiro... ou pas ?"
-   ]
+   ],
+   "numero": 44
   },
   {
    "id": "alb-261",
@@ -6708,7 +6752,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Bûcheron)"
-   ]
+   ],
+   "numero": 45
   },
   {
    "id": "alb-262",
@@ -6765,7 +6810,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "objet à crafter (Chasseur)",
     "objet à crafter (Cordonnier)"
-   ]
+   ],
+   "numero": 46
   },
   {
    "id": "alb-263",
@@ -6804,7 +6850,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Mineur)"
-   ]
+   ],
+   "numero": 47
   },
   {
    "id": "alb-264",
@@ -6832,7 +6879,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Fouiller la maison de Xarthan",
     "Surprendre Xarthan en flagrant délit"
-   ]
+   ],
+   "numero": 48
   },
   {
    "id": "alb-265",
@@ -6856,7 +6904,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 49
   },
   {
    "id": "alb-266",
@@ -6884,7 +6933,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Capturer les deux comploteurs",
     "Conduire Xephirès à Amayiro"
-   ]
+   ],
+   "numero": 50
   },
   {
    "id": "alb-280",
@@ -6908,7 +6958,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 51
   },
   {
    "id": "alb-281",
@@ -6955,7 +7006,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Mineur)"
-   ]
+   ],
+   "numero": 52
   },
   {
    "id": "alb-282",
@@ -7008,7 +7060,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "objet à crafter (Pêcheur)",
     "objet à crafter (Éleveur)"
-   ]
+   ],
+   "numero": 53
   },
   {
    "id": "alb-283",
@@ -7064,7 +7117,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Mineur)"
-   ]
+   ],
+   "numero": 54
   },
   {
    "id": "alb-284",
@@ -7093,7 +7147,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Battre Lenglad et retourner voir Amayiro",
     "Chercher des renseignements à la bibliothèque de Pandala",
     "Délivrer Dréna Nassema"
-   ]
+   ],
+   "numero": 55
   },
   {
    "id": "alb-285",
@@ -7137,7 +7192,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Mineur)"
-   ]
+   ],
+   "numero": 56
   },
   {
    "id": "alb-286",
@@ -7194,7 +7250,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Bricoleur)"
-   ]
+   ],
+   "numero": 57
   },
   {
    "id": "alb-290",
@@ -7221,7 +7278,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Chercher les documents sur les patrouilles"
-   ]
+   ],
+   "numero": 58
   },
   {
    "id": "alb-289",
@@ -7248,7 +7306,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Trouver le Vieux Grimoire Bwork"
-   ]
+   ],
+   "numero": 59
   },
   {
    "id": "alb-291",
@@ -7276,7 +7335,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Chercher le plan d'attaque dans la Tour de Brâkmar",
     "Trouver le nouveau plan d'attaque dans le bureau de Ledrob Terceséc"
-   ]
+   ],
+   "numero": 60
   },
   {
    "id": "alb-293",
@@ -7329,7 +7389,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "deroule": [
     "Interroger les taverniers d'Amakna au sujet de la Corne Edfrit"
-   ]
+   ],
+   "numero": 61
   },
   {
    "id": "alb-294",
@@ -7356,7 +7417,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Trouver le gardien de la Corne Edfrit"
-   ]
+   ],
+   "numero": 62
   },
   {
    "id": "alb-295",
@@ -7394,7 +7456,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Pêcheur)"
-   ]
+   ],
+   "numero": 63
   },
   {
    "id": "alb-296",
@@ -7421,7 +7484,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Sauver le bwak de feu au nord du chanil"
-   ]
+   ],
+   "numero": 64
   },
   {
    "id": "alb-302",
@@ -7466,7 +7530,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "objet à crafter (Tailleur)",
     "objet à crafter (Alchimiste)"
-   ]
+   ],
+   "numero": 65
   },
   {
    "id": "alb-298",
@@ -7494,7 +7559,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Rattraper l'espion",
     "Aller voir Amayiro ou Danathor"
-   ]
+   ],
+   "numero": 66
   },
   {
    "id": "alb-299",
@@ -7529,7 +7595,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 67
   },
   {
    "id": "alb-303",
@@ -7567,7 +7634,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 68
   },
   {
    "id": "alb-304",
@@ -7594,7 +7662,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Accomplir le rituel de Révélation"
-   ]
+   ],
+   "numero": 69
   },
   {
    "id": "alb-333",
@@ -7622,7 +7691,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Obtenir x 3 Miteters sur les Alhyènes",
     "Obtenir de la Graisse mammaire de Kanig"
-   ]
+   ],
+   "numero": 70
   },
   {
    "id": "alb-318",
@@ -7649,7 +7719,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Fouiller l'atelier des cordonniers à la recherche d'indices"
-   ]
+   ],
+   "numero": 71
   },
   {
    "id": "alb-321",
@@ -7676,7 +7747,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Récupérer de l'hydre au miel dans la cave de Bol Pokuz"
-   ]
+   ],
+   "numero": 72
   },
   {
    "id": "alb-325",
@@ -7707,7 +7779,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Trouver un témoin dans le quartier ouest",
     "Interroger les clients de la maison d'Heticili Ufot",
     "Interroger les clients de la maison d'Heticili Ufot, la nuit"
-   ]
+   ],
+   "numero": 73
   },
   {
    "id": "alb-326",
@@ -7757,7 +7830,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Forgeron)"
-   ]
+   ],
+   "numero": 74
   },
   {
    "id": "alb-334",
@@ -7788,7 +7862,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher un morceau de bois",
     "Trouver un sculpteur capable de tailler l'écorce sombre pétrifiée",
     "Trouver le Marteau de Lumière"
-   ]
+   ],
+   "numero": 75
   },
   {
    "id": "alb-335",
@@ -7864,7 +7939,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 76
   },
   {
    "id": "alb-328",
@@ -7911,7 +7987,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 77
   },
   {
    "id": "alb-451",
@@ -7959,7 +8036,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "objet à crafter (Paysan)",
     "objet à crafter (Alchimiste)"
-   ]
+   ],
+   "numero": 78
   },
   {
    "id": "alb-456",
@@ -7988,7 +8066,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Interroger les habitants dans la Montagne des Koalaks",
     "Suivre les instructions de Surivitna",
     "Retrouver Meuh Sieurchance chez lui, au village des éleveurs"
-   ]
+   ],
+   "numero": 79
   },
   {
    "id": "alb-457",
@@ -8030,7 +8109,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 80
   },
   {
    "id": "alb-337",
@@ -8058,7 +8138,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Inspecter la Milifutaie et ses environs",
     "Fouiller la zone du chemin de fer abandonné"
-   ]
+   ],
+   "numero": 81
   },
   {
    "id": "alb-343",
@@ -8082,7 +8163,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 82
   },
   {
    "id": "alb-1715",
@@ -8132,7 +8214,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher Lars Tord dans Gisgoul",
     "Chercher Lars Tord",
     "Aider Lars Tord à obtenir le gant magique"
-   ]
+   ],
+   "numero": 83
   },
   {
    "id": "alb-1717",
@@ -8176,7 +8259,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 84
   },
   {
    "id": "alb-1719",
@@ -8220,7 +8304,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 85
   },
   {
    "id": "alb-1721",
@@ -8259,7 +8344,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 86
   },
   {
    "id": "alb-1723",
@@ -8283,7 +8369,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 87
   },
   {
    "id": "alb-1728",
@@ -8321,7 +8408,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Chasseur)"
-   ]
+   ],
+   "numero": 88
   },
   {
    "id": "alb-1729",
@@ -8367,7 +8455,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Mineur)"
-   ]
+   ],
+   "numero": 89
   },
   {
    "id": "alb-1730",
@@ -8412,7 +8501,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 90
   },
   {
    "id": "alb-1885",
@@ -8440,7 +8530,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Acheter deux bières fraîches",
     "Interroger les parieurs sur les combats de tofus"
-   ]
+   ],
+   "numero": 91
   },
   {
    "id": "alb-1887",
@@ -8478,7 +8569,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Prendre Huguette Rhon en filature",
     "Parler aux disciples des petits dieux",
     "Vaincre les disciples des petits dieux"
-   ]
+   ],
+   "numero": 92
   },
   {
    "id": "alb-1889",
@@ -8538,7 +8630,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Chercher les Krobes altérés par le feu noir à l'aide de l'oscillateur de Ninae Charpe",
     "Prélever des cellules souches sur les Krobes altérés"
-   ]
+   ],
+   "numero": 93
   },
   {
    "id": "alb-1891",
@@ -8579,7 +8672,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 94
   },
   {
    "id": "alb-1893",
@@ -8619,7 +8713,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 95
   },
   {
    "id": "alb-1895",
@@ -8683,7 +8778,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Activer le totem de Maimane",
     "Vaincre les gardiens d'ossements",
     "Lire le message magique du totem de Maimane"
-   ]
+   ],
+   "numero": 96
   },
   {
    "id": "alb-1897",
@@ -8719,7 +8815,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 97
   },
   {
    "id": "alb-1899",
@@ -8749,7 +8846,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Interroger les habitués de la taverne du Bourreau",
     "Interroger les commerçants du marché de Srambad",
     "Chercher les disciples d'Erazal"
-   ]
+   ],
+   "numero": 98
   },
   {
    "id": "alb-1901",
@@ -8781,7 +8879,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 99
   },
   {
    "id": "alb-1903",
@@ -8810,7 +8909,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Astiquer une bitte",
     "Arrêter Erazal",
     "Récupérer des documents"
-   ]
+   ],
+   "numero": 100
   }
  ],
  "align-coeur-vaillant": [
@@ -9357,7 +9457,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 1
   },
   {
    "id": "alk-376",
@@ -9381,7 +9482,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 2
   },
   {
    "id": "alk-377",
@@ -9416,7 +9518,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Alchimiste)"
-   ]
+   ],
+   "numero": 3
   },
   {
    "id": "alk-378",
@@ -9443,7 +9546,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Extraire des dents de Chafer et les apporter à Oto Mustam"
-   ]
+   ],
+   "numero": 4
   },
   {
    "id": "alk-379",
@@ -9478,7 +9582,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 5
   },
   {
    "id": "alk-380",
@@ -9505,7 +9610,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Amener toutes les caisses"
-   ]
+   ],
+   "numero": 6
   },
   {
    "id": "alk-381",
@@ -9540,7 +9646,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 7
   },
   {
    "id": "alk-382",
@@ -9568,7 +9675,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Se renseigner dans les tavernes",
     "Faire un compte-rendu et le donner à Oto"
-   ]
+   ],
+   "numero": 8
   },
   {
    "id": "alk-383",
@@ -9600,7 +9708,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "note": "à rapporter à Oto Mustam",
      "verifie": true
     }
-   ]
+   ],
+   "numero": 9
   },
   {
    "id": "alk-384",
@@ -9635,7 +9744,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 10
   },
   {
    "id": "alk-385",
@@ -9670,7 +9780,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 11
   },
   {
    "id": "alk-386",
@@ -9705,7 +9816,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 12
   },
   {
    "id": "alk-387",
@@ -9734,7 +9846,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Trouver Finche Aticus dans Bonta",
     "Chercher le rapport de Finche Aticus dans la taverne de la Bagrutte",
     "Chercher Karl la Saumure dans le port de Bonta"
-   ]
+   ],
+   "numero": 13
   },
   {
    "id": "alk-388",
@@ -9758,7 +9871,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 14
   },
   {
    "id": "alk-389",
@@ -9782,7 +9896,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 15
   },
   {
    "id": "alk-390",
@@ -9811,7 +9926,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Dérober un pot d'alcool de cawotte",
     "Fouiller les égouts à la recherche de la source du mal",
     "Récupérer du sang de Rat contaminé et l'apporter à Oto Mustam"
-   ]
+   ],
+   "numero": 16
   },
   {
    "id": "alk-391",
@@ -9835,7 +9951,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 17
   },
   {
    "id": "alk-392",
@@ -9862,7 +9979,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Trouver un connaisseur en poisons magiques"
-   ]
+   ],
+   "numero": 18
   },
   {
    "id": "alk-393",
@@ -9900,7 +10018,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Tailleur)"
-   ]
+   ],
+   "numero": 19
   },
   {
    "id": "alk-394",
@@ -9929,7 +10048,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Entrez dans le caveau d'Ixa Mustam",
     "Communiquez avec Ixa Mustam",
     "Trouver le coffre caché par Ixa Mustam"
-   ]
+   ],
+   "numero": 20
   },
   {
    "id": "alk-395",
@@ -9990,7 +10110,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 21
   },
   {
    "id": "alk-396",
@@ -10039,7 +10160,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 22
   },
   {
    "id": "alk-397",
@@ -10066,7 +10188,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Voler le Poumon des plaines à Azra Lazarus"
-   ]
+   ],
+   "numero": 23
   },
   {
    "id": "alk-398",
@@ -10113,7 +10236,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Base)"
-   ]
+   ],
+   "numero": 24
   },
   {
    "id": "alk-399",
@@ -10137,7 +10261,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 25
   },
   {
    "id": "alk-400",
@@ -10168,7 +10293,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Escorter Raaga par la grotte au sud-est",
     "Défendre Raaga",
     "Continuer l'escorte de Raaga"
-   ]
+   ],
+   "numero": 26
   },
   {
    "id": "alk-401",
@@ -10196,7 +10322,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Trouver des indices au nord, à l'extérieur de la cité",
     "Se rendre dans les salles d'interrogatoire et trouver l'espion bontarien"
-   ]
+   ],
+   "numero": 27
   },
   {
    "id": "alk-402",
@@ -10223,7 +10350,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Trouver les documents et les amener à Oto Mustam"
-   ]
+   ],
+   "numero": 28
   },
   {
    "id": "alk-403",
@@ -10258,7 +10386,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 29
   },
   {
    "id": "alk-404",
@@ -10285,7 +10414,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Combattre Puja Mustam sans oublier la mise en garde d'Oto Mustam puis retourner voir ce dernier"
-   ]
+   ],
+   "numero": 30
   },
   {
    "id": "alk-405",
@@ -10313,7 +10443,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Enquêter vers la sortie ouest",
     "Chercher les deux individus signalés par Boulor"
-   ]
+   ],
+   "numero": 31
   },
   {
    "id": "alk-406",
@@ -10340,7 +10471,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Vaincre les Bontariens et retourner voir Oto Mustam"
-   ]
+   ],
+   "numero": 32
   },
   {
    "id": "alk-407",
@@ -10375,7 +10507,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 33
   },
   {
    "id": "alk-408",
@@ -10402,7 +10535,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Cueillir des plantes enchantées"
-   ]
+   ],
+   "numero": 34
   },
   {
    "id": "alk-409",
@@ -10429,7 +10563,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Inspecter la tour de Brâkmar à la recherche de fantômes"
-   ]
+   ],
+   "numero": 35
   },
   {
    "id": "alk-410",
@@ -10464,7 +10599,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 36
   },
   {
    "id": "alk-411",
@@ -10488,7 +10624,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 37
   },
   {
    "id": "alk-412",
@@ -10515,7 +10652,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Faire taire les opposants"
-   ]
+   ],
+   "numero": 38
   },
   {
    "id": "alk-413",
@@ -10553,7 +10691,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 39
   },
   {
    "id": "alk-414",
@@ -10588,7 +10727,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 40
   },
   {
    "id": "alk-246",
@@ -10625,7 +10765,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 41
   },
   {
    "id": "alk-247",
@@ -10653,7 +10794,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Trouver le Sram dans la Forêt Sombre",
     "Inspecter le bosquet à la recherche d'Exoram"
-   ]
+   ],
+   "numero": 42
   },
   {
    "id": "alk-248",
@@ -10684,7 +10826,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Trouver un moyen de descendre, un bricoleur pourra vous aider",
     "Sortir Exoram de sa corniche",
     "Escorter Exoram jusqu'au temple Sram"
-   ]
+   ],
+   "numero": 43
   },
   {
    "id": "alk-250",
@@ -10708,7 +10851,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 44
   },
   {
    "id": "alk-251",
@@ -10743,7 +10887,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Pêcheur)"
-   ]
+   ],
+   "numero": 45
   },
   {
    "id": "alk-252",
@@ -10805,7 +10950,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "combat de groupe",
     "objet à crafter (Mineur)"
-   ]
+   ],
+   "numero": 46
   },
   {
    "id": "alk-253",
@@ -10829,7 +10975,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 47
   },
   {
    "id": "alk-255",
@@ -10868,7 +11015,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 48
   },
   {
    "id": "alk-256",
@@ -10903,7 +11051,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 49
   },
   {
    "id": "alk-445",
@@ -10987,7 +11136,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "fabrication",
     "combat de groupe"
-   ]
+   ],
+   "numero": 50
   },
   {
    "id": "alk-267",
@@ -11011,7 +11161,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 51
   },
   {
    "id": "alk-268",
@@ -11039,7 +11190,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Trouver un moyen de tromper la vigilance du gardien",
     "Voler une caisse d'équipement"
-   ]
+   ],
+   "numero": 52
   },
   {
    "id": "alk-446",
@@ -11068,7 +11220,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Donner une prime de 1000 Kamas à Latem Sa",
     "Voler le minerai",
     "Remplacer les outils par 5 Marteaux Martel"
-   ]
+   ],
+   "numero": 53
   },
   {
    "id": "alk-270",
@@ -11095,7 +11248,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Trouver 10 ficelles pour ligoter Highlambert"
-   ]
+   ],
+   "numero": 54
   },
   {
    "id": "alk-271",
@@ -11122,7 +11276,286 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "S'occuper du tacticien"
-   ]
+   ],
+   "numero": 55
+  },
+  {
+   "id": "alk-275",
+   "nom": "Supermilicien",
+   "dofus": "align-brakmar",
+   "niveauConseille": 136,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-271",
+     "verifie": true
+    },
+    {
+     "type": "niveau",
+     "niveau": 130,
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [
+    {
+     "type": "combat",
+     "adversaires": [
+      "Brute épaisse bontarienne"
+     ],
+     "groupe": true
+    }
+   ],
+   "ressources": [
+    {
+     "id": "alk-275-r1",
+     "texte": "1 × Truchmuche",
+     "note": "à rapporter à Oto Mustam",
+     "verifie": true
+    }
+   ],
+   "deroule": [
+    "Inspecter les environs à la recherche d'indices",
+    "Intercepter le milicien bontarien avant son arrivée à Astrub"
+   ],
+   "aide": [
+    "combat de groupe"
+   ],
+   "numero": 56
+  },
+  {
+   "id": "alk-276",
+   "nom": "Le forgeron",
+   "dofus": "align-brakmar",
+   "niveauConseille": 137,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-275",
+     "verifie": true
+    },
+    {
+     "type": "niveau",
+     "niveau": 130,
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [],
+   "deroule": [
+    "Trouver le forgeron travaillant pour Bonta"
+   ],
+   "numero": 57
+  },
+  {
+   "id": "alk-277",
+   "nom": "Paranoïa aigüe",
+   "dofus": "align-brakmar",
+   "niveauConseille": 138,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-276",
+     "verifie": true
+    },
+    {
+     "type": "niveau",
+     "niveau": 130,
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [
+    {
+     "type": "combat",
+     "adversaires": [
+      "Nara"
+     ],
+     "groupe": true
+    }
+   ],
+   "ressources": [
+    {
+     "id": "alk-277-r1",
+     "texte": "1 × Philtre de Dragofesse",
+     "note": "à rapporter à Nara, craftable par un Éleveur niveau 75",
+     "verifie": true
+    },
+    {
+     "id": "alk-277-r2",
+     "texte": "1 × Langue de Truchmuche",
+     "note": "à rapporter à Nara",
+     "verifie": true
+    },
+    {
+     "id": "alk-277-r3",
+     "texte": "10 × Huile à frire",
+     "note": "à rapporter à Nara",
+     "verifie": true
+    },
+    {
+     "id": "alk-277-r4",
+     "texte": "5 × Planche de Gravure",
+     "note": "à rapporter à Nara, craftable par un Bûcheron niveau 140",
+     "verifie": true
+    }
+   ],
+   "aide": [
+    "objet à crafter (Éleveur)",
+    "objet à crafter (Bûcheron)",
+    "combat de groupe"
+   ],
+   "numero": 58
+  },
+  {
+   "id": "alk-278",
+   "nom": "À la manière des Brâkmariens",
+   "dofus": "align-brakmar",
+   "niveauConseille": 139,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-277",
+     "verifie": true
+    },
+    {
+     "type": "niveau",
+     "niveau": 130,
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [],
+   "deroule": [
+    "Trouver un moyen de récupérer le butin"
+   ],
+   "numero": 59
+  },
+  {
+   "id": "alk-279",
+   "nom": "Le trésor de La Descemer",
+   "dofus": "align-brakmar",
+   "niveauConseille": 140,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-278",
+     "verifie": true
+    },
+    {
+     "type": "niveau",
+     "niveau": 130,
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [],
+   "deroule": [
+    "Interroger les habitants du port"
+   ],
+   "numero": 60
+  },
+  {
+   "id": "alk-305",
+   "nom": "Une rumeur alléchante",
+   "dofus": "align-brakmar",
+   "niveauConseille": 151,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-279",
+     "verifie": true
+    },
+    {
+     "type": "niveau",
+     "niveau": 150,
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [],
+   "ressources": [
+    {
+     "id": "alk-305-r1",
+     "texte": "1 × Griffe de Phorrêveur",
+     "note": "à rapporter à Tavernier du Ripate",
+     "verifie": true
+    },
+    {
+     "id": "alk-305-r2",
+     "texte": "1 × Peau de Métaphorreur",
+     "note": "à rapporter à Tavernier du Ripate",
+     "verifie": true
+    },
+    {
+     "id": "alk-305-r3",
+     "texte": "1 × Corne de Père Phorreur",
+     "note": "à rapporter à Tavernier du Ripate",
+     "verifie": true
+    },
+    {
+     "id": "alk-305-r4",
+     "texte": "1 × Œil de Phozami",
+     "note": "à rapporter à Tavernier du Ripate",
+     "verifie": true
+    }
+   ],
+   "deroule": [
+    "Interroger les taverniers d'Amakna au sujet de la Corne Edfrit"
+   ],
+   "numero": 61
+  },
+  {
+   "id": "alk-306",
+   "nom": "Enquête à Moon",
+   "dofus": "align-brakmar",
+   "niveauConseille": 152,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-305",
+     "verifie": true
+    },
+    {
+     "type": "niveau",
+     "niveau": 150,
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [],
+   "deroule": [
+    "Trouver le gardien de la Corne Edfrit"
+   ],
+   "numero": 62
   },
   {
    "id": "alk-307",
@@ -11132,7 +11565,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "prerequis": [
     {
      "type": "quete",
-     "queteId": "alk-271",
+     "queteId": "alk-306",
      "verifie": true
     },
     {
@@ -11161,7 +11594,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Pêcheur)"
-   ]
+   ],
+   "numero": 63
   },
   {
    "id": "alk-308",
@@ -11188,7 +11622,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Sauver le bwak de feu au nord du chanil"
-   ]
+   ],
+   "numero": 64
   },
   {
    "id": "alk-309",
@@ -11232,7 +11667,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "fabrication"
-   ]
+   ],
+   "numero": 65
   },
   {
    "id": "alk-310",
@@ -11256,7 +11692,28 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 66
+  },
+  {
+   "id": "alk-312",
+   "nom": "On m'appelle l'Escargot",
+   "dofus": "align-brakmar",
+   "niveauConseille": 156,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-310",
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [],
+   "facultative": true
   },
   {
    "id": "alk-311",
@@ -11278,26 +11735,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Parler à l'espion"
-   ]
-  },
-  {
-   "id": "alk-312",
-   "nom": "On m'appelle l'Escargot",
-   "dofus": "align-brakmar",
-   "niveauConseille": 156,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-311",
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
    ],
-   "contenu": []
+   "facultative": true
   },
   {
    "id": "alk-313",
@@ -11307,7 +11746,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "prerequis": [
     {
      "type": "quete",
-     "queteId": "alk-312",
+     "queteId": "alk-310",
      "verifie": true
     },
     {
@@ -11324,7 +11763,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Intercepter l'espion"
-   ]
+   ],
+   "numero": 67
   },
   {
    "id": "alk-314",
@@ -11352,7 +11792,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Trouver Sim le Soft au sud du massif des Routes Rocailleuses",
     "Préparer de la salace fourrée au pollen dans le chaudron primordial pour la montrer à Oto Mustam"
-   ]
+   ],
+   "numero": 68
   },
   {
    "id": "alk-315",
@@ -11391,7 +11832,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 69
   },
   {
    "id": "alk-317",
@@ -11421,7 +11863,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Interroger les habitués de la salle de jeux",
     "Découvrir la planque de Trape pour lui faire la peau",
     "Infliger une correction au chef des Kanigs"
-   ]
+   ],
+   "numero": 70
   },
   {
    "id": "alk-319",
@@ -11449,7 +11892,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Posséder un réceptacle pour récupérer la Corruptite",
     "Apporter la Corruptite à Domen ou Divad"
-   ]
+   ],
+   "numero": 71
   },
   {
    "id": "alk-320",
@@ -11518,7 +11962,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "fabrication",
     "combat de groupe"
-   ]
+   ],
+   "numero": 72
   },
   {
    "id": "alk-322",
@@ -11558,7 +12003,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 73
   },
   {
    "id": "alk-323",
@@ -11614,7 +12060,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "combat de groupe",
     "objet à crafter (Alchimiste)"
-   ]
+   ],
+   "numero": 74
   },
   {
    "id": "alk-327",
@@ -11688,7 +12135,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "fabrication"
-   ]
+   ],
+   "numero": 75
   },
   {
    "id": "alk-324",
@@ -11716,7 +12164,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Vaincre les cauchemars pour imprégner la lame",
     "Faire appel aux talents d'un maître Forgemage dans l'atelier de Sotsiah Peh"
-   ]
+   ],
+   "numero": 76
   },
   {
    "id": "alk-329",
@@ -11746,7 +12195,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Vaincre les contrebandiers pour accéder à l'entrepôt",
     "Voler une caisse de minerai précieux",
     "Incendier la planque"
-   ]
+   ],
+   "numero": 77
   },
   {
    "id": "alk-330",
@@ -11823,7 +12273,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "objet à crafter (Mineur)",
     "objet à crafter (Pêcheur)"
-   ]
+   ],
+   "numero": 78
   },
   {
    "id": "alk-331",
@@ -11864,7 +12315,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 79
   },
   {
    "id": "alk-332",
@@ -11907,7 +12359,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 80
   },
   {
    "id": "alk-352",
@@ -11939,7 +12392,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Débaucher des guerriers pour les mettre au service d'Uk'Not'Allag",
     "Consulter les mages de la Tour de Brâkmar",
     "Trouver un disciple pour Uk'Not'Allag"
-   ]
+   ],
+   "numero": 81
   },
   {
    "id": "alk-474",
@@ -11994,7 +12448,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Alchimiste)"
-   ]
+   ],
+   "numero": 82
   },
   {
    "id": "alk-1716",
@@ -12047,7 +12502,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher Lars Tord dans Gisgoul",
     "Chercher Lars Tord",
     "Aider Lars Tord à obtenir le gant magique"
-   ]
+   ],
+   "numero": 83
   },
   {
    "id": "alk-1718",
@@ -12091,7 +12547,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 84
   },
   {
    "id": "alk-1720",
@@ -12135,7 +12592,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 85
   },
   {
    "id": "alk-1722",
@@ -12174,7 +12632,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 86
   },
   {
    "id": "alk-1724",
@@ -12198,7 +12657,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "verifie": true
     }
    ],
-   "contenu": []
+   "contenu": [],
+   "numero": 87
   },
   {
    "id": "alk-1725",
@@ -12236,7 +12696,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Chasseur)"
-   ]
+   ],
+   "numero": 88
   },
   {
    "id": "alk-1726",
@@ -12281,7 +12742,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Mineur)"
-   ]
+   ],
+   "numero": 89
   },
   {
    "id": "alk-1727",
@@ -12328,7 +12790,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 90
   },
   {
    "id": "alk-1886",
@@ -12355,7 +12818,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "contenu": [],
    "deroule": [
     "Acheter une bière fraîche"
-   ]
+   ],
+   "numero": 91
   },
   {
    "id": "alk-1888",
@@ -12393,7 +12857,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Prendre Huguette Rhon en filature",
     "Parler aux disciples des petits dieux",
     "Vaincre les disciples des petits dieux"
-   ]
+   ],
+   "numero": 92
   },
   {
    "id": "alk-1890",
@@ -12453,7 +12918,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "deroule": [
     "Chercher les Krobes altérés par le feu noir à l'aide de l'oscillateur de Ninae Charpe",
     "Prélever des cellules souches sur les Krobes altérés"
-   ]
+   ],
+   "numero": 93
   },
   {
    "id": "alk-1892",
@@ -12494,7 +12960,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 94
   },
   {
    "id": "alk-1894",
@@ -12534,7 +13001,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 95
   },
   {
    "id": "alk-1896",
@@ -12598,7 +13066,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Activer le totem de Maimane",
     "Vaincre les gardiens d'ossements",
     "Lire le message magique du totem de Maimane"
-   ]
+   ],
+   "numero": 96
   },
   {
    "id": "alk-1898",
@@ -12634,7 +13103,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 97
   },
   {
    "id": "alk-1900",
@@ -12664,7 +13134,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Interroger les habitués de la taverne du Bourreau",
     "Interroger les commerçants du marché de Srambad",
     "Chercher les disciples d'Erazal"
-   ]
+   ],
+   "numero": 98
   },
   {
    "id": "alk-1902",
@@ -12696,7 +13167,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
+   ],
+   "numero": 99
   },
   {
    "id": "alk-1904",
@@ -12725,7 +13197,56 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Astiquer une bitte",
     "Arrêter Erazal",
     "Récupérer des documents"
-   ]
+   ],
+   "numero": 100
+  },
+  {
+   "id": "alk-274",
+   "nom": "Les kamas résolvent tout",
+   "dofus": "align-brakmar",
+   "niveauConseille": 135,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-1904",
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [],
+   "deroule": [
+    "Chercher des indices dans la bibliothèque de Bonta",
+    "Chercher la méthode d'élevage aviaire dans la Volière de la Haute Truche"
+   ],
+   "facultative": true
+  },
+  {
+   "id": "alk-273",
+   "nom": "Le magnanime",
+   "dofus": "align-brakmar",
+   "niveauConseille": 135,
+   "prerequis": [
+    {
+     "type": "quete",
+     "queteId": "alk-1904",
+     "verifie": true
+    },
+    {
+     "type": "texte",
+     "description": "Être Brâkmarien",
+     "verifie": true
+    }
+   ],
+   "contenu": [],
+   "deroule": [
+    "Chercher des indices dans la bibliothèque de Bonta",
+    "Chercher la méthode d'élevage aviaire dans la Volière de la Haute Truche"
+   ],
+   "facultative": true
   },
   {
    "id": "alk-272",
@@ -12759,324 +13280,8 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "combat de groupe"
-   ]
-  },
-  {
-   "id": "alk-273",
-   "nom": "Le magnanime",
-   "dofus": "align-brakmar",
-   "niveauConseille": 135,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-272",
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
    ],
-   "contenu": [],
-   "deroule": [
-    "Chercher des indices dans la bibliothèque de Bonta",
-    "Chercher la méthode d'élevage aviaire dans la Volière de la Haute Truche"
-   ]
-  },
-  {
-   "id": "alk-274",
-   "nom": "Les kamas résolvent tout",
-   "dofus": "align-brakmar",
-   "niveauConseille": 135,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-273",
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
-   ],
-   "contenu": [],
-   "deroule": [
-    "Chercher des indices dans la bibliothèque de Bonta",
-    "Chercher la méthode d'élevage aviaire dans la Volière de la Haute Truche"
-   ]
-  },
-  {
-   "id": "alk-275",
-   "nom": "Supermilicien",
-   "dofus": "align-brakmar",
-   "niveauConseille": 136,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-274",
-     "verifie": true
-    },
-    {
-     "type": "niveau",
-     "niveau": 130,
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
-   ],
-   "contenu": [
-    {
-     "type": "combat",
-     "adversaires": [
-      "Brute épaisse bontarienne"
-     ],
-     "groupe": true
-    }
-   ],
-   "ressources": [
-    {
-     "id": "alk-275-r1",
-     "texte": "1 × Truchmuche",
-     "note": "à rapporter à Oto Mustam",
-     "verifie": true
-    }
-   ],
-   "deroule": [
-    "Inspecter les environs à la recherche d'indices",
-    "Intercepter le milicien bontarien avant son arrivée à Astrub"
-   ],
-   "aide": [
-    "combat de groupe"
-   ]
-  },
-  {
-   "id": "alk-276",
-   "nom": "Le forgeron",
-   "dofus": "align-brakmar",
-   "niveauConseille": 137,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-275",
-     "verifie": true
-    },
-    {
-     "type": "niveau",
-     "niveau": 130,
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
-   ],
-   "contenu": [],
-   "deroule": [
-    "Trouver le forgeron travaillant pour Bonta"
-   ]
-  },
-  {
-   "id": "alk-277",
-   "nom": "Paranoïa aigüe",
-   "dofus": "align-brakmar",
-   "niveauConseille": 138,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-276",
-     "verifie": true
-    },
-    {
-     "type": "niveau",
-     "niveau": 130,
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
-   ],
-   "contenu": [
-    {
-     "type": "combat",
-     "adversaires": [
-      "Nara"
-     ],
-     "groupe": true
-    }
-   ],
-   "ressources": [
-    {
-     "id": "alk-277-r1",
-     "texte": "1 × Philtre de Dragofesse",
-     "note": "à rapporter à Nara, craftable par un Éleveur niveau 75",
-     "verifie": true
-    },
-    {
-     "id": "alk-277-r2",
-     "texte": "1 × Langue de Truchmuche",
-     "note": "à rapporter à Nara",
-     "verifie": true
-    },
-    {
-     "id": "alk-277-r3",
-     "texte": "10 × Huile à frire",
-     "note": "à rapporter à Nara",
-     "verifie": true
-    },
-    {
-     "id": "alk-277-r4",
-     "texte": "5 × Planche de Gravure",
-     "note": "à rapporter à Nara, craftable par un Bûcheron niveau 140",
-     "verifie": true
-    }
-   ],
-   "aide": [
-    "objet à crafter (Éleveur)",
-    "objet à crafter (Bûcheron)",
-    "combat de groupe"
-   ]
-  },
-  {
-   "id": "alk-278",
-   "nom": "À la manière des Brâkmariens",
-   "dofus": "align-brakmar",
-   "niveauConseille": 139,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-277",
-     "verifie": true
-    },
-    {
-     "type": "niveau",
-     "niveau": 130,
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
-   ],
-   "contenu": [],
-   "deroule": [
-    "Trouver un moyen de récupérer le butin"
-   ]
-  },
-  {
-   "id": "alk-279",
-   "nom": "Le trésor de La Descemer",
-   "dofus": "align-brakmar",
-   "niveauConseille": 140,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-278",
-     "verifie": true
-    },
-    {
-     "type": "niveau",
-     "niveau": 130,
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
-   ],
-   "contenu": [],
-   "deroule": [
-    "Interroger les habitants du port"
-   ]
-  },
-  {
-   "id": "alk-305",
-   "nom": "Une rumeur alléchante",
-   "dofus": "align-brakmar",
-   "niveauConseille": 151,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-279",
-     "verifie": true
-    },
-    {
-     "type": "niveau",
-     "niveau": 150,
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
-   ],
-   "contenu": [],
-   "ressources": [
-    {
-     "id": "alk-305-r1",
-     "texte": "1 × Griffe de Phorrêveur",
-     "note": "à rapporter à Tavernier du Ripate",
-     "verifie": true
-    },
-    {
-     "id": "alk-305-r2",
-     "texte": "1 × Peau de Métaphorreur",
-     "note": "à rapporter à Tavernier du Ripate",
-     "verifie": true
-    },
-    {
-     "id": "alk-305-r3",
-     "texte": "1 × Corne de Père Phorreur",
-     "note": "à rapporter à Tavernier du Ripate",
-     "verifie": true
-    },
-    {
-     "id": "alk-305-r4",
-     "texte": "1 × Œil de Phozami",
-     "note": "à rapporter à Tavernier du Ripate",
-     "verifie": true
-    }
-   ],
-   "deroule": [
-    "Interroger les taverniers d'Amakna au sujet de la Corne Edfrit"
-   ]
-  },
-  {
-   "id": "alk-306",
-   "nom": "Enquête à Moon",
-   "dofus": "align-brakmar",
-   "niveauConseille": 152,
-   "prerequis": [
-    {
-     "type": "quete",
-     "queteId": "alk-305",
-     "verifie": true
-    },
-    {
-     "type": "niveau",
-     "niveau": 150,
-     "verifie": true
-    },
-    {
-     "type": "texte",
-     "description": "Être Brâkmarien",
-     "verifie": true
-    }
-   ],
-   "contenu": [],
-   "deroule": [
-    "Trouver le gardien de la Corne Edfrit"
-   ]
+   "facultative": true
   }
  ],
  "align-coeur-saignant": [

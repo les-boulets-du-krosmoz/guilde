@@ -6,3 +6,4 @@ Un déploiement sans nouvelle ligne n'annonce rien.
 
 ## À publier
 
+- Paramètres : nouvelle page (menu de votre avatar) avec un mode daltonien. Trois réglages (deutéranopie, protanopie, tritanopie) changent les couleurs qui portent une information et ajoutent à chaque statut un symbole plein (● ■ ✖ ◆) ; la tritanopie retire tout le jaune du site. Le choix suit votre compte sur tous vos appareils.
