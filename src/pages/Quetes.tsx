@@ -6,6 +6,9 @@ import { NomAvecPastille, Pastille } from "../components/Pastille";
 import { DOFUS, type Contenu, type Dofus, type Ressource } from "../data/dofus";
 import { donjonDeLEtape } from "../data/donjons";
 import { QuetesLiees, quetesLiees, TOUS_IDS_LIEES } from "../components/QuetesLiees";
+import { astuceDe, ParcoursOptimise } from "../components/EncartOptimisation";
+import { Fenetre } from "../components/Fenetre";
+import { OPTIMISATION_GLACES } from "../data/optimisationGlaces";
 import { donjonDuBoss, TOTAL_SUCCES } from "../data/succesDonjons";
 import { BoutonDefi } from "../components/BoutonDefi";
 import { TableauSucces } from "../components/TableauSucces";
@@ -62,6 +65,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   const [annuaire, setAnnuaire] = useState<{ persos: Map<string, Personnage>; membres: Map<string, Membre> } | null>(null);
   const [saisieAide, setSaisieAide] = useState<{ queteId: string; note: string } | null>(null);
   const [aideMasse, setAideMasse] = useState(false);
+  const [parcoursOuvert, setParcoursOuvert] = useState(false);
   // Alignement : par défaut, seulement les quêtes où l'aide d'un membre est utile (les chaînes font 100 quêtes).
   const [seulementAide, setSeulementAide] = useState(true);
   // Quêtes liées aux donjons des étapes : celles déjà faites par le personnage.
@@ -137,8 +141,11 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   // Arrivé depuis un profil (?dofus=…) : on amène directement à l'étape en cours.
   useEffect(() => {
     if (!perso || !params.get("dofus")) return;
-    const cible = dofus.quetes[etapeActuelle(dofus, faites)];
-    if (cible) document.getElementById(`etape-${cible.id}`)?.scrollIntoView({ block: "center" });
+    // ?etape=… (liens du parcours optimisé) : on ouvre et on amène à cette étape ; sinon à l'étape en cours.
+    const demandee = params.get("etape");
+    const cible = (demandee && dofus.quetes.find((q) => q.id === demandee)) || dofus.quetes[etapeActuelle(dofus, faites)];
+    if (demandee && cible) setOuvertes((o) => new Set([...o, cible.id]));
+    if (cible) setTimeout(() => document.getElementById(`etape-${cible.id}`)?.scrollIntoView({ block: "center" }), 50);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perso?.id, dofus.id]);
 
@@ -290,6 +297,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
   }
 
   const filtrable = !!dofus.filtreAide;
+  const optimisation = dofus.id === "glaces" ? OPTIMISATION_GLACES : undefined;
   const filtreAide = filtrable && seulementAide;
   const guideDpln = (dofus.sources ?? []).find((src) => src.url.includes("dofuspourlesnoobs.com"))?.url;
 
@@ -334,6 +342,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
             {dofus.quetes.length > total ? ` (+ ${dofus.quetes.length - total} facultative${dofus.quetes.length - total > 1 ? "s" : ""})` : ""}
           </p>
         </div>
+
         <div className="progression-globale">
           <span><strong className="vert">{terminees}</strong> / {total} terminées</span>
           <div className="barre barre--large" aria-hidden="true"><div style={{ width: `${(terminees / total) * 100}%` }} /></div>
@@ -352,11 +361,23 @@ function QuetesPerso({ persoId }: { persoId: string }) {
           Seulement les quêtes où l'aide d'un membre est utile ({dofus.quetes.filter((q) => q.aide).length} sur {dofus.quetes.length})
         </label>
       )}
-      {modifiable && !aideMasse && (
+      {(optimisation || (modifiable && !aideMasse)) && (
         <div className="aide-masse__ouvrir">
-          <button type="button" className="bouton" onClick={() => setAideMasse(true)}>🤝 Aide en masse</button>
-          <span className="discret">Indiquer d'un coup toutes les étapes où {perso.nom} peut aider.</span>
+          {optimisation && <button type="button" className="bouton bouton--icone" onClick={() => setParcoursOuvert(true)}><span aria-hidden="true">⚡</span>Parcours optimisé</button>}
+          {modifiable && !aideMasse && <button type="button" className="bouton bouton--icone" onClick={() => setAideMasse(true)}><span aria-hidden="true">🤝</span>Aide en masse</button>}
+          {modifiable && !aideMasse && <span className="discret">Indiquer d'un coup toutes les étapes où {perso.nom} peut aider.</span>}
         </div>
+      )}
+      {optimisation && parcoursOuvert && (
+        <Fenetre titre="Parcours optimisé" onFermer={() => setParcoursOuvert(false)} large>
+          <ParcoursOptimise opti={optimisation} dofus={dofus} faites={faites} persoId={perso.id} modifiable={modifiable}
+            onBasculerSerie={(id) => basculer(id)}
+            onAller={(id) => {
+              setParcoursOuvert(false);
+              setOuvertes((o) => new Set([...o, id]));
+              setTimeout(() => document.getElementById(`etape-${id}`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 80);
+            }} />
+        </Fenetre>
       )}
       {modifiable && aideMasse && (
         <AideEnMasse
@@ -444,6 +465,9 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                   <span className="quete__nom">{q.numero ?? (q.facultative && dofus.quetes.some((x) => x.numero !== undefined) ? "·" : i + 1)}. {q.nom}</span>
                   {q.theme && <span className="etiquette etiquette--theme" title="Succès du jeu qui regroupe cette quête">{q.theme}</span>}
                   {q.aide && <span className="etiquette etiquette--aide" title="Pourquoi l'aide d'un membre est utile">🤝 {q.aide.join(" · ")}</span>}
+                  {(categorie.id === "frigost" || dofus.id === "glaces") && astuceDe(OPTIMISATION_GLACES, q.nom) && (
+                    <span className="quete__astuce" title="Astuce du parcours optimisé du Dofus des Glaces">💡 {astuceDe(OPTIMISATION_GLACES, q.nom)}</span>
+                  )}
                   {independante && (
                     <span className="etiquette etiquette--independante etat" tabIndex={0}>
                       À cocher à part
@@ -511,6 +535,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                   const nomDonjon = donjonDuBoss(q.nom)?.nom;
                   return nomDonjon && quetesLiees(nomDonjon).length > 0 ? (
                     <QuetesLiees donjon={nomDonjon} faites={new Set([...liees, ...faites])} modifiable={modifiable}
+                      boss={donjonDuBoss(q.nom)?.boss} bossVaincu={dofus.unite === "boss" ? faites.has(q.id) : null}
                       onBasculer={(id, faite) => (dofus.quetes.some((x) => x.id === id) ? basculer(id) : basculerLiee(id, faite))} />
                   ) : null;
                 })()}

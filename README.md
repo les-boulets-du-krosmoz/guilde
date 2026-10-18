@@ -19,7 +19,7 @@ React + TypeScript (Vite) pour le front, Supabase pour la base de données, la c
 ### 1. Supabase
 
 1. Crée un projet sur [supabase.com](https://supabase.com).
-2. Dans **SQL Editor**, colle et exécute `supabase/schema.sql` (une seule fois, sur un projet neuf). Si tu l'as déjà exécuté avec une version plus ancienne, exécute seulement les migrations que tu n'as pas encore passées, dans l'ordre (`supabase/migration-002.sql`, `migration-003.sql`, `migration-004.sql`, `migration-005.sql`, `migration-006.sql`, `migration-007.sql`, `migration-008.sql`, `migration-009.sql`, `migration-010.sql`, `migration-011.sql`, `migration-012.sql`, `migration-013.sql`, `migration-014.sql`, `migration-015.sql`, `migration-016.sql`, `migration-017.sql`, `migration-018.sql`, `migration-019.sql`, puis `migration-020.sql`).
+2. Dans **SQL Editor**, colle et exécute `supabase/schema.sql` (une seule fois, sur un projet neuf). Si tu l'as déjà exécuté avec une version plus ancienne, exécute seulement les migrations que tu n'as pas encore passées, dans l'ordre (`supabase/migration-002.sql`, `migration-003.sql`, `migration-004.sql`, `migration-005.sql`, `migration-006.sql`, `migration-007.sql`, `migration-008.sql`, `migration-009.sql`, `migration-010.sql`, `migration-011.sql`, `migration-012.sql`, `migration-013.sql`, `migration-014.sql`, `migration-015.sql`, `migration-016.sql`, `migration-017.sql`, `migration-018.sql`, `migration-019.sql`, `migration-020.sql`, `migration-021.sql`, puis `migration-022.sql`).
 3. Note l'URL du projet et la clé `anon` (**Project Settings > API**).
 
 ### 2. Application Discord
@@ -131,11 +131,11 @@ Après chaque déploiement réussi en production, l'Action `.github/workflows/an
 
 ## Déployer sans perdre de données
 
-Les migrations 002 à 020 n'ajoutent que des tables, des colonnes vides et des règles d'accès : aucune ne supprime ni ne modifie de données existantes, et chacune peut être relancée sans risque. Le déploiement Vercel, lui, ne touche jamais à la base.
+Les migrations 002 à 022 n'ajoutent que des tables, des colonnes vides et des règles d'accès : aucune ne supprime ni ne modifie de données existantes, et chacune peut être relancée sans risque. Le déploiement Vercel, lui, ne touche jamais à la base.
 
 1. **Sauvegarde** : exporte les données avant de toucher à quoi que ce soit (voir ci-dessous).
 2. **État avant** : lance `supabase/verification-deploiement.sql` et garde le résultat (nombre de lignes par table).
-3. **Migrations** : exécute, dans l'ordre, celles qui ne sont pas encore passées (003 à 020). L'ancien site continue de fonctionner avec elles.
+3. **Migrations** : exécute, dans l'ordre, celles qui ne sont pas encore passées (003 à 022). L'ancien site continue de fonctionner avec elles.
 4. **État après** : relance `verification-deploiement.sql` : mêmes nombres de lignes (ou plus), et toutes les lignes de la partie 2 à « oui ».
 5. **Site** : seulement maintenant, pousse le code sur GitHub pour que Vercel déploie.
 6. **Retour arrière** si le site pose problème : dans Vercel, remets le déploiement précédent en production. La base n'a pas besoin d'être restaurée, les migrations sont compatibles avec l'ancien site.
@@ -218,3 +218,7 @@ Sur la base actuelle, restaurer une table abîmée se fait plutôt table par tab
 ## Application installable
 
 `public/manifest.webmanifest`, les icônes `public/icone-*.png` et `public/sw.js` rendent le site installable (« Ajouter à l'écran d'accueil »). Le service worker ne met rien en cache : chaque déploiement est visible tout de suite.
+
+## La Brocante des boulets
+
+`public/donnees/objets.json` (catalogue des équipements : images, caractéristiques possibles) est généré à partir des données du jeu : `python3 scripts/generer-objets.py`. La fonction `brocante-interet` prévient le vendeur sur Discord (variable `DISCORD_WEBHOOK_BROCANTE`, sinon le salon des sorties).

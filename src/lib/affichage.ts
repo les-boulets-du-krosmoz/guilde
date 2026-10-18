@@ -1,4 +1,4 @@
-import type { ModeDaltonien } from "./types";
+import type { ModeDaltonien, Police } from "./types";
 
 const CLE = "affichage:daltonien";
 
@@ -20,4 +20,36 @@ export function appliquerModeDaltonien(mode: ModeDaltonien | null | undefined) {
 /** Au démarrage : le dernier mode choisi sur cet appareil, avant même que le compte soit chargé. */
 export function modeDaltonienMemorise(): ModeDaltonien | null {
   try { return (localStorage.getItem(CLE) as ModeDaltonien | null) ?? null; } catch { return null; }
+}
+
+// ---------- Police ----------
+
+const CLE_POLICE = "affichage:police";
+
+export const POLICES: { id: Police | null; nom: string; detail: string; famille: string }[] = [
+  { id: null, nom: "Police du site", detail: "IBM Plex Sans pour le texte, Fraunces pour les titres.", famille: "\"IBM Plex Sans\", system-ui, sans-serif" },
+  { id: "times", nom: "Times New Roman", detail: "Police classique à empattements, installée sur la plupart des ordinateurs.", famille: "\"Times New Roman\", Times, \"Liberation Serif\", serif" },
+  { id: "epaisse", nom: "Atkinson Hyperlegible (épaisse)", detail: "Lettres plus épaisses et très distinctes, conçue pour faciliter la lecture.", famille: "\"Atkinson Hyperlegible\", system-ui, sans-serif" },
+];
+
+/** Charge la police à lettres épaisses (Google Fonts) seulement quand on en a besoin. */
+export function chargerPoliceEpaisse() {
+  if (document.getElementById("police-epaisse")) return;
+  const lien = document.createElement("link");
+  lien.id = "police-epaisse";
+  lien.rel = "stylesheet";
+  lien.href = "https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap";
+  document.head.appendChild(lien);
+}
+
+export function appliquerPolice(police: Police | null | undefined) {
+  const racine = document.documentElement;
+  if (police === "epaisse") chargerPoliceEpaisse();
+  if (police) racine.dataset.police = police;
+  else delete racine.dataset.police;
+  try { if (police) localStorage.setItem(CLE_POLICE, police); else localStorage.removeItem(CLE_POLICE); } catch { /* sans importance */ }
+}
+
+export function policeMemorisee(): Police | null {
+  try { return (localStorage.getItem(CLE_POLICE) as Police | null) ?? null; } catch { return null; }
 }

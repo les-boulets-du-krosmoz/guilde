@@ -178,7 +178,8 @@ export function TableauSucces({ perso, modifiable, succes, persos, membres, onBa
                 })()}
                 {deplies.has(d.nom) && lignes.find((x) => x.nom === d.nom) === d && (
                   <div className="tableau-succes__panneau">
-                    <QuetesLiees donjon={d.nom} faites={liees} modifiable={editable} onBasculer={basculerLiee} />
+                    <QuetesLiees donjon={d.nom} faites={liees} modifiable={editable} onBasculer={basculerLiee}
+                      boss={d.boss} bossVaincu={(() => { const v = d.succes.find((x) => x.libelle === "Vaincre"); return v ? mesFaits(v.id) : null; })()} />
                   </div>
                 )}
               </li>

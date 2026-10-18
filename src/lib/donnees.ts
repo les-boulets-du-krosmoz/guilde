@@ -385,3 +385,69 @@ export async function marquerQuete(personnageId: string, queteId: string, faite:
     : await supabase.from("quetes_terminees").delete().eq("personnage_id", personnageId).eq("quete_id", queteId);
   if (error) throw error;
 }
+
+// ---------- La Brocante des boulets ----------
+
+export type StatVente = { libelle: string; valeur: number };
+export type Vente = {
+  id: string; membre_id: string; objet_id: number; objet_nom: string; objet_niveau: number; objet_type: string | null; objet_icone: number | null;
+  stats: StatVente[]; prix: number; prix_hdv: number | null; note: string | null;
+  statut: "en_vente" | "reserve" | "vendu"; reserve_pour: string | null; vendu_le: string | null; cree_le: string;
+};
+export type InteretVente = { vente_id: string; membre_id: string; cree_le: string };
+
+/** Objets en vente ou réservés, et ceux vendus depuis moins de 7 jours ; avec les intérêts. */
+export async function chargerBrocante(): Promise<{ ventes: Vente[]; interets: InteretVente[] }> {
+  const depuis = new Date(Date.now() - 7 * 864e5).toISOString();
+  const [v, i] = await Promise.all([
+    supabase.from("brocante").select("*").or(`statut.neq.vendu,vendu_le.gte.${depuis}`).order("cree_le", { ascending: false }),
+    supabase.from("brocante_interets").select("vente_id, membre_id, cree_le"),
+  ]);
+  if (v.error) { if (tableAbsente(v.error)) return { ventes: [], interets: [] }; throw v.error; }
+  return { ventes: (v.data ?? []) as Vente[], interets: (i.data ?? []) as InteretVente[] };
+}
+
+export async function publierVente(vente: Omit<Vente, "id" | "statut" | "reserve_pour" | "vendu_le" | "cree_le">): Promise<void> {
+  const { error } = await supabase.from("brocante").insert(vente);
+  if (error) throw error;
+}
+
+export async function majVente(id: string, champs: Partial<Pick<Vente, "statut" | "reserve_pour" | "vendu_le" | "prix" | "prix_hdv" | "note" | "stats">>): Promise<void> {
+  const { error } = await supabase.from("brocante").update(champs).eq("id", id);
+  if (error) throw error;
+}
+
+export async function supprimerVente(id: string): Promise<void> {
+  const { error } = await supabase.from("brocante").delete().eq("id", id);
+  if (error) throw error;
+}
+
+/** « Intéressé » : enregistre l'intérêt puis prévient le vendeur sur Discord (une fois). */
+export async function seDireInteresse(venteId: string, membreId: string): Promise<{ prevenu: boolean; raison?: string }> {
+  const { error } = await supabase.from("brocante_interets").insert({ vente_id: venteId, membre_id: membreId });
+  if (error && error.code !== "23505") throw error;
+  const { data, error: e2 } = await supabase.functions.invoke("brocante-interet", { body: { vente_id: venteId } });
+  if (e2) return { prevenu: false, raison: "Le vendeur n'a pas pu être prévenu sur Discord." };
+  return { prevenu: !!data?.poste, raison: data?.raison };
+}
+
+export async function retirerInteret(venteId: string, membreId: string): Promise<void> {
+  const { error } = await supabase.from("brocante_interets").delete().eq("vente_id", venteId).eq("membre_id", membreId);
+  if (error) throw error;
+}
+
+// ---------- Quêtes en cours (parcours optimisé) ----------
+
+export async function chargerQuetesEnCours(personnageId: string, ids: string[]): Promise<Set<string>> {
+  if (!ids.length) return new Set();
+  const { data, error } = await supabase.from("quetes_en_cours").select("quete_id").eq("personnage_id", personnageId).in("quete_id", ids);
+  if (error) { if (tableAbsente(error)) return new Set(); throw error; }
+  return new Set((data ?? []).map((x: { quete_id: string }) => x.quete_id));
+}
+
+export async function marquerEnCours(personnageId: string, queteId: string, enCours: boolean): Promise<void> {
+  const { error } = enCours
+    ? await supabase.from("quetes_en_cours").upsert({ personnage_id: personnageId, quete_id: queteId })
+    : await supabase.from("quetes_en_cours").delete().eq("personnage_id", personnageId).eq("quete_id", queteId);
+  if (error) throw error;
+}

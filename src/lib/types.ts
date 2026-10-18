@@ -17,6 +17,8 @@ export interface Membre {
   vu_le?: string | null;
   /** Mode daltonien choisi (page Paramètres) ; null = couleurs habituelles. */
   mode_daltonien?: ModeDaltonien | null;
+  /** Police choisie (page Paramètres) ; null = police du site. */
+  police?: Police | null;
 }
 
 export interface Personnage {
@@ -153,3 +155,6 @@ export type InvitationAnnonce = {
 
 /** Modes daltoniens : palette adaptée et formes en plus des couleurs. */
 export type ModeDaltonien = "deuteranopie" | "protanopie" | "tritanopie";
+
+/** Polices proposées : celle du site (null), Times New Roman, ou une police aux lettres épaisses. */
+export type Police = "times" | "epaisse";

@@ -1,5 +1,5 @@
 import { QUETES_DONJONS, type QueteLieeDonjon } from "../data/quetesDonjons";
-import { TOUTES_LES_QUETES } from "../data/series";
+import { ouEstLaQuete, TOUTES_LES_QUETES } from "../data/series";
 import { donjonDuBoss } from "../data/succesDonjons";
 
 const norme = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -25,18 +25,36 @@ export const TOUS_IDS_LIEES = [...new Set(Object.values(RESOLUES).flat().map((q)
  * Quêtes liées à un donjon (un objectif demande de vaincre son boss), à cocher pour le personnage.
  * Seulement l'essentiel pour préparer la sortie : nom, niveau, ce qu'il faut faire dans ce donjon.
  */
-export function QuetesLiees({ donjon, faites, modifiable, onBasculer }: {
+/** Série et numéro d'étape d'une quête liée (« Dofus Sylvestre, étape 21 », « Brâkmar n° 87 »), pour comprendre d'où vient sa case. */
+function origine(id: string): string | null {
+  const o = ouEstLaQuete(id);
+  if (!o) return null;
+  const rang = o.quete.numero ?? o.serie.quetes.findIndex((x) => x.id === id) + 1;
+  const nom = o.categorie.estDofus ? `Dofus ${o.serie.nom}` : o.serie.nom;
+  return o.quete.numero !== undefined ? `${nom} n° ${rang}` : `${nom}, étape ${rang}`;
+}
+
+export function QuetesLiees({ donjon, faites, modifiable, onBasculer, bossVaincu, boss }: {
   donjon: string;
   faites: Set<string>;
   modifiable: boolean;
   onBasculer: (queteId: string, faite: boolean) => void;
+  /** Le boss du donjon est-il marqué vaincu (étape ou succès « Vaincre ») ? null = on ne sait pas. */
+  bossVaincu?: boolean | null;
+  boss?: string;
 }) {
   const liste = quetesLiees(donjon);
   if (!liste.length) return null;
   const nb = liste.filter((q) => faites.has(q.id)).length;
+  // Croisement avec le donjon : une quête qui demande de vaincre ce boss, cochée alors que le boss n'est pas marqué vaincu.
+  const aVerifier = (q: (typeof liste)[number]) =>
+    bossVaincu === false && faites.has(q.id) && !!boss && q.objectif.toLowerCase().includes(`vaincre ${boss.toLowerCase()}`);
   return (
     <div className="quetes-liees">
-      <span className="quetes-liees__titre">Quêtes liées <span className={nb === liste.length ? "vert" : "discret"}>({nb} / {liste.length})</span></span>
+      <span className="quetes-liees__titre">
+        Quêtes liées <span className={nb === liste.length ? "vert" : "discret"}>({nb} / {liste.length})</span>
+        {boss && bossVaincu != null && <span className="discret"> · {boss} {bossVaincu ? "vaincu ✓" : "pas encore vaincu"}</span>}
+      </span>
       <ul>
         {liste.map((q) => (
           <li key={q.id} className={faites.has(q.id) ? "quetes-liees--faite" : ""}>
@@ -44,7 +62,19 @@ export function QuetesLiees({ donjon, faites, modifiable, onBasculer }: {
               <input type="checkbox" checked={faites.has(q.id)} disabled={!modifiable} onChange={() => onBasculer(q.id, !faites.has(q.id))} />
               <span className="quetes-liees__nom">{q.nom}</span>
             </label>
-            <span className="discret-taille">niv. {q.niveau} · {q.objectif}</span>
+            <span className="discret-taille">niv. {q.niveau}{origine(q.id) && <> · {origine(q.id)}</>}</span>
+            {aVerifier(q) && (
+              <span className="quetes-liees__alerte" title="Cette case vient de la série indiquée (cochée avec les étapes précédentes, par exemple). Décoche-la si tu ne l'as pas faite.">
+                ⚠ cochée, mais {boss} n'est pas encore marqué vaincu : à vérifier
+              </span>
+            )}
+            {/* Ce qu'il faut faire dans ce donjon, avec la salle : affiché au survol de la quête (ou quand sa case a le focus) */}
+            <ul className="quetes-liees__infobulle" role="tooltip">
+              {q.objectif.split(" ; ").map((a, k) => {
+                const [action, salle] = a.split(" · ");
+                return <li key={k}>{action}{salle && <strong className="quetes-liees__salle"> · {salle}</strong>}</li>;
+              })}
+            </ul>
           </li>
         ))}
       </ul>

@@ -32,9 +32,10 @@ classes = refs("breeds.json")
 boss_donjon = {b: T(d["nameId"]) for d in donjons.values() for b in d["bosses"]["Array"]}
 NOMS_DONJONS = sorted(((T(d["nameId"]), d["id"]) for d in donjons.values() if T(d["nameId"])), key=lambda x: -len(x[0]))
 def donjon_cite(texte):
-    """Donjon nommé dans un objectif écrit (le plus long nom qui y figure)."""
-    t = texte.lower()
-    return next((dj for nom, dj in NOMS_DONJONS if nom.lower() in t), None)
+    """Donjon nommé dans un objectif écrit (le plus long nom qui y figure). Sans tenir compte des accents ni des
+    majuscules : le jeu écrit parfois « l'Epave du Grolandais Violent » pour l'« Épave du Grolandais violent »."""
+    t = f" {norme(texte)} "
+    return next((dj for nom, dj in NOMS_DONJONS if f" {norme(nom)} " in t), None)
 def donjon_de_quete(q):
     """Donjon où se déroule une quête, s'il est nommé dans un de ses objectifs écrits."""
     for sid in q["stepIds"]["Array"]:
@@ -409,27 +410,76 @@ def chaine_qf(depart):
 SERIE_DE_QUETE = {qid: "emma-tom-pouce" for qid in chaine_qf(896)}            # « Donjon en mousse » → « Le tour est joué »
 SERIE_DE_QUETE.update({qid: "tour-du-monde" for qid in chaine_qf(2005)})       # « Le tour du monde » → « Le tracas du guerrier »
 
+# Salle d'une carte de donjon, d'après le nom de la carte dans le jeu (« Salons privés de Klime - Troisième Salle »).
+# L'ordre des cartes dans les données ne suit pas celui des salles : seul le nom fait foi.
+infos_cartes = {}
+for r in charger("maps_information.json")["references"]["RefIds"]:
+    x = r.get("data", r)
+    if "id" in x: infos_cartes[x["id"]] = x
+ORDINAUX = {"premiere": 1, "deuxieme": 2, "troisieme": 3, "quatrieme": 4, "cinquieme": 5, "sixieme": 6, "septieme": 7, "huitieme": 8, "neuvieme": 9, "dixieme": 10}
+def salle_depuis_nom(nom_carte, nom_donjon, noms_boss):
+    partie = nom_carte.split(" - ", 1)[1] if " - " in nom_carte else ""
+    if not partie: return None
+    n = norme(partie).split(" ")
+    if n and n[0] in ORDINAUX and "salle" in n: return f"salle {ORDINAUX[n[0]]}"
+    if norme(partie).startswith("salle de ") or any(norme(b) in norme(partie) for b in noms_boss): return "salle du boss"
+    return partie[:1].lower() + partie[1:]  # « salle annexe », « antichambre du S.L.I.P. »
+salle_de_carte = {}
+for d in donjons.values():
+    noms_boss = [T(monstres[b]["nameId"]) for b in d["bosses"]["Array"] if b in monstres]
+    for m in d["mapIds"]["Array"]:
+        salle_de_carte[m] = (d["id"], salle_depuis_nom(T(infos_cartes.get(m, {}).get("nameId", 0)), T(d["nameId"]), noms_boss))
+# Boss cités par leur nom dans un objectif écrit (« Récupérer une Plante soufrière après l'Obsidiantre »).
+NOMS_BOSS = sorted(((T(monstres[b]["nameId"]), d["id"]) for d in donjons.values() for b in d["bosses"]["Array"] if b in monstres and T(monstres[b]["nameId"])),
+                   key=lambda x: -len(x[0]))
+def boss_cite(texte):
+    t = f" {norme(texte)} "
+    return next((dj for nom, dj in NOMS_BOSS if len(nom) > 4 and f" {norme(nom)} " in t), None)
+def premiere_majuscule(t): return t[:1].upper() + t[1:] if t else t
+
 liees = {}
 for q in quetes.values():
     if q["categoryId"] in cat_exclues: continue
-    objectifs = {}
+    # Pour chaque donjon : les actions à y faire, avec la salle quand on la connaît (« Cliquer sur… · salle 3 »).
+    actions = {}
+    def ajouter(dj, action, salle=None):
+        actions.setdefault(dj, [])
+        texte = f"{action} · {salle}" if salle else action
+        if texte not in actions[dj]: actions[dj].append(texte)
     for sid in q["stepIds"]["Array"]:
         for oid in etapes[sid]["objectiveIds"]["Array"]:
-            o = qobj[oid]
-            if o["typeId"] in (6, 14, 16):
-                mid = o["parameters"]["parameter0"]
+            o = qobj[oid]; p = o["parameters"]; t = o["typeId"]
+            carte = salle_de_carte.get(o.get("mapId"))
+            if t in (6, 14, 16):
+                mid = p["parameter0"]; n = max(1, p["parameter1"])
                 djs = set(boss_vers_donjons.get(mid, ()))
-                # Monstre qui n'est pas un boss mais à vaincre dans un donjon nommé par la quête (Larve Dorée, Donjon des Larves).
-                if not djs and o["parameters"].get("dungeonOnly"):
+                if not djs and p.get("dungeonOnly"):
                     cite = donjon_de_quete(q)
                     if cite: djs = {cite}
+                if not djs and carte: djs = {carte[0]}
                 for dj in djs:
-                    objectifs.setdefault(dj, []).append((mid, max(1, o["parameters"]["parameter1"])))
-    if not objectifs or len(objectifs) > 8: continue  # au-delà : quête générique sur tous les donjons
-    for dj, liste in objectifs.items():
-        faire = ", ".join(sorted({f"vaincre {T(monstres[m]['nameId'])}" + (f" ×{n}" if n > 1 else "") for m, n in liste}))
+                    salle = "salle du boss" if mid in boss_vers_donjons and dj in boss_vers_donjons[mid] else (carte[1] if carte and carte[0] == dj else None)
+                    ajouter(dj, f"Vaincre {T(monstres[mid]['nameId'])}" + (f" ×{n}" if n > 1 else ""), salle)
+            elif t == 0:
+                texte = premiere_majuscule(T(p["parameter0"]).strip().rstrip("."))
+                if not texte: continue
+                if carte:
+                    ajouter(carte[0], texte, carte[1])
+                elif re.search(r"proximit|abords|devant l|à l'entrée|aux alentours", texte.lower()):
+                    pass  # à côté du donjon, pas dedans
+                elif donjon_cite(texte):
+                    ajouter(donjon_cite(texte), texte)  # dans le donjon, sans salle précise
+                elif boss_cite(texte):
+                    ajouter(boss_cite(texte), texte, "salle du boss")
+            elif carte:
+                # Autres actions situées dans un donjon : parler à un PNJ, rapporter un objet, se rendre sur une carte
+                if t == 1 and p.get("parameter0") in pnj: ajouter(carte[0], f"Parler à {T(pnj[p['parameter0']]['nameId'])}", carte[1])
+                elif t == 3 and p.get("parameter1") in objets: ajouter(carte[0], f"Rapporter {max(1, p['parameter2'])} × {T(objets[p['parameter1']]['nameId'])}", carte[1])
+                elif t == 4: ajouter(carte[0], "Aller jusqu'à cette salle" if carte[1] else "Se rendre dans le donjon", carte[1])
+    if not actions or len(actions) > 8: continue  # au-delà : quête générique sur tous les donjons
+    for dj, liste in actions.items():
         liees.setdefault(T(donjons[dj]["nameId"]), []).append({
-            "id": id_site_de_quete.get(q["id"], f"dql-{q['id']}"), "nom": T(q["nameId"]), "niveau": q["levelMin"], "objectif": faire,
+            "id": id_site_de_quete.get(q["id"], f"dql-{q['id']}"), "nom": T(q["nameId"]), "niveau": q["levelMin"], "objectif": " ; ".join(liste),
             # Quête du Tour du monde ou d'Emma : le site la relie à l'étape de ce donjon dans la série.
             **({"serie": SERIE_DE_QUETE[q["id"]]} if q["id"] in SERIE_DE_QUETE else {}),
         })
@@ -438,8 +488,9 @@ print(f"quêtes liées : {sum(len(v) for v in liees.values())} pour {len(liees)}
 
 racine = pathlib.Path(__file__).resolve().parent.parent
 (racine / "src/data/quetesDonjons.ts").write_text(
-    "// Généré par scripts/generer-quetes-dofus.py : quêtes liées à chaque donjon (un objectif demande de vaincre son boss),\n"
-    "// d'après les données du jeu. Clé : nom du donjon. Un identifiant « dql-… » n'appartient à aucune série du site.\n"
+    "// Généré par scripts/generer-quetes-dofus.py : quêtes liées à chaque donjon (vaincre son boss, ou une action dans une de ses\n"
+    "// salles : objet à récupérer, élément à cliquer…), d'après les données du jeu. « objectif » = action · salle.\n"
+    "// Clé : nom du donjon. Un identifiant « dql-… » n'appartient à aucune série du site.\n"
     "export type QueteLieeDonjon = { id: string; nom: string; niveau: number; objectif: string; serie?: string };\n\n"
     "export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = " + json.dumps(liees, ensure_ascii=False, indent=1) + ";\n", encoding="utf-8")
 

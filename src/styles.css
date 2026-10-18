@@ -1077,3 +1077,113 @@ a.jauge__nom:hover { color: var(--or); }
 .legende i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; }
 .legende__obtenu { background: var(--vert); }
 .legende__encours { background: var(--or); }
+
+/* Parcours optimisé (Dofus des Glaces) */
+.opti summary { cursor: pointer; list-style: none; }
+.opti summary::-webkit-details-marker { display: none; }
+.opti summary::before { content: "▸ "; color: var(--or); }
+.opti[open] summary::before { content: "▾ "; }
+.opti__alertes { list-style: none; margin: 12px 0 0; padding: 10px 14px; border-radius: 10px; background: var(--orange-fond); display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.opti__parties { margin: 14px 0 6px; }
+.opti__etapes { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; line-height: 1.5; }
+.opti__etape--alerte { border-left: 3px solid var(--or); padding-left: 8px; margin-left: -11px; }
+.opti__quete { display: inline; padding: 0; border: none; background: none; font: inherit; font-weight: 600; color: var(--or-clair); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.opti__quete--faite { color: var(--vert-clair); }
+.quete__astuce { flex-basis: 100%; font-size: 13px; color: var(--texte-2); }
+.quetes-liees__salle { color: var(--or-clair); font-weight: 600; }
+
+/* Police choisie (page Paramètres) */
+[data-police="times"] { --titre: "Times New Roman", Times, "Liberation Serif", serif; --corps: "Times New Roman", Times, "Liberation Serif", serif; }
+[data-police="times"] body { font-size: 16px; }
+[data-police="epaisse"] { --titre: "Atkinson Hyperlegible", system-ui, sans-serif; --corps: "Atkinson Hyperlegible", system-ui, sans-serif; }
+[data-police="epaisse"] body { font-weight: 700; }
+[data-police="epaisse"] h1, [data-police="epaisse"] h2, [data-police="epaisse"] h3, [data-police="epaisse"] strong, [data-police="epaisse"] b { font-weight: 800; }
+.police__apercu { font-size: 15px; color: var(--texte); }
+
+/* Parcours optimisé : quêtes à cocher dans le texte, étapes faites */
+.opti__ref { white-space: nowrap; }
+.opti__quete { white-space: normal; }
+.opti__quete:disabled { cursor: default; }
+.opti__aller { margin-left: 3px; padding: 0 3px; border: none; background: none; color: var(--discret); font: inherit; font-size: 13px; text-decoration: none; cursor: pointer; }
+.opti__aller:hover { color: var(--texte); }
+.opti__etape--faite { color: var(--discret); }
+.opti__etape--faite::marker { content: "✓  "; color: var(--vert); }
+.opti__compte { font-size: 11px; opacity: 0.8; margin-left: 4px; }
+.quetes-liees__alerte { flex-basis: 100%; margin-left: 26px; font-size: 12px; color: var(--orange); }
+
+/* Parcours optimisé : les parties l'une sous l'autre */
+.opti__partie { margin-top: 16px; border-top: 1px solid var(--trait); padding-top: 12px; }
+.opti__partie > summary { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; cursor: pointer; list-style: none; margin-bottom: 8px; }
+.opti__partie > summary::-webkit-details-marker { display: none; }
+.opti__partie > summary::before { content: "▾"; color: var(--or); margin-right: 6px; }
+.opti__partie:not([open]) > summary::before { content: "▸"; }
+.opti__partie-titre { flex: 1; font-family: var(--titre); font-size: 17px; font-weight: 600; }
+
+/* Quêtes liées : les actions et salles apparaissent au survol de la quête */
+.quetes-liees li { position: relative; }
+.quetes-liees .quetes-liees__infobulle {
+  display: none; flex-direction: column; gap: 2px; position: absolute; left: 26px; top: calc(100% + 2px); z-index: 30; min-width: 260px; max-width: min(520px, 90vw);
+  list-style: none; margin: 0; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--trait-fort); background: var(--carte);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45); font-size: 13px; color: var(--texte-2); line-height: 1.45;
+}
+.quetes-liees .quetes-liees__infobulle li { display: block; }
+.quetes-liees .quetes-liees__infobulle li::before { content: "→ "; color: var(--discret); }
+.quetes-liees > ul > li:hover > .quetes-liees__infobulle, .quetes-liees > ul > li:focus-within > .quetes-liees__infobulle { display: flex; }
+.quetes-liees > ul > li { cursor: default; }
+
+/* La Brocante des boulets */
+.brocante-outils { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.brocante-outils input[type="search"] { flex: 1 1 260px; }
+.brocante-grille { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.vente { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; margin: 0; }
+.vente--vendu { opacity: 0.55; }
+.vente__haut { display: flex; align-items: center; gap: 12px; }
+.vente__haut > div { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.vente__icone { flex-shrink: 0; border-radius: 8px; background: rgba(255, 255, 255, 0.04); }
+.vente__nom { font-size: 15px; line-height: 1.25; }
+.vente__parfait { align-self: flex-start; }
+/* Comme l'infobulle d'un objet en jeu : une caractéristique par ligne */
+.vente__stats { list-style: none; margin: 0; padding: 8px 10px; display: flex; flex-direction: column; gap: 1px; font-size: 13px; border-radius: 8px; background: rgba(255, 255, 255, 0.03); }
+.vente__stat--malus { color: var(--rouge); }
+.vente__note { margin: 0; font-size: 13px; color: var(--texte-2); font-style: italic; }
+.vente__prix { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.vente__prix strong { font-size: 17px; color: var(--or-clair); }
+.vente__hdv { font-size: 13px; color: var(--discret); text-decoration: line-through; }
+.vente__reduc { font-size: 13px; font-weight: 700; color: var(--vert-clair); }
+.vente__vendeur { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 13px; color: var(--texte-2); }
+.vente__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.vente__actions select { height: 32px; min-height: 0; font-size: 13px; padding: 0 8px; }
+.vente__gestion { display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--trait); padding-top: 8px; }
+.form-vente { display: flex; flex-direction: column; gap: 12px; }
+.form-vente__recherche { position: relative; max-width: 560px; }
+.form-vente__recherche input { width: 100%; box-sizing: border-box; }
+.form-vente__resultats { list-style: none; margin: 6px 0 0; padding: 6px; border-radius: 10px; border: 1px solid var(--trait); background: var(--carte); max-height: 360px; overflow-y: auto; }
+.form-vente__resultats button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 8px; border: none; border-radius: 8px; background: transparent; color: var(--texte); font: inherit; text-align: left; cursor: pointer; }
+.form-vente__resultats button:hover { background: rgba(255, 255, 255, 0.05); }
+.form-vente__stats { display: flex; flex-direction: column; gap: 6px; max-width: 520px; }
+.form-vente__stat { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.form-vente__stat--fixe { padding-left: 2px; color: var(--texte-2); }
+.form-vente__stat input { width: 80px; height: 34px; min-height: 0; text-align: center; }
+
+/* Icône de chaque caractéristique (Brocante) */
+.vente__stats li { display: flex; align-items: center; gap: 6px; }
+.icone-stat { width: 18px; height: 18px; flex-shrink: 0; object-fit: contain; }
+.icone-stat--vide { display: inline-block; }
+
+/* Parcours optimisé en fenêtre : pages avec flèches, trois états par quête */
+.opti { padding: 22px 26px; display: flex; flex-direction: column; gap: 14px; }
+.opti__titre { margin: 0; padding-right: 40px; }
+.opti__navigation { display: flex; align-items: center; gap: 12px; }
+.opti__navigation .bouton { min-width: 44px; font-size: 18px; }
+.opti__navigation .bouton:disabled { opacity: 0.35; cursor: default; }
+.opti__entete-partie { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
+.opti__points { display: flex; justify-content: center; gap: 8px; }
+.opti__points button { width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 1px solid var(--trait-fort); background: transparent; cursor: pointer; }
+.opti__points button.actif { background: var(--or); border-color: var(--or); }
+.opti__quete--encours { color: var(--orange); }
+.opti__quete--faite { color: var(--vert-clair); }
+.opti__etape--encours::marker { color: var(--orange); font-weight: 700; }
+/* Boutons avec icône : icône et texte bien centrés */
+.bouton--icone { gap: 8px; line-height: 1; padding-top: 0; padding-bottom: 0; }
+.bouton--icone > span[aria-hidden] { display: inline-flex; font-size: 16px; line-height: 1; }
+.aide-masse__ouvrir { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }

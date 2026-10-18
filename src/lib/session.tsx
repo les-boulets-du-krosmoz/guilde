@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 import type { Session } from "@supabase/supabase-js";
 import { chargerMetamob } from "./donnees";
 import { supabase } from "./supabase";
-import { appliquerModeDaltonien } from "./affichage";
+import { appliquerModeDaltonien, appliquerPolice } from "./affichage";
 import type { Membre, Personnage } from "./types";
 
 type EtatSession = {
@@ -52,6 +52,7 @@ export function FournisseurSession({ children }: { children: ReactNode }) {
     const { data: m, error } = await supabase.from("membres").select("*").eq("id", s.user.id).single();
     // Le mode daltonien enregistré sur le compte suit le membre d'un appareil à l'autre.
     if (m && "mode_daltonien" in m) appliquerModeDaltonien((m as Membre).mode_daltonien ?? null);
+    if (m && "police" in m) appliquerPolice((m as Membre).police ?? null);
     if (error) setErreur("Impossible de charger ton profil : " + error.message);
     setMembre((m as Membre) ?? null);
     if (m?.valide) actualiserMonMetamob(m.id);

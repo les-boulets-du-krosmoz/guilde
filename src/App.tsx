@@ -7,6 +7,7 @@ import { FournisseurStatuts } from "./lib/statuts";
 import { Chargement, Connexion, NonMembre } from "./pages/Acces";
 
 // Chaque page est un morceau à part, téléchargé seulement quand on l'ouvre (puis gardé par le navigateur).
+const Brocante = lazy(() => import("./pages/Brocante").then((m) => ({ default: m.Brocante })));
 const Parametres = lazy(() => import("./pages/Parametres").then((m) => ({ default: m.Parametres })));
 const MesMetiers = lazy(() => import("./pages/MesMetiers").then((m) => ({ default: m.MesMetiers })));
 const Calendrier = lazy(() => import("./pages/Calendrier").then((m) => ({ default: m.Calendrier })));
@@ -42,6 +43,7 @@ export function App() {
         <Route path="/groupes" element={<Annonces />} />
         <Route path="/mes-metiers" element={<MesMetiers />} />
         <Route path="/parametres" element={<Parametres />} />
+        <Route path="/brocante" element={<Brocante />} />
         <Route path="/calendrier" element={<Calendrier />} />
         <Route path="/annonces" element={<Navigate to="/groupes" replace />} />
         <Route path="/avis" element={<AvisRecherche />} />

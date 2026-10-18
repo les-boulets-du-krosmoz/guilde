@@ -80,11 +80,12 @@ export function Nav() {
         />
         <MenuDeroulant
           libelle="Guilde"
-          actif={["/personnages", "/metiers", "/perso/", "/calendrier"].some((c) => pathname.startsWith(c))}
+          actif={["/personnages", "/metiers", "/perso/", "/calendrier", "/brocante"].some((c) => pathname.startsWith(c))}
           liens={[
             { to: "/personnages", libelle: "Personnages", detail: "Tous les membres et leurs personnages" },
             { to: "/metiers", libelle: "Métiers de la guilde", detail: "Qui peut fabriquer quoi" },
             { to: "/calendrier", libelle: "Calendrier", detail: "Les dispos de la guilde, trouver un créneau" },
+            { to: "/brocante", libelle: "La Brocante des boulets", detail: "Équipements à prix d'ami entre membres" },
           ]}
         />
       </nav>
