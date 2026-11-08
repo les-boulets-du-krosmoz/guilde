@@ -26,7 +26,8 @@ import { Chargement } from "./Acces";
 
 type AuMemeStade = { perso: Personnage; dispo: boolean }[];
 
-export function Quetes() {
+/** categorieImposee : affiche une seule catégorie, sans la barre des catégories (page Donjons, onglet Succès). */
+export function Quetes({ categorieImposee }: { categorieImposee?: string } = {}) {
   const { persoId } = useParams();
   const { mesPersos } = useSession();
 
@@ -39,15 +40,20 @@ export function Quetes() {
         </main>
       );
     }
+    // Intégrée à une autre page (Donjons) : on affiche directement le personnage principal, sans changer d'adresse.
+    if (categorieImposee) return <QuetesPerso key={defaut.id} persoId={defaut.id} categorieImposee={categorieImposee} />;
     return <Navigate to={{ pathname: `/quetes/${defaut.id}`, search: window.location.search }} replace />;
   }
-  return <QuetesPerso key={persoId} persoId={persoId} />;
+  return <QuetesPerso key={persoId} persoId={persoId} categorieImposee={categorieImposee} />;
 }
 
-function QuetesPerso({ persoId }: { persoId: string }) {
+function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorieImposee?: string }) {
   const { membre: moi } = useSession();
   const [params, setParams] = useSearchParams();
-  const categorie = CATEGORIES.find((c) => c.id === params.get("cat") && aDesQuetes(c)) ?? CATEGORIES[0];
+  const categorie = (categorieImposee ? CATEGORIES.find((c) => c.id === categorieImposee) : undefined)
+    ?? CATEGORIES.find((c) => c.id === params.get("cat") && c.id !== "succes" && aDesQuetes(c)) ?? CATEGORIES[0];
+  // Les succès de donjons ont déménagé dans la page Donjons : les anciens liens (?cat=succes) y mènent.
+  const ancienLienSucces = !categorieImposee && params.get("cat") === "succes";
   // La catégorie « Succès » n'a pas de série : on garde une série par défaut pour le chargement des données.
   const estSucces = categorie.id === "succes";
   const disponibles = (estSucces ? CATEGORIES[0] : categorie).series.filter((d) => d.quetes.length > 0);
@@ -149,6 +155,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perso?.id, dofus.id]);
 
+  if (ancienLienSucces) return <Navigate to="/donjons?onglet=succes" replace />;
   if (erreur) return <main className="page"><p className="erreur" role="alert">{erreur}</p></main>;
   // Étapes consécutives qu'on peut faire dans n'importe quel ordre : aucune ne dépend d'une autre du groupe.
   const groupesLibres = useMemo(() => {
@@ -316,7 +323,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
             <div className="barre barre--large" aria-hidden="true"><div style={{ width: `${(reussis / TOTAL_SUCCES) * 100}%` }} /></div>
           </div>
         </div>
-        <BarreCategories actif={categorie} onChoix={setCategorie} />
+        {!categorieImposee && <BarreCategories actif={categorie} onChoix={setCategorie} exclure={["succes"]} />}
         <TableauSucces
           perso={perso}
           modifiable={modifiable}
@@ -349,7 +356,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
         </div>
       </div>
 
-      <BarreCategories actif={categorie} onChoix={setCategorie} />
+      {!categorieImposee && <BarreCategories actif={categorie} onChoix={setCategorie} exclure={["succes"]} />}
 
       {categorie.series.length > 1 && (
         <OngletsSeries series={categorie.series} actif={dofus} onChoix={(d) => { setDofus(d); setAideMasse(false); }} libelle={categorie.estDofus ? "Choix du Dofus" : "Choix de la zone"} />
@@ -535,7 +542,7 @@ function QuetesPerso({ persoId }: { persoId: string }) {
                   const nomDonjon = donjonDuBoss(q.nom)?.nom;
                   return nomDonjon && quetesLiees(nomDonjon).length > 0 ? (
                     <QuetesLiees donjon={nomDonjon} faites={new Set([...liees, ...faites])} modifiable={modifiable}
-                      boss={donjonDuBoss(q.nom)?.boss} bossVaincu={dofus.unite === "boss" ? faites.has(q.id) : null}
+                      boss={donjonDuBoss(q.nom)?.boss} bossVaincu={dofus.unite === "boss" ? faites.has(q.id) : null} alignement={perso.alignement}
                       onBasculer={(id, faite) => (dofus.quetes.some((x) => x.id === id) ? basculer(id) : basculerLiee(id, faite))} />
                   ) : null;
                 })()}

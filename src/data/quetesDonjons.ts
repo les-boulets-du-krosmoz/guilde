@@ -9,14 +9,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-154",
    "nom": "Les sbires du maître",
    "niveau": 40,
-   "objectif": "Vaincre Bworkette · salle du boss",
+   "objectif": "Vaincre Bworkette · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
    "id": "alb-65",
    "nom": "Du repos mais pas trop...",
    "niveau": 51,
-   "objectif": "Vaincre Bworkette · salle du boss"
+   "objectif": "Vaincre Bworkette · salle du boss ; Parler à Magobwork · sortie"
   },
   {
    "id": "dql-2411",
@@ -38,6 +38,12 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "nom": "Recouvrement de dette à la Tabasse",
    "niveau": 52,
    "objectif": "Vaincre Coffre des Forgerons · salle du boss"
+  },
+  {
+   "id": "alb-302",
+   "nom": "Bandanarthrie",
+   "niveau": 155,
+   "objectif": "Vaincre Coffre des Forgerons pour récupérer 1 × Manuel du Tailleur pour les Nuls · salle du boss"
   }
  ],
  "Clos des Blops": [
@@ -45,7 +51,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "alb-73",
    "nom": "Le Tabi d'Amayiro",
    "niveau": 59,
-   "objectif": "Récupérer de l'huile de Blop Royal dans le Clos des Blops · salle 5"
+   "objectif": "Récupérer de l'huile de Blop Royal dans le Clos des Blops · salle 5 ; Vaincre Blop Reinette Royal pour récupérer 1 × Huile de Blop Royal · salle du boss"
   },
   {
    "id": "dql-2505",
@@ -53,6 +59,18 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "niveau": 60,
    "objectif": "Vaincre un Blop Royal sur sa carte en un seul combat · salle 5 ; Aller jusqu'à cette salle · salle 6",
    "serie": "emma-tom-pouce"
+  },
+  {
+   "id": "dql-1524",
+   "nom": "Il faut battre le lait quand il est chaud",
+   "niveau": 130,
+   "objectif": "Parler à Bibiblop · entrée ; Vaincre la Roublarde Hoize et ses complices · entrée ; Parler à Gavroch · entrée"
+  },
+  {
+   "id": "dql-1529",
+   "nom": "Le pouvoir derrière le trône",
+   "niveau": 130,
+   "objectif": "Parler à Bibiblop · entrée"
   }
  ],
  "Pitons Rocheux des Craqueleurs": [
@@ -60,20 +78,20 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-154",
    "nom": "Les sbires du maître",
    "niveau": 40,
-   "objectif": "Vaincre Craqueleur Légendaire · salle du boss",
+   "objectif": "Vaincre Craqueleur Légendaire · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
    "id": "alb-76",
    "nom": "La fureur du Holbaïd",
    "niveau": 72,
-   "objectif": "Vaincre Craqueleur Légendaire · salle du boss"
+   "objectif": "Vaincre Craqueleur Légendaire · salle du boss ; Ramasser un coticule · sortie"
   },
   {
    "id": "alk-396",
    "nom": "Taxe gratuite",
    "niveau": 72,
-   "objectif": "Vaincre Craqueleur Légendaire · salle du boss"
+   "objectif": "Vaincre Craqueleur Légendaire · salle du boss ; Vaincre Craqueleur Légendaire pour récupérer 1 × Dent en Or du Craqueleur Légendaire · salle du boss"
   }
  ],
  "Laboratoire de Brumen Tinctorias": [
@@ -81,26 +99,32 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-908",
    "nom": "Histoire de chiens",
    "niveau": 70,
-   "objectif": "Vaincre Nelween · salle du boss",
+   "objectif": "Vaincre Nelween · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "dql-1861",
    "nom": "Les morts vivants",
    "niveau": 70,
-   "objectif": "Voler des potions · salle 1 ; Prélever du liquide · salle 2 ; Copier des notes · salle 3 ; Prélever des échantillons sur les Maciens · salle 3 ; Voler des potions · salle 4 ; Prélever des échantillons sur Nelween · salle 5"
+   "objectif": "Voler des potions · salle 1 ; Prélever du liquide · salle 2 ; Copier des notes · salle 3 ; Prélever des échantillons sur les Maciens · salle 3 ; Voler des potions · salle 4 ; Prélever des échantillons sur Nelween · salle 5 ; Copier des notes · sortie"
+  },
+  {
+   "id": "dql-703",
+   "nom": "Où est passée la 7e compagnie ?",
+   "niveau": 75,
+   "objectif": "Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "alk-403",
    "nom": "Du venin sinon rien",
    "niveau": 79,
-   "objectif": "Vaincre Nelween · salle du boss"
+   "objectif": "Vaincre Nelween · salle du boss ; Remplir une fiole de venin de Scorbute · sortie"
   },
   {
    "id": "alb-83",
    "nom": "Poison de scorbute pour la prison",
    "niveau": 79,
-   "objectif": "Vaincre Nelween · salle du boss"
+   "objectif": "Vaincre Nelween · salle du boss ; Remplir une fiole de venin de Scorbute · sortie"
   }
  ],
  "Domaine Ancestral": [
@@ -108,19 +132,19 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "sy-2444",
    "nom": "Comme un corbac sur sa branche",
    "niveau": 90,
-   "objectif": "Interrompre le rituel de l'Abraknyde Ancestral en malmenant ses serviteurs · salle du boss ; Insister jusqu'à ce que l'Abraknyde Ancestral tienne sa promesse · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · sortie ; Interrompre le rituel de l'Abraknyde Ancestral en malmenant ses serviteurs · sortie ; Marchander avec le plus vieux magicien de la forêt · sortie ; Rapporter 1 × Œuf noir · sortie ; Insister jusqu'à ce que l'Abraknyde Ancestral tienne sa promesse · salle du boss"
   },
   {
    "id": "sy-1620",
    "nom": "Munster lève le mystère",
    "niveau": 90,
-   "objectif": "Se rendre au cœur du Domaine Ancestral · salle 5 ; Vaincre Abraknyde Ancestral · salle du boss"
+   "objectif": "Se rendre au cœur du Domaine Ancestral · salle 5 ; Vaincre Abraknyde Ancestral · salle du boss ; Parler à Abraknyde Ancestral · sortie"
   },
   {
    "id": "dql-155",
    "nom": "Un juge hystérique",
    "niveau": 90,
-   "objectif": "Vaincre Abraknyde Ancestral · salle du boss",
+   "objectif": "Vaincre Abraknyde Ancestral · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
@@ -156,7 +180,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-154",
    "nom": "Les sbires du maître",
    "niveau": 40,
-   "objectif": "Vaincre Scarabosse Doré · salle du boss",
+   "objectif": "Vaincre Scarabosse Doré · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
@@ -181,10 +205,16 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Trouver le butin caché dans la troisième salle de la Tanière du Meulou · salle 3"
   },
   {
+   "id": "dql-1470",
+   "nom": "Draconanthropie",
+   "niveau": 100,
+   "objectif": "Vaincre Meulou pour récupérer 1 × Bague Enchantée du Meulou · salle du boss"
+  },
+  {
    "id": "alk-414",
    "nom": "Mulanthropie",
    "niveau": 100,
-   "objectif": "Vaincre Meulou · salle du boss"
+   "objectif": "Vaincre Meulou · salle du boss ; Vaincre Meulou pour récupérer 1 × Échantillon frais de Mojo du Meulou · salle du boss"
   }
  ],
  "Clairière du Chêne Mou": [
@@ -192,13 +222,13 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1653",
    "nom": "Plongeon et dragon",
    "niveau": 100,
-   "objectif": "Vaincre Chêne Mou · salle du boss"
+   "objectif": "Vaincre Chêne Mou · salle du boss ; Aller jusqu'à cette salle · bosquet désenchanté ; Récupérer la Clef Griffue · bosquet désenchanté"
   },
   {
    "id": "dql-157",
    "nom": "La voie du guerrier",
    "niveau": 120,
-   "objectif": "Vaincre Chêne Mou · salle du boss",
+   "objectif": "Vaincre Chêne Mou · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
@@ -211,13 +241,25 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "sy-1621",
    "nom": "L'art de la langue de bois",
    "niveau": 140,
-   "objectif": "Entrer dans la Clairière du Chêne Mou et se présenter devant le maître des lieux · salle 5 ; Vaincre Chêne Mou · salle du boss"
+   "objectif": "Entrer dans la Clairière du Chêne Mou et se présenter devant le maître des lieux · salle 5 ; Vaincre Chêne Mou · salle du boss ; Parler à Chêne Mou · sortie"
+  },
+  {
+   "id": "frq-632",
+   "nom": "Convoi humanitaire",
+   "niveau": 170,
+   "objectif": "Vaincre Chêne Mou pour récupérer 1 × Branche du Chêne Mou · salle du boss"
+  },
+  {
+   "id": "sy-2488",
+   "nom": "Qui nous protège du Protecteur ?",
+   "niveau": 200,
+   "objectif": "Obtenir le sigil de Pouchecot · sortie"
   },
   {
    "id": "dql-2131",
    "nom": "Un pouvoir mérydique",
    "niveau": 200,
-   "objectif": "Vaincre Chêne Mou · salle du boss"
+   "objectif": "Vaincre Chêne Mou · salle du boss ; Détruire le second bourgeon parasite · sortie ; Parler à Chêne Mou · sortie"
   }
  ],
  "Fabrique de foux d'artifice": [
@@ -252,7 +294,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-153",
    "nom": "Le maître des clefs",
    "niveau": 30,
-   "objectif": "Vaincre Chafer Rōnin · salle du boss",
+   "objectif": "Vaincre Chafer Rōnin · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   }
  ],
@@ -261,7 +303,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-153",
    "nom": "Le maître des clefs",
    "niveau": 30,
-   "objectif": "Vaincre Batofu · salle du boss",
+   "objectif": "Vaincre Batofu · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   }
  ],
@@ -270,14 +312,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-154",
    "nom": "Les sbires du maître",
    "niveau": 40,
-   "objectif": "Vaincre Shin Larve · salle du boss",
+   "objectif": "Vaincre Shin Larve · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
    "id": "alk-386",
    "nom": "Pauvre larve... dorée",
    "niveau": 52,
-   "objectif": "Entrer dans le Donjon des Larves avec la Larve Dorée ; Vaincre Larve Dorée · onzième salle"
+   "objectif": "Entrer dans le Donjon des Larves avec la Larve Dorée ; Vaincre Larve Dorée · onzième salle ; Parler à Larve Dorée · sortie"
   }
  ],
  "Refuge sylvestre": [
@@ -285,14 +327,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-154",
    "nom": "Les sbires du maître",
    "niveau": 40,
-   "objectif": "Vaincre Rakoopeur · salle du boss",
+   "objectif": "Vaincre Rakoopeur · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
    "id": "dql-2466",
    "nom": "Association de fureteurs",
    "niveau": 50,
-   "objectif": "Vaincre Rakoopeur · salle du boss ; Parlez à Rakoopeur à nouveau · salle du boss ; Parlez à Rakoopeur une dernière fois · salle du boss"
+   "objectif": "Vaincre Rakoopeur · salle du boss ; Parler à Rakoopeur · sortie ; Retirer les bandages et appliquer l'onguent sur la cheville de Bentlaitue · sortie ; Parlez à Rakoopeur à nouveau · sortie ; Parler à Bentlaitue · sortie ; Parlez à Rakoopeur une dernière fois · sortie"
   },
   {
    "id": "dql-2465",
@@ -306,14 +348,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-155",
    "nom": "Un juge hystérique",
    "niveau": 90,
-   "objectif": "Vaincre Dragon Cochon · salle du boss",
+   "objectif": "Vaincre Dragon Cochon · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
    "id": "dql-1653",
    "nom": "Plongeon et dragon",
    "niveau": 100,
-   "objectif": "Vaincre Dragon Cochon · salle du boss"
+   "objectif": "Vaincre Dragon Cochon · salle du boss ; Aller jusqu'à cette salle · sortie ; Récupérer la Clef Dentée · sortie"
   }
  ],
  "Garde-manger du Rat Blanc": [
@@ -321,14 +363,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-155",
    "nom": "Un juge hystérique",
    "niveau": 90,
-   "objectif": "Vaincre Rat Blanc · salle du boss",
+   "objectif": "Vaincre Rat Blanc · salle du boss ; Se rendre dans le donjon",
    "serie": "tour-du-monde"
   },
   {
    "id": "dql-2434",
    "nom": "La Geste de Ratagnan",
    "niveau": 110,
-   "objectif": "Vaincre Rat Blanc · salle du boss ; Discuter avec le Rat Blanc · salle du boss"
+   "objectif": "Vaincre Rat Blanc · salle du boss ; Discuter avec le Rat Blanc"
   },
   {
    "id": "dql-2433",
@@ -340,7 +382,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "alb-257",
    "nom": "Vin diou",
    "niveau": 111,
-   "objectif": "Vaincre Rat Blanc · salle du boss"
+   "objectif": "Vaincre Rat Blanc · salle du boss ; Vaincre Rat Blanc pour récupérer 1 × Grelot d'Hersa · salle du boss"
   }
  ],
  "Sousouricière du Rat Noir": [
@@ -348,14 +390,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-155",
    "nom": "Un juge hystérique",
    "niveau": 90,
-   "objectif": "Vaincre Rat Noir · salle du boss",
+   "objectif": "Vaincre Rat Noir · salle du boss ; Se rendre dans le donjon",
    "serie": "tour-du-monde"
   },
   {
    "id": "dql-2432",
    "nom": "Fait comme un rat",
    "niveau": 110,
-   "objectif": "Trouver Stanis Ast dans la Sousouricière du Rat Noir ; Vaincre Rat Noir · salle du boss"
+   "objectif": "Trouver Stanis Ast dans la Sousouricière du Rat Noir ; Vaincre Rat Noir · salle du boss ; Parler à Rat Noir ; Rapporter 1 × Milicienne déprimée"
   },
   {
    "id": "alk-246",
@@ -382,7 +424,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1775",
    "nom": "Voler dans les plumes",
    "niveau": 110,
-   "objectif": "Parler à Natacha Manka · salle du trône ; Vaincre Maître Corbac · salle du boss ; Rapporter 1 × Guide du Maître Corbac · antichambre"
+   "objectif": "Parler à Natacha Manka · salle du trône ; Vaincre Maître Corbac · salle du boss ; Vaincre Maître Corbac pour récupérer 1 × Guide du Maître Corbac · salle du boss ; Rapporter 1 × Guide du Maître Corbac · antichambre"
   },
   {
    "id": "dql-2136",
@@ -402,26 +444,44 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-156",
    "nom": "Des donjons, encore des donjons",
    "niveau": 110,
-   "objectif": "Vaincre Royalmouth · salle du boss",
+   "objectif": "Vaincre Royalmouth · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
    "id": "gl-619",
    "nom": "Antiroyaliste",
    "niveau": 120,
-   "objectif": "Aller jusqu'à cette salle · salle 6 ; Vaincre Royalmouth · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle 6 ; Vaincre Royalmouth · salle du boss ; Vaincre Royalmouth pour récupérer 1 × Moumoute du Royalmouth · salle du boss"
+  },
+  {
+   "id": "frq-674",
+   "nom": "Le mal a dit",
+   "niveau": 120,
+   "objectif": "Vaincre Royalmouth pour récupérer 1 × Echantillon de Sang du Royalmouth · salle du boss"
   },
   {
    "id": "dql-695",
    "nom": "Monarchie absolue",
    "niveau": 120,
-   "objectif": "Vaincre Royalmouth · salle du boss"
+   "objectif": "Vaincre Royalmouth · salle du boss ; Aller jusqu'à cette salle · sortie"
+  },
+  {
+   "id": "dql-686",
+   "nom": "Porte, Royalmouth, trésor",
+   "niveau": 120,
+   "objectif": "Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "dql-1529",
    "nom": "Le pouvoir derrière le trône",
    "niveau": 130,
-   "objectif": "Trouver Gavroch dans la serre du Royalmouth ; Vaincre Royalmouth · salle du boss"
+   "objectif": "Trouver Gavroch dans la serre du Royalmouth ; Vaincre Royalmouth · salle du boss ; Parler à Gavroch · sortie"
+  },
+  {
+   "id": "frq-577",
+   "nom": "Pêche en eaux gelées",
+   "niveau": 130,
+   "objectif": "Vaincre Royalmouth pour récupérer 1 × Laine du Royalmouth · salle du boss"
   },
   {
    "id": "frq-678",
@@ -456,8 +516,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-156",
    "nom": "Des donjons, encore des donjons",
    "niveau": 110,
-   "objectif": "Vaincre Tofu Royal · salle du boss",
+   "objectif": "Vaincre Tofu Royal · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
+  },
+  {
+   "id": "dql-1527",
+   "nom": "Comment perdre ses plumes",
+   "niveau": 130,
+   "objectif": "Vaincre Tofu Royal pour récupérer 1 × Œuf de Monarque · salle du boss"
   }
  ],
  "Antre de Crocabulia": [
@@ -465,14 +531,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-156",
    "nom": "Des donjons, encore des donjons",
    "niveau": 110,
-   "objectif": "Vaincre Crocabulia · salle du boss",
+   "objectif": "Vaincre Crocabulia · salle du boss ; Aller jusqu'à cette salle · salle 5",
    "serie": "tour-du-monde"
   },
   {
    "id": "dql-2036",
    "nom": "Le forgeur de légende",
    "niveau": 120,
-   "objectif": "Vaincre Crocabulia · salle du boss ; Tremper l'épée dans le sang de Crocabulia · salle du boss"
+   "objectif": "Vaincre Crocabulia · salle du boss ; Tremper l'épée dans le sang de Crocabulia · salle 5"
   },
   {
    "id": "dql-2044",
@@ -509,6 +575,12 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "nom": "Au nom de l'Art",
    "niveau": 130,
    "objectif": "Entrer dans l'Atelier du Tanukouï San ; Vaincre Tanukouï San · salle du boss"
+  },
+  {
+   "id": "alb-284",
+   "nom": "La tactique des gens d'armes",
+   "niveau": 135,
+   "objectif": "Aller jusqu'à cette salle · débarras ; Délivrer Dréna Nassema · débarras"
   }
  ],
  "Salle du Minotot": [
@@ -525,7 +597,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-157",
    "nom": "La voie du guerrier",
    "niveau": 120,
-   "objectif": "Vaincre Bworker · salle du boss",
+   "objectif": "Vaincre Bworker · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   },
   {
@@ -536,6 +608,12 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
   }
  ],
  "Volière de la Haute Truche": [
+  {
+   "id": "dql-1517",
+   "nom": "Un œuf pour Ecaflip",
+   "niveau": 130,
+   "objectif": "Vaincre Haute Truche pour récupérer 1 × Œuf Fécondé de Haute Truche · salle du boss"
+  },
   {
    "id": "alk-272",
    "nom": "Assassinat effectué",
@@ -566,14 +644,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-914",
    "nom": "Tour de rein",
    "niveau": 150,
-   "objectif": "Vaincre Sphincter Cell · salle du boss",
+   "objectif": "Vaincre Sphincter Cell · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "alk-309",
    "nom": "Une faille dans sa carapace",
    "niveau": 155,
-   "objectif": "Récupérer les clefs dans le Repaire de Sphincter Cell · salle 5"
+   "objectif": "Récupérer les clefs dans le Repaire de Sphincter Cell · salle 5 ; Vaincre Sphincter Cell pour récupérer 1 × Clefs de Mulic Bere · salle du boss"
   }
  ],
  "Grotte de Kanigroula": [
@@ -594,6 +672,12 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "nom": "La bénédiction de Foluk",
    "niveau": 170,
    "objectif": "Vaincre Kanigroula · salle du boss"
+  },
+  {
+   "id": "dql-2121",
+   "nom": "Les sentiers de la guerre",
+   "niveau": 200,
+   "objectif": "Vaincre les deux gardes d'élite de la Matriarche · sortie ; Parler à Kanigroula · sortie"
   }
  ],
  "Laboratoire de Nileza": [
@@ -613,25 +697,31 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "frq-1323",
    "nom": "Au-delà du mur",
    "niveau": 200,
-   "objectif": "Chercher des traces du passage de Jean Neige dans le Laboratoire de Nileza · salle du boss ; Expliquer à Nileza par les armes que vous êtes venu en paix · salle du boss"
+   "objectif": "Chercher des traces du passage de Jean Neige dans le Laboratoire de Nileza · salle du boss ; Expliquer à Nileza par les armes que vous êtes venu en paix · salle du boss ; Parler à Nileza · sortie"
+  },
+  {
+   "id": "gl-1326",
+   "nom": "Chaud et froid",
+   "niveau": 200,
+   "objectif": "Parler à Nileza · sortie ; Rapporter 1 × Sang Glacé de Klime · sortie ; Rapporter 1 × Larme de Missiz Frizz · sortie ; Rapporter 1 × Huile Antigel de Sylargh · sortie"
   },
   {
    "id": "gl-1309",
    "nom": "Il faut mettre un terme aux maîtres",
    "niveau": 200,
-   "objectif": "Vaincre Nileza · salle du boss"
+   "objectif": "Vaincre Nileza · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "frq-1328",
    "nom": "Mille et un jours, un destin",
    "niveau": 200,
-   "objectif": "S'éloigner de Nileza pour qu'il termine la préparation de la potion · salle du boss ; Constater les effets de la potion de Nileza · salle du boss"
+   "objectif": "Rapporter 1 × Liquide de la Clepsydre · sortie ; S'éloigner de Nileza pour qu'il termine la préparation de la potion · sortie ; Constater les effets de la potion de Nileza · sortie"
   },
   {
    "id": "dql-1311",
    "nom": "Porte, Nileza, trésor",
    "niveau": 200,
-   "objectif": "Laboratoire de Nileza - Sortie"
+   "objectif": "Laboratoire de Nileza - Sortie · sortie"
   },
   {
    "id": "dql-1912",
@@ -651,20 +741,20 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-898",
    "nom": "Donjon douillet",
    "niveau": 50,
-   "objectif": "Vaincre Kwakwa · salle du boss",
+   "objectif": "Vaincre Kwakwa · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "dql-681",
    "nom": "L'Ascension",
    "niveau": 50,
-   "objectif": "Vaincre Kwakwa · salle du boss"
+   "objectif": "Vaincre Kwakwa · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "alk-385",
    "nom": "Pauvre larve",
    "niveau": 51,
-   "objectif": "Vaincre Kwakwa · salle du boss ; Récupérer un Œuf de Kwakwa · salle du boss"
+   "objectif": "Vaincre Kwakwa · salle du boss ; Récupérer un Œuf de Kwakwa · sortie"
   }
  ],
  "Gelaxième Dimension": [
@@ -687,26 +777,32 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "sy-1619",
    "nom": "Arak-haï en pagaille",
    "niveau": 90,
-   "objectif": "Trouver la reine des Arak-haï · salle 5 ; Vaincre Reine Nyée · salle du boss"
+   "objectif": "Trouver la reine des Arak-haï · salle 5 ; Vaincre Reine Nyée · salle du boss ; Parler à Reine Nyée · sortie"
   },
   {
    "id": "sy-2444",
    "nom": "Comme un corbac sur sa branche",
    "niveau": 90,
-   "objectif": "Récupérer le trésor volé par la Reine Nyée · salle 5"
+   "objectif": "Récupérer le trésor volé par la Reine Nyée · salle 5 ; Vaincre Reine Nyée pour récupérer 1 × Œuf noir · salle du boss"
+  },
+  {
+   "id": "sy-1620",
+   "nom": "Munster lève le mystère",
+   "niveau": 90,
+   "objectif": "Vaincre Reine Nyée pour récupérer 1 × Œuf d'Arak-haï · salle du boss"
   },
   {
    "id": "dql-2509",
    "nom": "Tour du propriétaire",
    "niveau": 90,
-   "objectif": "Vaincre Reine Nyée · salle du boss",
+   "objectif": "Vaincre Reine Nyée · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "alk-407",
    "nom": "Un assassin... à Bonta ?",
    "niveau": 93,
-   "objectif": "Vaincre Reine Nyée · salle du boss"
+   "objectif": "Vaincre Reine Nyée · salle du boss ; Récupérer du poison dans un cadavre frais · sortie"
   }
  ],
  "Temple du Grand Ougah": [
@@ -714,56 +810,77 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "aloa-425",
    "nom": "Apprentissage : Assassin Suprême",
    "niveau": 180,
-   "objectif": "Chercher Dike Tarak dans le Temple du Grand Ougah"
+   "objectif": "Chercher Dike Tarak dans le Temple du Grand Ougah · sortie"
+  },
+  {
+   "id": "alcv-421",
+   "nom": "Apprentissage : Champion Merveilleux",
+   "niveau": 180,
+   "objectif": "Vaincre Ougah pour récupérer 1 × Ougahstrique · salle du boss"
   },
   {
    "id": "alcs-422",
    "nom": "Apprentissage : Champion du Chaos",
    "niveau": 180,
-   "objectif": "Récupérer un éclat de roche lunaire gardé par Ougah · salle du boss"
+   "objectif": "Récupérer un éclat de roche lunaire gardé par Ougah · sortie"
   },
   {
    "id": "ales-423",
    "nom": "Apprentissage : Maître des Parchemins",
    "niveau": 180,
-   "objectif": "Trouver la statuette de Sumens cachée dans le Temple du Grand Ougah"
+   "objectif": "Trouver la statuette de Sumens cachée dans le Temple du Grand Ougah · sortie"
   },
   {
    "id": "alem-424",
    "nom": "Apprentissage : Maître des Sévices",
    "niveau": 180,
-   "objectif": "Trouver une Statuette de Sumens cachée dans le Temple du Grand Ougah"
+   "objectif": "Trouver une Statuette de Sumens cachée dans le Temple du Grand Ougah · sortie"
   },
   {
    "id": "aloas-426",
    "nom": "Apprentissage : Psychopathe",
    "niveau": 180,
-   "objectif": "Récupérer la Statuette de Sumens dans le Temple du Grand Ougah"
+   "objectif": "Récupérer la Statuette de Sumens dans le Temple du Grand Ougah · sortie"
   },
   {
    "id": "dql-1866",
    "nom": "Appui sur le champignon",
    "niveau": 180,
-   "objectif": "Souiller une statue d'Ougah · salle 1 ; Piétiner des champignons sacrés d'Ougah · salle 2 ; Griffonner par-dessus une représentation d'Ougah · salle 3 ; Glisser des suppositoires dans les orifices du Champrout sacré · salle 8 ; Vaincre Ougah · salle du boss"
+   "objectif": "Souiller une statue d'Ougah · salle 1 ; Piétiner des champignons sacrés d'Ougah · salle 2 ; Griffonner par-dessus une représentation d'Ougah · salle 3 ; Glisser des suppositoires dans les orifices du Champrout sacré · salle 8 ; Vaincre Ougah · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "dql-1784",
    "nom": "Les coûts du sort",
    "niveau": 180,
-   "objectif": "Vaincre Ougah · salle du boss"
+   "objectif": "Vaincre Ougah · salle du boss ; Vaincre Ougah pour récupérer 1 × Champignon psychotrope · salle du boss"
   },
   {
    "id": "dql-916",
    "nom": "Tour de force",
    "niveau": 180,
-   "objectif": "Vaincre Ougah · salle du boss",
+   "objectif": "Vaincre Ougah · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "dql-2131",
    "nom": "Un pouvoir mérydique",
    "niveau": 200,
-   "objectif": "Vaincre Ougah · salle du boss"
+   "objectif": "Vaincre Ougah · salle du boss ; Détruire le troisième bourgeon parasite · sortie"
+  }
+ ],
+ "Antre du Kralamoure Géant": [
+  {
+   "id": "dql-439",
+   "nom": "L'éternelle moisson",
+   "niveau": 40,
+   "objectif": "Vaincre Kralamoure Géant pour récupérer 1 × Âme du Kralamoure · salle du boss"
+  },
+  {
+   "id": "dql-918",
+   "nom": "Le tour est joué",
+   "niveau": 200,
+   "objectif": "Vaincre Kralamoure Géant · salle du boss",
+   "serie": "emma-tom-pouce"
   }
  ],
  "Excavation du Mansot Royal": [
@@ -780,16 +897,28 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Vaincre Mansot Royal · salle du boss"
   },
   {
+   "id": "gl-591",
+   "nom": "Les chasseurs",
+   "niveau": 140,
+   "objectif": "Vaincre Mansot Royal pour récupérer 1 × Bijoux de famille de Gérard · salle du boss"
+  },
+  {
    "id": "gl-620",
    "nom": "Les joyeux de la couronne",
    "niveau": 140,
-   "objectif": "Aller jusqu'à cette salle · salle 5 ; Vaincre Mansot Royal · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle 5 ; Vaincre Mansot Royal · salle du boss ; Vaincre Mansot Royal pour récupérer 1 × Poisskaille royal · salle du boss"
   },
   {
    "id": "dql-696",
    "nom": "Monarchie parlementaire",
    "niveau": 140,
-   "objectif": "Vaincre Mansot Royal · salle du boss"
+   "objectif": "Vaincre Mansot Royal · salle du boss ; Aller jusqu'à cette salle · sortie"
+  },
+  {
+   "id": "dql-687",
+   "nom": "Porte, Mansot Royal, trésor",
+   "niveau": 140,
+   "objectif": "Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "gl-653",
@@ -809,13 +938,19 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "gl-622",
    "nom": "Lavomatique",
    "niveau": 160,
-   "objectif": "Aller jusqu'à cette salle · salle 6 ; Vaincre Obsidiantre · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle 6 ; Vaincre Obsidiantre · salle du boss ; Vaincre Obsidiantre pour récupérer 1 × Crâne enfoncé · salle du boss"
+  },
+  {
+   "id": "dql-689",
+   "nom": "Porte, Obsidiantre, trésor",
+   "niveau": 160,
+   "objectif": "Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "dql-698",
    "nom": "Pour qui sonne le glagla",
    "niveau": 160,
-   "objectif": "Vaincre Obsidiantre · salle du boss"
+   "objectif": "Vaincre Obsidiantre · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "gl-594",
@@ -880,6 +1015,12 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Aller jusqu'à cette salle · salle 4 ; Aider Francis à sortir des cavernes sain et sauf · salle 5"
   },
   {
+   "id": "frq-677",
+   "nom": "Un remède à tous les maux",
+   "niveau": 190,
+   "objectif": "Vaincre Kolosso pour récupérer 1 × Prélèvement de Kolosso · salle du boss"
+  },
+  {
    "id": "frq-2017",
    "nom": "Nincassable",
    "niveau": 200,
@@ -891,7 +1032,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "gl-621",
    "nom": "Fais dodo, t'auras du gâteau",
    "niveau": 150,
-   "objectif": "Aller jusqu'à cette salle · salle 5 ; Vaincre Ben le Ripate · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle 5 ; Vaincre Ben le Ripate · salle du boss ; Vaincre Ben le Ripate pour récupérer 1 × Prothèse de Ben le Ripate · salle du boss"
   },
   {
    "id": "dql-1661",
@@ -903,7 +1044,13 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-697",
    "nom": "Piwates des sept mers et demies",
    "niveau": 150,
-   "objectif": "Vaincre Ben le Ripate · salle du boss"
+   "objectif": "Vaincre Ben le Ripate · salle du boss ; Aller jusqu'à cette salle · sortie"
+  },
+  {
+   "id": "dql-688",
+   "nom": "Porte, Ben le Ripate, trésor",
+   "niveau": 150,
+   "objectif": "Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "gl-653",
@@ -949,7 +1096,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-700",
    "nom": "Donjon sans dragon",
    "niveau": 180,
-   "objectif": "Vaincre Korriandre · salle du boss"
+   "objectif": "Vaincre Korriandre · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "sy-2486",
@@ -958,31 +1105,49 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Affronter le Korriandre et les Sylvesprits pour se frayer un chemin dans l'antre · salle 5"
   },
   {
+   "id": "dql-691",
+   "nom": "Porte, Korriandre, trésor",
+   "niveau": 180,
+   "objectif": "Aller jusqu'à cette salle · sortie"
+  },
+  {
    "id": "gl-624",
    "nom": "Sans ma barbe, quelle barbe",
    "niveau": 180,
-   "objectif": "Aller jusqu'à cette salle · salle 5 ; Vaincre Korriandre · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle 5 ; Vaincre Korriandre · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "alb-1719",
    "nom": "Gelé à pierre fendre",
    "niveau": 185,
-   "objectif": "Vaincre Korriandre · salle du boss"
+   "objectif": "Vaincre Korriandre · salle du boss ; Utiliser le dissolvant · sortie"
   },
   {
    "id": "alk-1720",
    "nom": "Marqué d'une pierre blanche",
    "niveau": 185,
-   "objectif": "Vaincre Korriandre · salle du boss"
+   "objectif": "Vaincre Korriandre · salle du boss ; Utiliser le dissolvant · sortie"
   },
   {
    "id": "gl-653",
    "nom": "Donjons et trouffions",
    "niveau": 190,
    "objectif": "Braver les dangers de l'Antre du Korriandre"
+  },
+  {
+   "id": "frq-677",
+   "nom": "Un remède à tous les maux",
+   "niveau": 190,
+   "objectif": "Vaincre Korriandre pour récupérer 1 × Patte de Korriandre · salle du boss"
   }
  ],
  "Antichambre des Gloursons": [
+  {
+   "id": "gl-1318",
+   "nom": "Mission Solution",
+   "niveau": 170,
+   "objectif": "Récupérer le Miel Liquide Mordoré · salle 3"
+  },
   {
    "id": "gl-653",
    "nom": "Donjons et trouffions",
@@ -993,13 +1158,25 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-702",
    "nom": "Glourson et lumière",
    "niveau": 190,
-   "objectif": "Vaincre Glourséleste · salle du boss"
+   "objectif": "Vaincre Glourséleste · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "gl-626",
    "nom": "Le pic qui glace",
    "niveau": 190,
-   "objectif": "Aller jusqu'à cette salle · salle du boss ; Vaincre Glourséleste · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle du boss ; Vaincre Glourséleste · salle du boss ; Aller jusqu'à cette salle · sortie"
+  },
+  {
+   "id": "dql-693",
+   "nom": "Porte, Glourséleste, trésor",
+   "niveau": 190,
+   "objectif": "Aller jusqu'à cette salle · sortie"
+  },
+  {
+   "id": "dql-1786",
+   "nom": "Un remède draconien",
+   "niveau": 190,
+   "objectif": "Vaincre Glourséleste pour récupérer 1 × Nectar céleste · salle du boss"
   }
  ],
  "Donjon du Comte Harebourg": [
@@ -1031,7 +1208,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2049",
    "nom": "S'armer contre le destin",
    "niveau": 200,
-   "objectif": "Arracher un éclat de destin brisé au Comte Harebourg · grande aiguille"
+   "objectif": "Arracher un éclat de destin brisé au Comte Harebourg · grande aiguille ; Vaincre Comte Harebourg pour récupérer 1 × Destin brisé de Harebourg · salle du boss"
   },
   {
    "id": "gl-1310",
@@ -1040,25 +1217,46 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Vaincre Comte Harebourg · salle du boss"
   }
  ],
+ "Laboratoire du Tynril": [
+  {
+   "id": "dql-1660",
+   "nom": "La bénédiction de Viti",
+   "niveau": 140,
+   "objectif": "Vaincre Tynril Perfide · salle du boss"
+  },
+  {
+   "id": "dql-913",
+   "nom": "Tour de passe-passe",
+   "niveau": 140,
+   "objectif": "Vaincre Tynril Perfide · salle du boss ; Aller jusqu'à cette salle · sortie",
+   "serie": "emma-tom-pouce"
+  },
+  {
+   "id": "frq-640",
+   "nom": "Un volcan s'éteint",
+   "niveau": 160,
+   "objectif": "Vaincre Tynril Perfide pour récupérer 1 × Pistil du Tynril · salle du boss"
+  }
+ ],
  "Village Kanniboul": [
   {
    "id": "dql-673",
    "nom": "T'as les boules",
    "niveau": 55,
-   "objectif": "Vaincre Kanniboul Ebil · salle du boss"
+   "objectif": "Vaincre Kanniboul Ebil · salle du boss ; Aller jusqu'à cette salle · sortie ; Parler à Gentil Organisateur Kanniboul · sortie"
   },
   {
    "id": "dql-904",
    "nom": "Un Kanniboul versé",
    "niveau": 60,
-   "objectif": "Vaincre Kanniboul Ebil · salle du boss",
+   "objectif": "Vaincre Kanniboul Ebil · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "dko-1668",
    "nom": "Un indigeste chez les indigènes",
    "niveau": 60,
-   "objectif": "Vaincre Kanniboul Ebil · salle du boss"
+   "objectif": "Vaincre Kanniboul Ebil · salle du boss ; Parler à Kanniboul Ebil · sortie"
   }
  ],
  "Maison Fantôme": [
@@ -1066,14 +1264,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-897",
    "nom": "Donjon en lambeaux",
    "niveau": 40,
-   "objectif": "Vaincre Boostache · salle du boss",
+   "objectif": "Vaincre Boostache · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "dql-675",
    "nom": "Fantômes contre fantômes",
    "niveau": 40,
-   "objectif": "Vaincre Boostache · salle du boss"
+   "objectif": "Vaincre Boostache · salle du boss ; Aller jusqu'à cette salle · sortie"
   }
  ],
  "Château du Wa Wabbit": [
@@ -1081,14 +1279,29 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-905",
    "nom": "Le Wa Pythie",
    "niveau": 60,
-   "objectif": "Vaincre Wa Wabbit · salle du boss",
+   "objectif": "Vaincre Wa Wabbit · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "cw-834",
    "nom": "Le château du Wa",
    "niveau": 60,
-   "objectif": "Vaincre Wa Wabbit · salle du boss"
+   "objectif": "Vaincre Wa Wabbit · salle du boss ; Parler à Wa Wabbit · sortie"
+  }
+ ],
+ "Terrier du Wa Wabbit": [
+  {
+   "id": "cw-835",
+   "nom": "L'œuf ou la cawotte ?",
+   "niveau": 80,
+   "objectif": "Parler à Gawdien du Dofus · sortie"
+  },
+  {
+   "id": "dql-1431",
+   "nom": "Un défilé de Wobots",
+   "niveau": 80,
+   "objectif": "Vaincre Wa Wobot · salle du boss ; Aller jusqu'à cette salle · sortie",
+   "serie": "emma-tom-pouce"
   }
  ],
  "Château Ensablé": [
@@ -1096,7 +1309,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-896",
    "nom": "Donjon en mousse",
    "niveau": 20,
-   "objectif": "Vaincre Mob l'Éponge · salle du boss",
+   "objectif": "Vaincre Mob l'Éponge · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   }
  ],
@@ -1105,13 +1318,13 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "sy-2443",
    "nom": "Après lui, le déluge",
    "niveau": 50,
-   "objectif": "Vaincre Corailleur Magistral · salle du boss ; Trouver de l'ambre antédiluvien dans la Grotte Hesque"
+   "objectif": "Vaincre Corailleur Magistral · salle du boss ; Trouver de l'ambre antédiluvien dans la Grotte Hesque · sortie"
   },
   {
    "id": "dql-899",
    "nom": "Donjon magistral",
    "niveau": 50,
-   "objectif": "Vaincre Corailleur Magistral · salle du boss",
+   "objectif": "Vaincre Corailleur Magistral · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   }
  ],
@@ -1120,7 +1333,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-907",
    "nom": "Chéri fais-moi peur",
    "niveau": 70,
-   "objectif": "Vaincre Gourlo le Terrible · salle du boss",
+   "objectif": "Vaincre Gourlo le Terrible · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   }
  ],
@@ -1129,14 +1342,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-909",
    "nom": "Le fossile et le marteau",
    "niveau": 80,
-   "objectif": "Vaincre Mantiscore · salle du boss",
+   "objectif": "Vaincre Mantiscore · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "dql-1805",
    "nom": "Le roi scorpion",
    "niveau": 80,
-   "objectif": "Vaincre Mantiscore · salle du boss"
+   "objectif": "Vaincre Mantiscore · salle du boss ; Vaincre Mantiscore pour récupérer 1 × Prélèvement du Mantiscore · salle du boss"
   },
   {
    "id": "dql-1819",
@@ -1150,13 +1363,13 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dko-1670",
    "nom": "Rendez-vous avec la lune",
    "niveau": 100,
-   "objectif": "Vaincre Moon · salle du boss"
+   "objectif": "Vaincre Moon · salle du boss ; Parler à Moon · sortie"
   },
   {
    "id": "dql-910",
    "nom": "Tour d'horizon",
    "niveau": 100,
-   "objectif": "Vaincre Moon · salle du boss",
+   "objectif": "Vaincre Moon · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   }
  ],
@@ -1165,8 +1378,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-911",
    "nom": "Tour à tour",
    "niveau": 110,
-   "objectif": "Vaincre Silf le Rasboul Majeur · salle du boss",
+   "objectif": "Vaincre Silf le Rasboul Majeur · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
+  },
+  {
+   "id": "dql-1527",
+   "nom": "Comment perdre ses plumes",
+   "niveau": 130,
+   "objectif": "Vaincre Silf le Rasboul Majeur pour récupérer 1 × Œuf Végétal · salle du boss"
   }
  ],
  "Antre du Blop Multicolore Royal": [
@@ -1184,21 +1403,6 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Vaincre Blop Multicolore Royal · salle du boss"
   }
  ],
- "Laboratoire du Tynril": [
-  {
-   "id": "dql-1660",
-   "nom": "La bénédiction de Viti",
-   "niveau": 140,
-   "objectif": "Vaincre Tynril Perfide · salle du boss"
-  },
-  {
-   "id": "dql-913",
-   "nom": "Tour de passe-passe",
-   "niveau": 140,
-   "objectif": "Vaincre Tynril Perfide · salle du boss",
-   "serie": "emma-tom-pouce"
-  }
- ],
  "Canopée du Kimbo": [
   {
    "id": "dql-1661",
@@ -1210,14 +1414,14 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-915",
    "nom": "Tour de main",
    "niveau": 160,
-   "objectif": "Vaincre Kimbo · salle du boss",
+   "objectif": "Vaincre Kimbo · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "dql-2131",
    "nom": "Un pouvoir mérydique",
    "niveau": 200,
-   "objectif": "Vaincre Kimbo · salle du boss"
+   "objectif": "Vaincre Kimbo · salle du boss ; Détruire le premier bourgeon parasite · sortie ; Parler à Kimbo · sortie"
   }
  ],
  "Aquadôme de Merkator": [
@@ -1277,15 +1481,6 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "serie": "emma-tom-pouce"
   }
  ],
- "Antre du Kralamoure Géant": [
-  {
-   "id": "dql-918",
-   "nom": "Le tour est joué",
-   "niveau": 200,
-   "objectif": "Vaincre Kralamoure Géant · salle du boss",
-   "serie": "emma-tom-pouce"
-  }
- ],
  "Donjon de la mine de Sakaï": [
   {
    "id": "gl-919",
@@ -1303,27 +1498,45 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "alk-1727",
    "nom": "La vengeance est un plat qui se mange froid",
    "niveau": 190,
-   "objectif": "Vaincre Grolloum · salle du boss"
+   "objectif": "Vaincre Grolloum · salle du boss ; Utiliser le Talisman de Grassimore sur les flammes froides · sortie"
   },
   {
    "id": "alb-1730",
    "nom": "Ça fait froid dans le dos",
    "niveau": 190,
-   "objectif": "Vaincre Grolloum · salle du boss"
+   "objectif": "Vaincre Grolloum · salle du boss ; Parler à Grolloum · sortie"
+  },
+  {
+   "id": "gl-1333",
+   "nom": "La machine à démonter le temps",
+   "niveau": 200,
+   "objectif": "Vaincre Grolloum pour récupérer 1 × Pierre d'Autre Temps · salle du boss"
+  },
+  {
+   "id": "dql-2111",
+   "nom": "Le jour le plus long",
+   "niveau": 200,
+   "objectif": "Vaincre Grolloum pour récupérer 2 × Eclat temporel · salle du boss"
   }
  ],
  "Transporteur de Sylargh": [
   {
+   "id": "gl-1326",
+   "nom": "Chaud et froid",
+   "niveau": 200,
+   "objectif": "Vaincre Sylargh pour récupérer 1 × Huile Antigel de Sylargh · salle du boss"
+  },
+  {
    "id": "dql-1915",
    "nom": "Il est temps de mourir",
    "niveau": 200,
-   "objectif": "Entrer dans le transporteur de Sylargh ; Vaincre Sylargh · salle du boss"
+   "objectif": "Entrer dans le transporteur de Sylargh ; Vaincre Sylargh · salle du boss ; Détruire l'automate et son phylactère · sortie"
   },
   {
    "id": "gl-1309",
    "nom": "Il faut mettre un terme aux maîtres",
    "niveau": 200,
-   "objectif": "Vaincre Sylargh · salle du boss"
+   "objectif": "Vaincre Sylargh · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "gl-1334",
@@ -1335,21 +1548,39 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "frq-1337",
    "nom": "Les desseins de Sylargh",
    "niveau": 200,
-   "objectif": "Lire le message de Sylargh · salle du boss ; Fouiller le transporteur de Sylargh à la recherche d'un indice · salle 3"
+   "objectif": "Lire le message de Sylargh · salle du boss ; Fouiller le transporteur de Sylargh à la recherche d'un indice · salle 3 ; Parler à Sylargh · sortie"
   },
   {
    "id": "frq-1320",
    "nom": "Moteur à explosion",
    "niveau": 200,
    "objectif": "Escorter Idrissa Boteur jusqu'au point de ravitaillement du transporteur de Sylargh"
+  },
+  {
+   "id": "dql-1312",
+   "nom": "Porte, Sylargh, trésor",
+   "niveau": 200,
+   "objectif": "Aller jusqu'à cette salle · sortie"
   }
  ],
  "Salons privés de Klime": [
   {
+   "id": "frq-1323",
+   "nom": "Au-delà du mur",
+   "niveau": 200,
+   "objectif": "Interroger les invités · salle 4"
+  },
+  {
+   "id": "gl-1326",
+   "nom": "Chaud et froid",
+   "niveau": 200,
+   "objectif": "Vaincre Klime pour récupérer 1 × Sang Glacé de Klime · salle du boss"
+  },
+  {
    "id": "gl-1309",
    "nom": "Il faut mettre un terme aux maîtres",
    "niveau": 200,
-   "objectif": "Vaincre Klime · salle du boss"
+   "objectif": "Vaincre Klime · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "gl-1334",
@@ -1358,10 +1589,16 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Confisquer la peau magique tannée par Klime · salle du boss"
   },
   {
+   "id": "dql-1313",
+   "nom": "Porte, Klime, trésor",
+   "niveau": 200,
+   "objectif": "Aller jusqu'à cette salle · sortie"
+  },
+  {
    "id": "frq-1338",
    "nom": "Vous avez demandé la peau lisse ?",
    "niveau": 200,
-   "objectif": "Trouver la peau magique tannée par Klime · salle 3"
+   "objectif": "Trouver la peau magique tannée par Klime · salle 3 ; Parler à Klime · sortie"
   }
  ],
  "Forgefroide de Missiz Frizz": [
@@ -1369,31 +1606,43 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "alk-1898",
    "nom": "Sueurs froides",
    "niveau": 197,
-   "objectif": "Vaincre Missiz Frizz · salle du boss"
+   "objectif": "Vaincre Missiz Frizz · salle du boss ; Parler à Missiz Frizz · sortie"
   },
   {
    "id": "alb-1897",
    "nom": "À glacer le sang",
    "niveau": 197,
-   "objectif": "Vaincre Missiz Frizz · salle du boss"
+   "objectif": "Vaincre Missiz Frizz · salle du boss ; Parler à Missiz Frizz · sortie"
+  },
+  {
+   "id": "gl-1326",
+   "nom": "Chaud et froid",
+   "niveau": 200,
+   "objectif": "Vaincre Missiz Frizz pour récupérer 1 × Larme de Missiz Frizz · salle du boss"
   },
   {
    "id": "gl-1309",
    "nom": "Il faut mettre un terme aux maîtres",
    "niveau": 200,
-   "objectif": "Vaincre Missiz Frizz · salle du boss"
+   "objectif": "Vaincre Missiz Frizz · salle du boss ; Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "frq-1339",
    "nom": "La dernière carte",
    "niveau": 200,
-   "objectif": "Vaincre Missiz Frizz · salle du boss"
+   "objectif": "Vaincre Missiz Frizz · salle du boss ; Vaincre Missiz Frizz pour récupérer 1 × Plan d'Invasion du village Enseveli · salle du boss"
   },
   {
    "id": "gl-1334",
    "nom": "La vie de château",
    "niveau": 200,
    "objectif": "Réduire à néant les plans de Missiz Frizz · salle du boss"
+  },
+  {
+   "id": "dql-1314",
+   "nom": "Porte, Missiz Frizz, trésor",
+   "niveau": 200,
+   "objectif": "Aller jusqu'à cette salle · sortie"
   }
  ],
  "Théâtre de Dramak": [
@@ -1401,22 +1650,13 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1425",
    "nom": "Ainsi font les petites marionnettes",
    "niveau": 100,
-   "objectif": "Vaincre Dramak · salle 4 ; Vaincre Maître des Pantins · salle du boss"
+   "objectif": "Vaincre Dramak · salle 4 ; Vaincre Maître des Pantins · salle du boss ; Parler à Dramak · sortie"
   },
   {
    "id": "dql-1432",
    "nom": "Tour de marionnettes",
    "niveau": 100,
-   "objectif": "Vaincre Maître des Pantins · salle du boss",
-   "serie": "emma-tom-pouce"
-  }
- ],
- "Terrier du Wa Wabbit": [
-  {
-   "id": "dql-1431",
-   "nom": "Un défilé de Wobots",
-   "niveau": 80,
-   "objectif": "Vaincre Wa Wobot · salle du boss",
+   "objectif": "Vaincre Maître des Pantins · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   }
  ],
@@ -1425,19 +1665,57 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1461",
    "nom": "L'armée des ombres",
    "niveau": 190,
-   "objectif": "Vaincre Ombre · salle du boss"
+   "objectif": "Vaincre Ombre · salle du boss ; Parler à Ombre · sortie"
   },
   {
    "id": "dql-1785",
    "nom": "Une ombre au tableau",
    "niveau": 190,
-   "objectif": "Escorter Nabrisa jusqu'à la Pyramide d'Ombre ; Vaincre Ombre · salle du boss ; Capturer l'âme d'Ombre avec l'aide de Nabrisa · salle du boss"
+   "objectif": "Escorter Nabrisa jusqu'à la Pyramide d'Ombre ; Vaincre Ombre · salle du boss ; Parler à Nabrisa · sortie ; Capturer l'âme d'Ombre avec l'aide de Nabrisa · sortie ; Parler à Kalisthe · sortie ; Parler à Mériana · sortie"
   },
   {
    "id": "dql-1559",
    "nom": "Courir après des ombres",
    "niveau": 200,
    "objectif": "Chercher les voleurs d'ombre · salle du boss ; Écouter les voleurs d'ombre · salle du boss"
+  }
+ ],
+ "Galerie du Phossile": [
+  {
+   "id": "ve-10",
+   "nom": "Le disparu de Sufokia",
+   "niveau": 100,
+   "objectif": "Vaincre Phossile pour récupérer 1 × Diamant Dimensionnel · salle du boss"
+  },
+  {
+   "id": "ve-3",
+   "nom": "Orichomania",
+   "niveau": 100,
+   "objectif": "Mesurer le taux d'orichor devant la Galerie du Phossile · sortie"
+  },
+  {
+   "id": "dql-1497",
+   "nom": "La meilleure défense, c'est l'attaque",
+   "niveau": 150,
+   "objectif": "Amener les défenses de phorreur à Dyane Phossé · sortie"
+  },
+  {
+   "id": "dql-1500",
+   "nom": "La pelle de la Phorrée",
+   "niveau": 150,
+   "objectif": "Vaincre Phossile · salle du boss ; Parler à Dyane Phossé à l'intérieur de la galerie du Phossile · sortie"
+  },
+  {
+   "id": "dql-1662",
+   "nom": "La bénédiction de Foluk",
+   "niveau": 170,
+   "objectif": "Vaincre Phossile · salle du boss"
+  },
+  {
+   "id": "dql-1494",
+   "nom": "Tout ce qui brille n'est pas or",
+   "niveau": 200,
+   "objectif": "Contrôler un tonneau de kamas à l'entrée de la galerie du Phossile · sortie"
   }
  ],
  "Palais du roi Nidas": [
@@ -1457,27 +1735,45 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1514",
    "nom": "Coiffeur de génie",
    "niveau": 200,
-   "objectif": "Vaincre Roi Nidas · salle du boss"
+   "objectif": "Vaincre Roi Nidas · salle du boss ; Aller jusqu'à cette salle · sortie ; Parler à Roi Nidas · sortie"
+  },
+  {
+   "id": "dql-2536",
+   "nom": "Les gloutons des dimensions",
+   "niveau": 200,
+   "objectif": "Vaincre Roi Nidas pour récupérer 1 × Poil de nez bleu du Roi Nidas · salle du boss"
+  },
+  {
+   "id": "sy-2488",
+   "nom": "Qui nous protège du Protecteur ?",
+   "niveau": 200,
+   "objectif": "Obtenir le sigil de Sumens · sortie"
   },
   {
    "id": "dql-1495",
    "nom": "Un morceau de roi",
    "niveau": 200,
-   "objectif": "Prélever de façon violente un poil de nez sur le roi Nidas · salle des coffres"
+   "objectif": "Prélever de façon violente un poil de nez sur le roi Nidas · salle des coffres ; Vaincre Roi Nidas pour récupérer 1 × Poil de Nez du Roi Nidas · salle du boss"
   }
  ],
- "Galerie du Phossile": [
+ "Fabrique de Malléfisk": [
   {
-   "id": "dql-1500",
-   "nom": "La pelle de la Phorrée",
-   "niveau": 150,
-   "objectif": "Vaincre Phossile · salle du boss ; Parler à Dyane Phossé à l'intérieur de la galerie du Phossile"
+   "id": "ve-10",
+   "nom": "Le disparu de Sufokia",
+   "niveau": 100,
+   "objectif": "Vaincre Malléfisk pour récupérer 1 × Diamant Dimensionnel · salle du boss"
   },
   {
-   "id": "dql-1662",
-   "nom": "La bénédiction de Foluk",
-   "niveau": 170,
-   "objectif": "Vaincre Phossile · salle du boss"
+   "id": "dql-1506",
+   "nom": "Malladie",
+   "niveau": 100,
+   "objectif": "Parler à Malléfisk · sortie ; Parler à Krosmoglob du Professeur Maximilio · sortie"
+  },
+  {
+   "id": "dql-1513",
+   "nom": "Malle des profondeurs",
+   "niveau": 200,
+   "objectif": "Parler à Malléfisk · sortie ; Vaincre Âme de Malléfisk · sortie"
   }
  ],
  "Ring du Capitaine Ekarlatte": [
@@ -1496,10 +1792,22 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
  ],
  "Cave du Toxoliath": [
   {
+   "id": "ve-10",
+   "nom": "Le disparu de Sufokia",
+   "niveau": 100,
+   "objectif": "Vaincre Toxoliath pour récupérer 1 × Diamant Dimensionnel · salle du boss"
+  },
+  {
    "id": "dql-1547",
    "nom": "L'art me ment",
    "niveau": 180,
-   "objectif": "Vaincre Toxoliath · salle du boss"
+   "objectif": "Vaincre Toxoliath · salle du boss ; Aller jusqu'à cette salle · sortie ; Parler à Starchy Tropeur · sortie"
+  },
+  {
+   "id": "dql-2536",
+   "nom": "Les gloutons des dimensions",
+   "niveau": 200,
+   "objectif": "Vaincre Toxoliath pour récupérer 1 × Sang vicié du Toxoliath · salle du boss"
   }
  ],
  "Trône de la Cour Sombre": [
@@ -1524,10 +1832,16 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Rapporter 1 × Inoculateur de Ninae Charpe · salle 4"
   },
   {
+   "id": "dql-2536",
+   "nom": "Les gloutons des dimensions",
+   "niveau": 200,
+   "objectif": "Vaincre Protozorreur pour récupérer 1 × Noyau de Protozorreur boursoufflé · salle du boss"
+  },
+  {
    "id": "frq-1568",
    "nom": "Qui dit baume",
    "niveau": 200,
-   "objectif": "Vaincre Protozorreur · salle du boss"
+   "objectif": "Vaincre Protozorreur · salle du boss ; Aller jusqu'à cette salle · sortie ; Parler à Esprit de Kidibom · sortie ; Vaincre Protozorreur pour récupérer 1 × Boursouflure de Protozorreur · salle du boss"
   }
  ],
  "Œil de Vortex": [
@@ -1535,13 +1849,19 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1582",
    "nom": "La vérité est au fond du puits",
    "niveau": 200,
-   "objectif": "Vaincre Vortex · salle du boss"
+   "objectif": "Vaincre Vortex · salle du boss ; Parler à Vortex · sortie"
+  },
+  {
+   "id": "dql-1601",
+   "nom": "Les sables du temps",
+   "niveau": 200,
+   "objectif": "Aller jusqu'à cette salle · sortie"
   },
   {
    "id": "dql-2049",
    "nom": "S'armer contre le destin",
    "niveau": 200,
-   "objectif": "Arracher un éclat de destin brisé à Vortex · salle des heures perdues"
+   "objectif": "Arracher un éclat de destin brisé à Vortex · salle des heures perdues ; Vaincre Vortex pour récupérer 1 × Destin brisé de Vortex · salle du boss"
   },
   {
    "id": "dql-1945",
@@ -1551,6 +1871,12 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
   }
  ],
  "Horologium de XLII": [
+  {
+   "id": "ve-10",
+   "nom": "Le disparu de Sufokia",
+   "niveau": 100,
+   "objectif": "Vaincre XLII pour récupérer 1 × Diamant Dimensionnel · salle du boss"
+  },
   {
    "id": "dql-1586",
    "nom": "La Vie, l'Hormonde et le Reste",
@@ -1563,19 +1889,40 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2062",
    "nom": "Chaque chose en son temps",
    "niveau": 50,
-   "objectif": "Entrer dans le Mégalithe et voir comment Fraktale réagit en présence du pixel perpétuel · salle du boss"
+   "objectif": "Entrer dans le Mégalithe et voir comment Fraktale réagit en présence du pixel perpétuel · sortie ; Parler à Entropix · sortie"
+  },
+  {
+   "id": "ve-10",
+   "nom": "Le disparu de Sufokia",
+   "niveau": 100,
+   "objectif": "Vaincre Fraktale pour récupérer 1 × Diamant Dimensionnel · salle du boss"
   },
   {
    "id": "dql-2035",
    "nom": "L'épée du rocher",
    "niveau": 120,
-   "objectif": "Vaincre Fraktale · salle du boss"
+   "objectif": "Vaincre Fraktale · salle du boss ; Vaincre Fraktale pour récupérer 1 × Temps fracassé · salle du boss"
   },
   {
    "id": "dql-1593",
    "nom": "Prisonniers du temps",
    "niveau": 120,
-   "objectif": "Vaincre Fraktale · salle du boss"
+   "objectif": "Vaincre Fraktale · salle du boss ; Aller jusqu'à cette salle · sortie ; Utiliser le détecteur portable · sortie"
+  }
+ ],
+ "Cache de Kankreblath": [
+  {
+   "id": "dql-1607",
+   "nom": "Aventure miniature",
+   "niveau": 40,
+   "objectif": "Parler à Kankreblath · sortie ; Réduire la taille de la croquette pour l'emporter avec vous · sortie"
+  },
+  {
+   "id": "dql-2003",
+   "nom": "Donjon rikiki",
+   "niveau": 40,
+   "objectif": "Vaincre Kankreblath · salle du boss ; Aller jusqu'à cette salle · sortie",
+   "serie": "emma-tom-pouce"
   }
  ],
  "Crypte de Kardorim": [
@@ -1583,22 +1930,28 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "ag-1638",
    "nom": "Cryptologie",
    "niveau": 10,
-   "objectif": "Aller jusqu'à cette salle · salle du boss ; Vaincre Kardorim · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle du boss ; Vaincre Kardorim · salle du boss ; Parler à Kardorim · sortie"
   }
  ],
  "Bateau du Chouque": [
   {
+   "id": "dql-1671",
+   "nom": "Le radeau ivre",
+   "niveau": 50,
+   "objectif": "Vaincre Le Chouque pour récupérer 1 × Pavillon noir · salle du boss"
+  },
+  {
    "id": "dql-2507",
    "nom": "C'est du bateau",
    "niveau": 90,
-   "objectif": "Vaincre Le Chouque · salle du boss",
+   "objectif": "Vaincre Le Chouque · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "dko-1669",
    "nom": "Squelettes et amulette",
    "niveau": 90,
-   "objectif": "Vaincre Le Chouque · salle du boss"
+   "objectif": "Vaincre Le Chouque · salle du boss ; Parler à Le Chouque · sortie"
   }
  ],
  "Plateau de Ush": [
@@ -1606,13 +1959,19 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1710",
    "nom": "En rouge et noir",
    "niveau": 160,
-   "objectif": "Vaincre Ush Galesh · salle du boss"
+   "objectif": "Vaincre Ush Galesh · salle du boss ; Aller jusqu'à cette salle · sortie ; Parler à Ush Galesh · sortie"
   },
   {
    "id": "dql-1698",
    "nom": "GaBuZoMeu",
    "niveau": 160,
    "objectif": "Récupérer la flamme de Ush Galesh · salle du boss"
+  },
+  {
+   "id": "dql-1711",
+   "nom": "Tu peux te brosser",
+   "niveau": 160,
+   "objectif": "Parler à Ush Galesh · sortie"
   }
  ],
  "Défi du Chalœil": [
@@ -1634,7 +1993,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1705",
    "nom": "Testé et approuvé",
    "niveau": 110,
-   "objectif": "Entrer dans le miausolée du pounicheur ; Vaincre Pounicheur · salle du boss"
+   "objectif": "Entrer dans le miausolée du pounicheur ; Vaincre Pounicheur · salle du boss ; Trouver l'agent et son bouclier · sortie"
   }
  ],
  "Temple Maudit d'Araknas": [
@@ -1642,13 +2001,13 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "alb-1721",
    "nom": "L'ascension de Qu'Tan",
    "niveau": 186,
-   "objectif": "Vaincre Qu'Tan · salle 3 ; Parler à Qu'Tan · autel d'Araknas"
+   "objectif": "Aller jusqu'à cette salle · entrée ; Parler à Briscard Brâkmarien · entrée ; Parler à Disciple d'Araknas · entrée ; Vaincre Qu'Tan · salle 3 ; Parler à Qu'Tan · autel d'Araknas"
   },
   {
    "id": "alk-1722",
    "nom": "L'essor de Qu'Tan",
    "niveau": 186,
-   "objectif": "Vaincre Qu'Tan · salle 3 ; Parler à Qu'Tan · autel d'Araknas"
+   "objectif": "Aller jusqu'à cette salle · entrée ; Parler à Briscarde Bontarienne · entrée ; Parler à Disciple d'Araknas · entrée ; Vaincre Qu'Tan · salle 3 ; Parler à Qu'Tan · autel d'Araknas"
   }
  ],
  "Vaisseau du Capitaine Meno": [
@@ -1656,13 +2015,19 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1735",
    "nom": "Piège de crystal",
    "niveau": 200,
-   "objectif": "Entrer dans le vaisseau du Capitaine Meno ; Vaincre Capitaine Meno · salle du boss"
+   "objectif": "Entrer dans le vaisseau du Capitaine Meno ; Vaincre Capitaine Meno · salle du boss ; Parler à Capitaine Meno · sortie"
+  },
+  {
+   "id": "dql-1736",
+   "nom": "Son nom est Personne",
+   "niveau": 200,
+   "objectif": "Rapporter 1 × Partition pour orgue · sortie"
   },
   {
    "id": "dql-1912",
    "nom": "Une voix de crystal",
    "niveau": 200,
-   "objectif": "Donner les partitions au capitaine Meno · salle du boss"
+   "objectif": "Parler à Capitaine Meno · sortie ; Donner les partitions au capitaine Meno · sortie"
   }
  ],
  "Palais de Dantinéa": [
@@ -1670,13 +2035,19 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1792",
    "nom": "Mississitudes",
    "niveau": 200,
-   "objectif": "Entrer dans le palais de Dantinéa ; Vaincre Dantinéa · salle du boss"
+   "objectif": "Entrer dans le palais de Dantinéa ; Vaincre Dantinéa · salle du boss ; Parler à Lisette la Greuvette · sortie"
+  },
+  {
+   "id": "dql-1738",
+   "nom": "Rançon nage",
+   "niveau": 200,
+   "objectif": "Rapporter 3 × Bijoux de la rançon · sortie ; Rapporter 1 × Caisse de Perles des Profondeurs · sortie"
   },
   {
    "id": "dql-1737",
    "nom": "Reine de beauté",
    "niveau": 200,
-   "objectif": "Vaincre Dantinéa · salle du boss"
+   "objectif": "Vaincre Dantinéa · salle du boss ; Parler à Dantinéa · sortie"
   }
  ],
  "Temple de Koutoulou": [
@@ -1684,7 +2055,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1759",
    "nom": "De mal en impie",
    "niveau": 200,
-   "objectif": "Entrer dans le temple de Koutoulou ; Vaincre Larve de Koutoulou · salle du boss"
+   "objectif": "Entrer dans le temple de Koutoulou ; Vaincre Larve de Koutoulou · salle du boss ; Parler à Capitaine Skaille · sortie ; Vaincre Prêtre en jaune · sortie ; Parler à Pollie Perkine · sortie"
   }
  ],
  "Caverne d'El Piko": [
@@ -1698,7 +2069,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1807",
    "nom": "Le monde entier est un cactus",
    "niveau": 130,
-   "objectif": "Aller jusqu'à cette salle · salle 5 ; Vaincre El Piko · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle 5 ; Vaincre El Piko · salle du boss ; Parler à Laure Hion · sortie ; Parler à Scytus · sortie ; Rapporter 1 × Plat de Piment Saharach · sortie ; Rapporter 10 × Eau Potable · sortie"
   }
  ],
  "Boyau du Père Ver": [
@@ -1706,7 +2077,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1831",
    "nom": "Le mystère des vers",
    "niveau": 170,
-   "objectif": "Entrer dans le Boyau du Père Ver ; Vaincre Père Ver · salle du boss"
+   "objectif": "Entrer dans le Boyau du Père Ver ; Vaincre Père Ver · salle du boss ; Vaincre Père Ver pour récupérer 1 × Suc digestif · salle du boss"
   }
  ],
  "Chambre de Tal Kasha": [
@@ -1714,13 +2085,13 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1833",
    "nom": "Le secret de la pyramide",
    "niveau": 200,
-   "objectif": "Entrer dans la Chambre de Tal Kasha avec Chanisa ; Vaincre Tal Kasha · salle du boss"
+   "objectif": "Entrer dans la Chambre de Tal Kasha avec Chanisa ; Vaincre Tal Kasha · salle du boss ; Parler à Tal Kasha · sortie ; Parler à Bénédicte Gesser · sortie"
   },
   {
    "id": "dql-1909",
    "nom": "Nordalie",
    "niveau": 200,
-   "objectif": "Entrer dans la Chambre de Tal Kasha ; Vaincre Tal Kasha · salle du boss"
+   "objectif": "Entrer dans la Chambre de Tal Kasha ; Vaincre Tal Kasha · salle du boss ; Parler à Hem le Maudit · sortie"
   }
  ],
  "Camp du Comte Razof": [
@@ -1728,7 +2099,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1854",
    "nom": "La valse des manuels",
    "niveau": 190,
-   "objectif": "Aller jusqu'à cette salle · salle 5 ; Parler à Minikrone Effrayée · salle 5 ; Vaincre Comte Razof · salle du boss ; Fouiller le camp du Comte Razof à la recherche des manuels scolaires"
+   "objectif": "Aller jusqu'à cette salle · salle 5 ; Parler à Minikrone Effrayée · salle 5 ; Vaincre Comte Razof · salle du boss ; Fouiller le camp du Comte Razof à la recherche des manuels scolaires · sortie ; Parler à Comte Razof · sortie"
   }
  ],
  "Manoir des Katrepat": [
@@ -1736,13 +2107,13 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-1875",
    "nom": "Entretien avec une Vampyre",
    "niveau": 200,
-   "objectif": "Entrer dans le manoir des Katrepat ; Vaincre Anerice la Shushess · salle du boss"
+   "objectif": "Entrer dans le manoir des Katrepat ; Vaincre Anerice la Shushess · salle du boss ; Parler à Anerice la Shushess · sortie"
   },
   {
    "id": "dql-1913",
    "nom": "Le mort dans l'âme",
    "niveau": 200,
-   "objectif": "Obtenir par la force une audience avec Anerice · salle 5"
+   "objectif": "Obtenir par la force une audience avec Anerice · salle 5 ; Présenter Funestaro à la Shushess · sortie ; Parler à Funestaro · sortie"
   }
  ],
  "Chapiteau des Magik Riktus": [
@@ -1765,13 +2136,31 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "alb-1901",
    "nom": "Fée d'hiver",
    "niveau": 199,
-   "objectif": "Aller jusqu'à cette salle · blessure d'Erazal ; Vaincre Ilyzaelle · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · blessure d'Erazal ; Vaincre Ilyzaelle · salle du boss ; Parler à Ilyzaelle · blessure d'Erazal (sortie)"
   },
   {
    "id": "alk-1902",
    "nom": "Lettre à Ilyz",
    "niveau": 199,
-   "objectif": "Aller jusqu'à cette salle · blessure d'Erazal ; Vaincre Ilyzaelle · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · blessure d'Erazal ; Vaincre Ilyzaelle · salle du boss ; Parler à Ilyzaelle · blessure d'Erazal (sortie)"
+  },
+  {
+   "id": "dql-1908",
+   "nom": "Casse en Enutrosor",
+   "niveau": 200,
+   "objectif": "Parler à Ilyzaelle · blessure d'Erazal (sortie)"
+  },
+  {
+   "id": "dql-2136",
+   "nom": "L'avis de la Mort",
+   "niveau": 200,
+   "objectif": "Vaincre Ilyzaelle pour récupérer 1 × Feu dévoreur · salle du boss"
+  },
+  {
+   "id": "dql-2051",
+   "nom": "Le silence est d'Aure",
+   "niveau": 200,
+   "objectif": "Entrer en Externam · blessure d'Erazal (sortie)"
   },
   {
    "id": "dql-1909",
@@ -1783,7 +2172,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2480",
    "nom": "Une dernière volonté",
    "niveau": 200,
-   "objectif": "Vous frayer un chemin jusqu'à Ilyzaelle · blessure d'Erazal ; Annoncer à Ilyzaelle que le roi se porte volontaire · salle du boss"
+   "objectif": "Vous frayer un chemin jusqu'à Ilyzaelle · blessure d'Erazal ; Parler à Ilyzaelle · blessure d'Erazal (sortie) ; Annoncer à Ilyzaelle que le roi se porte volontaire · blessure d'Erazal (sortie) ; Prouver à la championne de Jiva que le roi peut repousser les Brûlâmes · blessure d'Erazal (sortie)"
   }
  ],
  "Trône de Sang": [
@@ -1821,7 +2210,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2111",
    "nom": "Le jour le plus long",
    "niveau": 200,
-   "objectif": "Vaincre les Généraux de Guerre · salle du boss ; Vaincre Guerre · salle du boss ; Parler à nouveau avec Guerre · salle du boss"
+   "objectif": "Vaincre les Généraux de Guerre · salle du boss ; Vaincre Guerre · salle du boss ; Parler à nouveau avec Guerre · sortie"
   },
   {
    "id": "dql-2122",
@@ -1842,12 +2231,32 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Jouer du tambour de guerre sur un lieu propice et survivre à la bataille · salle du boss"
   }
  ],
+ "Tour de Bethel": [
+  {
+   "id": "dql-1954",
+   "nom": "Les cœurs livides",
+   "niveau": 200,
+   "objectif": "Entrer dans la Tour de Bethel ; Vaincre Bethel Akarna · salle du boss ; Aller jusqu'à cette salle · salle du cœur livide ; Se concentrer sur les battements du cœur des Submergés · salle du cœur livide ; Parler à Raval le Terrible · salle du cœur livide"
+  },
+  {
+   "id": "dql-1945",
+   "nom": "Toucher le fond",
+   "niveau": 200,
+   "objectif": "Chercher une sortie"
+  },
+  {
+   "id": "dql-2038",
+   "nom": "À la recherche de Crocoburio",
+   "niveau": 200,
+   "objectif": "Affronter Bethel dans sa tour · salle 5 ; Vaincre Bethel Akarna pour récupérer 1 × Coquille d'âme corrompue · salle du boss"
+  }
+ ],
  "Tour de Solar": [
   {
    "id": "dql-1954",
    "nom": "Les cœurs livides",
    "niveau": 200,
-   "objectif": "Entrer dans la Tour de Solar ; Vaincre Solar · salle du boss"
+   "objectif": "Entrer dans la Tour de Solar ; Vaincre Solar · salle du boss ; Aller jusqu'à cette salle · salle du cœur livide ; Se concentrer sur les battements du cœur des Calcinés · salle du cœur livide ; Parler à Dieu Sram · salle du cœur livide"
   },
   {
    "id": "dql-2044",
@@ -1856,35 +2265,12 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Calmer la faim de Crocobur en lui faisant goûter à l'âme de Solar · salle 5"
   }
  ],
- "Tour de Bethel": [
-  {
-   "id": "dql-1954",
-   "nom": "Les cœurs livides",
-   "niveau": 200,
-   "objectif": "Entrer dans la Tour de Bethel ; Vaincre Bethel Akarna · salle du boss"
-  },
-  {
-   "id": "dql-2038",
-   "nom": "À la recherche de Crocoburio",
-   "niveau": 200,
-   "objectif": "Affronter Bethel dans sa tour · salle 5"
-  }
- ],
- "Cache de Kankreblath": [
-  {
-   "id": "dql-2003",
-   "nom": "Donjon rikiki",
-   "niveau": 40,
-   "objectif": "Vaincre Kankreblath · salle du boss",
-   "serie": "emma-tom-pouce"
-  }
- ],
  "Grange du Tournesol Affamé": [
   {
    "id": "dql-2005",
    "nom": "Le tour du monde",
    "niveau": 20,
-   "objectif": "Vaincre Tournesol Affamé · salle du boss",
+   "objectif": "Vaincre Tournesol Affamé · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   }
  ],
@@ -1893,7 +2279,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2006",
    "nom": "Revenons à nos bouftons",
    "niveau": 30,
-   "objectif": "Vaincre Bouftou Royal · salle du boss",
+   "objectif": "Vaincre Bouftou Royal · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "tour-du-monde"
   }
  ],
@@ -1902,21 +2288,47 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "frq-2011",
    "nom": "De Brikke et de Brokke",
    "niveau": 200,
-   "objectif": "Entrer dans la Brasserie du roi Dazak ; Demander violemment une audience avec le roi Dazak Martegel · salle 5"
+   "objectif": "Entrer dans la Brasserie du roi Dazak ; Demander violemment une audience avec le roi Dazak Martegel · salle 5 ; Parler à Dazak Martegel · sortie"
+  },
+  {
+   "id": "frq-2013",
+   "nom": "La bible des rancunes",
+   "niveau": 200,
+   "objectif": "Rapporter 20 × Morceau de Brikoléreux · sortie ; Rapporter 1 × Coffre de kamas · sortie ; Rapporter 20 × Poisskaille en Fricassée · sortie ; Rapporter 20 × Pain de Frostiz · sortie ; Rapporter 20 × Pizza au boudin de boufmouth · sortie ; Rapporter 20 × Friswein · sortie"
   },
   {
    "id": "dql-2041",
    "nom": "Le dragon noir",
    "niveau": 200,
-   "objectif": "Discuter avec le roi Dazak Martegel après lui avoir montré que vous n'êtes pas son ennemi · salle du boss"
+   "objectif": "Discuter avec le roi Dazak Martegel après lui avoir montré que vous n'êtes pas son ennemi · sortie"
   }
  ],
  "Fonderie des Waddicts": [
+  {
+   "id": "dql-2058",
+   "nom": "Chocomagie contre chocomancie",
+   "niveau": 20,
+   "objectif": "Retrouver l'intendante de Pwâk · sortie"
+  },
   {
    "id": "dql-2068",
    "nom": "Les aléas de la Chocolaterie",
    "niveau": 60,
    "objectif": "Vaincre Mawabouaino · salle du boss"
+  }
+ ],
+ "Temple du dieu Kao": [
+  {
+   "id": "dql-2058",
+   "nom": "Chocomagie contre chocomancie",
+   "niveau": 20,
+   "objectif": "Retrouver l'intendante de Pwâk · sortie"
+  },
+  {
+   "id": "dql-2068",
+   "nom": "Les aléas de la Chocolaterie",
+   "niveau": 60,
+   "objectif": "Vaincre Prêtresse de Kao · salle du boss"
   }
  ],
  "Croquanterie": [
@@ -1927,27 +2339,19 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Vaincre Croqueleur · salle du boss"
   }
  ],
- "Temple du dieu Kao": [
-  {
-   "id": "dql-2068",
-   "nom": "Les aléas de la Chocolaterie",
-   "niveau": 60,
-   "objectif": "Vaincre Prêtresse de Kao · salle du boss"
-  }
- ],
  "Épreuve de Draegnerys": [
   {
    "id": "dql-2506",
    "nom": "C'est radical ici",
    "niveau": 70,
-   "objectif": "Vaincre Draegnerys · salle du boss",
+   "objectif": "Vaincre Draegnerys · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "vu-2079",
    "nom": "La mère des Dragoeufs",
    "niveau": 200,
-   "objectif": "Combattre des aventuriers dans le sanctuaire des Dragoeufs jusqu'à ce que Draegnerys soit satisfaite · salle du boss"
+   "objectif": "Parler à Draegnerys · sortie ; Combattre des aventuriers dans le sanctuaire des Dragoeufs jusqu'à ce que Draegnerys soit satisfaite · salle du boss"
   }
  ],
  "Sanctuaire de Torkélonia": [
@@ -1955,7 +2359,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2087",
    "nom": "Le sens du sacrifice",
    "niveau": 200,
-   "objectif": "Vaincre Torkélonia · salle du boss"
+   "objectif": "Vaincre Torkélonia · salle du boss ; Parler à Porte-voix de Torkélonia · sortie ; Faire apparaître la déesse Ixchelonia · sortie ; Parler à Ixchelonia · sortie"
   }
  ],
  "Tempête de l'Eliocalypse": [
@@ -2059,13 +2463,13 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2130",
    "nom": "Les racines du mal",
    "niveau": 200,
-   "objectif": "Tenter de pénétrer dans l'Arbre de Mort ; Retourner à l'arbre de mort transformé en Gangredogue ; Examiner le cœur de l'arbre de mort ; Évoquer la corruption de l'endroit avec Rathrosk · salle du boss"
+   "objectif": "Tenter de pénétrer dans l'Arbre de Mort ; Retourner à l'arbre de mort transformé en Gangredogue ; Examiner le cœur de l'arbre de mort · sortie ; Parler à Rathrosk · sortie ; Rappeler à Rathrosk votre existence · sortie ; Se rendre auprès de l'arbre des vagabonds grâce à Rathrosk · sortie ; Évoquer la corruption de l'endroit avec Rathrosk · salle du boss"
   },
   {
    "id": "dql-2132",
    "nom": "Mort et renouveau",
    "niveau": 200,
-   "objectif": "Retourner à l'arbre de mort pour utiliser le pouvoir de l'idole ; Chercher un endroit préservé de la corruption · salle du boss ; Tenter de communiquer avec l'arbre de mort ; Vaincre Corruption · salle du boss ; Faire admettre à Corruption sa défaite · salle du boss"
+   "objectif": "Retourner à l'arbre de mort pour utiliser le pouvoir de l'idole ; Chercher un endroit préservé de la corruption · salle du boss ; Tenter de communiquer avec l'arbre de mort ; Vaincre Corruption · salle du boss ; Utiliser le pouvoir de Kernuros pour sceller le pouvoir de l'arbre · sortie ; Parler à Corruption · sortie ; Parler à Kernuros · sortie ; Parler au second Kernuros · sortie ; Faire admettre à Corruption sa défaite · sortie"
   },
   {
    "id": "dql-2408",
@@ -2088,6 +2492,12 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
  ],
  "Bambusaie de Damadrya": [
   {
+   "id": "dql-2161",
+   "nom": "Le saule du promeneur",
+   "niveau": 110,
+   "objectif": "Vaincre Damadrya pour récupérer 1 × Feuille de Damadrya · salle du boss"
+  },
+  {
    "id": "sy-2445",
    "nom": "Rester planté là",
    "niveau": 110,
@@ -2105,7 +2515,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2153",
    "nom": "La jetée des enfants perdus",
    "niveau": 130,
-   "objectif": "Entrer dans la Vallée de la Dame des eaux ; Vaincre Nagate la Dame des eaux · salle 5"
+   "objectif": "Entrer dans la Vallée de la Dame des eaux ; Vaincre Nagate la Dame des eaux · salle 5 ; Parler à Nagate la Dame des eaux · sortie ; Parler à Kwatalo · sortie"
   }
  ],
  "Dojo du Vent": [
@@ -2118,16 +2528,22 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
  ],
  "Demeure des Esprits": [
   {
+   "id": "dg-2198",
+   "nom": "Jusqu'à leur dernier soupir",
+   "niveau": 170,
+   "objectif": "Rapporter le Hoshinotama à la Kitsoune · salle 5"
+  },
+  {
    "id": "sy-2447",
    "nom": "Quand les esprits s'échauffent",
    "niveau": 170,
-   "objectif": "Attirer l'attention de la Kitsoune à neuf queues par une démonstration de force · salle 5 ; Passer un marché avec Koumiho · salle du boss"
+   "objectif": "Attirer l'attention de la Kitsoune à neuf queues par une démonstration de force · salle 5 ; Passer un marché avec Koumiho · salle 5"
   },
   {
    "id": "dg-2180",
    "nom": "Requiem pour un Yokai",
    "niveau": 170,
-   "objectif": "Aller jusqu'à cette salle · salle 1 ; Vaincre Koumiho · salle du boss ; Emporter une flamme du Kitsounebi de Koumiho · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle 1 ; Vaincre Koumiho · salle du boss ; Emporter une flamme du Kitsounebi de Koumiho · salle 5"
   },
   {
    "id": "dql-2162",
@@ -2141,7 +2557,19 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dg-2179",
    "nom": "Maudite disparition",
    "niveau": 160,
-   "objectif": "Aller jusqu'à cette salle · salle 1 ; Vaincre Shogun Tofugawa · salle du boss"
+   "objectif": "Aller jusqu'à cette salle · salle 1 ; Vaincre Shogun Tofugawa · salle du boss ; Parler à Shogun Tofugawa · salle 5"
+  },
+  {
+   "id": "dql-2188",
+   "nom": "Nidanwa : Harmonie intérieure",
+   "niveau": 170,
+   "objectif": "Vaincre Shogun Tofugawa pour récupérer 3 × Moustache du Shogun Tofugawa · salle du boss"
+  },
+  {
+   "id": "dg-2180",
+   "nom": "Requiem pour un Yokai",
+   "niveau": 170,
+   "objectif": "Négocier les termes du marché avec le Shogun · salle 5"
   }
  ],
  "Mémoire d'Orukam": [
@@ -2149,7 +2577,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "ta-2201",
    "nom": "Deux souffles, une inspiration",
    "niveau": 200,
-   "objectif": "Explorer la Mémoire d'Orukam ; Vaincre Roi Imagami · salle du boss ; Décrypter le sens des mots-esprits dans la dernière salle de la Mémoire d'Orukam"
+   "objectif": "Explorer la Mémoire d'Orukam ; Vaincre Roi Imagami · salle du boss ; Décrypter le sens des mots-esprits dans la dernière salle de la Mémoire d'Orukam · le Dofus"
   }
  ],
  "Souvenir d'Imagiro": [
@@ -2157,15 +2585,21 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "ta-2201",
    "nom": "Deux souffles, une inspiration",
    "niveau": 200,
-   "objectif": "Explorer le Souvenir d'Imagiro ; Vaincre Reine Amirukam · salle du boss ; Décrypter le sens des mots-esprits dans la dernière salle du Souvenir d'Imagiro"
+   "objectif": "Explorer le Souvenir d'Imagiro ; Vaincre Reine Amirukam · salle du boss ; Décrypter le sens des mots-esprits dans la dernière salle du Souvenir d'Imagiro · le Dofus"
   }
  ],
  "Rituel de Kabahal": [
   {
+   "id": "dql-2421",
+   "nom": "La danse de la dissonance",
+   "niveau": 200,
+   "objectif": "Parler à Kabahal · sortie"
+  },
+  {
    "id": "dql-2412",
    "nom": "Le chant du Pandamonium",
    "niveau": 200,
-   "objectif": "Affronter les Possédés et leur chaman démoniaque · salle 5"
+   "objectif": "Affronter les Possédés et leur chaman démoniaque · salle 5 ; Parler à Kabahal · sortie"
   },
   {
    "id": "dql-2417",
@@ -2199,20 +2633,20 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2455",
    "nom": "De joyeux petits arbres",
    "niveau": 40,
-   "objectif": "Vaincre Directeur Grunob · salle du boss"
+   "objectif": "Vaincre Directeur Grunob · salle du boss ; Parler à Directeur Grunob · salle du boss ; Fouiller la Rmouâre à la recherche du pinceau · salle du boss"
   },
   {
    "id": "dql-2504",
    "nom": "Donjon éducatif",
    "niveau": 40,
-   "objectif": "Vaincre Directeur Grunob · salle du boss",
+   "objectif": "Vaincre Directeur Grunob · salle du boss ; Aller jusqu'à cette salle · salle du boss",
    "serie": "emma-tom-pouce"
   },
   {
    "id": "sy-2442",
    "nom": "La raison du plus fort",
    "niveau": 40,
-   "objectif": "Entrer dans l'Akadémie des Gobs ; Vaincre Directeur Grunob · salle du boss"
+   "objectif": "Entrer dans l'Akadémie des Gobs ; Vaincre Directeur Grunob · salle du boss ; Parler à Directeur Grunob · salle du boss"
   }
  ],
  "Tertre du long sommeil": [
@@ -2220,7 +2654,25 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2451",
    "nom": "Arrête-la si tu peux",
    "niveau": 150,
-   "objectif": "Conduire Karnhell auprès d'Hell Mina · salle du boss ; Suivre Hell Mina à l'intérieur du Tumulus · salle du boss ; Vaincre Hell Mina · salle du boss"
+   "objectif": "Conduire Karnhell auprès d'Hell Mina · salle du boss ; Suivre Hell Mina à l'intérieur du Tumulus · salle du boss ; Vaincre Hell Mina · salle du boss ; Parler à Hell Mina · chambre du mal"
+  },
+  {
+   "id": "sy-2446",
+   "nom": "Pas de fumée sans feu",
+   "niveau": 150,
+   "objectif": "Révéler puis examiner le sceau de Terrakourial · chambre du mal ; Survivre à la morsure du feu du Dark Vlad · chambre du mal ; Placer les trois ambres purifiés sur le sceau · chambre du mal"
+  },
+  {
+   "id": "sy-2447",
+   "nom": "Quand les esprits s'échauffent",
+   "niveau": 170,
+   "objectif": "Examiner à nouveau le sceau de Terrakourial · chambre du mal"
+  },
+  {
+   "id": "sy-2449",
+   "nom": "La bête au bois dormant",
+   "niveau": 200,
+   "objectif": "Pénétrer dans le bloc d'ambre caché sous le tumulus · chambre du mal"
   }
  ],
  "Bastion des Marteaux-Aigris": [
@@ -2228,7 +2680,19 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2472",
    "nom": "L'île maudite",
    "niveau": 190,
-   "objectif": "Se rendre là où se trouve Barbéryl Clochecuivre, en faisant toujours preuve de discrétion · salle du boss ; Se faufiler dans le Bastion des Marteaux-Aigris · salle 1 ; Vaincre Barbéryl Clochecuivre · salle du boss"
+   "objectif": "Se rendre là où se trouve Barbéryl Clochecuivre, en faisant toujours preuve de discrétion · salle du boss ; Se faufiler dans le Bastion des Marteaux-Aigris · salle 1 ; Vaincre Barbéryl Clochecuivre · salle du boss ; Parler à Barbéryl Clochecuivre · sortie"
+  },
+  {
+   "id": "dql-2474",
+   "nom": "La fin des maningances",
+   "niveau": 190,
+   "objectif": "Aller voir Barbéryl, en compagnie de Vitkour Pied-Vif, pour l'avertir à propos de Malva Bonnepanse · sortie ; Écouter le plaidoyer de Malva Bonnepanse · sortie ; Suivre l'intervention de Vitkour Pied-Vif · sortie ; Interrompre la tentative de meurtre de Malva Bonnepanse · sortie ; Parler à Barbéryl Clochecuivre · sortie"
+  },
+  {
+   "id": "dql-2477",
+   "nom": "Pour que la flamme vacille",
+   "niveau": 200,
+   "objectif": "Parler à Barbéryl Clochecuivre · sortie ; Parler à Ningénieur en chef · sortie"
   }
  ],
  "Chambre des maléfices": [
@@ -2242,7 +2706,7 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2475",
    "nom": "La sorcière exilée",
    "niveau": 200,
-   "objectif": "Vaincre Belladone · salle du boss"
+   "objectif": "Vaincre Belladone · salle du boss ; Parler à Belladone · sortie"
   }
  ],
  "Repaire du Kharnozor": [
@@ -2250,8 +2714,22 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "id": "dql-2510",
    "nom": "Tour d'honneur",
    "niveau": 100,
-   "objectif": "Vaincre Kharnozor · salle du boss",
+   "objectif": "Vaincre Kharnozor · salle du boss ; Aller jusqu'à cette salle · sortie",
    "serie": "emma-tom-pouce"
+  }
+ ],
+ "Breuil du Vénérable": [
+  {
+   "id": "dql-2531",
+   "nom": "Devoir de réserve",
+   "niveau": 200,
+   "objectif": "Vaincre Vénérable Endormi · salle du boss ; Parler à Vénérable somnolent · sortie ; Se défendre contre l'attaque provoquée par la garde-chasse · sortie ; Parler à Arctalante · sortie"
+  },
+  {
+   "id": "dql-2517",
+   "nom": "La proie des vérités",
+   "niveau": 200,
+   "objectif": "Pousser le Vénérable à croquer dans la pomme bleue · sortie ; Parler à Déesse Crâ · sortie ; Assister à la discussion entre Crâ et l'esprit animal · sortie ; Parler à Kroketh · sortie ; Se soumettre à l'ordalie demandée par le dieu Kroketh · sortie"
   }
  ],
  "Poste de contrôle du Supervizœuf": [
@@ -2262,12 +2740,12 @@ export const QUETES_DONJONS: Record<string, QueteLieeDonjon[]> = {
    "objectif": "Vaincre Supervizœuf · salle du boss"
   }
  ],
- "Breuil du Vénérable": [
+ "Autel de la Déchireuse": [
   {
-   "id": "dql-2531",
-   "nom": "Devoir de réserve",
+   "id": "dql-2535",
+   "nom": "Le roi balafré",
    "niveau": 200,
-   "objectif": "Vaincre Vénérable Endormi · salle du boss"
+   "objectif": "Vaincre Déchireuse pour récupérer 1 × Pelage de la Déchireuse · salle du boss"
   }
  ]
 };

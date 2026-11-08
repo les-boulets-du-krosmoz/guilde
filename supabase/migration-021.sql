@@ -34,6 +34,9 @@ create policy modif_brocante on public.brocante for update to authenticated
 drop policy if exists suppr_brocante on public.brocante;
 create policy suppr_brocante on public.brocante for delete to authenticated
   using ((membre_id = auth.uid() or public.est_officier()) and public.est_membre_valide());
+-- Annonce sur Discord à la mise en vente (une seule fois par objet).
+alter table public.brocante add column if not exists discord_le timestamptz;
+
 drop trigger if exists brocante_maj on public.brocante;
 create trigger brocante_maj before update on public.brocante for each row execute function public.toucher_maj();
 

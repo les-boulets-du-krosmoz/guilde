@@ -13,7 +13,7 @@ union all select 'ressources_cochees', count(*) from public.ressources_cochees
 union all select 'dofus_souhaites', count(*) from public.dofus_souhaites
 order by 1;
 
--- 2. Ce que les migrations 003 à 022 doivent avoir créé (après coup : tout doit être à « oui »).
+-- 2. Ce que les migrations 003 à 026 doivent avoir créé (après coup : tout doit être à « oui »).
 select 'table avis_personnage (003)' as element,
        case when to_regclass('public.avis_personnage') is not null then 'oui' else 'NON' end as present
 union all select 'colonne membres.metamob (004)',
@@ -52,7 +52,18 @@ union all select 'tables absences et liens_utiles (019)',
        case when to_regclass('public.liens_utiles') is not null and to_regclass('public.absences') is not null then 'oui' else 'NON' end
 union all select 'colonnes membres.mode_daltonien et police (020)',
        case when exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'membres' and column_name = 'police') then 'oui' else 'NON' end
-union all select 'tables brocante et brocante_interets (021)',
-       case when to_regclass('public.brocante') is not null and to_regclass('public.brocante_interets') is not null then 'oui' else 'NON' end
+union all select 'tables brocante et brocante_interets, colonne brocante.discord_le (021)',
+       case when to_regclass('public.brocante_interets') is not null and exists (select 1 from information_schema.columns
+         where table_schema = 'public' and table_name = 'brocante' and column_name = 'discord_le') then 'oui' else 'NON' end
 union all select 'table quetes_en_cours (022)',
-       case when to_regclass('public.quetes_en_cours') is not null then 'oui' else 'NON' end;
+       case when to_regclass('public.quetes_en_cours') is not null then 'oui' else 'NON' end
+union all select 'modification des recherches de groupe réservée à l''organisateur (023)',
+       case when exists (select 1 from pg_policies where tablename = 'annonces' and policyname = 'modif_annonces'
+         and qual not like '%est_officier%') then 'oui' else 'NON' end
+union all select 'ordre « Œil Putride » (024)',
+       case when not exists (select 1 from public.personnages where ordre = 'Œil Assassin')
+         and pg_get_constraintdef((select oid from pg_constraint where conname = 'ordre_coherent')) like '%Œil Putride%' then 'oui' else 'NON' end
+union all select 'table metamob_archis (025)',
+       case when to_regclass('public.metamob_archis') is not null then 'oui' else 'NON' end
+union all select 'table songes_runs (026)',
+       case when to_regclass('public.songes_runs') is not null then 'oui' else 'NON' end;

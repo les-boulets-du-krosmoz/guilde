@@ -8,7 +8,7 @@ export function MesMetiers() {
       <div className="entete">
         <div>
           <h1>Mes métiers</h1>
-          <p className="discret">Tes niveaux de métier : chaque champ s'enregistre tout seul. Ceux de toute la guilde sont dans <Link to="/metiers">Métiers de la guilde</Link>.</p>
+          <p className="discret">Tes niveaux de métier : chaque champ s'enregistre tout seul. Ceux de toute la guilde sont dans <Link to="/metiers">l'Annuaire</Link>.</p>
         </div>
       </div>
       <FormMetiers />

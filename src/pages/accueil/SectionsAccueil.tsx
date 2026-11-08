@@ -9,7 +9,7 @@ import { BoutonDefi } from "../../components/BoutonDefi";
 import { CarteLiens } from "../../components/CarteLiens";
 import { SUCCES_PAR_ID } from "../../data/succesDonjons";
 import { IconeMetier } from "../../components/IconeMetier";
-import { IconeSortie } from "../../components/IconeSortie";
+import { IconeTypeSortie } from "../../components/IconeTypeSortie";
 import { NomAvecPastille, Pastille } from "../../components/Pastille";
 import { ilYa } from "../../lib/dates";
 import { chargerAides, chargerAvis, chargerGuilde, chargerMetiers, chargerSouhaits, participer, repondreInvitation, toutesLesQuetes } from "../../lib/donnees";
@@ -329,15 +329,27 @@ function BlocAnnonces({ annonces, participants, auteurs, invitations, toutesInvi
 }) {
   // Les succès visés sont comparés avec mon personnage principal, comme sur la page Recherche de groupe.
   const monPerso = mesPersos.find((p) => p.est_principal) ?? mesPersos[0];
+  const [filtre, setFiltre] = useState<"tout" | "donjon" | "quete">("tout");
   const seuil = Date.now() - 3 * 3600e3;
-  const prochaines = annonces
-    .filter((a) => !a.date_prevue || new Date(a.date_prevue).getTime() >= seuil)
-    .sort((a, b) => (a.date_prevue && b.date_prevue ? a.date_prevue.localeCompare(b.date_prevue) : a.date_prevue ? -1 : b.date_prevue ? 1 : b.cree_le.localeCompare(a.cree_le)))
-    .slice(0, 5);
+  // Toutes les sorties à venir (la liste défile dans la carte au lieu de l'agrandir), filtrables par type.
+  const avenir = annonces.filter((a) => !a.date_prevue || new Date(a.date_prevue).getTime() >= seuil);
+  const prochaines = avenir
+    .filter((a) => filtre === "tout" || a.type === filtre)
+    .sort((a, b) => (a.date_prevue && b.date_prevue ? a.date_prevue.localeCompare(b.date_prevue) : a.date_prevue ? -1 : b.date_prevue ? 1 : b.cree_le.localeCompare(a.cree_le)));
+  const compte = (t: "donjon" | "quete") => avenir.filter((a) => a.type === t).length;
   return (
     <section className="carte bloc-annonces">
       <div className="carte__entete">
         <h2><Link to="/groupes" className="titre-lien" title="Toutes les recherches et le calendrier">Recherche de groupe</Link></h2>
+        <div className="onglets onglets--mini bloc-annonces__filtre" role="group" aria-label="Type de sortie">
+          <button type="button" className={`onglet ${filtre === "tout" ? "onglet--actif" : ""}`} aria-pressed={filtre === "tout"} onClick={() => setFiltre("tout")}>Tout ({avenir.length})</button>
+          {(["donjon", "quete"] as const).map((t) => (
+            <button key={t} type="button" className={`onglet onglet--icone ${filtre === t ? "onglet--actif" : ""}`} aria-pressed={filtre === t}
+              aria-label={`${t === "donjon" ? "Donjons" : "Quêtes"} (${compte(t)})`} title={t === "donjon" ? "Donjons" : "Quêtes"} onClick={() => setFiltre(t)}>
+              <IconeTypeSortie type={t} taille={18} /> {compte(t)}
+            </button>
+          ))}
+        </div>
       </div>
       {invitations.map((i) => {
         const a = annonces.find((x) => x.id === i.annonce_id);
@@ -350,7 +362,7 @@ function BlocAnnonces({ annonces, participants, auteurs, invitations, toutesInvi
         );
       })}
       {prochaines.length === 0 ? (
-        <p className="vide">Aucune sortie prévue. <Link to="/groupes">Propose la première</Link> !</p>
+        <p className="vide">{filtre === "tout" ? <>Aucune sortie prévue. <Link to="/groupes">Propose la première</Link> !</> : `Aucune sortie de ce type pour l'instant.`}</p>
       ) : (
         <ul className="bloc-annonces__liste">
           {prochaines.map((a) => {
@@ -361,7 +373,7 @@ function BlocAnnonces({ annonces, participants, auteurs, invitations, toutesInvi
                 <div className="bloc-annonces__haut">
                 <Link to="/groupes" className="bloc-annonces__titre">
                   {/* Donjon : la tête du boss ; quête : le parchemin. */}
-                  {a.type === "donjon" && dj ? <IconeDonjon fichier={dj.icone} taille={22} titre={dj.boss} /> : <IconeSortie type={a.type} />}
+                  {a.type === "donjon" && dj ? <IconeDonjon fichier={dj.icone} taille={22} titre={dj.boss} /> : <IconeTypeSortie type={a.type} taille={22} />}
                   {a.titre}
                   {a.visibilite === "prive" && (
                     <span title={a.auteur_id === moiId || toutesInvitations.some((x) => x.annonce_id === a.id && x.membre_id === moiId) ? "Groupe privé : tu as accès" : "Groupe privé : sur invitation"}>
@@ -471,7 +483,10 @@ function CarteObjectif({ objectif: o, aidants, dispos, absences }: { objectif: O
       <div className="objectif__corps">
         <div className="objectif__titre">
           <strong>{o.titre}</strong>
-          <span className={`etiquette ${o.type === "Donjon" ? "etiquette--donjon" : o.type === "Avis de recherche" ? "etiquette--avis" : "etiquette--groupe"}`}>{o.type}</span>
+          {/* Donjon : le crâne ; combat de quête : le « ! » ; avis de recherche : son étiquette */}
+          {o.type === "Avis de recherche"
+            ? <span className="etiquette etiquette--avis">{o.type}</span>
+            : <IconeTypeSortie type={o.type === "Donjon" ? "donjon" : "quete"} taille={22} />}
         </div>
         <span className="discret-taille">{o.quetes.join(", ")}</span>
         {o.note && <span className="discret-taille objectif__note"><IconeDonjon fichier={o.icone ?? ""} taille={20} /> {o.note}</span>}

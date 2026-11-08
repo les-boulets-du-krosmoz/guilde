@@ -100,3 +100,19 @@ for c in sorted(set(ICONES_UTILISEES.values())):
     "// Généré par scripts/generer-objets.py : icône (public/icones/stats/<id>.webp) de chaque caractéristique, par son nom.\n"
     f"export const ICONES_STATS: Record<string, number> = {json.dumps(dict(sorted(ICONES_UTILISEES.items())), ensure_ascii=False, indent=1)};\n", encoding="utf-8")
 print(f"{len(set(ICONES_UTILISEES.values()))} icônes de caractéristiques pour {len(ICONES_UTILISEES)} noms")
+
+# Images des équipements, hébergées par le site (public/icones/objets/<iconId>.webp, 48 px) : la Brocante ne dépend
+# plus du service d'images de dofusdude, qui peut être indisponible ou limiter le nombre de requêtes.
+images_objets = tarfile.open(fichier("items_images_64.tar.gz"))
+par_nom = {pathlib.Path(n).name: n for n in images_objets.getnames()}
+dossier_obj = racine / "public/icones/objets"
+dossier_obj.mkdir(parents=True, exist_ok=True)
+faites = 0
+for icone in sorted({c[4] for c in catalogue if c[4]}):
+    cible = dossier_obj / f"{icone}.webp"
+    nom = par_nom.get(f"{icone}-64.png")
+    if not nom or cible.exists(): continue
+    with images_objets.extractfile(nom) as f:
+        Image.open(io.BytesIO(f.read())).convert("RGBA").resize((48, 48), Image.LANCZOS).save(cible, "WEBP", quality=82, method=6)
+    faites += 1
+print(f"{faites} images d'équipements ajoutées dans public/icones/objets ({sum(f.stat().st_size for f in dossier_obj.glob('*.webp')) // 1024} Ko au total)")

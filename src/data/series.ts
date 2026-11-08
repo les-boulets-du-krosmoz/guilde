@@ -30,7 +30,7 @@ export const SERIES_ALIGNEMENT: Dofus[] = [
   serieAlign("align-brakmar", "Brâkmar", "Brâkmar", "#c24a4a", "Alignement brâkmarien"),
   serieAlign("align-coeur-saignant", "Cœur Saignant", "Brâkmar", "#c24a4a", "Ordre du Cœur Saignant"),
   serieAlign("align-esprit-malsain", "Esprit Malsain", "Brâkmar", "#c24a4a", "Ordre de l'Esprit Malsain"),
-  serieAlign("align-oeil-assassin", "Œil Assassin", "Brâkmar", "#c24a4a", "Ordre de l'Œil Assassin"),
+  serieAlign("align-oeil-assassin", "Œil Putride", "Brâkmar", "#c24a4a", "Ordre de l'Œil Putride"),
 ];
 
 export const CATEGORIES: Categorie[] = [

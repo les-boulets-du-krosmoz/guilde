@@ -11,7 +11,7 @@ export const ALIGNEMENTS: Alignement[] = ["Neutre", "Bonta", "Brâkmar"];
 export const ORDRES: Record<Alignement, string[]> = {
   Neutre: [],
   Bonta: ["Cœur Vaillant", "Esprit Salvateur", "Œil Attentif"],
-  Brâkmar: ["Cœur Saignant", "Esprit Malsain", "Œil Assassin"],
+  Brâkmar: ["Cœur Saignant", "Esprit Malsain", "Œil Putride"],
 };
 
 // À vérifier en jeu : métiers et spécialisations de forgemagie de Dofus 3.

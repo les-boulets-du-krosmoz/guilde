@@ -7,6 +7,9 @@ import { FournisseurStatuts } from "./lib/statuts";
 import { Chargement, Connexion, NonMembre } from "./pages/Acces";
 
 // Chaque page est un morceau à part, téléchargé seulement quand on l'ouvre (puis gardé par le navigateur).
+const Donjons = lazy(() => import("./pages/Donjons").then((m) => ({ default: m.Donjons })));
+const Archimonstres = lazy(() => import("./pages/Archimonstres").then((m) => ({ default: m.Archimonstres })));
+const Songes = lazy(() => import("./pages/Songes").then((m) => ({ default: m.Songes })));
 const Brocante = lazy(() => import("./pages/Brocante").then((m) => ({ default: m.Brocante })));
 const Parametres = lazy(() => import("./pages/Parametres").then((m) => ({ default: m.Parametres })));
 const MesMetiers = lazy(() => import("./pages/MesMetiers").then((m) => ({ default: m.MesMetiers })));
@@ -44,6 +47,11 @@ export function App() {
         <Route path="/mes-metiers" element={<MesMetiers />} />
         <Route path="/parametres" element={<Parametres />} />
         <Route path="/brocante" element={<Brocante />} />
+        <Route path="/songes" element={<Songes />} />
+        <Route path="/archimonstres" element={<Archimonstres />} />
+        <Route path="/donjons" element={<Donjons />} />
+        <Route path="/ordres" element={<Metiers />} />
+        <Route path="/ordres/:ordre" element={<Metiers />} />
         <Route path="/calendrier" element={<Calendrier />} />
         <Route path="/annonces" element={<Navigate to="/groupes" replace />} />
         <Route path="/avis" element={<AvisRecherche />} />

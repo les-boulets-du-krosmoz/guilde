@@ -69,23 +69,24 @@ export function Nav() {
         </NavLink>
         <MenuDeroulant
           libelle="Progression"
-          actif={["/quetes", "/progression", "/avis", "/mes-metiers"].some((c) => pathname.startsWith(c))}
+          actif={["/quetes", "/progression", "/avis", "/songes", "/donjons"].some((c) => pathname.startsWith(c))}
           liens={[
-            { to: "/quetes", libelle: "Mes quêtes", detail: "Dofus, Frigost, Tour du monde, Emma", actif: pathname.startsWith("/quetes") && !search.includes("cat=succes") },
-            { to: "/quetes?cat=succes", libelle: "Donjons", detail: "Succès et quêtes liées des donjons", actif: pathname.startsWith("/quetes") && search.includes("cat=succes") },
-            { to: "/mes-metiers", libelle: "Mes métiers", detail: "Tes niveaux, enregistrés automatiquement" },
+            { to: "/quetes", libelle: "Mes quêtes", detail: "Dofus, Frigost, Tour du monde, Emma", actif: pathname.startsWith("/quetes") },
+            { to: "/donjons", libelle: "Donjons", detail: "Succès, guides de boss et quêtes liées" },
             { to: "/progression", libelle: "Où en est la guilde", detail: "Qui en est à quelle étape" },
             { to: "/avis", libelle: "Avis de recherche", detail: "Avis, avitons et parchemins" },
+            { to: "/songes", libelle: "Songes infinis", detail: "Le mode roguelite et les meilleurs Domi Reversi" },
           ]}
         />
         <MenuDeroulant
           libelle="Guilde"
-          actif={["/personnages", "/metiers", "/perso/", "/calendrier", "/brocante"].some((c) => pathname.startsWith(c))}
+          actif={["/personnages", "/metiers", "/ordres", "/perso/", "/calendrier", "/brocante", "/archimonstres"].some((c) => pathname.startsWith(c))}
           liens={[
             { to: "/personnages", libelle: "Personnages", detail: "Tous les membres et leurs personnages" },
-            { to: "/metiers", libelle: "Métiers de la guilde", detail: "Qui peut fabriquer quoi" },
+            { to: "/metiers", libelle: "Annuaire", detail: "Métiers et ordres de la guilde" },
             { to: "/calendrier", libelle: "Calendrier", detail: "Les dispos de la guilde, trouver un créneau" },
             { to: "/brocante", libelle: "La Brocante des boulets", detail: "Équipements à prix d'ami entre membres" },
+            { to: "/archimonstres", libelle: "Archimonstres", detail: "La quête Ocre de chacun, et qui a les archis qui te manquent" },
           ]}
         />
       </nav>
@@ -107,10 +108,11 @@ export function Nav() {
             ? <img src={membre.avatar_url} alt={`Compte de ${membre.pseudo}`} width={32} height={32} className="nav__avatar" referrerPolicy="no-referrer" />
             : <span className="nav__avatar nav__avatar--initiales">{(membre?.pseudo ?? "?").slice(0, 2)}</span>}
           etiquette="Mon compte"
-          actif={pathname.startsWith("/mon-compte") || pathname.startsWith("/parametres")}
+          actif={["/mon-compte", "/parametres", "/mes-metiers"].some((c) => pathname.startsWith(c))}
           aDroite
           liens={[
             { to: "/mon-compte", libelle: "Mon compte", detail: "Personnages, Metamob" },
+            { to: "/mes-metiers", libelle: "Mes métiers", detail: "Mettre à jour tes niveaux" },
             { to: "/parametres", libelle: "Paramètres", detail: "Mode daltonien" },
             ...(principal ? [{ to: `/perso/${principal.id}`, libelle: "Ma fiche", detail: `Profil de ${principal.nom}` }] : []),
           ]}

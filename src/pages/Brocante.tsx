@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Kamas, SymboleKamas } from "../components/Kamas";
 import { Pastille } from "../components/Pastille";
 import { ICONES_STATS } from "../data/iconesStats";
 import { ilYa } from "../lib/dates";
@@ -26,8 +27,8 @@ function IconeStat({ libelle }: { libelle: string }) {
   return id ? <img className="icone-stat" src={`/icones/stats/${id}.webp`} alt="" width={18} height={18} loading="lazy" /> : <span className="icone-stat icone-stat--vide" aria-hidden="true" />;
 }
 
-const IMG = (icone: number | null) => (icone ? `https://api.dofusdu.de/dofus3/v1/img/item/${icone}-64.png` : undefined);
-const kamas = (n: number) => `${n.toLocaleString("fr-FR")} k`;
+// Images des équipements hébergées par le site (scripts/generer-objets.py), pour ne pas dépendre d'un service extérieur.
+const IMG = (icone: number | null) => (icone ? `/icones/objets/${icone}.webp` : undefined);
 const sansAccents = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 /** « 1 200 000 », « 1,2m », « 850k » → nombre de kamas. */
 function lirePrix(t: string): number | null {
@@ -95,7 +96,7 @@ export function Brocante() {
         <button type="button" className="bouton bouton--vert" onClick={() => setFormulaire(!formulaire)}>{formulaire ? "Fermer" : "+ Proposer un objet"}</button>
       </div>
 
-      {formulaire && <FormVente membreId={membre.id} onAnnuler={() => setFormulaire(false)} onFini={() => { setFormulaire(false); recharger(); setInfo("Ton objet est en vente."); }} onErreur={setErreur} />}
+      {formulaire && <FormVente membreId={membre.id} onAnnuler={() => setFormulaire(false)} onFini={(m) => { setFormulaire(false); recharger(); setInfo(m); }} onErreur={setErreur} />}
       {info && <p className="discret" role="status">{info}</p>}
 
       <div className="brocante-outils">
@@ -145,8 +146,8 @@ export function Brocante() {
                 </ul>
                 {v.note && <p className="vente__note">« {v.note} »</p>}
                 <div className="vente__prix">
-                  <strong>{kamas(v.prix)}</strong>
-                  {v.prix_hdv && v.prix_hdv > v.prix && <><span className="vente__hdv">{kamas(v.prix_hdv)}</span><span className="vente__reduc">−{r} %</span></>}
+                  <strong><Kamas valeur={v.prix} /></strong>
+                  {v.prix_hdv && v.prix_hdv > v.prix && <><Kamas valeur={v.prix_hdv} className="vente__hdv" /><span className="vente__reduc">−{r} %</span></>}
                 </div>
                 <div className="vente__vendeur">
                   {vendeur && <Pastille perso={vendeur} taille={22} />}
@@ -204,7 +205,7 @@ export function Brocante() {
 }
 
 /** Proposer un objet : on le choisit dans le catalogue du jeu, puis on indique les caractéristiques de SON exemplaire. */
-function FormVente({ membreId, onAnnuler, onFini, onErreur }: { membreId: string; onAnnuler: () => void; onFini: () => void; onErreur: (m: string) => void }) {
+function FormVente({ membreId, onAnnuler, onFini, onErreur }: { membreId: string; onAnnuler: () => void; onFini: (message: string) => void; onErreur: (m: string) => void }) {
   const [catalogue, setCatalogue] = useState<ObjetCatalogue[] | null>(null);
   const [recherche, setRecherche] = useState("");
   const [objet, setObjet] = useState<ObjetCatalogue | null>(null);
@@ -231,11 +232,11 @@ function FormVente({ membreId, onAnnuler, onFini, onErreur }: { membreId: string
     const ph = prixHdv.trim() ? lirePrix(prixHdv) : null;
     setEnCours(true);
     try {
-      await publierVente({
+      const r = await publierVente({
         membre_id: membreId, objet_id: objet[0], objet_nom: objet[1], objet_niveau: objet[2], objet_type: objet[3], objet_icone: objet[4],
         stats, prix: p, prix_hdv: ph, note: note.trim() || null,
       });
-      onFini();
+      onFini(r.annonce ? "Ton objet est en vente et annoncé sur Discord." : `Ton objet est en vente.${r.raison ? ` (${r.raison})` : ""}`);
     } catch (e) { onErreur((e as Error).message); } finally { setEnCours(false); }
   }
 
@@ -281,7 +282,7 @@ function FormVente({ membreId, onAnnuler, onFini, onErreur }: { membreId: string
             )))}
           </div>
           <div className="fa-grille">
-            <label className="fa-champ fa-4"><span>Ton prix (kamas)</span><input value={prix} onChange={(e) => setPrix(e.target.value)} placeholder="ex. 1 200 000 ou 1,2m" /></label>
+            <label className="fa-champ fa-4"><span>Ton prix <SymboleKamas titre="en kamas" /></span><input value={prix} onChange={(e) => setPrix(e.target.value)} placeholder="ex. 1 200 000 ou 1,2m" /></label>
             <label className="fa-champ fa-4"><span>Prix à l'HDV <span className="discret">(facultatif)</span></span><input value={prixHdv} onChange={(e) => setPrixHdv(e.target.value)} placeholder="pour afficher la réduction" /></label>
             <label className="fa-champ fa-4"><span>Note <span className="discret">(facultatif)</span></span><input maxLength={300} value={note} onChange={(e) => setNote(e.target.value)} placeholder="ex. négociable, exo PA…" /></label>
           </div>

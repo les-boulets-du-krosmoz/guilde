@@ -103,7 +103,13 @@ export async function chargerAvis(personnageId?: string): Promise<LigneAvis[]> {
 }
 
 export type CompteMetamob = { possedes: number; total: number };
-export type QueteMetamob = { personnage: string; etape: number; etapes: number; archis: CompteMetamob; boss: CompteMetamob };
+export type QueteMetamob = {
+  personnage: string; etape: number; etapes: number; archis: CompteMetamob; boss: CompteMetamob;
+  /** Quêtes menées en parallèle (exemplaires nécessaires de chaque monstre). */
+  parallele?: number;
+  /** Archis possédés : identifiant Metamob -> quantité (seulement ceux qu'on a). */
+  possession?: Record<string, number>;
+};
 export type ResumeMetamob = { pseudo: string | null; quetes: QueteMetamob[]; maj_le?: string; ancien?: boolean; introuvable?: boolean };
 
 /** Quêtes du Dofus Ocre d'un membre sur Metamob (passe par la fonction serveur, qui garde la clé API). */
@@ -115,6 +121,30 @@ export async function chargerMetamob(membreId: string, forcer = false): Promise<
     throw new Error(corps?.erreur ?? "Metamob est injoignable pour le moment.");
   }
   return data as ResumeMetamob;
+}
+
+/** Message lisible d'une erreur de fonction Supabase : le message du serveur, sinon le code HTTP et le texte reçu. */
+async function messageErreurFonction(error: unknown): Promise<string> {
+  const reponse = (error as { context?: Response }).context;
+  if (reponse && typeof reponse.text === "function") {
+    const texte = await reponse.clone().text().catch(() => "");
+    try { const corps = JSON.parse(texte); if (corps?.erreur) return corps.erreur; } catch { /* pas du JSON */ }
+    if (reponse.status === 404) return "La fonction metamob n'est pas déployée sur Supabase.";
+    if (reponse.status === 546 || /WORKER_LIMIT/i.test(texte)) return "La fonction metamob a dépassé ses limites de calcul (code 546).";
+    return `La fonction metamob a répondu ${reponse.status}${texte ? ` : ${texte.slice(0, 160)}` : ""}.`;
+  }
+  return error instanceof Error && error.message ? `Metamob est injoignable (${error.message}).` : "Metamob est injoignable pour le moment.";
+}
+
+export type ArchiMetamob = { id: number; nom: string; etape: number };
+export type LigneMetamobGuilde = { membre_id: string; pseudo: string | null; donnees: ResumeMetamob | null; maj_le: string | null };
+export type MetamobGuilde = { membres: LigneMetamobGuilde[]; catalogue: ArchiMetamob[]; restants: number; alerte?: string | null };
+
+/** La quête Ocre de toute la guilde ; la fonction rafraîchit à chaque appel un petit lot de résumés trop vieux. */
+export async function chargerMetamobGuilde(): Promise<MetamobGuilde> {
+  const { data, error } = await supabase.functions.invoke("metamob", { body: { guilde: true } });
+  if (error) throw new Error(await messageErreurFonction(error));
+  return data as MetamobGuilde;
 }
 
 /** Nombre d'avis livrés par un personnage. */
@@ -407,9 +437,13 @@ export async function chargerBrocante(): Promise<{ ventes: Vente[]; interets: In
   return { ventes: (v.data ?? []) as Vente[], interets: (i.data ?? []) as InteretVente[] };
 }
 
-export async function publierVente(vente: Omit<Vente, "id" | "statut" | "reserve_pour" | "vendu_le" | "cree_le">): Promise<void> {
-  const { error } = await supabase.from("brocante").insert(vente);
+/** Met un objet en vente, puis l'annonce sur Discord. Renvoie si l'annonce est partie (la vente, elle, est faite). */
+export async function publierVente(vente: Omit<Vente, "id" | "statut" | "reserve_pour" | "vendu_le" | "cree_le">): Promise<{ annonce: boolean; raison?: string }> {
+  const { data, error } = await supabase.from("brocante").insert(vente).select("id").single();
   if (error) throw error;
+  const { data: r, error: e2 } = await supabase.functions.invoke("brocante-interet", { body: { vente_id: data.id, action: "vente" } });
+  if (e2) return { annonce: false, raison: "L'annonce sur Discord n'a pas pu partir (fonction brocante-interet déployée ?)." };
+  return { annonce: !!r?.poste, raison: r?.raison };
 }
 
 export async function majVente(id: string, champs: Partial<Pick<Vente, "statut" | "reserve_pour" | "vendu_le" | "prix" | "prix_hdv" | "note" | "stats">>): Promise<void> {
@@ -449,5 +483,30 @@ export async function marquerEnCours(personnageId: string, queteId: string, enCo
   const { error } = enCours
     ? await supabase.from("quetes_en_cours").upsert({ personnage_id: personnageId, quete_id: queteId })
     : await supabase.from("quetes_en_cours").delete().eq("personnage_id", personnageId).eq("quete_id", queteId);
+  if (error) throw error;
+}
+
+// ---------- Songes déclarés (classement et taux observés) ----------
+
+export type SongeDeclare = {
+  id: string; membre_id: string; intensite: string; vagues: number; bribes: number;
+  butin: Record<string, number>; taux: Record<string, number>; cree_le: string;
+  /** Profondeur atteinte (1 à 26) ; termine = arrivé au combat final (sinon perdu avant). */
+  profondeur: number; termine: boolean;
+};
+
+export async function chargerSonges(): Promise<SongeDeclare[]> {
+  const { data, error } = await supabase.from("songes_runs").select("*").order("cree_le", { ascending: false });
+  if (error) { if (tableAbsente(error)) return []; throw error; }
+  return (data ?? []) as SongeDeclare[];
+}
+
+export async function declarerSonge(songe: Omit<SongeDeclare, "id" | "cree_le">): Promise<void> {
+  const { error } = await supabase.from("songes_runs").insert(songe);
+  if (error) throw error;
+}
+
+export async function supprimerSonge(id: string): Promise<void> {
+  const { error } = await supabase.from("songes_runs").delete().eq("id", id);
   if (error) throw error;
 }

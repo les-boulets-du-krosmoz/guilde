@@ -10,7 +10,7 @@ export const ORDRES_DETAIL: Ordre[] = [
   { nom: "Œil Attentif", camp: "Bonta", court: "Œil", rangs: r("Disciple de Silvosse", "Espion Silencieux", "Chasseur de Renégats", "Assassin Suprême", "Maître des Illusions") },
   { nom: "Cœur Vaillant", camp: "Bonta", court: "Cœur", rangs: r("Disciple de Menalt", "Écuyer", "Chevalier de l'Espoir", "Champion Merveilleux", "Héros Légendaire") },
   { nom: "Esprit Salvateur", camp: "Bonta", court: "Esprit", rangs: r("Disciple de Jiva", "Apprenti Éclairé", "Adepte des Écrits", "Maître des Parchemins", "Gardien du Savoir") },
-  { nom: "Œil Assassin", camp: "Brâkmar", court: "Œil", rangs: r("Disciple de Brumaire", "Espion Sombre", "Chasseur d'Âmes", "Psychopathe", "Maître des Ombres") },
+  { nom: "Œil Putride", camp: "Brâkmar", court: "Œil", rangs: r("Disciple de Brumaire", "Espion Sombre", "Chasseur d'Âmes", "Psychopathe", "Maître des Ombres") },
   { nom: "Cœur Saignant", camp: "Brâkmar", court: "Cœur", rangs: r("Disciple de Djaul", "Surineur", "Chevalier du Désespoir", "Champion du Chaos", "Héros de l'Apocalypse") },
   { nom: "Esprit Malsain", camp: "Brâkmar", court: "Esprit", rangs: r("Disciple d'Hécate", "Apprenti Sombre", "Adepte des Douleurs", "Maître des Sévices", "Gardien des Tortures") },
 ];

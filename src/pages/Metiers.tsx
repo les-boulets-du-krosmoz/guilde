@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { IconeMetier } from "../components/IconeMetier";
+import { ordreDepuisSlug, PanneauOrdre, SectionOrdres, usePersosParOrdre } from "./Ordres";
 import { NomAvecPastille } from "../components/Pastille";
 import { METIERS } from "../data/constantes";
 import { estAncien, ilYa, SEUIL_ANCIEN_JOURS } from "../lib/dates";
@@ -11,10 +12,11 @@ import { Chargement } from "./Acces";
 const PALIERS = [0, 50, 100, 150, 200];
 
 export function Metiers() {
-  const { metier } = useParams();
+  const { metier, ordre: ordreSlug } = useParams();
   const [params] = useSearchParams();
   const naviguer = useNavigate();
   const min = Number(params.get("min") ?? 0);
+  const rang = Number(params.get("rang") ?? 0);
 
   const [guilde, setGuilde] = useState<DonneesGuilde | null>(null);
   const [metiers, setMetiers] = useState<MetierMembre[] | null>(null);
@@ -41,8 +43,10 @@ export function Metiers() {
     return map;
   }, [metiers, guilde]);
 
+  const parOrdre = usePersosParOrdre(guilde);
   if (erreur) return <main className="page"><p className="erreur" role="alert">{erreur}</p></main>;
   if (!guilde || !metiers) return <Chargement />;
+  const ordre = ordreDepuisSlug(ordreSlug);
 
   // Les métiers sont liés au compte : on affiche le personnage principal pour identifier le membre.
   const principal = (membreId: string) =>
@@ -53,11 +57,57 @@ export function Metiers() {
   const paliers = PALIERS.includes(min) ? PALIERS : [...PALIERS, min].sort((a, b) => a - b);
   const suffixe = min ? `?min=${min}` : "";
 
+  // Panneau du métier choisi : rendu dans la grille, à la place de la dernière colonne (même largeur qu'une carte).
+  const panneauMetier = metier ? (
+        <aside className="carte panneau">
+          <div className="carte__entete">
+            <h2 className="metier__nom"><IconeMetier metier={metier} taille={40} />{metier}</h2>
+            <span className="discret">{(parMetier.get(metier) ?? []).length} membres</span>
+          </div>
+          <div className="champ">
+            <label htmlFor="niveau-min">Niveau minimum</label>
+            <select
+              id="niveau-min"
+              value={min}
+              onChange={(e) => naviguer(`/metiers/${encodeURIComponent(metier)}${Number(e.target.value) ? `?min=${e.target.value}` : ""}`)}
+            >
+              {paliers.map((p) => <option key={p} value={p}>{p === 0 ? "Tous" : p === 200 ? "200" : `≥ ${p}`}</option>)}
+            </select>
+          </div>
+
+          {detail.length === 0 ? (
+            <p className="vide">Personne dans la guilde n'a ce métier à ce niveau.</p>
+          ) : (
+            <ul className="liste-annuaire">
+                {detail.map((m) => {
+                  const perso = principal(m.membre_id);
+                  const pseudo = guilde.membres.get(m.membre_id)?.pseudo ?? "?";
+                  return (
+                    <li key={m.membre_id}>
+                      <div className="liste-annuaire__haut">
+                        {perso ? <NomAvecPastille perso={perso} dispo={estDispo(guilde.membres.get(m.membre_id), perso.id)} taille={24} /> : pseudo}
+                        <strong className="liste-annuaire__valeur">{m.niveau}</strong>
+                      </div>
+                      <div className="discret-taille">@{pseudo} · <span className={estAncien(m.maj_le) ? "ancien" : ""}>{ilYa(m.maj_le)}</span></div>
+                    </li>
+                  );
+                })}
+            </ul>
+          )}
+          <p className="discret">En orange : pas mis à jour depuis plus de {SEUIL_ANCIEN_JOURS} jours.</p>
+        </aside>
+  ) : null;
+
   return (
-    <main className={`page ${metier ? "page--metiers" : ""}`}>
+    <main className="page">
+      <h1>Annuaire</h1>
+      <p className="discret">La guilde par métier et par ordre : choisis-en un pour voir qui l'a.</p>
+      {/* Catégorie Métiers : la grille et, à côté, le panneau du métier choisi (il reste dans ce bloc) */}
+      <div className="annuaire__bloc">
       <section>
-        <h1>Métiers de la guilde</h1>
+        <h2 className="annuaire__titre-categorie">Métiers</h2>
         <p className="discret">Pour mettre à jour tes propres niveaux : <Link to="/mes-metiers">Mes métiers</Link>.</p>
+        <div className={`annuaire__zone ${metier ? "annuaire__zone--ouverte" : ""}`}>
         <ul className="grille-metiers">
           {METIERS.map((nom) => {
             const liste = parMetier.get(nom) ?? [];
@@ -82,53 +132,18 @@ export function Metiers() {
             );
           })}
         </ul>
+        {/* Le panneau commence à la hauteur des cartes et ne dépasse pas la hauteur de leur grille (il défile à l'intérieur) */}
+        {metier && <div className="annuaire__cellule"><div className="annuaire__cadre">{panneauMetier}</div></div>}
+        </div>
       </section>
 
-      {metier && (
-        <aside className="carte panneau">
-          <div className="carte__entete">
-            <h2 className="metier__nom"><IconeMetier metier={metier} taille={40} />{metier}</h2>
-            <span className="discret">{(parMetier.get(metier) ?? []).length} membres</span>
-          </div>
-          <div className="champ">
-            <label htmlFor="niveau-min">Niveau minimum</label>
-            <select
-              id="niveau-min"
-              value={min}
-              onChange={(e) => naviguer(`/metiers/${encodeURIComponent(metier)}${Number(e.target.value) ? `?min=${e.target.value}` : ""}`)}
-            >
-              {paliers.map((p) => <option key={p} value={p}>{p === 0 ? "Tous" : p === 200 ? "200" : `≥ ${p}`}</option>)}
-            </select>
-          </div>
+      </div>
 
-          {detail.length === 0 ? (
-            <p className="vide">Personne dans la guilde n'a ce métier à ce niveau.</p>
-          ) : (
-            <table className="tableau">
-              <thead>
-                <tr><th scope="col">Membre</th><th scope="col">Niv.</th><th scope="col">Mise à jour</th></tr>
-              </thead>
-              <tbody>
-                {detail.map((m) => {
-                  const perso = principal(m.membre_id);
-                  const pseudo = guilde.membres.get(m.membre_id)?.pseudo ?? "?";
-                  return (
-                    <tr key={m.membre_id}>
-                      <td>
-                        {perso ? <NomAvecPastille perso={perso} dispo={estDispo(guilde.membres.get(m.membre_id), perso.id)} taille={26} /> : pseudo}
-                        <div className="discret">@{pseudo}</div>
-                      </td>
-                      <td><strong>{m.niveau}</strong></td>
-                      <td className={estAncien(m.maj_le) ? "ancien" : "discret"}>{ilYa(m.maj_le)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
-          <p className="discret">En orange : pas mis à jour depuis plus de {SEUIL_ANCIEN_JOURS} jours.</p>
-        </aside>
-      )}
+      {/* Catégorie Ordres : même principe, le panneau de l'ordre choisi reste à côté des ordres */}
+      <div className="annuaire__bloc">
+        <SectionOrdres parOrdre={parOrdre} actif={ordre}
+          panneau={ordre ? <PanneauOrdre guilde={guilde} ordre={ordre} membres={parOrdre.get(ordre.nom) ?? []} rang={rang} /> : null} />
+      </div>
     </main>
   );
 }

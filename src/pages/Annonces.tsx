@@ -232,7 +232,9 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
   const [choix, setChoix] = useState<string>(candidats[0]?.id ?? "");
   const persoChoisi = mesPersos.find((p) => p.id === choix) ?? candidats[0];
   const refus = persoChoisi ? raisonRefus(a, persoChoisi) : null;
-  const peutModifier = a.auteur_id === moiId || officier;
+  // Seul l'organisateur modifie sa recherche (et gère ses invitations) ; un officier peut la supprimer au besoin.
+  const peutModifier = a.auteur_id === moiId;
+  const peutSupprimer = peutModifier || officier;
   const monInvitation = invitations.find((i) => i.membre_id === moiId);
   const [inviterOuvert, setInviterOuvert] = useState(false);
   // Personnage pour comparer les succès : celui inscrit, sinon celui choisi.
@@ -364,11 +366,14 @@ function CarteAnnonce({ annonce: a, guilde, participants, invitations, metiers, 
           </>
         )}
         {complet && mesInscrits.length === 0 && <span className="discret">Complet</span>}
-        {peutModifier && (
+        {peutSupprimer && (
           <span className="annonce__gestion">
-            {!inviterOuvert && <button type="button" className="lien-bouton" onClick={() => setInviterOuvert(true)}>📨 Inviter</button>}
-            <button type="button" className="lien-bouton" onClick={onModifier}>Modifier</button>
-            <button type="button" className="lien-bouton" onClick={() => window.confirm("Supprimer cette annonce ?") && action(() => supprimerAnnonce(a.id))}>Supprimer</button>
+            {peutModifier && !inviterOuvert && <button type="button" className="lien-bouton" onClick={() => setInviterOuvert(true)}>📨 Inviter</button>}
+            {peutModifier && <button type="button" className="lien-bouton" onClick={onModifier}>Modifier</button>}
+            <button type="button" className="lien-bouton"
+              onClick={() => window.confirm(peutModifier ? "Supprimer cette annonce ?" : `Supprimer l'annonce de ${guilde.membres.get(a.auteur_id)?.pseudo ?? "ce membre"} (en tant qu'officier) ?`) && action(() => supprimerAnnonce(a.id))}>
+              Supprimer{!peutModifier && " (officier)"}
+            </button>
           </span>
         )}
       </div>

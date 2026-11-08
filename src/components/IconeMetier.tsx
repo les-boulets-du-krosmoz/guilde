@@ -3,7 +3,8 @@ import { METIERS_CRAFT, METIERS_RECOLTE } from "../data/constantes";
 
 // Icônes du jeu (servies par l'API dofusdude) : l'objet ou la ressource emblématique de chaque métier.
 // Les images restent hébergées par dofusdude ; si l'une ne charge pas, on affiche le pictogramme dessiné ci-dessous.
-const IMG = (id: number, px: 64 | 128) => `https://api.dofusdu.de/dofus3/v1/img/item/${id}-${px}.png`;
+// Images hébergées par le site (public/icones/objets : 64 px, et @2x en 128 px pour les écrans haute densité).
+const IMG = (id: number, px: 64 | 128) => `/icones/objets/${id}${px === 128 ? "@2x" : ""}.webp`;
 const ICONES: Record<string, number> = {
   Alchimiste: 12003, // Potion de Soin
   Bûcheron: 38017, // Bois de Frêne

@@ -1,3 +1,4 @@
+import { Kamas } from "./Kamas";
 import { useEffect, useState } from "react";
 import { chargerAlmanax, dateParis, SITE_ALMANAX, type JourAlmanax } from "../lib/almanax";
 
@@ -34,7 +35,7 @@ export function CarteAlmanax() {
               <p className="almanax__bonus">{jours[0].bonus}</p>
               <p className="almanax__offrande">
                 <strong>Offrande :</strong> {jours[0].offrande.quantite} × {jours[0].offrande.nom}
-                {jours[0].kamas ? <span className="discret"> · {jours[0].kamas.toLocaleString("fr-FR")} kamas en récompense</span> : null}
+                {jours[0].kamas ? <span className="discret"> · <Kamas valeur={jours[0].kamas} /> en récompense</span> : null}
               </p>
             </div>
           </div>

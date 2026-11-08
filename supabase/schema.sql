@@ -35,7 +35,7 @@ create table public.personnages (
   constraint ordre_coherent check (
        (alignement = 'Neutre'  and ordre is null and niveau_quete_alignement is null)
     or (alignement = 'Bonta'   and ordre in ('Cœur Vaillant', 'Esprit Salvateur', 'Œil Attentif'))
-    or (alignement = 'Brâkmar' and ordre in ('Cœur Saignant', 'Esprit Malsain', 'Œil Assassin'))
+    or (alignement = 'Brâkmar' and ordre in ('Cœur Saignant', 'Esprit Malsain', 'Œil Putride'))  -- migration 024
   ),
   -- https uniquement, et pas de lien de pièce jointe Discord (ils expirent)
   constraint image_url_valide check (
@@ -379,7 +379,7 @@ create policy creation_annonces on public.annonces for insert to authenticated
   with check (auteur_id = auth.uid() and public.est_membre_valide());
 drop policy if exists modif_annonces on public.annonces;
 create policy modif_annonces on public.annonces for update to authenticated
-  using ((auteur_id = auth.uid() or public.est_officier()) and public.est_membre_valide());
+  using (auteur_id = auth.uid() and public.est_membre_valide());  -- migration 023 : l'organisateur seulement
 drop policy if exists suppr_annonces on public.annonces;
 create policy suppr_annonces on public.annonces for delete to authenticated
   using ((auteur_id = auth.uid() or public.est_officier()) and public.est_membre_valide());
@@ -677,3 +677,48 @@ drop policy if exists ecriture_quetes_en_cours on public.quetes_en_cours;
 create policy ecriture_quetes_en_cours on public.quetes_en_cours for all to authenticated
   using (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid()) and public.est_membre_valide())
   with check (exists (select 1 from public.personnages p where p.id = personnage_id and p.membre_id = auth.uid()) and public.est_membre_valide());
+
+alter table public.brocante add column if not exists discord_le timestamptz;
+
+-- Catalogue des archimonstres (migration 025)
+
+create table if not exists public.metamob_archis (
+  id     int primary key,
+  nom    text not null,
+  etape  int  not null default 0,
+  maj_le timestamptz not null default now()
+);
+alter table public.metamob_archis enable row level security;
+drop policy if exists lecture_metamob_archis on public.metamob_archis;
+create policy lecture_metamob_archis on public.metamob_archis for select to authenticated using (public.est_membre_valide());
+-- (écriture : seulement par la fonction metamob, avec la clé de service)
+
+-- Songes déclarés (migration 026)
+
+create table if not exists public.songes_runs (
+  id         uuid primary key default gen_random_uuid(),
+  membre_id  uuid not null references public.membres(id) on delete cascade,
+  intensite  text not null check (intensite in ('Rêve I','Rêve II','Rêve III','Paradoxe I','Paradoxe II','Paradoxe III','Paradoxe IV','Cauchemar I','Cauchemar II','Cauchemar III')),
+  vagues     int  not null default 0 check (vagues between 0 and 999),
+  bribes     int  not null default 0 check (bribes between 0 and 1000000),
+  -- quantités obtenues, par objet : { "reflet-onirique": 120, "rune-legendaire": 1, "legende:Brumaire": 1, … }
+  butin      jsonb not null default '{}',
+  -- taux de butin affichés en jeu, par palier : { "1": 190, "3": 238 }
+  taux       jsonb not null default '{}',
+  -- profondeur atteinte (1 à 26) et songe terminé (arrivé au combat final) ou perdu avant
+  profondeur int  not null default 26 check (profondeur between 1 and 26),
+  termine    boolean not null default true,
+  cree_le    timestamptz not null default now()
+);
+alter table public.songes_runs add column if not exists profondeur int not null default 26;
+alter table public.songes_runs add column if not exists termine boolean not null default true;
+alter table public.songes_runs enable row level security;
+drop policy if exists lecture_songes_runs on public.songes_runs;
+create policy lecture_songes_runs on public.songes_runs for select to authenticated using (public.est_membre_valide());
+drop policy if exists ajout_songes_runs on public.songes_runs;
+create policy ajout_songes_runs on public.songes_runs for insert to authenticated with check (membre_id = auth.uid() and public.est_membre_valide());
+drop policy if exists modif_songes_runs on public.songes_runs;
+create policy modif_songes_runs on public.songes_runs for update to authenticated using (membre_id = auth.uid() and public.est_membre_valide());
+drop policy if exists suppr_songes_runs on public.songes_runs;
+create policy suppr_songes_runs on public.songes_runs for delete to authenticated
+  using ((membre_id = auth.uid() or public.est_officier()) and public.est_membre_valide());

@@ -1,6 +1,7 @@
 // Icônes du jeu pour les types de sortie (servies par l'API dofusdude, comme celles des métiers) :
 // une clef de donjon (Clef du Donjon des Squelettes) et un parchemin de quête.
-const IMG = (id: number) => `https://api.dofusdu.de/dofus3/v1/img/item/${id}-64.png`;
+// Images hébergées par le site (public/icones/objets), pour ne pas dépendre d'un service extérieur.
+const IMG = (id: number) => `/icones/objets/${id}.webp`;
 const ICONES = { donjon: 84228, quete: 24026 } as const;
 
 export function IconeSortie({ type, taille = 20 }: { type: "donjon" | "quete"; taille?: number }) {

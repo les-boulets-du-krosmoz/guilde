@@ -418,17 +418,32 @@ for r in charger("maps_information.json")["references"]["RefIds"]:
     if "id" in x: infos_cartes[x["id"]] = x
 ORDINAUX = {"premiere": 1, "deuxieme": 2, "troisieme": 3, "quatrieme": 4, "cinquieme": 5, "sixieme": 6, "septieme": 7, "huitieme": 8, "neuvieme": 9, "dixieme": 10}
 def salle_depuis_nom(nom_carte, nom_donjon, noms_boss):
-    partie = nom_carte.split(" - ", 1)[1] if " - " in nom_carte else ""
+    morceaux = re.split(r"\s*-\s+", nom_carte, maxsplit=1)
+    partie = morceaux[1] if len(morceaux) == 2 else ""
     if not partie: return None
     n = norme(partie).split(" ")
     if n and n[0] in ORDINAUX and "salle" in n: return f"salle {ORDINAUX[n[0]]}"
     if norme(partie).startswith("salle de ") or any(norme(b) in norme(partie) for b in noms_boss): return "salle du boss"
     return partie[:1].lower() + partie[1:]  # « salle annexe », « antichambre du S.L.I.P. »
 salle_de_carte = {}
+sous_zone_donjon = {}  # sous-zone -> donjons dont les salles y sont
 for d in donjons.values():
     noms_boss = [T(monstres[b]["nameId"]) for b in d["bosses"]["Array"] if b in monstres]
     for m in d["mapIds"]["Array"]:
         salle_de_carte[m] = (d["id"], salle_depuis_nom(T(infos_cartes.get(m, {}).get("nameId", 0)), T(d["nameId"]), noms_boss))
+        sz = infos_cartes.get(m, {}).get("subAreaId")
+        if sz is not None: sous_zone_donjon.setdefault(sz, set()).add(d["id"])
+# Les cartes de la même sous-zone qu'un seul donjon, et nommées comme lui (« Antichambre des Gloursons - Sortie ») :
+# ce sont aussi ses salles (sortie, salle du trésor…), même si le jeu ne les liste pas dans le donjon.
+for m, x in infos_cartes.items():
+    if m in salle_de_carte: continue
+    djs = sous_zone_donjon.get(x.get("subAreaId"), set())
+    if len(djs) != 1: continue
+    d = donjons[next(iter(djs))]
+    nom_carte = T(x.get("nameId", 0))
+    if norme(nom_carte).startswith(norme(T(d["nameId"]))):
+        noms_boss = [T(monstres[b]["nameId"]) for b in d["bosses"]["Array"] if b in monstres]
+        salle_de_carte[m] = (d["id"], salle_depuis_nom(nom_carte, T(d["nameId"]), noms_boss))
 # Boss cités par leur nom dans un objectif écrit (« Récupérer une Plante soufrière après l'Obsidiantre »).
 NOMS_BOSS = sorted(((T(monstres[b]["nameId"]), d["id"]) for d in donjons.values() for b in d["bosses"]["Array"] if b in monstres and T(monstres[b]["nameId"])),
                    key=lambda x: -len(x[0]))
@@ -436,6 +451,22 @@ def boss_cite(texte):
     t = f" {norme(texte)} "
     return next((dj for nom, dj in NOMS_BOSS if len(nom) > 4 and f" {norme(nom)} " in t), None)
 def premiere_majuscule(t): return t[:1].upper() + t[1:] if t else t
+
+porteurs = {}
+for m in monstres.values():
+    for dr in (m.get("drops") or {}).get("Array", []):
+        porteurs.setdefault(dr.get("objectId"), set()).add(m["id"])
+def boss_seul_porteur(item):
+    """Donjons dont le boss est le seul monstre à lâcher cet objet (sinon : rien, l'objet se trouve ailleurs aussi)."""
+    p = porteurs.get(item, set())
+    if not p or any(m not in boss_vers_donjons for m in p): return {}
+    return {dj: m for m in p for dj in boss_vers_donjons[m]}
+
+# Liens que les données du jeu ne permettent pas de déduire (objet trouvé dans une salle, sans monstre qui le lâche),
+# vérifiés en jeu ou dans les guides : (quête, donjon, action, salle).
+LIENS_MANUELS = [
+    ("Mission Solution", "Antichambre des Gloursons", "Récupérer le Miel Liquide Mordoré", "salle 3"),
+]
 
 liees = {}
 for q in quetes.values():
@@ -471,11 +502,21 @@ for q in quetes.values():
                     ajouter(donjon_cite(texte), texte)  # dans le donjon, sans salle précise
                 elif boss_cite(texte):
                     ajouter(boss_cite(texte), texte, "salle du boss")
+            if t == 3 and p.get("parameter1") in objets:
+                # Objet à rapporter qui ne tombe que sur un boss de donjon
+                for dj, boss in boss_seul_porteur(p["parameter1"]).items():
+                    ajouter(dj, f"Vaincre {T(monstres[boss]['nameId'])} pour récupérer {max(1, p['parameter2'])} × {T(objets[p['parameter1']]['nameId'])}", "salle du boss")
+            if t in (6, 14, 16) or t == 0:
+                pass
             elif carte:
                 # Autres actions situées dans un donjon : parler à un PNJ, rapporter un objet, se rendre sur une carte
                 if t == 1 and p.get("parameter0") in pnj: ajouter(carte[0], f"Parler à {T(pnj[p['parameter0']]['nameId'])}", carte[1])
                 elif t == 3 and p.get("parameter1") in objets: ajouter(carte[0], f"Rapporter {max(1, p['parameter2'])} × {T(objets[p['parameter1']]['nameId'])}", carte[1])
                 elif t == 4: ajouter(carte[0], "Aller jusqu'à cette salle" if carte[1] else "Se rendre dans le donjon", carte[1])
+    for nom_q, nom_dj, action, salle in LIENS_MANUELS:
+        if T(q["nameId"]) == nom_q:
+            dj = next((d["id"] for d in donjons.values() if T(d["nameId"]) == nom_dj), None)
+            if dj: ajouter(dj, action, salle)
     if not actions or len(actions) > 8: continue  # au-delà : quête générique sur tous les donjons
     for dj, liste in actions.items():
         liees.setdefault(T(donjons[dj]["nameId"]), []).append({

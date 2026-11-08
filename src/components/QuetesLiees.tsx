@@ -34,7 +34,13 @@ function origine(id: string): string | null {
   return o.quete.numero !== undefined ? `${nom} n° ${rang}` : `${nom}, étape ${rang}`;
 }
 
-export function QuetesLiees({ donjon, faites, modifiable, onBasculer, bossVaincu, boss }: {
+/** Camp d'une quête d'alignement (« Bonta » ou « Brâkmar ») ; null pour une quête accessible à tous. */
+function campDe(id: string): string | null {
+  const o = ouEstLaQuete(id);
+  return o && o.serie.id.startsWith("align-") ? (o.serie.groupe ?? null) : null;
+}
+
+export function QuetesLiees({ donjon, faites, modifiable, onBasculer, bossVaincu, boss, alignement }: {
   donjon: string;
   faites: Set<string>;
   modifiable: boolean;
@@ -42,26 +48,38 @@ export function QuetesLiees({ donjon, faites, modifiable, onBasculer, bossVaincu
   /** Le boss du donjon est-il marqué vaincu (étape ou succès « Vaincre ») ? null = on ne sait pas. */
   bossVaincu?: boolean | null;
   boss?: string;
+  /** Alignement du personnage : les quêtes d'un autre camp sont marquées d'une croix (non réalisables). */
+  alignement?: string | null;
 }) {
   const liste = quetesLiees(donjon);
   if (!liste.length) return null;
-  const nb = liste.filter((q) => faites.has(q.id)).length;
+  // Une quête d'alignement d'un autre camp (ou d'un camp quand on est neutre) n'est pas réalisable par ce personnage.
+  const realisable = (id: string) => { const c = campDe(id); return !c || !alignement || c === alignement; };
+  const faisables = liste.filter((q) => realisable(q.id));
+  const nb = faisables.filter((q) => faites.has(q.id)).length;
   // Croisement avec le donjon : une quête qui demande de vaincre ce boss, cochée alors que le boss n'est pas marqué vaincu.
   const aVerifier = (q: (typeof liste)[number]) =>
     bossVaincu === false && faites.has(q.id) && !!boss && q.objectif.toLowerCase().includes(`vaincre ${boss.toLowerCase()}`);
   return (
     <div className="quetes-liees">
       <span className="quetes-liees__titre">
-        Quêtes liées <span className={nb === liste.length ? "vert" : "discret"}>({nb} / {liste.length})</span>
+        Quêtes liées <span className={nb === faisables.length ? "vert" : "discret"}>({nb} / {faisables.length})</span>
         {boss && bossVaincu != null && <span className="discret"> · {boss} {bossVaincu ? "vaincu ✓" : "pas encore vaincu"}</span>}
       </span>
       <ul>
         {liste.map((q) => (
-          <li key={q.id} className={faites.has(q.id) ? "quetes-liees--faite" : ""}>
-            <label className="case">
-              <input type="checkbox" checked={faites.has(q.id)} disabled={!modifiable} onChange={() => onBasculer(q.id, !faites.has(q.id))} />
-              <span className="quetes-liees__nom">{q.nom}</span>
-            </label>
+          <li key={q.id} className={!realisable(q.id) ? "quetes-liees--impossible" : faites.has(q.id) ? "quetes-liees--faite" : ""}>
+            {realisable(q.id) ? (
+              <label className="case">
+                <input type="checkbox" checked={faites.has(q.id)} disabled={!modifiable} onChange={() => onBasculer(q.id, !faites.has(q.id))} />
+                <span className="quetes-liees__nom">{q.nom}</span>
+              </label>
+            ) : (
+              <span className="case" title={`Réservée aux personnages de ${campDe(q.id)} : ce personnage ne peut pas la faire.`}>
+                <span className="quetes-liees__croix" aria-hidden="true">✗</span>
+                <span className="quetes-liees__nom">{q.nom}<span className="sr-only"> (non réalisable : réservée à {campDe(q.id)})</span></span>
+              </span>
+            )}
             <span className="discret-taille">niv. {q.niveau}{origine(q.id) && <> · {origine(q.id)}</>}</span>
             {aVerifier(q) && (
               <span className="quetes-liees__alerte" title="Cette case vient de la série indiquée (cochée avec les étapes précédentes, par exemple). Décoche-la si tu ne l'as pas faite.">
