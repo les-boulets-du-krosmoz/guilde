@@ -52,8 +52,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Berserkoffre Affectueux"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -65,7 +64,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Trouver le caporal Gobdon"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -201,8 +200,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Marie Ride"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -215,7 +213,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Escorter Vardo jusqu'à Sufokia"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -310,8 +308,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Dévoreur de livres"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -323,7 +320,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Parler de nouveau à Olivie Frange"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -392,7 +389,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Survivre à l'assaut des hordes de spectres Pandissidans"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -469,8 +466,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Péki Garou"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -487,7 +483,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Assister à la confrontation entre Imagiro et le Shogun dans le Plan Astral"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   }
  ],
@@ -671,8 +667,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "4 × Wabbit Squelette agressif"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -680,7 +675,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Lire le Carnet de voyage déchiré"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -737,7 +732,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -897,12 +892,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Caporale Mynerve"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -922,33 +916,29 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Tofu Chimérique"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Pissenlit Miroitant"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Rose Vaporeuse"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Tournesol Nébuleux"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -968,26 +958,23 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "2 × Petit Gloot"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "2 × Plikplok"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Grand Splatch"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -1007,33 +994,29 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Boufton Pâlichon"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Boufton Orageux"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Bouftou Nuageux"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Bouftor Éthéré"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -1053,26 +1036,23 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "2 × Ronronchon"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "2 × Tigrimas"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "2 × Chakrobat"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -1092,12 +1072,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Kruella Freuz"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -1117,43 +1096,38 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Chafer Débutant"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Chafer Furtif"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Chafer Éclaireur"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Chafer Piquier"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Percy Klop"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
     "Fouiller la tombe"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -1551,8 +1525,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Rat Soiffé"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -1560,7 +1533,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Faire sortir le rat de sa cachette"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -1576,7 +1549,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -1620,8 +1593,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Nowa"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -1630,7 +1602,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Escorter Nowa et le livrer au chef Badufron"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -1875,33 +1847,29 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "3 × Pichon Blanc"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "3 × Pichon Bleu"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "3 × Pichon Orange"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "3 × Pichon Vert"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -1948,33 +1916,29 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "4 × Boufton Blanc"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "4 × Boufton Noir"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "3 × Bouftou"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Chef de Guerre Bouftou"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -2270,8 +2234,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Créature d'Otomaï"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -2283,7 +2246,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Placer le sixième appât, à l'intérieur de la mine"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -2330,8 +2293,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Rose Artempeth"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -2373,7 +2335,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "fabrication",
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -2393,8 +2355,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "5 × Milimulou"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -2405,7 +2366,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Vaincre l'Homme-Ours avec l'aide d'Artand"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -2444,29 +2405,25 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Gargrouille en colère"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Garglyphe en colère"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "La Ouassingue en colère"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Selim Llenneb"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -2485,7 +2442,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Tenter de crocheter la grille grâce aux outils"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -2505,8 +2462,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Klaüs Konbah"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -2549,7 +2505,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Trouver le troisième esprit"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -2763,15 +2719,13 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Sumowa"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Shinobi novice"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -2817,7 +2771,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Convaincre Pandawa de vous confier sa Main"
    ],
    "aide": [
-    "combat de groupe",
+    "combat",
     "fabrication"
    ]
   },
@@ -2877,7 +2831,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Retourner voir le Grandapan dans le temple de la Taverne interdite"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -2950,8 +2904,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "3 × Grokoko"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -2960,7 +2913,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Vaincre un Vieux Grokoko"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -2982,7 +2935,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3006,8 +2959,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "L'Égorgeur"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -3019,7 +2971,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Identifier le voleur de l'amulette"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3044,7 +2996,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Enterrer la jeune pousse et 5 doses d'engrais de Moon au pied d'un totem"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   }
  ],
@@ -3207,7 +3159,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3229,7 +3181,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3264,8 +3216,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Esprit rebelle"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -3274,7 +3225,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Récupérer le butin"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3296,7 +3247,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3361,7 +3312,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Fouiller l'hypogée de l'Obsidiantre à la recherche des restes de Dan Lavy"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3383,7 +3334,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3418,8 +3369,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "3 × Boufmouth dressé"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -3429,7 +3379,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Interroger le voisinage de Clarisse Tosha au sujet de ses activités"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3451,7 +3401,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3506,7 +3456,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3564,7 +3514,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3594,8 +3544,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "3 × Gloursaya énervé"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -3604,7 +3553,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Modifier les paramètres du contrôleur des canalisations"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3626,7 +3575,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3790,7 +3739,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3910,7 +3859,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -3932,7 +3881,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -4039,8 +3988,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Gardien du Destin"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -4051,7 +3999,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Entrer dans la Caverne du Destin"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -4076,29 +4024,25 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "S.L.O.P."
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "2 × Tueur Tromatique Frigorifié"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Epouvantail de Frostiz Transgénisé"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Djaulien Perdu"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -4115,7 +4059,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Assister Judas Sticau pendant le rituel de désenvoûtement."
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -4168,22 +4112,19 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Habitant de Frigost"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Ouvrière du Comte"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "S. Bill Sberg"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -4195,7 +4136,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Activer le Stabilisateur Temporel"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -4234,7 +4175,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Se prosterner devant Jiva"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -4472,8 +4413,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Dopeul Maléfique"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -4485,7 +4425,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Se rendre à l'orée enchantée de la forêt Maléfique"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -4596,7 +4536,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Aider Jykel à quitter le nid"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -4628,7 +4568,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Purifier l'ambre antédiluvien grâce au pouvoir de l'anneau ocre"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -4733,7 +4673,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Parler à l'esprit serein avant de quitter Plantala"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -4960,29 +4900,25 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "3 × Dardalaine"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "3 × Néfileuse"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "3 × Gargantûl"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "3 × Saltik"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "donjon",
@@ -4994,7 +4930,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Trouver la reine des Arak-haï"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -5021,7 +4957,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Examiner la statue"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -5050,8 +4986,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "La Comploteuse"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -5060,7 +4995,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "S'éloigner du puits, puis revenir pour surprendre la poupée"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -5280,12 +5215,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Tarche"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 1
   },
@@ -5405,12 +5339,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Torche"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 5
   },
@@ -5469,12 +5402,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Corbac égaré"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 7
   },
@@ -5563,12 +5495,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Sanglier agressif"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 10
   },
@@ -5613,7 +5544,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Sculpteur)",
-    "combat de groupe"
+    "combat"
    ],
    "numero": 11
   },
@@ -5650,7 +5581,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Récupérer du liquide de forge"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 12
   },
@@ -5907,22 +5838,19 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Larve marécageuse"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Larve céréalière"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Larve fongique"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -5939,7 +5867,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Bijoutier)",
-    "combat de groupe"
+    "combat"
    ],
    "numero": 21
   },
@@ -5975,7 +5903,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Ramasser un coticule"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 22
   },
@@ -6233,7 +6161,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Remplir une fiole de venin de Scorbute"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 29
   },
@@ -6441,12 +6369,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "8 × Membre de Commando Brâkmarien"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 36
   },
@@ -6533,15 +6460,14 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "8 × Garde de la Prison"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
     "Délivrer Houé Dapyus dans les geôles de Brâkmar et l'amener devant Amayiro"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 39
   },
@@ -6578,7 +6504,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher les trafiquants dans la forêt de Kaliptus"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 40
   },
@@ -6615,7 +6541,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Interroger les Ecaflips de Bonta"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 41
   },
@@ -7589,12 +7515,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "3 × Poursuivant brâkmarien"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 67
   },
@@ -7625,15 +7550,14 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Iop en cape brâkmarienne"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
     "Inspecter les lieux à la recherche de la corne"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 68
   },
@@ -7892,8 +7816,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Comtoise"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -7938,7 +7861,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher les personnes dont Nosilla Budois a fait mention"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 76
   },
@@ -7969,8 +7892,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Caisse Mystérieuse"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -7986,7 +7908,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Trouver une fille de la Taverne de la Bagrutte intéressée par la proposition des Roublards"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 77
   },
@@ -8096,8 +8018,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Rob Mirbelec"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -8108,7 +8029,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher le maître de la créature sur l'îlot Estitch"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 80
   },
@@ -8244,8 +8165,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Tombe"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -8258,7 +8178,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Voler la pierre"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 84
   },
@@ -8293,8 +8213,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Rammola"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -8303,7 +8222,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Prendre la Pierre Sacrée incrustée dans la statue"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 85
   },
@@ -8334,8 +8253,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Qu'Tan"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -8343,7 +8261,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Desceller l'entrée du temple maudit"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 86
   },
@@ -8500,7 +8418,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Fouiller la planque secrète"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 90
   },
@@ -8660,8 +8578,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Individu Encapuchonné"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -8671,7 +8588,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Se renseigner à la bibliothèque sur les occupants des tombes profanées"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 94
   },
@@ -8702,8 +8619,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Lacame Arilla"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -8712,7 +8628,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher des informations sur le disciple d'Erazal"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 95
   },
@@ -8814,7 +8730,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher des traces du passage d'Erazal dans le bastion des froides légions"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 97
   },
@@ -8878,7 +8794,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 99
   },
@@ -9060,8 +8976,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Captain Chafer"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -9069,7 +8984,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Vaincre les héros d'antan"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   }
  ],
@@ -9248,8 +9163,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Captain Chafer"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -9257,7 +9171,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Vaincre les héros d'antan"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   }
  ],
@@ -9303,15 +9217,13 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "3 × Renégat bontarien"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Chef des renégats bontariens"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -9320,7 +9232,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Trouver le chef des renégats caché au sud du Territoire des bandits"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   },
   {
@@ -9415,8 +9327,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Captain Chafer"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -9424,7 +9335,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Vaincre les héros d'antan"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   }
  ],
@@ -9451,12 +9362,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Mak Gahan"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 1
   },
@@ -9576,12 +9486,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Mak Gahan équipé"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 5
   },
@@ -9640,12 +9549,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Écureuil bagarreur"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 7
   },
@@ -9738,12 +9646,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Croc Gland Enragé"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 10
   },
@@ -9779,7 +9686,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Récupérer un Œuf de Kwakwa"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 11
   },
@@ -9815,7 +9722,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Entrer dans le Donjon des Larves avec la Larve Dorée"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 12
   },
@@ -10078,22 +9985,19 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Ver à soif vert"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Vert à soif orange"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Vert à soif bleu"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -10109,7 +10013,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher un ver à soif"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 21
   },
@@ -10140,15 +10044,13 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Champion de la taverne du Bworkball"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Videur de la taverne de Djaul"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "donjon",
@@ -10159,7 +10061,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Apporter les chèques à Oto Mustam"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 22
   },
@@ -10385,7 +10287,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Remplir une fiole de venin de Scorbute"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 29
   },
@@ -10506,7 +10408,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Récupérer du poison dans un cadavre frais"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 33
   },
@@ -10593,12 +10495,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "8 × Membre de Commando Bontarien"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 36
   },
@@ -10682,15 +10583,14 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "8 × Garde de la Prison"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
     "Délivrer Trof Hapyus dans les geôles de Bonta et l'amener devant Oto Mustam"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 39
   },
@@ -10726,7 +10626,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher un alchimiste spécialiste de la mulanthropie dans le village côtier"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 40
   },
@@ -10764,7 +10664,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Utiliser l'antidote du Rat Noir"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 41
   },
@@ -10917,8 +10817,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Sabine"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -10948,7 +10847,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Enchanter le cristal de Kain Dharyn"
    ],
    "aide": [
-    "combat de groupe",
+    "combat",
     "objet à crafter (Mineur)"
    ],
    "numero": 46
@@ -11005,8 +10904,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Jissey Pandamme"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -11014,7 +10912,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Recouvrir le mobilier avec de la Pâte à Tra Khben"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 48
   },
@@ -11045,12 +10943,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Nana moche qui rit"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 49
   },
@@ -11081,8 +10978,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Gardien du puits"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -11135,7 +11031,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "fabrication",
-    "combat de groupe"
+    "combat"
    ],
    "numero": 50
   },
@@ -11306,8 +11202,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Brute épaisse bontarienne"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -11323,7 +11218,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Intercepter le milicien bontarien avant son arrivée à Astrub"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 56
   },
@@ -11382,8 +11277,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Nara"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -11415,7 +11309,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    "aide": [
     "objet à crafter (Éleveur)",
     "objet à crafter (Bûcheron)",
-    "combat de groupe"
+    "combat"
    ],
    "numero": 58
   },
@@ -11822,8 +11716,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Sadida en cape bontarienne"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -11831,7 +11724,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Inspecter les lieux à la recherche de la corne"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 69
   },
@@ -11922,15 +11815,13 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Tequelest"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "3 × Esprit de Lave"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -11961,7 +11852,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "fabrication",
-    "combat de groupe"
+    "combat"
    ],
    "numero": 72
   },
@@ -11992,8 +11883,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Charme Sombre Ensorcelé"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -12002,7 +11892,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Ouvrir le passage menant à la Charmaie Sombre"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 73
   },
@@ -12033,15 +11923,13 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "3 × Garde de la forge"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Esprit de Lumière"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -12058,7 +11946,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Apporter le marteau à Oto... ou à Domen ?"
    ],
    "aide": [
-    "combat de groupe",
+    "combat",
     "objet à crafter (Alchimiste)"
    ],
    "numero": 74
@@ -12303,8 +12191,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Abominable Sept des mers"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -12314,7 +12201,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Glisser les cocktails et la potion dans les marchandises"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 79
   },
@@ -12345,8 +12232,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Rob Mirbelec"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -12358,7 +12244,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher le maître de la créature sur l'îlot Estitch"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 80
   },
@@ -12532,8 +12418,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Tombe"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -12546,7 +12431,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Voler la pierre"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 84
   },
@@ -12581,8 +12466,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Rammola"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -12591,7 +12475,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Prendre la Pierre Sacrée incrustée dans la statue"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 85
   },
@@ -12622,8 +12506,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Qu'Tan"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -12631,7 +12514,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Desceller l'entrée du temple maudit"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 86
   },
@@ -12789,7 +12672,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Voler le marteau"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 90
   },
@@ -12948,8 +12831,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Individu Encapuchonné"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -12959,7 +12841,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Se renseigner à la bibliothèque sur les occupants des tombes profanées"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 94
   },
@@ -12990,8 +12872,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Lacame Arilla"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -13000,7 +12881,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher des informations sur le disciple d'Erazal"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 95
   },
@@ -13102,7 +12983,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher des traces du passage d'Erazal dans le bastion des froides légions"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 97
   },
@@ -13166,7 +13047,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "numero": 99
   },
@@ -13270,8 +13151,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Tacticien de Bonta"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -13279,7 +13159,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher la méthode d'élevage aviaire dans la Volière de la Haute Truche"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "facultative": true
   }
@@ -13421,8 +13301,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Captain Chafer"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -13430,7 +13309,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Vaincre les héros d'antan"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   }
  ],
@@ -13612,8 +13491,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Captain Chafer"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -13621,7 +13499,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Vaincre les héros d'antan"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   }
  ],
@@ -13808,8 +13686,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Captain Chafer"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -13817,7 +13694,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Vaincre les héros d'antan"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ]
   }
  ],
@@ -14341,12 +14218,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "8 × Rat Bougri délavé"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Problèmes et solutions"
   },
@@ -14418,8 +14294,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Kanimodo"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -14450,7 +14325,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Parler à Groméo Montay et Ginette Capoué"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Problèmes et solutions"
   },
@@ -14699,15 +14574,14 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Kordis"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
     "Trouver le passage dans la forêt pétrifiée"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Objets trouvés"
   },
@@ -15218,8 +15092,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "La Créature"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "ressources": [
@@ -15266,7 +15139,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Chercher la créature dans les larmes d'Ouronigride"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Jouer au docteur"
   },
@@ -15316,12 +15189,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Craqueleur de Glace"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Les carrières de glace"
   },
@@ -15362,15 +15234,14 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Dolores Kimo"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
     "Inspecter la tuyauterie"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Les carrières de glace"
   },
@@ -15391,12 +15262,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "2 × Créature de gaz"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Les carrières de glace"
   },
@@ -15422,12 +15292,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Pougnette enragée"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Ongles incarnés"
   },
@@ -15453,12 +15322,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Ondine démoniaque"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Ongles incarnés"
   },
@@ -15525,8 +15393,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Biofiente"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -15535,7 +15402,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Récupérer des Feuilles de paie dans les bacs de plantes des jardins d'hiver"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Mais où qu'ils sont les Frigostiens ?"
   },
@@ -15556,8 +15423,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "3 × Ravisseur Kanimate"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -15569,7 +15435,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Faire diversion pour couvrir les agissements d'Idrissa Boteur"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Mais où qu'ils sont les Frigostiens ?"
   },
@@ -15610,8 +15476,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Frimaraudeur"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -15619,7 +15484,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Aider Merrin Lencastré à accomplir l'exorcisme"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Mais où qu'ils sont les Frigostiens ?"
   },
@@ -15660,8 +15525,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Stalak errant"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -15671,7 +15535,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Interroger les invités"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Mais où qu'ils sont les Frigostiens ?"
   },
@@ -15697,8 +15561,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Emma Sculai"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -15707,7 +15570,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Continuer les fouilles dans la Tour de la Clepsydre"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Mais où qu'ils sont les Frigostiens ?"
   },
@@ -15733,12 +15596,11 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Messager Grippé"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Noblesse oblige"
   },
@@ -15764,117 +15626,101 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "5 × Harrogant"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Grodruche"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Empaillé"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Cuirboule"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Ventrublion"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Stalak"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Karkanik"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Verglasseur"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Nessil"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Krakal"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Dodox"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Drosérâle"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Kanimate"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Mansordide"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Mécanofoux"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "5 × Mérulor"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Noblesse oblige"
   },
@@ -15951,7 +15797,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     }
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Noblesse oblige"
   },
@@ -16095,7 +15941,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
    ],
    "aide": [
     "objet à crafter (Forgeron)",
-    "combat de groupe"
+    "combat"
    ],
    "theme": "C'est assez"
   },
@@ -16350,22 +16196,19 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Aventurière démasquée"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Aventurier pris sur le fait"
-     ],
-     "groupe": true
+     ]
     },
     {
      "type": "combat",
      "adversaires": [
       "Aventurier repéré"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -16376,7 +16219,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Ninterroger le cinquième suspect"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Là-bas sous la montagne"
   },
@@ -16465,8 +16308,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
      "type": "combat",
      "adversaires": [
       "Ratse"
-     ],
-     "groupe": true
+     ]
     }
    ],
    "deroule": [
@@ -16477,7 +16319,7 @@ export const QUETES_JEU: Record<string, Quete[]> = {
     "Combattre les Armutins avec l'aide des éclaireurs et des Nimbos"
    ],
    "aide": [
-    "combat de groupe"
+    "combat"
    ],
    "theme": "Là-bas sous la montagne"
   }

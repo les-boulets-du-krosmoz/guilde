@@ -64,13 +64,6 @@ export function prefixeDofus(ids: string[]): string | undefined {
   return ids[0]?.split("-")[0] + "-";
 }
 
-/** Identifiants des ressources cochées par un personnage. */
-export async function chargerRessources(personnageId: string): Promise<Set<string>> {
-  const { data, error } = await supabase.from("ressources_cochees").select("ressource_id").eq("personnage_id", personnageId);
-  if (error) throw error;
-  return new Set((data as { ressource_id: string }[]).map((r) => r.ressource_id));
-}
-
 /** Dofus que chaque personnage veut commencer : personnage -> ensemble d'identifiants de Dofus. */
 export async function chargerSouhaits(personnageId?: string): Promise<Map<string, Set<string>>> {
   let req = supabase.from("dofus_souhaites").select("personnage_id, dofus_id");
@@ -477,6 +470,24 @@ export async function chargerQuetesEnCours(personnageId: string, ids: string[]):
   const { data, error } = await supabase.from("quetes_en_cours").select("quete_id").eq("personnage_id", personnageId).in("quete_id", ids);
   if (error) { if (tableAbsente(error)) return new Set(); throw error; }
   return new Set((data ?? []).map((x: { quete_id: string }) => x.quete_id));
+}
+
+/** Qui s'est positionné sur quelles quêtes, dans toute la guilde : quête -> personnages. */
+export async function chargerEnCoursGuilde(ids: string[]): Promise<Map<string, string[]>> {
+  const res = new Map<string, string[]>();
+  if (!ids.length) return res;
+  const { data, error } = await supabase.from("quetes_en_cours").select("quete_id, personnage_id").in("quete_id", ids);
+  if (error) { if (tableAbsente(error)) return res; throw error; }
+  for (const r of (data ?? []) as { quete_id: string; personnage_id: string }[]) res.set(r.quete_id, [...(res.get(r.quete_id) ?? []), r.personnage_id]);
+  return res;
+}
+
+/** Parmi ces personnages et ces quêtes, lesquelles sont déjà faites : ensemble de « personnage|quête ». */
+export async function chargerTerminesParmi(queteIds: string[], personnageIds: string[]): Promise<Set<string>> {
+  if (!queteIds.length || !personnageIds.length) return new Set();
+  const { data, error } = await supabase.from("quetes_terminees").select("personnage_id, quete_id").in("quete_id", queteIds).in("personnage_id", personnageIds);
+  if (error) throw error;
+  return new Set(((data ?? []) as { personnage_id: string; quete_id: string }[]).map((r) => `${r.personnage_id}|${r.quete_id}`));
 }
 
 export async function marquerEnCours(personnageId: string, queteId: string, enCours: boolean): Promise<void> {

@@ -4,6 +4,7 @@ import { Nav } from "./components/Nav";
 import { NOM_GUILDE, SLOGAN } from "./lib/guilde";
 import { useSession } from "./lib/session";
 import { FournisseurStatuts } from "./lib/statuts";
+import { reglerComptage, useComptageDesPages } from "./lib/visites";
 import { Chargement, Connexion, NonMembre } from "./pages/Acces";
 
 // Chaque page est un morceau à part, téléchargé seulement quand on l'ouvre (puis gardé par le navigateur).
@@ -22,6 +23,7 @@ const Personnages = lazy(() => import("./pages/Personnages").then((m) => ({ defa
 const Profil = lazy(() => import("./pages/Profil").then((m) => ({ default: m.Profil })));
 const Progression = lazy(() => import("./pages/Progression").then((m) => ({ default: m.Progression })));
 const Quetes = lazy(() => import("./pages/Quetes").then((m) => ({ default: m.Quetes })));
+const Statistiques = lazy(() => import("./pages/Statistiques").then((m) => ({ default: m.Statistiques })));
 const TableauDeBord = lazy(() => import("./pages/TableauDeBord").then((m) => ({ default: m.TableauDeBord })));
 
 export function App() {
@@ -33,6 +35,7 @@ export function App() {
 
   return (
     <FournisseurStatuts actif>
+      <ComptageDesPages />
       <Nav />
       <Suspense fallback={<Chargement />}>
       <Routes>
@@ -58,6 +61,7 @@ export function App() {
         <Route path="/avis/:persoId" element={<AvisRecherche />} />
         <Route path="/progression" element={<Progression />} />
         <Route path="/mon-compte" element={<MonCompte />} />
+        <Route path="/statistiques" element={<Statistiques />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>
@@ -67,4 +71,12 @@ export function App() {
       </footer>
     </FournisseurStatuts>
   );
+}
+
+/** Compte les pages ouvertes, une fois connecté (rien n'est envoyé sur la personne). */
+function ComptageDesPages() {
+  const { membre } = useSession();
+  reglerComptage(!membre?.hors_statistiques); // avant le comptage de la page, dans le même rendu
+  useComptageDesPages();
+  return null;
 }

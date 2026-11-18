@@ -41,7 +41,7 @@ export type Quete = {
   facultative?: boolean;
   /** Déroulé de la quête (objectifs écrits du jeu), dans l'ordre. */
   deroule?: string[];
-  /** Pourquoi l'aide d'un membre est utile (combat de groupe, objet à crafter par un métier…). */
+  /** Pourquoi l'aide d'un membre est utile (combat, objet à crafter par un métier…). */
   aide?: string[];
   /** Thème de la quête (le succès du jeu qui la regroupe, ex. « La maire dénie »). */
   theme?: string;
@@ -518,9 +518,9 @@ export const QUETES_DOMAKURO: Quete[] = [
       texte("Conseillé : avoir fait « Ça est frugal, une fois », sinon la Filtounga coûte 50 000 kamas"),
     ],
     contenu: [
-      tactique("Yokai de la bibliothèque : les rendre somnolents tous les 5 au même tour"),
+      tactique("Yokai de la bibliothèque"),
       solo("3 Pandissidans, sous la banque en [20,-30]"),
-      tactique("Maître Kwatimbe, invulnérable : le tacler quand il fuit"),
+      solo("Maître Kwatimbe"),
     ],
     ressources: [
       res("dk-2-r1", "2 × Artefact Pandawushu Roc", { note: "Pandaclier, atelier des façonneurs de Pandala [23,-28]" }),
@@ -546,9 +546,9 @@ export const QUETES_DOMAKURO: Quete[] = [
     prerequis: [metier("Alchimiste", 1, true)],
     contenu: [
       donjon("Atelier du Tanukouï San [26,-24]"),
-      groupe("Kaskouïs en [27,-28] : les sortir de leur glyphe pour les rendre vulnérables"),
+      groupe("Kaskouïs en [27,-28]"),
       groupe("Kaskouïs en [25,-24]"),
-      solo("Tanuki Durtouki [26,-27] : le sortir de son glyphe"),
+      solo("Tanuki Durtouki [26,-27]"),
     ],
     ressources: [
       res("dk-4-r1", "1 × Huile de Riz", { note: "Baume Hakouï, en atelier d'alchimiste" }),
@@ -572,7 +572,7 @@ export const QUETES_DOMAKURO: Quete[] = [
   q(DK, "dk-6", "Le festival de la lanterne", 140, ["dk-5"], {
     contenu: [
       groupe("Feux follets, à la Lanterne primordiale [17,-32]"),
-      solo("Firefoux, pour protéger le Qilin de papier [18,-34] : il ne doit pas mourir"),
+      solo("Firefoux [18,-34]"),
       donjon("Fabrique de foux d'artifice (Founoroshi)"),
     ],
     ressources: [
@@ -601,7 +601,7 @@ export const QUETES_DOMAKURO: Quete[] = [
     prerequis: [texte("Garder le Pandaclier : il faut l'équiper pour entrer dans la Pandassemblée")],
     contenu: [
       solo("Assassins Pandikazes [19,-34], avec Ikunochi"),
-      solo("Maître Pandore : ignorer les invocations, Ikunochi s'en charge"),
+      solo("Maître Pandore"),
     ],
     ressources: [
       res("dk-8-r1", "1 000 kamas", { note: "Offrande au Grand Pouddah, Marchande aerdalienne" }),

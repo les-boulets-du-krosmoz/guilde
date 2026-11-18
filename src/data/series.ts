@@ -10,7 +10,7 @@ import { TOUR_DU_MONDE, EMMA_TOM_POUCE } from "./quetesTourDuMonde";
  */
 export type Categorie = { id: string; nom: string; series: Dofus[]; estDofus: boolean };
 
-const AVERT_ALIGN = "Quêtes, combats et objets tirés des données du jeu. Par défaut, seules les quêtes où l'aide d'un membre est utile (combat de groupe, objet à crafter) sont affichées.";
+const AVERT_ALIGN = "Quêtes, combats et objets tirés des données du jeu. Par défaut, seules les quêtes où l'aide d'un membre est utile (combat, objet à crafter) sont affichées.";
 const serieAlign = (id: string, nom: string, groupe: string, couleur: string, succes: string): Dofus => ({
   id, nom, groupe, couleur, succes, quetes: QUETES_JEU[id] ?? [], avertissement: AVERT_ALIGN,
   filtreAide: (QUETES_JEU[id] ?? []).length > 10, // les chaînes des camps (100 quêtes), pas les apprentissages d'ordre

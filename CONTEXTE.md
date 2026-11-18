@@ -11,18 +11,74 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
 - Icônes redessinées en vectoriel plutôt qu'agrandies (kamas, Donjon/Quête). Images du jeu hébergées par le site.
 - Quêtes d'alignement numérotées comme en jeu ; l'ordre de l'Œil de Brâkmar s'appelle « Œil Putride ».
 - Seul l'organisateur modifie une recherche de groupe ; les officiers peuvent la supprimer.
+- Ressources de quêtes : plus affichées (DPLN plus fiable). Les données res() et la table ressources_cochees sont
+  conservées mais inutilisées ; ne pas supprimer la table sans accord.
+- Combats tactiques : pas de notion de classe (personnage généralement transformé). Le champ `transformation` le dit
+  combat par combat. Fiches dans src/data/combatsTactiques.ts, ouvertes par le bouton « Strat » de l'étiquette
+  « Tactique solo » (rien n'est ajouté dans l'étape quand il n'y a pas de fiche).
+- Statistiques de visite (migration 027, src/lib/visites.ts, page /statistiques réservée aux officiers) : table visites
+  (jour, cible, vues), aucun identifiant de membre, validé avec la guilde. Écriture uniquement par la fonction
+  compter_visite (+1), lecture par statistiques_visites (officiers). Cibles : page:/chemin?onglet|cat|dofus (identifiants
+  de personnage, métier, ordre retirés), boss:<slug>, strat:<quête>:<adversaire>, outil:memoire (à la première marque).
+  Une ouverture par cible, par jour et par chargement du site ; rien n'est compté en local (npm run dev).
+  Case « Compter mes visites » (page Statistiques) = colonne membres.hors_statistiques, vérifiée par compter_visite
+  (et par le site, qui n'envoie alors rien). Valable sur tous les appareils ; le passé compté ne se retire pas.
+  Renommer un slug ou un adversaire coupe son historique (l'ancienne clé s'affiche brute dans la page).
 - Archive livrée en deux parties : le site (léger) et public/icones/objets (images d'équipements, à part).
 
 ## Déploiement
-- Version en préparation : 1.7.0 (changelog « À publier » à jour). Migrations 021 (relancer), 023, 024, 025, 026 à exécuter.
+- Version en préparation : 1.7.0 (changelog « À publier » à jour). Migrations 021 (relancer), 023, 024, 025, 026, 027 à exécuter.
 - Fonctions Supabase : metamob, brocante-interet (noms exacts, sans extension), annoncer-sortie, synchro-membres, verifier-guilde.
 - Secrets : METAMOB_API_KEY, DISCORD_WEBHOOK_BROCANTE (facultatif), SUPABASE_DB_URL et SAUVEGARDE_PHRASE (GitHub, sauvegarde).
 
 ## Chantiers en cours
-- Guides de boss (src/data/guidesBoss.ts, page Donjons > Guides) : 19 fiches rédigées, à relire. Points ouverts en
+- Guides de boss (src/data/guidesBoss.ts, page Donjons > Guides) : 26 fiches rédigées, à relire. Points ouverts en
   « avertissements » dans chaque fiche (Reine des Voleurs : bonbombes ; Meno : délock ; Ilyzaelle : emprise ; Dazak :
-  résistances ; Protozorreur : nombre de tours ; Sylargh : second kill).
-- Boss à ajouter ensuite : Camp du Comte Razof, Pyramide d'Ombre, Horologium de XLII, Temple de Koutoulou,
-  Manoir des Katrepat, Défi du Chalœil, Toxoliath. Fiche du jeu : scripts dans l'historique (monsters.json, gfxId -> image).
-- Icônes de caractéristiques manquantes (Brocante) : attendre les numéros donnés par Kevin.
+  résistances ; Protozorreur : nombre de tours ; Sylargh : second kill ; Ombre : sort Paranoïa non décrit ; les 7 boss
+  THL ajoutés en novembre reposent sur des guides d'avant Dofus 3, mécaniques chiffrées à confirmer en jeu).
+- Prochains guides de boss, dans cet ordre : 1) Frigost (Tanière Givrefoux, Antre du Korriandre, Antichambre des
+  Gloursons, Mine de Sakaï) ; 2) récents niv. 200 (Éliocalypse, Belladone, Kabahal, Déchireuse, Vénérable, Aurore
+  Pourpre, Marteaux-Aigris, Torkélonia) ; 3) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro, Orukam) ;
+  4) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao). Les 3 Frigost s'afficheront seuls dans
+  la liste des donjons de Frigost (lien « Mécaniques du boss »), le slug suffit.
+- Combats tactiques : inventaire dans docs/combats-tactiques.md (245 combats classés d'après les données du jeu :
+  10 confirmés dont 2 avec fiche, 124 à vérifier, 111 écartés). Les données ne marquent pas les combats tactiques :
+  « monstre de quête » est un filtre, pas une preuve. Vérifier Dofus par Dofus (un guide de quêtes couvre toute la série).
+- Quêtes journalières (?cat=journalieres) : src/data/quetesRepetables.ts généré par scripts/generer-quetes-repetables.py
+  (repeatType 1 = jour, 2 = semaine ; Almanax et -1 exclus), avec PNJ, position et objets à apporter. Remise à zéro
+  supposée à minuit (Paris) et le lundi à minuit, d'après un joueur : affichée « à confirmer » (src/components/Rebours.tsx). Les données ont aussi
+  isPartyQuest (167 quêtes) : piste pour savoir quelles quêtes se font en groupe, sens à vérifier.
+- Donjons > Quêtes (src/components/SuiviQuetesDonjons.tsx) : quêtes liées résolues (mêmes identifiants que les étapes
+  de séries), un seul bouton par quête (à faire → en cours orange → faite verte), positionnement = table quetes_en_cours (aussi utilisée par le parcours optimisé) ;
+  cocher « faite » retire le positionnement.
+- Fiche avec genre « astuce » : combat ordinaire qui garde son étiquette et gagne un bouton Strat (Domakuro : Kwatimbe,
+  Kaskouïs, Tanuki Durtouki, Firefoux, Maître Pandore) ; absente de l'onglet Combats tactiques. Plus d'astuce dans les noms.
+- Une fiche dans combatsTactiques.ts suffit à marquer un combat tactique (étiquette « Tactique solo » + Strat), même dans
+  les quêtes générées : ne pas toucher à quetesJeu.ts pour ça. « Le serment de l'ambre » (jeu de mémoire, Reine cornue)
+  n'est dans aucune quête du site : sa fiche a `nomQuete` au lieu de `quete` et n'apparaît que dans l'onglet « Combats
+  tactiques » de la page Quêtes (?cat=tactiques), qui liste toutes les fiches.
+- Outil du Serment de l'ambre (fait ; fiche réécrite le 18 novembre, elle avait disparu de combatsTactiques.ts) : réplique de la carte, saisie à la main uniquement.
+  Légende : case occupée (nature inconnue), 4 natures (couleur ou icône), case libérée. Sur la carte : les 5 positions
+  où lancer le repérage, et les cases où il est inefficace (identifier la nature à la place). 32 monstres, 8 par îlot,
+  4 îlots ; la Reine se déplace. Monstres placés au hasard à chaque combat. Natures : Malters (Malépik, Malbois,
+  Maltrio, Malzerb). Une marque posée sur une case marquée la remplace. Fait : src/components/OutilMemoire.tsx sur la grille
+  standard (560 cases). Carte corrigée par un joueur (SOL, MURS, départs J et R). Positions de repérage (5) et cases
+  inefficaces (18) calculées par simulation des lignes de vue depuis l'îlot central (les monstres invisibles ne bloquent pas la vue,
+  confirmé en jeu). Seule incertitude : les lignes qui frôlent un coin de bloc, signalée dans la fiche.
+- Strats des combats tactiques, prochain chantier, dans cet ordre : 1) les 8 confirmés sans fiche (tous faits en novembre ; Rainikrone, Hyrkul, Crocoburio,
+  Grougalorasalar et Bolgrot en brouillon, d'après les guides : Hyrkul et Crocoburio se jouent avec son propre personnage) (Dark Vlad (fait), Minogolem
+  séculaire (fait, écrit d'après un joueur qui l'a passé), Esprit de Bolgrot (fait, brouillon), Furye (fait), Rainikrone, Hyrkul, Crocoburio, Grougalorasalar) et compléter les 2 Domakuro ;
+  2) trier docs/combats-tactiques.md Dofus par Dofus (un guide de quêtes JeuxOnline par Dofus couvre toute la série),
+  marquer les « oui » avec tactique(...) et rédiger leur fiche. Sortir au passage les astuces cachées dans des noms
+  d'adversaires (Kaskouïs « les sortir de leur glyphe », Firefoux « protéger le Qilin de papier »). Mêmes règles que
+  les guides de boss : nos mots, avertissement pour toute info d'une seule source ou d'avant Dofus 3.
+- Le script d'import des quêtes (scripts/generer-quetes-dofus.py, quêtes reprises des données du jeu dans quetesJeu.ts)
+  marque tous ses combats « groupe », sans source : 158 combats affichés « Combat de groupe » dans 17 séries. Corrigé en
+  novembre : le script ne précise plus seul/groupe (étiquette « Combat »). Étiquettes : Combat de groupe, Combat solo
+  (compagnon possible ou non, pas de catégorie à part), Tactique solo, Combat. Préciser seul/groupe combat par combat :
+  idée d'un fichier à part (comme combatsTactiques.ts), pas encore validée.
+- Liens « Guide détaillé » des 7 boss THL : page générale donjons.html de Dofus pour les Noobs, faute d'adresse exacte
+  trouvée. À remplacer par l'adresse de chaque page.
+- Fiche du jeu d'un boss (caractéristiques + portrait) : python3 scripts/generer-boss.py <version> slug=idMonstre.
+- Icônes de caractéristiques manquantes (Brocante) : attendre les numéros donnés par le propriétaire du site.
 - Idées validées sur le principe, à cadrer : niveau et hauts faits de la guilde.

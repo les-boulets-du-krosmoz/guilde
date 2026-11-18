@@ -215,14 +215,14 @@ for dofus_id, pref, aid in DOFUS + [(a, p, None) for a, p, _ in ALIGNEMENT]:
                         phrase = re.sub(r"<[^>]+>", "", T(p["parameter0"])).strip()
                         if phrase and phrase not in deroule: deroule.append(phrase)
                     if t in (6, 14, 16):
-                        if "combat de groupe" not in aide: aide.append("combat de groupe")
+                        if "combat" not in aide: aide.append("combat")
                         mid, n = p["parameter0"], max(1, p["parameter1"])
                         nom = T(monstres[mid]["nameId"]) if mid in monstres else None
                         if not nom: continue
                         dj_cite = donjon_de_quete(quetes[m]) if p.get("dungeonOnly") else None
                         if mid in boss_donjon: c = {"type": "donjon", "nom": f"{boss_donjon[mid]} ({nom})"}
                         elif dj_cite: c = {"type": "donjon", "nom": f"{T(donjons[dj_cite]['nameId'])} ({nom})"}
-                        else: c = {"type": "combat", "adversaires": [f"{n} × {nom}" if n > 1 else nom], "groupe": True}
+                        else: c = {"type": "combat", "adversaires": [f"{n} × {nom}" if n > 1 else nom]}  # seul ou en groupe : les données du jeu ne le disent pas
                         if c not in contenu: contenu.append(c)
                     elif t == 3 and not objet_de_quete(p["parameter1"]):
                         note = f"à rapporter à {T(pnj[p['parameter0']]['nameId'])}" if p["parameter0"] in pnj else None

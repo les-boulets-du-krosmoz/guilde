@@ -267,5 +267,103 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
    10,
    29
   ]
+ },
+ "xlii": {
+  "nom": "XLII",
+  "niveau": 170,
+  "pv": 13000,
+  "pa": 14,
+  "pm": 5,
+  "res": [
+   10,
+   6,
+   22,
+   12,
+   30
+  ]
+ },
+ "toxoliath": {
+  "nom": "Toxoliath",
+  "niveau": 180,
+  "pv": 14000,
+  "pa": 16,
+  "pm": 4,
+  "res": [
+   26,
+   13,
+   19,
+   32,
+   23
+  ]
+ },
+ "comte-razof": {
+  "nom": "Comte Razof",
+  "niveau": 190,
+  "pv": 17000,
+  "pa": 13,
+  "pm": 6,
+  "res": [
+   100,
+   120,
+   115,
+   135,
+   105
+  ]
+ },
+ "ombre": {
+  "nom": "Ombre",
+  "niveau": 190,
+  "pv": 17000,
+  "pa": 20,
+  "pm": 6,
+  "res": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ "chaloeil": {
+  "nom": "Chalœil",
+  "niveau": 220,
+  "pv": 22000,
+  "pa": 20,
+  "pm": 4,
+  "res": [
+   21,
+   21,
+   11,
+   31,
+   16
+  ]
+ },
+ "anerice-la-shushess": {
+  "nom": "Anerice la Shushess",
+  "niveau": 220,
+  "pv": 26000,
+  "pa": 20,
+  "pm": 6,
+  "res": [
+   15,
+   20,
+   10,
+   25,
+   30
+  ]
+ },
+ "larve-de-koutoulou": {
+  "nom": "Larve de Koutoulou",
+  "niveau": 220,
+  "pv": 26000,
+  "pa": 20,
+  "pm": 6,
+  "res": [
+   16,
+   22,
+   17,
+   17,
+   28
+  ]
  }
 };

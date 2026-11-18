@@ -108,13 +108,14 @@ export function Nav() {
             ? <img src={membre.avatar_url} alt={`Compte de ${membre.pseudo}`} width={32} height={32} className="nav__avatar" referrerPolicy="no-referrer" />
             : <span className="nav__avatar nav__avatar--initiales">{(membre?.pseudo ?? "?").slice(0, 2)}</span>}
           etiquette="Mon compte"
-          actif={["/mon-compte", "/parametres", "/mes-metiers"].some((c) => pathname.startsWith(c))}
+          actif={["/mon-compte", "/parametres", "/mes-metiers", "/statistiques"].some((c) => pathname.startsWith(c))}
           aDroite
           liens={[
             { to: "/mon-compte", libelle: "Mon compte", detail: "Personnages, Metamob" },
             { to: "/mes-metiers", libelle: "Mes métiers", detail: "Mettre à jour tes niveaux" },
             { to: "/parametres", libelle: "Paramètres", detail: "Mode daltonien" },
             ...(principal ? [{ to: `/perso/${principal.id}`, libelle: "Ma fiche", detail: `Profil de ${principal.nom}` }] : []),
+            ...(membre?.est_officier ? [{ to: "/statistiques", libelle: "Statistiques", detail: "Ce qui est consulté sur le site" }] : []),
           ]}
           action={{ libelle: "Déconnexion", onClick: seDeconnecter }}
         />

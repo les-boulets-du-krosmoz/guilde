@@ -19,6 +19,8 @@ export interface Membre {
   mode_daltonien?: ModeDaltonien | null;
   /** Police choisie (page Paramètres) ; null = police du site. */
   police?: Police | null;
+  /** Ne pas compter ses visites dans les statistiques (réglage des officiers, page Statistiques). */
+  hors_statistiques?: boolean;
 }
 
 export interface Personnage {

@@ -3,7 +3,11 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useParams, useSearchParams } from "react-router-dom";
 import { TexteEtats } from "../components/Etat";
 import { NomAvecPastille, Pastille } from "../components/Pastille";
-import { DOFUS, type Contenu, type Dofus, type Ressource } from "../data/dofus";
+import { DOFUS, type Contenu, type Dofus } from "../data/dofus";
+import { FicheCombat } from "../components/FicheCombat";
+import { QuetesRepetables } from "../components/QuetesRepetables";
+import { COMBATS_TACTIQUES, guideCombat, type GuideCombat } from "../data/combatsTactiques";
+import { guideDuDonjon, lienGuide } from "../data/guidesBoss";
 import { donjonDeLEtape } from "../data/donjons";
 import { QuetesLiees, quetesLiees, TOUS_IDS_LIEES } from "../components/QuetesLiees";
 import { astuceDe, ParcoursOptimise } from "../components/EncartOptimisation";
@@ -17,7 +21,7 @@ import { IconeDonjon, imageDonjon } from "../components/IconeDonjon";
 import { aDesQuetes, CATEGORIES, type Categorie } from "../data/series";
 import { clicSurCarte } from "../lib/clicCarte";
 import { ilYa } from "../lib/dates";
-import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerQuetesFaites, chargerRessources, chargerSouhaits, chargerSucces, definirSucces, definirSuccesPlusieurs, marquerQuete, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
+import { chargerAides, chargerGuilde, chargerMetiers, chargerQuetes, chargerQuetesFaites, chargerSouhaits, chargerSucces, definirSucces, definirSuccesPlusieurs, marquerQuete, prefixeDofus, proposerAide, retirerAide } from "../lib/donnees";
 import { ancetres, avancement, cocher, decocher, etapeActuelle, evaluerPrerequis } from "../lib/quetes";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -60,7 +64,12 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
   const dofus = disponibles.find((d) => d.id === params.get("dofus")) ?? disponibles[0];
   const setDofus = (d: Dofus) => setParams({ cat: categorie.id, dofus: d.id }, { replace: true });
   const setCategorie = (c: Categorie) => setParams({ cat: c.id }, { replace: true });
-  const [ressources, setRessources] = useState<Set<string>>(new Set());
+  const vueTactiques = !categorieImposee && params.get("cat") === "tactiques";
+  const vueJournalieres = !categorieImposee && params.get("cat") === "journalieres";
+  const extras = [
+    { nom: "Combats tactiques", actif: vueTactiques, onChoix: () => setParams({ cat: "tactiques" }, { replace: true }) },
+    { nom: "Quêtes journalières", actif: vueJournalieres, onChoix: () => setParams({ cat: "journalieres" }, { replace: true }) },
+  ];
   const [souhaits, setSouhaits] = useState<Set<string>>(new Set());
   const [perso, setPerso] = useState<Personnage | null>(null);
   const [metiers, setMetiers] = useState<MetierMembre[]>([]);
@@ -98,11 +107,10 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
       if (error || !data) throw new Error("Ce personnage n'existe pas ou plus.");
       const p = data as Personnage;
       const prefixe = prefixeDofus(dofus.quetes.map((q) => q.id));
-      const [m, quetes, guilde, res, tousSouhaits, inscriptions, tousSucces] = await Promise.all([
+      const [m, quetes, guilde, tousSouhaits, inscriptions, tousSucces] = await Promise.all([
         chargerMetiers(p.membre_id),
         chargerQuetes(prefixe),
         chargerGuilde(),
-        chargerRessources(p.id),
         chargerSouhaits(),
         chargerAides(prefixe),
         chargerSucces(),
@@ -110,7 +118,6 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
       setAides(inscriptions);
       setSucces(tousSucces);
       setAnnuaire({ persos: new Map(guilde.personnages.map((x) => [x.id, x])), membres: guilde.membres as Map<string, Membre> });
-      setRessources(res);
       setSouhaits(tousSouhaits.get(p.id) ?? new Set());
       const mesFaites = quetes.get(p.id) ?? new Set<string>();
       setPerso(p);
@@ -287,22 +294,6 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
     }
   }
 
-  async function basculerRessource(id: string) {
-    if (!modifiable) return;
-    const avait = ressources.has(id);
-    const suivant = new Set(ressources);
-    if (avait) suivant.delete(id);
-    else suivant.add(id);
-    setRessources(suivant);
-    const { error } = avait
-      ? await supabase.from("ressources_cochees").delete().eq("personnage_id", persoId).eq("ressource_id", id)
-      : await supabase.from("ressources_cochees").insert({ personnage_id: persoId, ressource_id: id });
-    if (error) {
-      setRessources(ressources);
-      setErreur("La ressource n'a pas été enregistrée : " + error.message);
-    }
-  }
-
   const filtrable = !!dofus.filtreAide;
   const optimisation = dofus.id === "glaces" ? OPTIMISATION_GLACES : undefined;
   const filtreAide = filtrable && seulementAide;
@@ -338,6 +329,36 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
     );
   }
 
+  if (vueJournalieres) {
+    return (
+      <main className="page">
+        <div className="entete">
+          <div>
+            <Link to={`/perso/${perso.id}`}>Retour à {perso.nom} ({perso.classe} {perso.niveau})</Link>
+            <h1>Quêtes journalières</h1>
+          </div>
+        </div>
+        <BarreCategories actif={categorie} onChoix={setCategorie} exclure={["succes"]} extras={extras} />
+        <QuetesRepetables />
+      </main>
+    );
+  }
+  if (vueTactiques) {
+    return (
+      <main className="page">
+        <div className="entete">
+          <div>
+            <Link to={`/perso/${perso.id}`}>Retour à {perso.nom} ({perso.classe} {perso.niveau})</Link>
+            <h1>Combats tactiques</h1>
+            <p className="discret">Les strats des combats tactiques des quêtes, par Dofus.</p>
+          </div>
+        </div>
+        <BarreCategories actif={categorie} onChoix={setCategorie} exclure={["succes"]} extras={extras} />
+        <ListeCombatsTactiques />
+      </main>
+    );
+  }
+
   return (
     <main className="page">
       <div className="entete">
@@ -356,7 +377,7 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
         </div>
       </div>
 
-      {!categorieImposee && <BarreCategories actif={categorie} onChoix={setCategorie} exclure={["succes"]} />}
+      {!categorieImposee && <BarreCategories actif={categorie} onChoix={setCategorie} exclure={["succes"]} extras={extras} />}
 
       {categorie.series.length > 1 && (
         <OngletsSeries series={categorie.series} actif={dofus} onChoix={(d) => { setDofus(d); setAideMasse(false); }} libelle={categorie.estDofus ? "Choix du Dofus" : "Choix de la zone"} />
@@ -438,7 +459,7 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
           const ici = positions.get(q.id) ?? [];
           const jAide = aidesEtape.some((a) => a.personnage_id === perso.id);
           const donjon = donjonDeLEtape(q.id);
-          const aDuDetail = q.contenu.length > 0 || prerequis.length > 0 || (q.ressources ?? []).length > 0 || (q.deroule ?? []).length > 0 || ici.length > 0 || aidesEtape.length > 0 || modifiable;
+          const aDuDetail = q.contenu.length > 0 || prerequis.length > 0 || (q.deroule ?? []).length > 0 || ici.length > 0 || aidesEtape.length > 0 || modifiable;
           // Étape indépendante : aucune étape suivante n'en dépend, donc cocher une étape plus loin ne la coche pas.
           const independante = i < dofus.quetes.length - 1 && !dofus.quetes.slice(i + 1).some((s) => ancetres(s.id).has(q.id));
           const manque = prerequis.some((p) => p.etat === "manque");
@@ -504,7 +525,7 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
                 {ouverte && (
                 <div id={`detail-${q.id}`} className="quete__detail">
                 <div className="etiquettes">
-                  {q.contenu.map((c, j) => <Etiquette key={j} contenu={c} />)}
+                  {q.contenu.map((c, j) => <Etiquette key={j} contenu={c} quete={q} />)}
                 </div>
                 {/* Objectifs écrits du jeu : une ligne s'il n'y en a qu'un, sinon le déroulé complet à déplier. */}
                 {(q.deroule ?? []).length === 1 && <p className="quete__objectif discret-taille">Objectif : {q.deroule![0]}</p>}
@@ -546,11 +567,17 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
                       onBasculer={(id, faite) => (dofus.quetes.some((x) => x.id === id) ? basculer(id) : basculerLiee(id, faite))} />
                   ) : null;
                 })()}
-                {donjon && (
-                  <div className="donjon-liens">
-                    <a href={`${SITE_DPLN}${donjon.page}`} target="_blank" rel="noreferrer">Guide du donjon</a>
-                  </div>
-                )}
+                {(() => {
+                  const dj = donjonDuBoss(q.nom);
+                  const guide = guideDuDonjon(dj?.nom, dj?.boss ?? q.nom)
+                    ?? q.contenu.map((c) => (c.type === "donjon" ? guideDuDonjon(c.nom) : undefined)).find((g) => !!g);
+                  return donjon || guide ? (
+                    <div className="donjon-liens">
+                      {guide && <Link to={lienGuide(guide)}>Mécaniques du boss</Link>}
+                      {donjon && <a href={`${SITE_DPLN}${donjon.page}`} target="_blank" rel="noreferrer">Guide du donjon</a>}
+                    </div>
+                  ) : null;
+                })()}
                 {prerequis.length > 0 && (
                   <ul className="prerequis">
                     {prerequis.map((p, j) => (
@@ -563,18 +590,6 @@ function QuetesPerso({ persoId, categorieImposee }: { persoId: string; categorie
                       </li>
                     ))}
                   </ul>
-                )}
-                {q.ressources && q.ressources.length > 0 && (
-                  fait ? (
-                    <span className="vert discret-taille">{q.ressources.length} ressource{q.ressources.length > 1 ? "s" : ""} réunie{q.ressources.length > 1 ? "s" : ""}</span>
-                  ) : (
-                    <BlocRessources
-                      liste={q.ressources}
-                      cochees={ressources}
-                      modifiable={modifiable}
-                      onBascule={basculerRessource}
-                    />
-                  )
                 )}
                 </div>
                 )}
@@ -663,18 +678,25 @@ const SITE_DPLN = "https://www.dofuspourlesnoobs.com/";
 
 
 /** Barre des catégories (Dofus, Frigost, Tour du monde…), partagée avec la page Progression. */
-export function BarreCategories({ actif, onChoix, exclure = [] }: { actif: Categorie; onChoix: (c: Categorie) => void; exclure?: string[] }) {
+export function BarreCategories({ actif, onChoix, exclure = [], extras = [] }: {
+  actif: Categorie; onChoix: (c: Categorie) => void; exclure?: string[];
+  /** Page Quêtes seulement : boutons de vues à part (combats tactiques, quêtes journalières). */
+  extras?: { nom: string; actif: boolean; onChoix: () => void }[];
+}) {
   return (
     <div className="onglets onglets--categories" role="group" aria-label="Catégorie de quêtes">
       {CATEGORIES.filter((c) => !exclure.includes(c.id)).map((c) =>
         aDesQuetes(c) ? (
-          <button key={c.id} type="button" className={`onglet ${c.id === actif.id ? "onglet--actif" : ""}`} aria-pressed={c.id === actif.id} onClick={() => onChoix(c)}>
+          <button key={c.id} type="button" className={`onglet ${c.id === actif.id && !extras.some((e) => e.actif) ? "onglet--actif" : ""}`} aria-pressed={c.id === actif.id && !extras.some((e) => e.actif)} onClick={() => onChoix(c)}>
             {c.nom}
           </button>
         ) : (
           <button key={c.id} type="button" className="onglet onglet--vide" disabled>{c.nom} (à venir)</button>
         ),
       )}
+      {extras.map((e) => (
+        <button key={e.nom} type="button" className={`onglet ${e.actif ? "onglet--actif" : ""}`} aria-pressed={e.actif} onClick={e.onChoix}>{e.nom}</button>
+      ))}
     </div>
   );
 }
@@ -758,14 +780,29 @@ export function OngletsSeries({ series, actif, onChoix, libelle }: { series: Dof
   );
 }
 
-export function Etiquette({ contenu: c }: { contenu: Contenu }) {
+/** Étiquette d'un contenu de quête. Avec `quete`, un combat tactique qui a une fiche devient un bouton « Strat ». */
+export function Etiquette({ contenu: c, quete }: { contenu: Contenu; quete?: { id: string; nom: string } }) {
+  const [strat, setStrat] = useState(false);
   switch (c.type) {
-    case "combat":
+    case "combat": {
+      const fiche = quete ? guideCombat(quete.id, c.adversaires[0]) : undefined;
+      const tactiqueParFiche = !!fiche && fiche.genre !== "astuce";
+      const classe = `etiquette ${tactiqueParFiche ? "etiquette--solo" : c.groupe === undefined ? "etiquette--neutre" : c.groupe ? "etiquette--groupe" : "etiquette--solo"}`;
+      const libelle = `${tactiqueParFiche ? "Tactique solo" : c.groupe === undefined ? "Combat" : c.groupe ? "Combat de groupe" : c.tactique ? "Tactique solo" : "Combat solo"} : ${c.adversaires.join(", ")}`;
+      if (!fiche || !quete) return <span className={classe}>{libelle}</span>;
       return (
-        <span className={`etiquette ${c.groupe === undefined ? "etiquette--neutre" : c.groupe ? "etiquette--groupe" : "etiquette--solo"}`}>
-          {c.groupe === undefined ? "Combat" : c.groupe ? "Combat de groupe" : c.tactique ? "Tactique solo" : "Solo obligatoire"} : {c.adversaires.join(", ")}
-        </span>
+        <>
+          <button type="button" className={`${classe} etiquette--strat`} aria-haspopup="dialog" onClick={() => setStrat(true)}>
+            {libelle}<span className="etiquette__strat">Strat</span>
+          </button>
+          {strat && (
+            <Fenetre titre={fiche.adversaire} onFermer={() => setStrat(false)} large>
+              <FicheCombat guide={fiche} quete={quete.nom} />
+            </Fenetre>
+          )}
+        </>
       );
+    }
     case "donjon":
       return <span className="etiquette etiquette--donjon"><TexteEtats texte={`Donjon : ${c.nom}`} /></span>;
     case "drop_quete":
@@ -773,48 +810,38 @@ export function Etiquette({ contenu: c }: { contenu: Contenu }) {
   }
 }
 
-function BlocRessources({
-  titre = "À réunir",
-  liste,
-  cochees,
-  modifiable,
-  onBascule,
-}: {
-  titre?: string;
-  liste: Ressource[];
-  cochees: Set<string>;
-  modifiable: boolean;
-  onBascule: (id: string) => void;
-}) {
-  const n = liste.filter((r) => cochees.has(r.id)).length;
+/** Toutes les strats de combats tactiques, rangées par série de quêtes (ordre du site), puis celles hors des quêtes suivies. */
+function ListeCombatsTactiques() {
+  const [ouverte, setOuverte] = useState<{ guide: GuideCombat; quete: string } | null>(null);
+  const groupes: { titre: string; lignes: { guide: GuideCombat; quete: string }[] }[] = [];
+  for (const c of CATEGORIES) for (const s of c.series) {
+    const lignes = s.quetes.flatMap((q) => COMBATS_TACTIQUES.filter((g) => g.quete === q.id && g.genre !== "astuce").map((guide) => ({ guide, quete: q.nom })));
+    if (lignes.length) groupes.push({ titre: titreSerie(c, s), lignes });
+  }
+  const horsSuivi = COMBATS_TACTIQUES.filter((g) => !g.quete).map((guide) => ({ guide, quete: guide.nomQuete ?? "" }));
+  if (horsSuivi.length) groupes.push({ titre: "Hors des quêtes suivies", lignes: horsSuivi });
   return (
-    <div className="ressources">
-      <div className="ressources__entete">
-        <strong>{titre}</strong>
-        <span className="discret">{n} / {liste.length}</span>
-      </div>
-      <ul>
-        {liste.map((r) => {
-          const ok = cochees.has(r.id);
-          return (
-            <li key={r.id} className={ok ? "ressource--ok" : ""}>
-              <input type="checkbox" id={r.id} checked={ok} disabled={!modifiable} onChange={() => onBascule(r.id)} />
-              <label htmlFor={r.id}>
-                {r.texte}
-                {r.alternative && (
-                  <>
-                    <span className="ou">OU</span>
-                    {r.alternative}
-                  </>
-                )}
-              </label>
-              {(r.note || !r.verifie) && (
-                <span className={r.verifie ? "discret" : "discret a-confirmer"}>{[r.note, r.verifie ? "" : "à confirmer"].filter(Boolean).join(", ")}</span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+    <div className="combats-tactiques">
+      {groupes.map((gr) => (
+        <section key={gr.titre}>
+          <h2>{gr.titre}</h2>
+          <ul>
+            {gr.lignes.map((l) => (
+              <li key={`${l.quete}-${l.guide.adversaire}`}>
+                <button type="button" aria-haspopup="dialog" onClick={() => setOuverte(l)}>
+                  <strong>{l.guide.adversaire}</strong>
+                  <span className="discret">{l.quete}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      {ouverte && (
+        <Fenetre titre={ouverte.guide.adversaire} onFermer={() => setOuverte(null)} large>
+          <FicheCombat guide={ouverte.guide} quete={ouverte.quete} />
+        </Fenetre>
+      )}
     </div>
   );
 }

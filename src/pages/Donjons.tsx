@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Fenetre } from "../components/Fenetre";
 import { STATS_BOSS } from "../data/bossStats";
 import { GUIDES_BOSS, type GuideBoss } from "../data/guidesBoss";
-import { QUETES_DONJONS } from "../data/quetesDonjons";
+import { SuiviQuetesDonjons } from "../components/SuiviQuetesDonjons";
+import { cibleBoss, compterVisite } from "../lib/visites";
 import { Quetes } from "./Quetes";
 
 const ONGLETS = [
@@ -16,7 +17,6 @@ const ELEMENTS = [
   { nom: "Neutre", couleur: "#b9b1a3" }, { nom: "Terre", couleur: "#b4824f" }, { nom: "Feu", couleur: "#e4683f" },
   { nom: "Eau", couleur: "#4fa3e0" }, { nom: "Air", couleur: "#62c27a" },
 ];
-const sansAccents = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
 /** Page Donjons : les succès (déplacés de la page Quêtes), les guides de boss et l'index des quêtes liées. */
 export function Donjons() {
@@ -35,13 +35,15 @@ export function Donjons() {
       </div>
       {onglet === "succes" && <Quetes categorieImposee="succes" />}
       {onglet === "guides" && <Guides />}
-      {onglet === "quetes" && <IndexQuetesLiees />}
+      {onglet === "quetes" && <SuiviQuetesDonjons />}
     </div>
   );
 }
 
 function Guides() {
-  const [ouvert, setOuvert] = useState<GuideBoss | null>(null);
+  const [params, setParams] = useSearchParams();
+  const ouvert = GUIDES_BOSS.find((g) => g.slug === params.get("boss")) ?? null;
+  const setOuvert = (g: GuideBoss | null) => setParams(g ? { onglet: "guides", boss: g.slug } : { onglet: "guides" }, { replace: true });
   const tries = [...GUIDES_BOSS].sort((a, b) => Number(a.statut !== "brouillon") - Number(b.statut !== "brouillon") || (STATS_BOSS[a.slug]?.nom ?? "").localeCompare(STATS_BOSS[b.slug]?.nom ?? ""));
   return (
     <main className="page">
@@ -67,6 +69,7 @@ function Guides() {
 
 export function FicheBoss({ guide }: { guide: GuideBoss }) {
   const s = STATS_BOSS[guide.slug];
+  useEffect(() => compterVisite(cibleBoss(guide.slug)), [guide.slug]);
   const section = (titre: string, lignes?: string[]) => lignes?.length ? (
     <section className="fiche-boss__section"><h3>{titre}</h3><ul>{lignes.map((l, k) => <li key={k}>{l}</li>)}</ul></section>
   ) : null;
@@ -107,32 +110,3 @@ export function FicheBoss({ guide }: { guide: GuideBoss }) {
   );
 }
 
-/** Index des quêtes liées à chaque donjon (lecture seule) ; pour cocher, voir l'onglet Succès. */
-function IndexQuetesLiees() {
-  const [recherche, setRecherche] = useState("");
-  const q = sansAccents(recherche.trim());
-  const donjons = Object.entries(QUETES_DONJONS)
-    .filter(([d, l]) => !q || sansAccents(d).includes(q) || l.some((x) => sansAccents(x.nom).includes(q)))
-    .sort(([a], [b]) => a.localeCompare(b));
-  return (
-    <main className="page">
-      <p className="discret">Les quêtes qui demandent d'agir dans un donjon, avec la salle concernée. Pour les cocher, passez par l'onglet Succès.</p>
-      <input type="search" className="donjons__recherche" placeholder="Rechercher un donjon ou une quête…" value={recherche} onChange={(e) => setRecherche(e.target.value)} aria-label="Rechercher" />
-      <ul className="index-liees">
-        {donjons.map(([d, l]) => (
-          <li key={d} className="carte">
-            <details>
-              <summary><strong>{d}</strong> <span className="discret-taille">{l.length} quête{l.length > 1 ? "s" : ""}</span></summary>
-              <ul>
-                {l.map((x) => (
-                  <li key={x.id + d}><strong>{x.nom}</strong> <span className="discret-taille">niv. {x.niveau}</span>
-                    <div className="discret-taille">{x.objectif.split(" ; ").join(" · ")}</div></li>
-                ))}
-              </ul>
-            </details>
-          </li>
-        ))}
-      </ul>
-    </main>
-  );
-}

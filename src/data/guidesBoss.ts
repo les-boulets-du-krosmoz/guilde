@@ -300,7 +300,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "ben-le-ripate", donjon: "Épave du Grolandais violent", niveau: 150, position: "Frigost", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "ben-le-ripate", donjon: "Épave du Grolandais violent", niveau: 150, position: "Frigost", dpln: `${DPLN}epave-du-grolandais-violent.html`, statut: "brouillon",
     mecaniques: [
       "Ben le Ripate invoque un monstre qui cherche à rejoindre son corps-à-corps.",
       "L'invocation ne peut être déplacée d'aucune manière (ni poussée, ni attirée, ni échangée).",
@@ -314,7 +314,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "kolosso", donjon: "Cavernes du Kolosso", niveau: 190, position: "Frigost", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "kolosso", donjon: "Cavernes du Kolosso", niveau: 190, position: "Frigost", dpln: `${DPLN}cavernes-du-kolosso.html`, statut: "brouillon",
     mecaniques: [
       "La zone de frappe du Kolosso est énorme, en cône : s'il frappe au contact, tous les alliés placés derrière la cible sont touchés aussi.",
       "Le Professeur Xa est dans le combat : à sa mort, tous les monstres gagnent 400 dommages.",
@@ -377,4 +377,195 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     succes: ["Succès du donjon : Mystique, Zombie, Score 150 et 200, Duo (40 tours)."],
   },
+  {
+    slug: "xlii", donjon: "Horologium de XLII", niveau: 170, position: "[7,-2] (Xélorium)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    acces: [
+      "Dans le Jour Présent, deuxième zone de Xélorium. On entre dans la dimension par le portail Xélorium, dont la position s'obtient par une chasse au portail.",
+      "Le chemin jusqu'au donjon demande une Montre en avance et une Montre en retard.",
+      "Pas de trousseau : la clef se fabrique. Les Poils d'Hordémon de la recette s'échangent contre 2 Orichors au collectionneur de l'avant-poste.",
+    ],
+    mecaniques: [
+      "Une seule salle et un seul combat : 5 vagues, une tous les 5 tours. Vider une vague fait venir la suivante tout de suite, et ses monstres restent invulnérables jusqu'à leur premier tour.",
+      "Le nombre de monstres par vague dépend du nombre de personnages au lancement du combat : un mort ne réduit pas les vagues suivantes.",
+      "L'Auroraire tourne sur le cadran qui sert de sol. Au début, tout le monde n'inflige que 40 % de ses dégâts ; à chaque tour d'un de vos personnages, elle avance et donne 10 % de dommages aux deux camps.",
+      "Un personnage placé sur la case où l'Auroraire doit avancer échange sa place avec elle.",
+      "Chaque Hordémon change d'effet passé la moitié de ses PV : le Trezz gagne des résistances quand on le frappe, puis de la puissance ; le Vindeux soigne ses voisins, puis renvoie les dégâts autour de l'attaquant.",
+      "XLII : Souffle démoniaque rend Pacifiste un tour (portée 1 à 3, sans ligne de vue), Coquetterie frappe autour de lui et réduit la durée de vos boosts. S'il est déplacé, il peut échanger sa place avec un autre Hordémon.",
+    ],
+    delock: ["XLII n'est pas invulnérable : pas de délock. Le seul frein est la baisse de dégâts du début de combat."],
+    strategie: [
+      "Utilisez les premiers tours, où vos dégâts sont faibles, pour vous booster et baisser ses résistances.",
+      "Concentrez-vous sur XLII : sa mort fait disparaître l'Auroraire et ses effets. Pendant ce temps, faites patienter le reste de la première vague.",
+      "Évitez de le déplacer, et ne finissez pas votre tour à 3 cases de lui.",
+      "Achevez vite un Trezz sous la moitié de ses PV : chaque coup reçu le rend plus fort.",
+    ],
+    succes: [
+      "Succès du donjon : Collant, Barbare, Spécial « C'est très vague ! » (finir chaque vague avant l'arrivée de la suivante), Duo (80 tours).",
+      "Collant : Coquetterie touche tous les personnages autour de XLII, gardez-le loin du groupe.",
+    ],
+    avertissements: ["Le chemin avec les montres et les valeurs de l'Auroraire (40 % au départ, +10 % par tour) n'ont été trouvés que dans un guide d'avant Dofus 3 : à confirmer en jeu."],
+  },
+  {
+    slug: "toxoliath", donjon: "Cave du Toxoliath", niveau: 180, position: "[8,8] (Srambad)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    acces: [
+      "Dans les Catacombres, deuxième zone de Srambad. On entre dans la dimension par le portail Srambad (chasse au portail).",
+      "Pas de trousseau : la clef se fabrique. Les Chitines de Nécrotique de la recette s'échangent contre 2 Orichors au collectionneur de l'avant-poste.",
+    ],
+    mecaniques: [
+      "Une seule salle : 5 vagues, une tous les 5 tours. Vider une vague fait venir la suivante, invulnérable jusqu'à son premier tour.",
+      "Le Toxoliath n'a ni invulnérabilité ni résistances hors normes. Mais chaque coup qu'on lui porte pose sur l'attaquant un poison de 2 tours, cumulable, qui frappe selon les PM utilisés pendant le tour, avant comme après le coup.",
+      "Venin Salvateur : tous vos personnages subissent 50 % de dommages en plus.",
+      "Les Nécrotiques aussi empoisonnent : le Scoliopode tue les invocations à son contact et rend insoignable celui qui le frappe ; le Lucrane retire la moitié de la vie de sa cible pour un tour.",
+    ],
+    delock: ["Pas d'invulnérabilité : le danger, c'est le poison qu'il renvoie à chaque coup."],
+    strategie: [
+      "Frappez-le sans bouger : mettez-vous en place un tour avant, puis restez immobile pendant les 2 tours du poison.",
+      "Les portails d'un Éliotrope permettent de le toucher sans se déplacer.",
+      "Prévoyez du soin : les poisons s'accumulent tout au long du combat.",
+      "Gardez vos invocations loin du Scoliopode.",
+    ],
+    succes: [
+      "Succès du donjon : Misanthrope, Circulez (aucun retrait de PM), Spécial « Relation toxique » (tuer le Toxoliath en dernier), Duo (80 tours).",
+      "Circulez : temporisez avec des poussées et des protections plutôt qu'avec du retrait de PM.",
+    ],
+    avertissements: ["Le poison calculé sur les PM n'a été trouvé que dans un guide d'avant Dofus 3 : à confirmer en jeu, surtout ce qui compte (PM du tour entier ou seulement après le coup)."],
+  },
+  {
+    slug: "comte-razof", donjon: "Camp du Comte Razof", niveau: 190, position: "[-68,30] (Nimotopia)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    acces: [
+      "Sur l'île de Nimotopia. Le plus rapide : le zaap des Champs de Cania en [-27,-36], puis le Muldobus en [-28,-31], après les questions d'Agathe Mainate.",
+      "Clef par le trousseau, ou à fabriquer avec une ressource de chaque monstre du camp (Chevrotine, Brokouillon, Nemroz, Crâmbo).",
+    ],
+    mecaniques: [
+      "Le Comte n'est pas invulnérable, mais ses résistances dépassent 100 % dans tous les éléments (données du jeu) : sans préparation, vos coups ne lui font rien.",
+      "Chaque invocation non statique présente sur le terrain lui fait perdre des résistances.",
+      "Trophée de Chasse : il tue une invocation à son contact et gagne 1 PM et 200 de puissance pendant 2 tours.",
+      "Chasse Gardée réduit les dégâts qu'il subit pendant un tour. Pelliste, jusqu'à 15 cases, retire des PM et pose Affaibli et Pesanteur.",
+      "La Chevrotine invoque un chien qui colle sa cible, lui retire tous ses PM et la rend Pesanteur.",
+    ],
+    delock: [
+      "Invoquez le plus possible : chaque invocation mobile en jeu fait baisser ses résistances, et on peut alors le frapper dans n'importe quel élément.",
+      "Gardez vos invocations hors de son contact : chacune qu'il tue le renforce.",
+    ],
+    strategie: [
+      "Un Osamodas, ou toute classe qui invoque beaucoup, est le meilleur atout ici.",
+      "Tuez la Chevrotine en premier, avant que son chien ne bloque quelqu'un.",
+      "Méfiez-vous des pièges invisibles du Nemroz (retrait de PA et de portée) et de l'attirance du Viandargh, qui retire 400 de puissance.",
+    ],
+    succes: ["Succès du donjon : Liberté, Premier, Spécial « Nos amies les bêtes » (aucune invocation alliée tuée par un ennemi), Duo (20 tours)."],
+    avertissements: ["La perte de résistances par invocation n'est chiffrée nulle part, et la mécanique n'a été trouvée que dans un guide d'avant Dofus 3 : à vérifier en jeu."],
+  },
+  {
+    slug: "ombre", donjon: "Pyramide d'Ombre", niveau: 190, position: "[6,13] (Dimension Obscure)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    acces: [
+      "Dans la Dimension Obscure, où l'on entre depuis la même position de la forêt d'Amakna. Zaap le plus proche : Bord de la Forêt Maléfique, en [-1,13].",
+      "Clef par le trousseau, ou à fabriquer avec les quatre masques des monstres de la zone (Vide, Vengeance, Violence, Vivacité).",
+    ],
+    mecaniques: [
+      "Ombre est invulnérable. Pendant le combat, il invoque un Globilum et une Silhouette, qui servent au délock.",
+      "À la fin de chacun de ses tours, le Globilum pose un glyphe autour de lui.",
+      "Ombre frappe de plus en plus fort : Liaison l'attire vers vous et augmente ses coups suivants, Distorsion frappe à 3 cases autour de lui.",
+      "Le Sombléro renforce ses alliés pour un tour (il rend le Brutopak invulnérable, par exemple) et fait riposter les monstres autour de celui qu'on frappe.",
+    ],
+    delock: [
+      "Amenez la Silhouette dans le glyphe du Globilum : tant qu'elle y reste, Ombre peut être frappé, à condition qu'il ne soit pas lui-même dans le glyphe.",
+      "La Silhouette ne peut être déplacée qu'une seule fois par tour de jeu : décidez à l'avance qui la bouge.",
+      "Les échanges de place (Xélor, Sacrieur, Écaflip) ne semblent pas compter dans cette limite.",
+      "Un personnage qui tacle bien peut la retenir dans le glyphe.",
+    ],
+    strategie: [
+      "Tuez d'abord les autres monstres, en commençant par le Sombléro, et gardez Ombre à distance.",
+      "Installez ensuite la Silhouette dans le glyphe, puis frappez Ombre.",
+    ],
+    succes: ["Succès du donjon : Collant, Premier, Compagnon, Spécial « Jeux d'ombres » (aucune attaque à distance sur les ennemis), Duo (26 tours)."],
+    avertissements: [
+      "Dans les données du jeu, Ombre possède un sort, Paranoïa, qu'aucun guide consulté ne décrit : la mécanique a pu changer depuis. Si tu l'as vu en combat, dis-le aux officiers.",
+      "L'exception des échanges de place pour la Silhouette ne vient que d'une seule source, ancienne.",
+    ],
+  },
+  {
+    slug: "anerice-la-shushess", donjon: "Manoir des Katrepat", niveau: 200, position: "[-14,25]", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    acces: [
+      "Dans les Terres Désacrées, juste à côté du zaap des Terres Désacrées en [-15,25].",
+      "Clef par le trousseau, ou à fabriquer (dont 5 ressources de chacune des goules de la zone).",
+    ],
+    mecaniques: [
+      "Les goules avancent d'une case vers vous à votre première attaque sur l'une d'elles, à chaque tour.",
+      "Anerice n'est pas invulnérable, mais elle réduit vos dommages de 90 %.",
+      "Goulification (portée 1 à 3) : elle transforme sa cible en Goule jusqu'à la fin du combat, et la Goule subit 50 % de dommages en plus.",
+      "Un tour sur deux, elle peut échanger sa place avec un personnage transformé, puis frapper en zone autour de lui.",
+      "La Kérigoule partage les dommages reçus entre tous les monstres pendant 2 tours.",
+    ],
+    delock: [
+      "Faites-vous goulifier : chaque personnage transformé retire 10 points à sa réduction (80 % avec un, 60 % avec trois).",
+      "Autre voie : jouer à distance avec beaucoup d'érosion, sans prendre le risque de la transformation.",
+    ],
+    strategie: [
+      "Tuez la Kérigoule en premier : son partage de dégâts rallonge tout le combat.",
+      "Tenez les goules à distance (retrait de PM, poussées).",
+      "Une fois transformés, écartez-vous les uns des autres : elle arrive au contact d'une Goule et frappe tout autour.",
+      "Le Gouligane rend Pacifiste : gardez du désenvoûtement.",
+    ],
+    succes: ["Succès du donjon : Prudent, Premier, Compagnon, Spécial « Qu'est-ce qu'elle a ma goule ? » (chaque allié goulifié au moins une fois), Duo (40 tours)."],
+    avertissements: ["Les chiffres de la réduction (90 %, 10 points par Goule) n'ont été trouvés que dans un guide d'avant Dofus 3 : à vérifier en jeu."],
+  },
+  {
+    slug: "chaloeil", donjon: "Défi du Chalœil", niveau: 200, position: "Temple de Kérubim (Écaflipus)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    acces: [
+      "Dans le Temple de Kérubim, dans la dimension Écaflipus, où l'on entre par une chasse au portail.",
+      "Pas de trousseau : la clef se fabrique (Carte du Grand Jeu et une ressource de chaque monstre de la zone).",
+    ],
+    mecaniques: [
+      "Une seule salle : 5 vagues, une tous les 5 tours (tours 1, 6, 11, 16, 21). Vider une vague fait venir la suivante, à l'emplacement de départ des monstres.",
+      "Le Chalœil est invulnérable jusqu'au tour 21.",
+      "Le sol est couvert de dés de 1 à 6 : finir son tour sur une case donne l'état de son chiffre. Quand un monstre commence son tour sur le même chiffre qu'un personnage, celui-ci prend 200 à 300 dégâts Neutre et 20 % d'érosion (le Chalœil ne le fait pas).",
+      "Gros Yeux, tous les 3 tours : le Chalœil et ses alliés gagnent un bonus selon le chiffre de leur case (esquive PM, portée, Indéplaçable, PM, soin, puissance).",
+      "À la fin de son tour, des dés (obstacles) et des glyphes blancs apparaissent sur toutes les cases du même chiffre que la sienne. Passer sur un glyphe blanc soigne.",
+      "Chaque monstre a une roulette : un bonus qui tourne à chaque tour dans un ordre fixe, dont 100 % de critique un tour sur trois. Leurs sorts ont des effets en plus sur un critique.",
+      "Farce et Attrape : jusqu'à 3 fois par tour, il échange sa place avec une cible, alliée ou ennemie. L'état Pesanteur l'en empêche.",
+    ],
+    delock: ["Rien à faire : il redevient vulnérable de lui-même au tour 21. D'ici là, il faut tenir face aux vagues."],
+    strategie: [
+      "Avant de finir votre tour, comparez le chiffre de votre case à celui des monstres proches.",
+      "Retirez-lui des PM, ou bloquez-le dans un coin avec un double de Sram ou un personnage résistant.",
+      "Servez-vous des glyphes blancs pour vous soigner.",
+      "Repérez le tour où un monstre a 100 % de critique : ses sorts font plus de choses ce tour-là.",
+    ],
+    succes: ["Succès du donjon : Liberté, Prudent, Compagnon, Spécial « Les bons comptes font les bons ennemis » (finir chaque tour sur le chiffre de sa case de départ), Trio (80 tours)."],
+    avertissements: ["L'invulnérabilité jusqu'au tour 21 et le détail des bonus de Gros Yeux n'ont été trouvés que dans un guide d'avant Dofus 3 : à vérifier en jeu."],
+  },
+  {
+    slug: "larve-de-koutoulou", donjon: "Temple de Koutoulou", niveau: 200, position: "[27,26]", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    acces: [
+      "Sur le Plateau de R'lyugluglu, dans les Abysses de Sufokia. Le plus rapide : le zaapi du quai de la voie du temple, en [22,23].",
+      "Clef par le trousseau, ou à fabriquer (tentacules de Grofond et de N'yalg, yeux de Shokkoth et ressources marines).",
+    ],
+    mecaniques: [
+      "La Folie monte à chaque coup reçu des monstres, sur 10 niveaux : dès 2, vos coups renvoient des dégâts autour de vous ; dès 4, vos soins reçus sont divisés par deux ; dès 6, vous subissez le double de dégâts ; à 10, le personnage meurt. Elle redescend quand vous n'êtes pas frappé.",
+      "À chaque tour, la Larve téléporte à son contact tout personnage en ligne de vue directe avec elle (pas les invocations).",
+      "Chaque fois que vous frappez un monstre, votre personnage échange sa place avec l'entité la plus proche, alliée ou ennemie (hors invocations).",
+      "Échanger deux fois avec le même monstre le rend invulnérable jusqu'à votre prochain tour ; deux fois avec un allié, et vos deux Folies montent.",
+      "Le Shokkoth crée des doubles de vos personnages qui partagent vos dégâts. On peut les tuer en les poussant contre un monstre.",
+    ],
+    delock: ["Pas d'invulnérabilité de départ : tout se joue sur le placement."],
+    strategie: [
+      "Finissez chaque tour caché derrière un obstacle, un monstre ou une invocation.",
+      "Avec du retrait de PM et du placement, coincez la Larve dans un coin derrière des obstacles.",
+      "Avant de frapper, regardez qui est le plus proche de vous : c'est avec lui que vous changerez de place.",
+      "Tuez d'abord le Klûtiste (zone, retrait de PM, bonus aux alliés), puis le Shokkoth.",
+      "Quand votre Folie monte, éloignez-vous du combat pour la faire redescendre.",
+    ],
+    succes: ["Succès du donjon : Prudent, Hardi, Compagnon, Spécial « Chaises musicales » (un ennemi doit échanger avec un allié entre chacun de ses tours), Duo (40 tours)."],
+    avertissements: ["La Folie et les échanges de place n'ont été trouvés que dans un guide d'avant Dofus 3 (mis à jour en 2020) : les paliers sont à vérifier en jeu."],
+  },
 ];
+
+const simple = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+/** Guide d'un donjon, retrouvé par le nom du donjon ou par celui de son boss (les orthographes varient d'une source à l'autre). */
+export function guideDuDonjon(donjon?: string, boss?: string): GuideBoss | undefined {
+  return GUIDES_BOSS.find((g) => (!!donjon && simple(g.donjon) === simple(donjon)) || (!!boss && g.slug === simple(boss)));
+}
+
+/** Adresse qui ouvre directement la fiche du boss dans Donjons > Guides. */
+export const lienGuide = (g: GuideBoss) => `/donjons?onglet=guides&boss=${g.slug}`;

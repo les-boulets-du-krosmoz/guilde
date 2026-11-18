@@ -1,6 +1,7 @@
 import { Kamas } from "./Kamas";
 import { useEffect, useState } from "react";
 import { chargerAlmanax, dateParis, SITE_ALMANAX, type JourAlmanax } from "../lib/almanax";
+import { Rebours } from "./Rebours";
 
 const jourLisible = (date: string) =>
   new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
@@ -20,7 +21,7 @@ export function CarteAlmanax() {
     <section className="carte almanax">
       <div className="carte__entete">
         <h2>Almanax du jour</h2>
-        {jours && <span className="discret">{jourLisible(jours[0].date)}</span>}
+        {jours && <span className="discret">{jourLisible(jours[0].date)}, change dans <Rebours periode="jour" /></span>}
       </div>
       {erreur ? (
         <p className="discret">L'Almanax ne répond pas pour l'instant. <a href={SITE_ALMANAX} target="_blank" rel="noreferrer">Voir sur notre site Almanax</a></p>
