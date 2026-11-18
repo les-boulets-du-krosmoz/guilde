@@ -50,10 +50,13 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   Kasha, Vortex, Solar, Ilyzaelle, Reine des Voleurs, Bethel, Protozorreur, Chalœil, Anerice, Larve de Koutoulou.
   Point ouvert Meno : « augmente les dommages finaux des alliés » (vos personnages ou ses monstres ?).
 - Tête de mort des guides de boss : écrire « {os} » juste après le nom du monstre qui peut tuer d'un coup
-  (src/components/TeteDeMort.tsx). Posée sur Tengu, Fuji, Glourmand, Glourséleste, Gobus, Kimbo, Solar, Nileza, Dantinéa.
-- Prochains guides de boss, dans cet ordre : 1) récents niv. 200 (Éliocalypse, Belladone, Kabahal, Déchireuse,
-  Vénérable, Aurore Pourpre, Marteaux-Aigris, Torkélonia) ; 2) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro,
-  Orukam) ; 3) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
+  (src/components/TeteDeMort.tsx). Posée sur Tengu, Fuji, Glourmand, Glourséleste, Gobus, Kimbo, Solar, Nileza, Dantinéa, Royalmouth, Pougnette,
+  Belladone, Déchireuse, Torkélonia.
+- 18 novembre, suite : Royalmouth, Mansot Royal, Obsidiantre (d'après un joueur), les 4 Cavaliers + Tempête de
+  l'Eliocalypse (fiche du jeu de Guerre affichée pour la Tempête), Kabahal, Belladone, Déchireuse, Vénérable Endormi,
+  Éternel Conflit, Torkélonia, Barbéryl. Sources souvent d'avant Dofus 3 : avertissements dans chaque fiche.
+- Prochains guides de boss, dans cet ordre : 1) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro, Orukam) ;
+  2) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
 - Combats tactiques : inventaire dans docs/combats-tactiques.md (245 combats classés d'après les données du jeu :
   10 confirmés dont 2 avec fiche, 124 à vérifier, 111 écartés). Les données ne marquent pas les combats tactiques :
   « monstre de quête » est un filtre, pas une preuve. Vérifier Dofus par Dofus (un guide de quêtes couvre toute la série).

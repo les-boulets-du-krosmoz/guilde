@@ -533,5 +533,103 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
    25,
    25
   ]
+ },
+ "kabahal": {
+  "nom": "Kabahal",
+  "niveau": 220,
+  "pv": 20000,
+  "pa": 20,
+  "pm": 6,
+  "res": [
+   50,
+   50,
+   50,
+   50,
+   50
+  ]
+ },
+ "belladone": {
+  "nom": "Belladone",
+  "niveau": 220,
+  "pv": 33000,
+  "pa": 25,
+  "pm": 10,
+  "res": [
+   22,
+   18,
+   8,
+   24,
+   14
+  ]
+ },
+ "dechireuse": {
+  "nom": "Déchireuse",
+  "niveau": 220,
+  "pv": 18000,
+  "pa": 12,
+  "pm": 6,
+  "res": [
+   25,
+   20,
+   15,
+   15,
+   20
+  ]
+ },
+ "venerable-endormi": {
+  "nom": "Vénérable Endormi",
+  "niveau": 220,
+  "pv": 32000,
+  "pa": 16,
+  "pm": 4,
+  "res": [
+   25,
+   25,
+   25,
+   25,
+   25
+  ]
+ },
+ "eternel-conflit": {
+  "nom": "L'Éternel Conflit",
+  "niveau": 220,
+  "pv": 31000,
+  "pa": 20,
+  "pm": 4,
+  "res": [
+   20,
+   29,
+   17,
+   23,
+   31
+  ]
+ },
+ "torkelonia": {
+  "nom": "Torkélonia",
+  "niveau": 220,
+  "pv": 22000,
+  "pa": 20,
+  "pm": 6,
+  "res": [
+   12,
+   14,
+   22,
+   24,
+   18
+  ]
+ },
+ "barberyl-clochecuivre": {
+  "nom": "Barbéryl Clochecuivre",
+  "niveau": 190,
+  "pv": 22000,
+  "pa": 20,
+  "pm": 5,
+  "res": [
+   -9,
+   10,
+   2,
+   4,
+   -7
+  ]
  }
 };

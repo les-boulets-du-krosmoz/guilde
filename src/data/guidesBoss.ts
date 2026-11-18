@@ -947,6 +947,151 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     avertissements: ["Fiche faite d'après un seul guide : à confirmer en jeu. La fiche du jeu affichée est celle de Guerre."],
   },
+  {
+    slug: "kabahal", donjon: "Rituel de Kabahal", niveau: 200, position: "[43,-57]", dpln: `${DPLN}rituel-de-kabahal.html`, statut: "brouillon",
+    acces: ["Sur l'Atoll des Possédés : l'entrée est dans la carcasse de la baleine, en [43,-57]. Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "Kabahal ne se frappe pas directement : il faut passer par les Bras démoniaques.",
+      "Ses monstres posent des runes. Au tour suivant de celui qui l'a posée, un Bras démoniaque apparaît dessus et pose un glyphe de 2 cases autour de lui.",
+      "Toute entité (monstre ou personnage) qui entre dans ce glyphe reçoit un des trois sorts du Bras, au hasard : environ 700 à 800 Neutre, une fois par tour.",
+      "Une rune spéciale ne fait apparaître aucun Bras : elle sert à prendre le contrôle des Bras présents.",
+      "Une fois pris, le contrôle des Bras dure tout le combat. Mais si personne ne finit son tour sur une rune, la portée de leurs sorts tombe à 3 cases.",
+      "À partir du tour 5, les monstres qu'il invoque ont moitié moins de vie.",
+    ],
+    delock: ["Prenez le contrôle des Bras en finissant votre tour sur la rune de contrôle, puis servez-vous de leurs sorts pour frapper Kabahal."],
+    strategie: [
+      "Gardez quelqu'un sur une rune les tours pairs, sinon la portée des Bras tombe à 3 cases.",
+      "Poussez les monstres dans les glyphes des Bras pour qu'ils prennent les coups, et ne les traversez pas vous-mêmes.",
+    ],
+    succes: [
+      "Succès du donjon : Hardi, Mains propres, Duo (40 tours), Spécial « Gros Bras » (les ennemis doivent être achevés uniquement par les Bras démoniaques).",
+      "Gros Bras : entamez les monstres, puis placez-les dans les glyphes des Bras pour que ce soient eux qui les achèvent.",
+    ],
+    avertissements: ["Guides de 2021, avant Dofus 3, complétés avec les changements de la 2.71 : à confirmer en jeu, surtout la rune de contrôle."],
+  },
+  {
+    slug: "belladone", donjon: "Chambre des maléfices", niveau: 200, position: "[29,-88]", dpln: `${DPLN}chambre-des-malefices.html`, statut: "brouillon",
+    acces: ["Dans le château en ruine d'Ephedrya, sur l'archipel de Valonia : parlez à Bulbybell en [29,-88]. Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "Phase 1 : Belladone reste sur son îlot, ne bouge pas et est invulnérable. Chaque monstre tué lui donne un niveau d'Ensorcellement (3 au plus), qui renforce ses sorts.",
+      "Une fois tous ses monstres tués, elle quitte l'îlot et se téléporte sur le terrain, avec d'autres sorts.",
+      "Sur le terrain, elle ne perd son invulnérabilité qu'à la fin de son tour, et elle a un seuil à 50 % de sa vie.",
+      "Si vous êtes dans sa ligne de vue au début de son tour, elle pose autour de vous un glyphe en étoile sur toute la carte et vous empoisonne selon les PA que vous dépensez. Le glyphe de Belladone{os} tue les personnages qui commencent leur tour dedans.",
+      "Son Déchaînement fantasmagorique frappe en croix et en diagonale (3 cases) et rend Insoignable le personnage au centre.",
+    ],
+    delock: ["Tuez tous ses monstres pour la faire descendre de son îlot. Ensuite, elle n'est vulnérable qu'après la fin de son tour."],
+    strategie: [
+      "Chaque monstre tué la renforce : préparez la phase sur le terrain avant de tuer le dernier.",
+      "Au début de son tour, sortez de sa ligne de vue. Si elle pose son glyphe, tout le monde en sort avant la fin de son tour.",
+    ],
+    succes: [
+      "Succès du donjon : Collant, Mains propres, Duo (40 tours), Compagnon (à 4 au moins, avec Haku, Manitou Zoth, Karotz, Grouillot ou Phong Huss), Spécial « Cible facile » (le personnage qu'elle désigne doit être dans sa ligne de vue au début de son tour suivant, et ne pas mourir).",
+      "Cible facile : le désigné recevra son glyphe ; personne d'autre ne doit être dans ses lignes à ce moment-là.",
+    ],
+    avertissements: ["Guide de 2022, avant Dofus 3 : à confirmer en jeu (phases et seuil)."],
+  },
+  {
+    slug: "dechireuse", donjon: "Autel de la Déchireuse", niveau: 200, position: "[12,2]", dpln: `${DPLN}autel-de-la-dechireuse.html`, statut: "brouillon",
+    acces: ["Dans le Village Rhoarim d'Osavora, en [12,2]. Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "Une seule salle et 5 vagues : une tous les 5 tours (tours 1, 6, 11, 16 et 21), ou tout de suite si la précédente est éliminée. Les nouveaux monstres sont invulnérables jusqu'à la fin de leur premier tour.",
+      "Au début de son tour, la Déchireuse se téléporte sur le personnage le plus proche dans sa ligne de vue, le frappe (Feu) et lui donne l'état Espèce menacée jusqu'à la fin du combat.",
+      "Si la Déchireuse{os} se téléporte sur un personnage qui a déjà Espèce menacée, il meurt d'un coup. Sans personne dans sa ligne de vue, elle ne se téléporte pas.",
+      "Elle gagne 1 PM par monstre aligné avec elle au début de son tour. On ne peut ni l'éroder ni la rendre Insoignable.",
+      "À 1 PV, elle récupère toute sa vie et passe en Barbarisme : plus puissante, et Lourde.",
+      "Un Autel de la Chasse est invoqué au début du combat (invulnérable, 100 000 PV). Un monstre qui a pris 4 coups déclenche au 5e sa Réaction saisonnière, un effet qui dépend du monstre et de la saison.",
+    ],
+    delock: [
+      "La Déchireuse est invulnérable. Elle devient vulnérable quand l'Autel de la Chasse lui applique la Réaction saisonnière d'un de ses monstres, et ce monstre change avec la saison d'Osavora : Voracle (Naissances), Domptueuse (Chasse), Ébourifauve (Repos).",
+      "Exemple en saison des Naissances : déclenchez le Voracle et placez la Déchireuse au plus près de l'Autel. À son tour, l'Autel la rend invisible : frappez-la, elle redevient visible et vulnérable.",
+    ],
+    strategie: [
+      "Un personnage qui a déjà Espèce menacée finit son tour hors de sa ligne de vue, ou derrière quelqu'un de plus proche d'elle qui ne l'a pas encore.",
+      "Tenez ses monstres hors de ses lignes : chacun lui donne 1 PM.",
+      "Prévoyez des dégâts pour ses deux vies : à 1 PV, elle repart avec toute sa vie, en plus fort.",
+    ],
+    succes: ["Succès du donjon : Nomade, En ligne de mire, Trio (80 tours), Spécial « Autelière » (aucun ennemi autre que la Déchireuse ne doit subir les effets de l'Autel de la Chasse)."],
+    avertissements: ["Le placement exact selon la saison (qui doit être le plus proche de l'Autel) vient d'un seul guide : à confirmer en jeu."],
+  },
+  {
+    slug: "venerable-endormi", donjon: "Breuil du Vénérable", niveau: 200, position: "[6,9]", dpln: `${DPLN}breuil-du-venerable.html`, statut: "brouillon",
+    acces: ["Dans la Réserve Touffue d'Osavora, en [6,9]. Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "Le Vénérable Endormi dort, et il est invulnérable.",
+      "Un monstre frappé passe Alerté pendant 2 tours, puis Apathique pendant 2 tours. Si le Vénérable est à 3 cases ou moins d'un monstre Alerté, il se réveille.",
+      "Depuis la 3.7 (octobre 2026), les Zarbivores invoquent un bébé jusqu'à 2 cases d'eux et sortent seuls de l'état Apathique au bout de 2 tours : on ne peut plus temporiser sans fin.",
+    ],
+    delock: ["Tuez sa Monture du Vénérable : au moment où elle meurt, il se réveille et reste vulnérable jusqu'à la fin du combat."],
+    strategie: [
+      "Ne frappez pas les monstres à 3 cases ou moins de lui tant que vous n'êtes pas prêts à l'affronter.",
+      "Préparez la mort de la Monture : dès qu'elle tombe, il faut pouvoir taper.",
+    ],
+    succes: ["Succès du donjon : Premier, Hardi, Trio (80 tours), Spécial « Ça ronfle fort »."],
+    avertissements: ["Guides d'avant la 3.7, qui a changé les Zarbivores : à confirmer en jeu. Ce qui se passe quand un monstre Alerté le réveille (vulnérable ou non) reste à préciser."],
+  },
+  {
+    slug: "eternel-conflit", donjon: "Bataille de l'Aurore Pourpre", niveau: 200, position: "[1,0]", dpln: `${DPLN}bataille-de-l-aurore-pourpre.html`, statut: "brouillon",
+    acces: ["Dans le Cauchemar des Ravageurs, en [1,0]. Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "L'Éternel Conflit est protégé par deux diablotins : tant que le Bonraphin vit, il est invulnérable à distance ; tant que le Brâklotin vit, il est invulnérable au contact.",
+      "Dans tout le donjon, quand un monstre est achevé, les monstres dans sa ligne de vue deviennent invisibles pendant un tour (pas quand c'est un diablotin qui meurt).",
+      "Il faut aussi finir son tour dans la ligne de vue d'un monstre, sauf quand il ne reste que le boss.",
+      "Son Poing de la Cité Sombre ne sert qu'une fois par combat.",
+    ],
+    delock: ["Tuez le Bonraphin pour pouvoir le frapper à distance, le Brâklotin pour le frapper au contact, ou les deux."],
+    strategie: [
+      "Choisissez le diablotin selon votre équipe : plutôt le Bonraphin si vous frappez à distance.",
+      "Avant d'achever un monstre, regardez qui est dans sa ligne de vue : ceux-là disparaissent un tour.",
+    ],
+    succes: [
+      "Succès du donjon : Premier, Zombie, Duo (40 tours), Spécial « Jusqu'à l'Aurore » (le Bonraphin et le Brâklotin ne doivent pas être achevés).",
+      "Jusqu'à l'Aurore : sans tuer les diablotins, il faut passer par son état X, obtenu en montant ses états de haine, et le tuer en 2 tours.",
+    ],
+    avertissements: ["Donjon très modifié en 2.71, guides d'avant Dofus 3 : à confirmer en jeu, surtout la fin de tour en ligne de vue (ce qui arrive sinon)."],
+  },
+  {
+    slug: "torkelonia", donjon: "Sanctuaire de Torkélonia", niveau: 200, position: "[-84,-16]", dpln: `${DPLN}sanctuaire-de-torkelonia.html`, statut: "brouillon",
+    acces: ["Sur l'île de Crocuzko, en [-84,-16] : il faut avoir fini la quête « Perdu dans le temps ». Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "Torkélonia invoque au centre une Lunorbe (invulnérable, indéplaçable) qui rend tout le monde invulnérable, elle comme ses monstres.",
+      "La Lunorbe pose un glyphe bleu, en ligne ou en diagonale, qui tourne d'un cran à chaque tour, dans le sens des aiguilles d'une montre.",
+      "Cycle lunaire : à chaque tour, les monstres gagnent un bonus selon la phase de la lune, de la Nouvelle Lune (tour 1) à la Pleine Lune (tour 5). Frapper la Lunorbe fait avancer le cycle.",
+      "Tuer un monstre donne aux autres de la vie et l'invulnérabilité pour un tour, sauf en Nouvelle Lune et en Pleine Lune depuis la 3.7.",
+      "Torkélonia{os} tue le personnage qui l'achève, sauf s'il le fait en Nouvelle Lune.",
+      "Faisceau lunaire : elle frappe en ligne et en diagonale, à n'importe quelle distance.",
+    ],
+    delock: [
+      "Pendant votre tour, placez-vous dans le glyphe bleu et infligez une ligne de dommages : l'invulnérabilité saute pour votre tour. Ne sortez pas du glyphe avant d'avoir fini de frapper.",
+      "Tuer Torkélonia fait disparaître la Lunorbe et son glyphe : ses monstres deviennent vulnérables.",
+    ],
+    strategie: [
+      "Tuez Torkélonia en premier : c'est ce qui rend le reste du combat simple.",
+      "Pour le coup final, attendez la Nouvelle Lune, ou achevez-la avec une invocation.",
+      "Ne restez pas alignés avec elle, ni en ligne ni en diagonale.",
+    ],
+    succes: [
+      "Succès du donjon : Statue, Dernier, Duo (40 tours), Compagnon (à 4 au moins, avec Flamme, Goutte, Nuage, Feuille ou Ténèbre), Spécial « Lunatique » (chaque ennemi achevé en Nouvelle Lune ou en Pleine Lune, sans jamais frapper la Lunorbe pour accélérer le cycle).",
+      "Dernier : avec Torkélonia en dernier, chaque monstre se délocke par le glyphe. C'est long, mais faisable.",
+    ],
+    avertissements: ["Guides de 2019 ; la 3.7 a changé les effets de la Nouvelle et de la Pleine Lune. Achever Torkélonia sans mourir : seulement en Nouvelle Lune, ou aussi en Pleine Lune ? À confirmer."],
+  },
+  {
+    slug: "barberyl-clochecuivre", donjon: "Bastion des Marteaux-Aigris", niveau: 190, position: "[32,-64]", dpln: `${DPLN}bastion-des-marteaux-aigris.html`, statut: "brouillon",
+    acces: ["Dans les Galeries d'Ereboria, sur l'archipel de Valonia (bateau en [36,-76]). Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "Nimpatience : chaque fois qu'un Marteau-Aigri touche un de vos personnages, sa Nimpatience monte (2 fois par tour au plus, 5 niveaux en tout), et elle ne redescend jamais.",
+      "Chaque niveau augmente ses caractéristiques. Au niveau III, il gagne un sort spécial utilisable une fois ; au niveau V, une version plus forte, utilisable à chaque tour.",
+      "Barbéryl échange sa place avec les personnages marqués Clochecuivre et leur retire 100 PM pendant un tour. Si l'échange est impossible (elle ou eux sous Pesanteur), rien ne se passe.",
+    ],
+    delock: ["Barbéryl n'est pas invulnérable : la difficulté vient de la Nimpatience, qui ne fait que monter."],
+    strategie: [
+      "Prenez le moins de coups possible : chaque coup reçu fait monter la Nimpatience du monstre qui l'a donné.",
+      "Tuez Barbéryl tôt, idéalement au tour 2, puis les monstres les plus proches du niveau V.",
+      "La Pesanteur protège de son échange de place et du retrait de 100 PM.",
+    ],
+    succes: ["Succès du donjon : Versatile, Dernier, Duo (20 tours), Compagnon (à 4 au moins, avec Haku, Manitou Zoth, Karotz, Grouillot ou Phong Huss), Spécial « Antioxydant » (aucun ennemi ne doit atteindre la Nimpatience V)."],
+    avertissements: ["Guides de 2022, avant Dofus 3 ; la 3.1 a réduit ses PA (20) et la durée du retrait de PM. Vulnérable dès le début ? À confirmer en jeu."],
+  },
 ];
 
 const simple = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
