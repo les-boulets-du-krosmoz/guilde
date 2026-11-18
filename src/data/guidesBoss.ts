@@ -433,7 +433,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Dernier : tous ses monstres meurent avant lui, donc il arrive à la fin avec beaucoup de PM et de puissance.",
     ],
     avertissements: [
-      "D'après les anciens guides, la mort d'un de vos personnages le renforce aussi.",
+      "La mort d'un de vos personnages le renforce-t-elle aussi, comme celle de ses monstres ? Aucune confirmation récente : à vérifier en jeu.",
     ],
   },
   {
