@@ -463,5 +463,75 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
    21,
    26
   ]
+ },
+ "guerre": {
+  "nom": "Guerre",
+  "niveau": 220,
+  "pv": 25000,
+  "pa": 12,
+  "pm": 6,
+  "res": [
+   30,
+   35,
+   35,
+   25,
+   25
+  ]
+ },
+ "servitude": {
+  "nom": "Servitude",
+  "niveau": 220,
+  "pv": 28000,
+  "pa": 11,
+  "pm": 7,
+  "res": [
+   20,
+   15,
+   30,
+   25,
+   25
+  ]
+ },
+ "misere": {
+  "nom": "Misère",
+  "niveau": 220,
+  "pv": 24000,
+  "pa": 20,
+  "pm": 6,
+  "res": [
+   9,
+   32,
+   19,
+   12,
+   28
+  ]
+ },
+ "corruption": {
+  "nom": "Corruption",
+  "niveau": 220,
+  "pv": 25000,
+  "pa": 20,
+  "pm": 4,
+  "res": [
+   22,
+   16,
+   5,
+   11,
+   25
+  ]
+ },
+ "tempete-eliocalypse": {
+  "nom": "Guerre",
+  "niveau": 220,
+  "pv": 25000,
+  "pa": 12,
+  "pm": 6,
+  "res": [
+   30,
+   35,
+   35,
+   25,
+   25
+  ]
  }
 };

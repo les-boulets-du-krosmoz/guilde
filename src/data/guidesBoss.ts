@@ -843,6 +843,110 @@ export const GUIDES_BOSS: GuideBoss[] = [
     succes: ["Succès du donjon : Prudent, Hardi, Compagnon, Spécial « Chaises musicales » (un ennemi doit échanger avec un allié entre chacun de ses tours), Duo (40 tours)."],
     avertissements: ["La Folie et les échanges de place n'ont été trouvés que dans un guide d'avant Dofus 3 (mis à jour en 2020) : les paliers sont à vérifier en jeu."],
   },
+  {
+    slug: "guerre", donjon: "Trône de Sang", niveau: 200, position: "[4,-2]", dpln: `${DPLN}trone-de-sang.html`, statut: "brouillon",
+    acces: [
+      "Dans la Blessure de Guerre, une des dimensions de l'Éliocalypse, ouvertes depuis le Sanctuaire du dernier espoir ([15,-20]).",
+      "L'entrée en [4,-2] n'est pas sur la carte du village : montez jusqu'à une grotte, redescendez, puis prenez les escaliers sur la gauche.",
+      "Clef par le trousseau, ou à fabriquer avec des ressources de la Blessure de Guerre.",
+    ],
+    mecaniques: [
+      "Guerre est invulnérable tant que des monstres l'accompagnent.",
+      "Ensuite, chaque fois qu'elle perd 20 % de sa vie, elle invoque une arme : Épée, puis Marteau, Hache et Morgenstern. Les armes frappent fort dans leur zone, et la Hache lui donne un bouclier tous les 2 tours.",
+      "Elle ne se sert de ses armes qu'un tour sur trois.",
+      "Olgoth : invulnérable au contact tant qu'il a plus de la moitié de sa vie, puis invulnérable à distance.",
+      "Macabrateur : il frappe le personnage le plus proche, à n'importe quelle distance et sans ligne de vue.",
+    ],
+    delock: ["Tuez tous les monstres qui l'accompagnent : elle devient vulnérable."],
+    strategie: [
+      "Repoussez Guerre loin de vous pendant que vous nettoyez ses monstres.",
+      "Une fois vulnérable, chaque tranche de 20 % fait apparaître une arme : regardez sa zone avant de finir votre tour.",
+    ],
+    succes: [
+      "Succès du donjon : Zombie, Misanthrope, Duo (40 tours), Spécial « Arsenal total » (aucune arme de Guerre ne doit être achevée ni déplacée par un allié).",
+      "Arsenal total : laissez les armes en place et jouez autour de leurs zones.",
+    ],
+    avertissements: ["Les guides de ce donjon datent de sa sortie (2019), avant Dofus 3 : à confirmer en jeu, surtout les armes."],
+  },
+  {
+    slug: "servitude", donjon: "Fers de la Tyrannie", niveau: 200, position: "[4,-3]", dpln: `${DPLN}fers-de-la-tyrannie.html`, statut: "brouillon",
+    acces: ["Dans la Galère de Servitude, une des dimensions de l'Éliocalypse, ouvertes depuis le Sanctuaire du dernier espoir ([15,-20]). Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "Servitude renvoie les dommages qu'on lui inflige (200 %). Pour le frapper sans risque, il faut l'état Traître.",
+      "Pour l'avoir, finissez votre tour dans un des glyphes qu'il pose tous les 2 tours. Un glyphe donne une seule attaque sans renvoi.",
+      "Il invoque une Armécréante au premier tour, puis tous les 2 tours (6 en vie au maximum).",
+      "Une Armécréante qui n'a pris aucun coup direct avant son tour invoque un Iopprimé (2 au maximum chacune).",
+      "Quand il tombe à 1 PV, il revient en arrière et se soigne de 25 % de sa vie.",
+    ],
+    delock: ["Servitude n'est pas invulnérable, mais sans l'état Traître, chaque coup vous revient en double."],
+    strategie: [
+      "Ceux qui vont frapper Servitude finissent leur tour précédent dans un glyphe.",
+      "Touchez chaque Armécréante à chaque tour, même un peu : sinon elle invoque des Iopprimés.",
+      "Gardez assez de dégâts pour le dernier quart de sa vie, après son retour en arrière.",
+    ],
+    succes: [
+      "Succès du donjon : Versatile, Focus, Duo (40 tours), Spécial « Bain de foule » (aucune Armécréante invoquée ne doit être achevée par un allié).",
+      "Bain de foule : sans tuer les Armécréantes, continuez à les toucher chaque tour pour éviter les Iopprimés.",
+    ],
+    avertissements: ["Guides d'avant Dofus 3, complétés avec les changements de la 3.6 (6 Armécréantes au maximum). Le nombre d'attaques par glyphe vient d'un autre combat contre Servitude : à confirmer."],
+  },
+  {
+    slug: "misere", donjon: "Sentence de la Balance", niveau: 200, position: "[1,0]", dpln: `${DPLN}sentence-de-la-balance.html`, statut: "brouillon",
+    acces: ["Dans le Désert de Misère, une des dimensions de l'Éliocalypse, ouvertes depuis le Sanctuaire du dernier espoir ([15,-20]). Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "Au début, Misère n'est pas sur sa monture. À 50 % de sa vie, elle monte dessus, change de sorts et devient invulnérable pendant un tour entier.",
+      "À pied, elle peut renvoyer un personnage à 2 cases sur sa case de début de tour : il devient invulnérable, mais perd 100 PA et 100 PM pendant un tour.",
+      "Montée, elle échange sa place avec un personnage à 4 à 8 cases, sans ligne de vue, tous les 3 tours.",
+      "Chaque coup de Balance-Fléau lui donne 200 de puissance, cumulables.",
+      "Ses monstres volent des caractéristiques à chaque coup, jusqu'à leur mort. Chaque mort laisse une dépouille qu'un monstre proche peut manger pour reprendre de la vie.",
+    ],
+    delock: ["Pas de délock à faire : il faut seulement passer son tour d'invulnérabilité, quand elle monte sur sa monture à 50 %."],
+    strategie: [
+      "Tuez-la vite : elle prend de la puissance à chaque coup de Balance-Fléau.",
+      "Préparez le passage à 50 % : pendant son tour d'invulnérabilité, replacez-vous et soignez.",
+      "Tuez ses monstres loin des autres, pour qu'ils ne puissent pas manger les dépouilles.",
+    ],
+    succes: ["Succès du donjon : Hardi, Mains propres, Duo (40 tours), Spécial « Abjecte opulence » (Misère achevée en premier, et dans l'état Collecte au moins une fois par tour)."],
+    avertissements: ["Guides d'avant Dofus 3, en partie faits sur la version bêta : à confirmer en jeu (dépouilles, invulnérabilité au début du combat)."],
+  },
+  {
+    slug: "corruption", donjon: "Arbre de Mort", niveau: 200, position: "[4,0]", dpln: `${DPLN}arbre-de-mort.html`, statut: "brouillon",
+    acces: ["Dans le Royaume Corrompu, une des dimensions de l'Éliocalypse, ouvertes depuis le Sanctuaire du dernier espoir ([15,-20]). Clef par le trousseau, ou à fabriquer."],
+    mecaniques: [
+      "Corruption a l'état Kissiphrot Sipike : le frapper vous fait prendre un coup en retour. Ses monstres l'ont aussi.",
+      "Maladies : chaque retrait de PA, de PM ou de portée que vous subissez (même venant d'un allié) vous donne une maladie. Il y en a 9, et elles se cumulent.",
+      "Pour guérir, un personnage doit être soigné 3 fois.",
+    ],
+    delock: [
+      "Soignez une entité au contact de Corruption (un soin suffit, même sur un personnage à pleine vie) : il perd l'état, ses monstres aussi, et il descend de sa monture.",
+      "Ça ne dure que 3 tours : s'il est encore en vie, il remonte sur sa monture et reprend l'état.",
+    ],
+    strategie: [
+      "Préparez les 3 tours avant le soin qui délocke : toute l'équipe doit pouvoir taper juste après.",
+      "Évitez les retraits de PA, PM et PO dans votre propre équipe : ils donnent aussi des maladies.",
+      "Gardez du soin pour guérir les maladies (3 soins par personnage).",
+    ],
+    succes: [
+      "Succès du donjon : Collant, Mains propres, Duo (40 tours), Spécial « Immunité collective » (seuls les alliés sans maladie peuvent infliger des dommages).",
+      "Immunité collective : soignez 3 fois un frappeur malade avant qu'il tape.",
+    ],
+    avertissements: ["Guides d'avant Dofus 3 : à confirmer en jeu."],
+  },
+  {
+    slug: "tempete-eliocalypse", donjon: "Tempête de l'Eliocalypse", niveau: 200, position: "Éliocalypse", dpln: `${DPLN}tempete-de-l-eliocalypse.html`, statut: "brouillon",
+    acces: ["Les quatre Cavaliers dans le même combat. Chacun garde la mécanique de son donjon : voir les fiches de Guerre, Servitude, Misère et Corruption."],
+    mecaniques: [
+      "Guerre est invulnérable tant qu'elle n'est pas seule : elle meurt toujours en dernier.",
+      "Servitude renvoie 200 % des dommages : il faut l'état Traître (finir son tour dans le glyphe qu'il pose tous les 2 tours). Il invoque une Armécréante au premier tour puis tous les 2 tours, et à 1 PV il revient en arrière en se soignant de 25 %.",
+      "Misère devient invulnérable un tour quand elle monte sur sa monture, à 50 % de sa vie.",
+      "Corruption : soignez une entité à son contact pour lui retirer l'état qui renvoie les coups ; ses alliés le perdent aussi. Les maladies sont là : 3 soins pour en guérir.",
+    ],
+    delock: ["Chaque Cavalier se traite comme dans son donjon. Guerre ne devient vulnérable qu'une fois les trois autres tombés."],
+    strategie: [
+      "Commencez par Corruption, le plus simple à concentrer, et ne laissez pas traîner Misère, qui prend de la puissance à chaque coup. Guerre en dernier, forcément.",
+    ],
+    avertissements: ["Fiche faite d'après un seul guide : à confirmer en jeu. La fiche du jeu affichée est celle de Guerre."],
+  },
 ];
 
 const simple = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
