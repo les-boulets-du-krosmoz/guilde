@@ -55,6 +55,11 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
 - 18 novembre, suite : Royalmouth, Mansot Royal, Obsidiantre (d'après un joueur), les 4 Cavaliers + Tempête de
   l'Eliocalypse (fiche du jeu de Guerre affichée pour la Tempête), Kabahal, Belladone, Déchireuse, Vénérable Endormi,
   Éternel Conflit, Torkélonia, Barbéryl. Sources souvent d'avant Dofus 3 : avertissements dans chaque fiche.
+- Statut des guides de boss : « relu » (validé par un joueur qui a fait le boss, étiquette « ✓ Guide relu », plus de
+  bandeau « à relire »), « brouillon », « a-rediger ». Relus le 18 novembre : Royalmouth (tuent d'un coup : celui qui lui
+  inflige des dommages de poussée et celui qui en subit contre lui ; seul le Boufmouth légendaire pousse, d'après les
+  données), Mansot Royal (dommages autour du soigné à chaque soin ; le vol de vie ne délocke pas), Obsidiantre (8 cases
+  autour de la Pougnette, explosion au 5e tour). Les fiches niveau 200 restent en brouillon, doutes en avertissement.
 - Prochains guides de boss, dans cet ordre : 1) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro, Orukam) ;
   2) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
 - Combats tactiques : inventaire dans docs/combats-tactiques.md (245 combats classés d'après les données du jeu :

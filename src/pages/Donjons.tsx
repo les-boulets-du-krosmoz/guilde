@@ -41,11 +41,17 @@ export function Donjons() {
   );
 }
 
+const ETIQUETTE: Record<GuideBoss["statut"], { texte: string; classe: string }> = {
+  relu: { texte: "✓ Guide relu", classe: "etiquette--groupe" },
+  brouillon: { texte: "Guide à relire", classe: "etiquette--aide" },
+  "a-rediger": { texte: "Fiche du jeu", classe: "" },
+};
+
 function Guides() {
   const [params, setParams] = useSearchParams();
   const ouvert = GUIDES_BOSS.find((g) => g.slug === params.get("boss")) ?? null;
   const setOuvert = (g: GuideBoss | null) => setParams(g ? { onglet: "guides", boss: g.slug } : { onglet: "guides" }, { replace: true });
-  const tries = [...GUIDES_BOSS].sort((a, b) => Number(a.statut !== "brouillon") - Number(b.statut !== "brouillon") || (STATS_BOSS[a.slug]?.nom ?? "").localeCompare(STATS_BOSS[b.slug]?.nom ?? ""));
+  const tries = [...GUIDES_BOSS].sort((a, b) => Number(a.statut === "a-rediger") - Number(b.statut === "a-rediger") || (STATS_BOSS[a.slug]?.nom ?? "").localeCompare(STATS_BOSS[b.slug]?.nom ?? ""));
   return (
     <main className="page">
       <p className="discret">Les boss qui demandent une stratégie : accès, mécaniques et astuces, rédigés par la guilde. Les caractéristiques viennent des données du jeu.</p>
@@ -57,7 +63,7 @@ function Guides() {
               <button type="button" className="carte guides-boss__carte" onClick={() => setOuvert(g)}>
                 <img src={`/icones/boss/${g.slug}.webp`} alt="" width={72} height={72} loading="lazy" />
                 <span className="guides-boss__nom"><strong>{s?.nom ?? g.slug}</strong><span className="discret-taille">{g.donjon} · niv. {g.niveau}</span></span>
-                <span className={`etiquette ${g.statut === "brouillon" ? "etiquette--aide" : ""}`}>{g.statut === "brouillon" ? "Guide à relire" : "Fiche du jeu"}</span>
+                <span className={`etiquette ${ETIQUETTE[g.statut].classe}`}>{ETIQUETTE[g.statut].texte}</span>
               </button>
             </li>
           );
@@ -92,9 +98,8 @@ export function FicheBoss({ guide }: { guide: GuideBoss }) {
           )}
         </div>
       </div>
-      {guide.statut === "brouillon"
-        ? <p className="fiche-boss__statut">📝 Première version, à faire relire par un membre qui a fait ce boss : signalez les erreurs aux officiers.</p>
-        : <p className="fiche-boss__statut">Guide pas encore rédigé : en attendant, voir le guide détaillé ci-dessous.</p>}
+      {guide.statut === "brouillon" && <p className="fiche-boss__statut">📝 Première version, à faire relire par un membre qui a fait ce boss : signalez les erreurs aux officiers.</p>}
+      {guide.statut === "a-rediger" && <p className="fiche-boss__statut">Guide pas encore rédigé : en attendant, voir le guide détaillé ci-dessous.</p>}
       {guide.avertissements?.length ? (
         <div className="fiche-boss__alerte" role="note">{guide.avertissements.map((x, k) => <p key={k}>⚠ {x}</p>)}</div>
       ) : null}
