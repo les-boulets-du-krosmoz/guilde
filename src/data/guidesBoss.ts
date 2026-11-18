@@ -344,9 +344,11 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     delock: [
       "Dans le même tour, il faut faire deux choses : pousser ou attirer un Yokaï en diagonale du Tengu, et frapper à l'arme un Yomi aligné avec le Tengu.",
-      "Le Tengu change alors d'apparence à son tour de jeu et devient vulnérable pendant 4 tours.",
+      "Un Yokaï déjà en diagonale ne compte pas : il faut l'y amener par une poussée ou une attirance.",
+      "Quand la condition est remplie, le monstre se transforme : c'est le signe qu'il a l'état qui délocke le Tengu, pour le Yokaï comme pour le Yomi. Pas de transformation, pas de délock.",
+      "Le Tengu se délocke ensuite à son propre tour de jeu : il change d'apparence et reste vulnérable pendant 4 tours.",
       "Une seule des deux conditions ne suffit pas, et elle est punie : selon celle qui manque, il tue un personnage au contact ou érode toute l'équipe de 30 % pendant un tour.",
-      "Ne tuez pas le dernier Yokaï ni le dernier Yomi avant le délock : sans eux, il faut attendre ses invocations.",
+      "Si le Tengu invoque un Yokaï ou un Yomi, gardez l'invocation en vie et tuez le monstre du même type venu avec la salle : un exemplaire de chaque suffit, et il y a moins de monstres sur le terrain.",
     ],
     strategie: [
       "Décidez avant le combat qui pousse ou attire le Yokaï et qui frappe le Yomi à l'arme : une arme qui porte à plusieurs cases évite d'aller au contact du Yomi.",
@@ -390,7 +392,8 @@ export const GUIDES_BOSS: GuideBoss[] = [
     strategie: [
       "Avant de finir votre tour, vérifiez qu'aucune poussée (Sporakne, sorts alliés) ni l'attirance du Korriandre ne peut vous déposer sur un glyphe avant votre prochain tour : vous mourriez en le commençant.",
       "Ne frappez jamais la Mérulette à distance, et prévenez l'équipe avant la salle du boss, où elle est aussi.",
-      "Commencez par l'Abrazif (retrait de PA) et la Dramanite (poison selon les PA dépensés). Le Fongeur frappe plus fort à mesure qu'on le blesse : laissez-le pour la fin et tuez-le d'un coup.",
+      "Commencez par l'Abrazif (retrait de PA) et la Dramanite (poison selon les PA dépensés).",
+      "Le Fongeur frappe toute la carte à partir de 3 cases de lui, mais rien à 2 cases ou moins : restez à son contact et bloquez-le dans un coin, il ne pourra rien faire. Dans la salle du boss, les glyphes occupent vite les cases sûres autour de lui : tuez-le tant qu'il en reste.",
       "Ne laissez pas traîner le combat : chaque tour ajoute des glyphes, et la carte devient vite un piège.",
     ],
     succes: [
@@ -400,7 +403,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     avertissements: [
       "Le combat a changé en juin 2026 (mise à jour 3.6) : beaucoup de guides décrivent encore un Korriandre sans invulnérabilité. Si ce qui est écrit ici ne colle pas en jeu, dis-le aux officiers.",
-      "Les monstres du donjon (Mérulette, Abrazif, Dramanite, Fongeur) sont décrits d'après des guides d'avant Dofus 3.",
+      "La Mérulette, l'Abrazif et la Dramanite sont décrits d'après des guides d'avant Dofus 3.",
     ],
   },
   {
@@ -451,7 +454,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Le Grolloum est invulnérable. Lui retirer des PM (même une simple tentative) lui donne d'énormes résistances pendant un tour.",
       "Tous les 2 tours, il ressuscite le dernier monstre tué (de 5 à 10 cases de lui), avec un quart de sa vie. Le monstre revient en Zombi : il mourra avec le Grolloum.",
       "Invulnérable, il frappe au contact sur une ligne (vol de vie Eau, retrait de portée) et se soigne. Vulnérable, il échange sa place avec un personnage à 1 à 4 cases et le frappe (Feu).",
-      "Gobus : il ne bouge pas. Dès son deuxième tour, il peut exploser : d'énormes dommages Feu à chaque personnage aligné avec lui, à n'importe quelle distance et même derrière un obstacle. Il meurt dans l'explosion. Le Perkü en invoque d'autres.",
+      "Gobus : il ne bouge pas. Dès son deuxième tour, il peut exploser et tue alors d'un coup chaque personnage aligné avec lui, à n'importe quelle distance et même derrière un obstacle. Il meurt dans l'explosion. Le Perkü en invoque d'autres.",
       "Gobosteur et Marôdeur retirent ou volent des PA et des PM ; le Courtilieur attire de 4 cases et frappe fort au contact.",
     ],
     delock: [
@@ -470,7 +473,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Blitzkrieg : un ennemi frappé doit mourir avant son tour. Pour le Grolloum, tout se joue dans le tour du délock.",
     ],
     avertissements: [
-      "Les guides détaillés de ce donjon datent d'avant Dofus 3. La résurrection à un quart de vie et l'explosion du Gobus sont lues dans les données du jeu : à confirmer en combat.",
+      "Les guides détaillés de ce donjon datent d'avant Dofus 3. La résurrection à un quart de vie est lue dans les données du jeu : à confirmer en combat.",
     ],
   },
   {

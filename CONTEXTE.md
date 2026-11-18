@@ -40,6 +40,9 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   avec les données 3.7 (sorts, portées, durées). Korriandre refait en 3.6 (invulnérable, délock par la Sporakne sur un
   glyphe). Ouverts : Tengu (« même tour » à un ou deux personnages, 4 tours de vulnérabilité lus dans les données, ce qui
   fait venir la Fuji), Glourséleste (infliger des dommages de poussée tue-t-il aussi ?), Grolloum (chiffres des données).
+  Corrigé d'après un joueur : Yokaï à pousser ou attirer (déjà en diagonale ne compte pas), Yokaï et Yomi transformés
+  quand ils ont l'état, délock au tour du Tengu, garder ses invocations et tuer ceux de la salle ; Fongeur sans danger à
+  2 cases ou moins (frappe toute la carte au-delà) ; explosion du Gobus mortelle.
 - À revoir : depuis la 3.7, les données du jeu décrivent la mécanique de certains boss (sort initial, ex. Cohobation de
   Nileza, Chambranle de Sylargh, Congère de Missiz Frizz). Ces textes contredisent en partie nos fiches Nileza (échange
   seulement à distance, Pacifiste si trop loin, mort au contact d'un allié), Sylargh (Pacifiste pour les alliés à 90 % de
