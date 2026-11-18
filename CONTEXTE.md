@@ -32,15 +32,21 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
 - Secrets : METAMOB_API_KEY, DISCORD_WEBHOOK_BROCANTE (facultatif), SUPABASE_DB_URL et SAUVEGARDE_PHRASE (GitHub, sauvegarde).
 
 ## Chantiers en cours
-- Guides de boss (src/data/guidesBoss.ts, page Donjons > Guides) : 26 fiches rédigées, à relire. Points ouverts en
+- Guides de boss (src/data/guidesBoss.ts, page Donjons > Guides) : 30 fiches rédigées, à relire. Points ouverts en
   « avertissements » dans chaque fiche (Reine des Voleurs : bonbombes ; Meno : délock ; Ilyzaelle : emprise ; Dazak :
   résistances ; Protozorreur : nombre de tours ; Sylargh : second kill ; Ombre : sort Paranoïa non décrit ; les 7 boss
   THL ajoutés en novembre reposent sur des guides d'avant Dofus 3, mécaniques chiffrées à confirmer en jeu).
-- Prochains guides de boss, dans cet ordre : 1) Frigost (Tanière Givrefoux, Antre du Korriandre, Antichambre des
-  Gloursons, Mine de Sakaï) ; 2) récents niv. 200 (Éliocalypse, Belladone, Kabahal, Déchireuse, Vénérable, Aurore
-  Pourpre, Marteaux-Aigris, Torkélonia) ; 3) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro, Orukam) ;
-  4) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao). Les 3 Frigost s'afficheront seuls dans
-  la liste des donjons de Frigost (lien « Mécaniques du boss »), le slug suffit.
+- Fiches Frigost du 18 novembre (tengu-givrefoux, korriandre, glourseleste, grolloum) : guides d'avant Dofus 3 croisés
+  avec les données 3.7 (sorts, portées, durées). Korriandre refait en 3.6 (invulnérable, délock par la Sporakne sur un
+  glyphe). Ouverts : Tengu (« même tour » à un ou deux personnages, 4 tours de vulnérabilité lus dans les données, ce qui
+  fait venir la Fuji), Glourséleste (infliger des dommages de poussée tue-t-il aussi ?), Grolloum (chiffres des données).
+- À revoir : depuis la 3.7, les données du jeu décrivent la mécanique de certains boss (sort initial, ex. Cohobation de
+  Nileza, Chambranle de Sylargh, Congère de Missiz Frizz). Ces textes contredisent en partie nos fiches Nileza (échange
+  seulement à distance, Pacifiste si trop loin, mort au contact d'un allié), Sylargh (Pacifiste pour les alliés à 90 % de
+  vie ou plus) et Missiz Frizz : à comparer avant de les passer en relu.
+- Prochains guides de boss, dans cet ordre : 1) récents niv. 200 (Éliocalypse, Belladone, Kabahal, Déchireuse,
+  Vénérable, Aurore Pourpre, Marteaux-Aigris, Torkélonia) ; 2) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro,
+  Orukam) ; 3) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
 - Combats tactiques : inventaire dans docs/combats-tactiques.md (245 combats classés d'après les données du jeu :
   10 confirmés dont 2 avec fiche, 124 à vérifier, 111 écartés). Les données ne marquent pas les combats tactiques :
   « monstre de quête » est un filtre, pas une preuve. Vérifier Dofus par Dofus (un guide de quêtes couvre toute la série).
@@ -79,6 +85,8 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   idée d'un fichier à part (comme combatsTactiques.ts), pas encore validée.
 - Liens « Guide détaillé » des 7 boss THL : page générale donjons.html de Dofus pour les Noobs, faute d'adresse exacte
   trouvée. À remplacer par l'adresse de chaque page.
-- Fiche du jeu d'un boss (caractéristiques + portrait) : python3 scripts/generer-boss.py <version> slug=idMonstre.
+- Fiche du jeu d'un boss (caractéristiques + portrait) : python3 scripts/generer-boss.py <version> slug=idMonstre
+  (3.7.14.18 par défaut ; données 3.6 et 3.7 lues toutes les deux, cache par version dans /tmp/d3/<version>).
+  Les 26 fiches existantes sont identiques en 3.7.
 - Icônes de caractéristiques manquantes (Brocante) : attendre les numéros donnés par le propriétaire du site.
 - Idées validées sur le principe, à cadrer : niveau et hauts faits de la guilde.

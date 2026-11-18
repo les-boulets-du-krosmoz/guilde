@@ -1,4 +1,4 @@
-// Généré depuis les données du jeu (monsters.json, version 3.6) : caractéristiques au grade le plus haut.
+// Généré depuis les données du jeu (monsters.json, version 3.7) : caractéristiques au grade le plus haut.
 // res = résistances en % : Neutre, Terre, Feu, Eau, Air. Images dans public/icones/boss.
 export type StatsBoss = { nom: string; niveau: number; pv: number; pa: number; pm: number; res: number[] };
 export const STATS_BOSS: Record<string, StatsBoss> = {
@@ -364,6 +364,62 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
    17,
    17,
    28
+  ]
+ },
+ "tengu-givrefoux": {
+  "nom": "Tengu Givrefoux",
+  "niveau": 170,
+  "pv": 13000,
+  "pa": 15,
+  "pm": 5,
+  "res": [
+   33,
+   13,
+   19,
+   28,
+   21
+  ]
+ },
+ "korriandre": {
+  "nom": "Korriandre",
+  "niveau": 180,
+  "pv": 14000,
+  "pa": 15,
+  "pm": 6,
+  "res": [
+   45,
+   9,
+   15,
+   5,
+   17
+  ]
+ },
+ "glourseleste": {
+  "nom": "Glourséleste",
+  "niveau": 190,
+  "pv": 15000,
+  "pa": 20,
+  "pm": 8,
+  "res": [
+   25,
+   21,
+   16,
+   24,
+   23
+  ]
+ },
+ "grolloum": {
+  "nom": "Grolloum",
+  "niveau": 190,
+  "pv": 15000,
+  "pa": 20,
+  "pm": 6,
+  "res": [
+   34,
+   21,
+   31,
+   -5,
+   24
   ]
  }
 };

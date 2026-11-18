@@ -2,21 +2,23 @@
 dans public/icones/boss/<slug>.webp, à partir des données extraites par dofusdude/dofus3-main.
 
 Usage : python3 scripts/generer-boss.py [version] slug=idMonstre [slug=idMonstre ...]
-Exemple : python3 scripts/generer-boss.py 3.6.12.16 ombre=3564
+Exemple : python3 scripts/generer-boss.py 3.7.14.18 ombre=3564
 Sans argument slug=id, toutes les fiches déjà présentes sont rafraîchies (même numéro de monstre, retrouvé par son nom).
 Le slug doit être celui de la fiche dans src/data/guidesBoss.ts.
+Données 3.6 et 3.7 acceptées (les résistances s'appellent neutralResistance… en 3.6, reductionNeutral… en 3.7).
 """
 import io, json, pathlib, sys, tarfile, urllib.request
 from PIL import Image
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
-CACHE = pathlib.Path("/tmp/d3")
 args = sys.argv[1:]
-version = args.pop(0) if args and "=" not in args[0] else "3.6.12.16"
+version = args.pop(0) if args and "=" not in args[0] else "3.7.14.18"
+CACHE = pathlib.Path("/tmp/d3") / version  # un dossier par version : sinon une autre version déjà téléchargée serait relue
 choix = {a.split("=")[0]: int(a.split("=")[1]) for a in args}
+RES = lambda g, e: g[f"{e}Resistance"] if f"{e}Resistance" in g else g[f"reduction{e.capitalize()}"]
 
 def fichier(nom):
-    CACHE.mkdir(exist_ok=True)
+    CACHE.mkdir(parents=True, exist_ok=True)
     f = CACHE / nom
     if not f.exists():
         urllib.request.urlretrieve(f"https://github.com/dofusdude/dofus3-main/releases/download/{version}/{nom}", f)
@@ -39,7 +41,7 @@ if not choix:  # rafraîchir l'existant
 for slug, mid in choix.items():
     m = mons[mid]; g = m["grades"]["Array"][-1]
     stats[slug] = {"nom": T(m["nameId"]), "niveau": g["level"], "pv": g["lifePoints"], "pa": g["actionPoints"], "pm": g["movementPoints"],
-                   "res": [g["neutralResistance"], g["earthResistance"], g["fireResistance"], g["waterResistance"], g["airResistance"]]}
+                   "res": [RES(g, e) for e in ("neutral", "earth", "fire", "water", "air")]}
     f = par_nom.get(f"{m['gfxId']}-128.png")
     if not f:
         print("portrait introuvable :", slug); continue

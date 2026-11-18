@@ -328,6 +328,152 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
+    slug: "tengu-givrefoux", donjon: "Tanière Givrefoux", niveau: 170, position: "[-80,-75]", dpln: `${DPLN}taniegravere-givrefoux.html`, statut: "brouillon",
+    acces: [
+      "Au fond des Cavernes Givrefoux, dans la Crevasse Perge : la zone s'ouvre une fois l'Obsidiantre vaincu.",
+      "Clef par le trousseau, ou à fabriquer avec des ressources des Givrefoux de la zone.",
+      "La salle du boss existe en deux versions : le Tengu seul, ou le Tengu avec la Fuji Givrefoux Nourricière, qui prend la place d'une Kami. Chaque boss a ses propres succès.",
+    ],
+    mecaniques: [
+      "Le Tengu est invulnérable. Il ne frappe qu'au contact, mais il attire de 3 cases jusqu'à 8 cases de distance.",
+      "Au tour 2, puis tous les 3 tours, il invoque un Yokaï ou un Yomi Givrefoux : toujours celui des deux qui manque sur le terrain.",
+      "Yomi : au contact, il retire 10 PM jusqu'à son prochain tour. Yokaï : il se téléporte et frappe autour de lui, d'autant plus fort qu'il a perdu de la vie.",
+      "Kami : elle ne frappe qu'en diagonale, jusqu'à 7 cases. Ne finissez pas votre tour dans ses diagonales.",
+      "Fuji Givrefoux Nourricière : pas d'invulnérabilité, mais au contact elle tue un personnage et le remplace par un Givrefoux (une fois par tour, pas au premier). Elle frappe aussi en diagonale, à 3 ou 4 cases, avec 20 % d'érosion.",
+      "Chaque monstre tué donne 1 PM à tous les monstres pendant un tour (cumulable), et 1 000 dommages au Tengu et à la Fuji. Tous les 3 tours, la Fuji soigne les monstres à 5 cases autour d'elle et leur donne 200 dommages pendant 2 tours.",
+    ],
+    delock: [
+      "Dans le même tour, il faut faire deux choses : pousser ou attirer un Yokaï en diagonale du Tengu, et frapper à l'arme un Yomi aligné avec le Tengu.",
+      "Le Tengu change alors d'apparence à son tour de jeu et devient vulnérable pendant 4 tours.",
+      "Une seule des deux conditions ne suffit pas, et elle est punie : selon celle qui manque, il tue un personnage au contact ou érode toute l'équipe de 30 % pendant un tour.",
+      "Ne tuez pas le dernier Yokaï ni le dernier Yomi avant le délock : sans eux, il faut attendre ses invocations.",
+    ],
+    strategie: [
+      "Décidez avant le combat qui pousse ou attire le Yokaï et qui frappe le Yomi à l'arme : une arme qui porte à plusieurs cases évite d'aller au contact du Yomi.",
+      "Tenez le Yomi à distance en dehors du délock : ses 10 PM retirés bloquent un personnage tout un tour.",
+      "Avec la Fuji, restez à plus de 5 cases d'elle et hors de ses diagonales, et davantage quand des monstres viennent de mourir (1 PM de plus par mort).",
+      "Elle n'est pas invulnérable : on peut commencer par elle pendant que le Tengu est protégé. Évitez seulement d'enchaîner plusieurs morts juste avant le tour des monstres.",
+    ],
+    succes: [
+      "Succès du Tengu : Premier, Statue, Duo (15 tours), Spécial « Autonomie givrée » (chaque allié finit son tour à plus de 4 cases de tous les autres).",
+      "Succès de la Fuji : Dernier, Statue, Duo (20 tours), Compagnon (à 4 au moins, avec Rapiat, Rapine, Ougicle ou Hulkrap), Spécial « Émancipation maternelle » (ne jamais finir son tour en ligne d'un ennemi).",
+      "Premier : délockez le Tengu dès les premiers tours, avec le Yokaï et le Yomi de la salle.",
+      "Émancipation maternelle : la carte est étroite, et un Yomi au contact (10 PM en moins) peut vous laisser coincé en ligne d'un ennemi. Gardez-le loin.",
+    ],
+    avertissements: [
+      "Les guides détaillés de ce donjon datent d'avant Dofus 3, sauf pour les invocations du Tengu (revues en 2024) : chiffres à confirmer en jeu.",
+      "La durée de vulnérabilité (4 tours) est lue dans les données du jeu : à vérifier en combat.",
+      "« Dans le même tour » : faut-il un seul personnage, ou deux personnages qui jouent avant le Tengu suffisent-ils ? À vérifier en combat.",
+      "On ne sait pas ce qui fait tomber sur la version avec la Fuji : si tu le sais, dis-le aux officiers.",
+    ],
+  },
+  {
+    slug: "korriandre", donjon: "Antre du Korriandre", niveau: 180, position: "[-73,-69]", dpln: `${DPLN}antre-du-korriandre.html`, statut: "brouillon",
+    acces: [
+      "Dans la Forêt Pétrifiée, après le Tengu Givrefoux. Le plus rapide : le Transporteur Frigostien de la Forêt Pétrifiée, en [-76,-66].",
+      "Clef par le trousseau, ou à fabriquer avec des ressources des monstres du donjon.",
+    ],
+    mecaniques: [
+      "Au début du tour de chaque personnage, un glyphe apparaît sous lui et reste jusqu'à la fin du combat. Commencer ou finir son tour sur un glyphe tue, invocations et compagnons compris.",
+      "Votre case de départ devient donc un glyphe dès votre premier tour : il faut bouger à chaque tour, et la place libre diminue à mesure que le combat dure.",
+      "Le Korriandre est invulnérable au début du combat (changement de la mise à jour 3.6, en juin 2026). Tant qu'il l'est, il invoque une Sporakne : au premier tour, puis au plus tous les 3 tours.",
+      "La Sporakne a 5 PM et en perd 1 à chaque coup reçu (3 au plus). Quand on la pousse ou qu'on l'attire, elle repousse d'une case tout ce qui est aligné avec elle.",
+      "Le Korriandre attire de 3 cases en ligne (jusqu'à 4 cases de distance) en retirant de la fuite, et frappe d'autant plus fort qu'il a perdu de la vie.",
+      "Mérulette : la frapper à distance renvoie tous les joueurs à leur case de départ, c'est-à-dire sur un glyphe. La frapper au contact ne déclenche rien.",
+    ],
+    delock: [
+      "Faites finir son tour à la Sporakne sur un des glyphes de vos personnages : elle meurt, et le Korriandre devient vulnérable jusqu'à la fin du combat.",
+      "Elle n'attaque qu'au contact : placez un personnage ou une invocation à côté d'un glyphe, pour qu'elle s'y arrête en venant le frapper. Son coup repousse d'une case : la case derrière l'appât ne doit pas être un glyphe.",
+      "La frapper avant son tour lui retire des PM et l'aide à s'arrêter au bon endroit.",
+      "Vulnérable, le Korriandre gagne 1 PM et 200 de puissance, n'invoque plus de Sporakne, et peut se téléporter jusqu'à 3 cases tous les 2 tours.",
+    ],
+    strategie: [
+      "Avant de finir votre tour, vérifiez qu'aucune poussée (Sporakne, sorts alliés) ni l'attirance du Korriandre ne peut vous déposer sur un glyphe avant votre prochain tour : vous mourriez en le commençant.",
+      "Ne frappez jamais la Mérulette à distance, et prévenez l'équipe avant la salle du boss, où elle est aussi.",
+      "Commencez par l'Abrazif (retrait de PA) et la Dramanite (poison selon les PA dépensés). Le Fongeur frappe plus fort à mesure qu'on le blesse : laissez-le pour la fin et tuez-le d'un coup.",
+      "Ne laissez pas traîner le combat : chaque tour ajoute des glyphes, et la carte devient vite un piège.",
+    ],
+    succes: [
+      "Succès du donjon : Mystique (sorts seulement, pas d'arme), Zombie (exactement 1 PM par tour), Duo (15 tours), Spécial « Pas dans mes pattes » (chaque allié finit son tour à plus de 3 cases d'un autre).",
+      "Zombie : un seul PM par tour suffit pour quitter votre glyphe, mais pas pour éviter les poussées. Préparez votre chemin case par case.",
+      "Mystique : la Mérulette se frappe toujours au contact, avec un sort.",
+    ],
+    avertissements: [
+      "Le combat a changé en juin 2026 (mise à jour 3.6) : beaucoup de guides décrivent encore un Korriandre sans invulnérabilité. Si ce qui est écrit ici ne colle pas en jeu, dis-le aux officiers.",
+      "Les monstres du donjon (Mérulette, Abrazif, Dramanite, Fongeur) sont décrits d'après des guides d'avant Dofus 3.",
+    ],
+  },
+  {
+    slug: "glourseleste", donjon: "Antichambre des Gloursons", niveau: 190, position: "[-63,-75]", dpln: `${DPLN}antichambre-des-gloursons.html`, statut: "brouillon",
+    acces: [
+      "Dans la Ruche des Gloursons, au Mont Torrideau : la zone s'ouvre après les Cavernes du Kolosso.",
+      "Clef par le trousseau, ou à fabriquer avec des ressources des Gloursons.",
+      "Le vaincre une fois ouvre Frigost III.",
+    ],
+    mecaniques: [
+      "Pendant tout le combat, subir des dommages de poussée tue sur le coup. Le Glourmand pousse : ne restez jamais entre lui et un obstacle ou un allié.",
+      "Le Glourséleste est invulnérable.",
+      "Le déplacer (poussée, attirance, échange de place) ou lui retirer des PM ou de la portée lui fait ressusciter les monstres déjà tués, avec toute leur vie.",
+      "Le Glouragan attire tout ce qui est aligné avec lui quand on le frappe : s'il est aligné avec le Glourséleste, il le déplace, et les monstres reviennent.",
+      "Tous les 2 tours, le Glourséleste alourdit ses monstres et leur donne du tacle : quitter le contact de l'un d'eux tue alors, sauf à fuir sans rien perdre.",
+      "Il frappe d'autant plus fort au contact qu'il a perdu de la vie, et jusqu'à 5 cases il échange sa place avec sa cible.",
+      "Meliglours : il encaisse les coups destinés à un allié et lui donne 1 000 de vitalité.",
+    ],
+    delock: [
+      "Frappez-le au contact : il devient vulnérable pendant le tour du personnage qui l'a frappé, et seulement ce tour-là.",
+      "Ce coup repousse de 4 cases tout ce qui est aligné avec lui jusqu'à 4 cases, celui qui frappe compris. Un personnage repoussé contre un obstacle ou une entité prend des dommages de poussée, donc meurt.",
+      "Ouvrez avec un coup au contact peu coûteux en PA, avec 4 cases libres derrière vous, puis enchaînez à distance pendant le même tour.",
+    ],
+    strategie: [
+      "Éliminez d'abord ses monstres, en commençant par le Glourmand, sans jamais toucher au Glourséleste.",
+      "Prévenez l'équipe : aucun retrait de PM ou de portée sur lui, aucune poussée. Méfiez-vous des sorts de zone qui repoussent ou volent des PM sans qu'on y pense.",
+      "Ne frappez pas le Glouragan quand il est aligné avec le Glourséleste.",
+      "Avant de vous attaquer à lui, reboostez et protégez l'équipe. L'érosion aide, et ne laissez pas traîner la fin : plus il perd de vie, plus il frappe fort.",
+    ],
+    succes: [
+      "Succès du donjon : Premier, Collant, Duo (20 tours), Compagnon (à 4 au moins, avec Inferno, Styx, Mandrin ou Will Killson), Spécial « Complaisance gloursonne » (aucun retrait de PM, de PA ou de portée et aucun déplacement sur les ennemis).",
+      "Premier : il faut le tuer avec tous ses monstres en vie. Prévoyez beaucoup de protection et du désenvoûtement.",
+      "Collant : très difficile, car les poussées du Glourmand et celle du délock séparent l'équipe.",
+    ],
+    avertissements: [
+      "Les guides détaillés de ce donjon datent d'avant Dofus 3 : chiffres à confirmer en jeu.",
+      "Un seul guide affirme qu'infliger des dommages de poussée tue aussi (et pas seulement en subir) : dans le doute, n'en infligez pas.",
+    ],
+  },
+  {
+    slug: "grolloum", donjon: "Donjon de la mine de Sakaï", niveau: 190, position: "[-52,-45]", dpln: `${DPLN}donjon-de-la-mine-de-sakaiuml.html`, statut: "brouillon",
+    acces: [
+      "Dans la Forêt Enneigée de l'île de Sakaï.",
+      "Clef par le trousseau, ou à fabriquer avec des ressources des monstres de l'île.",
+      "Pour le Dofus des Glaces, Au fion du trou et La machine à démonter le temps demandent toutes deux ce donjon : faites-les en une seule fois.",
+    ],
+    mecaniques: [
+      "Le Grolloum est invulnérable. Lui retirer des PM (même une simple tentative) lui donne d'énormes résistances pendant un tour.",
+      "Tous les 2 tours, il ressuscite le dernier monstre tué (de 5 à 10 cases de lui), avec un quart de sa vie. Le monstre revient en Zombi : il mourra avec le Grolloum.",
+      "Invulnérable, il frappe au contact sur une ligne (vol de vie Eau, retrait de portée) et se soigne. Vulnérable, il échange sa place avec un personnage à 1 à 4 cases et le frappe (Feu).",
+      "Gobus : il ne bouge pas. Dès son deuxième tour, il peut exploser : d'énormes dommages Feu à chaque personnage aligné avec lui, à n'importe quelle distance et même derrière un obstacle. Il meurt dans l'explosion. Le Perkü en invoque d'autres.",
+      "Gobosteur et Marôdeur retirent ou volent des PA et des PM ; le Courtilieur attire de 4 cases et frappe fort au contact.",
+    ],
+    delock: [
+      "Tuez un monstre, puis attendez que le Grolloum le ressuscite et lui lance Gelée blanche (le Zombi gagne 200 dommages pendant un tour : vérifiez qu'il a bien l'effet, sinon attendez un tour).",
+      "Achevez ce Zombi pendant qu'il est au contact du Grolloum : le Grolloum perd son invulnérabilité pendant un tour.",
+      "Recommencez autant de fois qu'il le faut. Pour le placement, déplacez l'un ou l'autre (attirance, poussée, échange de place), mais sans retrait de PM sur le Grolloum.",
+    ],
+    strategie: [
+      "Ne finissez jamais votre tour aligné avec un Gobus. Tuez en priorité le Perkü, qui en invoque.",
+      "Gardez sous la main un monstre facile à achever pour le délock, et assez de dégâts pour le tour où le Grolloum est vulnérable : moins de délocks, moins de risques.",
+      "Une fois vulnérable, il échange sa place avec un de vos personnages : regardez où il pourrait vous envoyer, surtout dans la ligne d'un Gobus.",
+    ],
+    succes: [
+      "Succès du donjon : Versatile, Blitzkrieg, Duo (28 tours), Compagnon (à 4 au moins, avec Grüt, Gobeuf, Turyé ou Piggy Paupe), Spécial « On voulait l'autre » (ne jamais déplacer un ennemi Zombi).",
+      "On voulait l'autre : c'est le Grolloum qu'il faut amener au contact du Zombi, pas l'inverse.",
+      "Blitzkrieg : un ennemi frappé doit mourir avant son tour. Pour le Grolloum, tout se joue dans le tour du délock.",
+    ],
+    avertissements: [
+      "Les guides détaillés de ce donjon datent d'avant Dofus 3. La résurrection à un quart de vie et l'explosion du Gobus sont lues dans les données du jeu : à confirmer en combat.",
+    ],
+  },
+  {
     slug: "reine-des-voleurs", donjon: "Trône de la Cour Sombre", niveau: 200, position: "Hauts Ténébreux (Srambad)", dpln: `${DPLN}trone-de-la-cour-sombre.html`, statut: "brouillon",
     acces: [
       "Au sommet de la pyramide de Srambad, dans les Hauts Ténébreux. On entre dans la dimension par le portail de Srambad, dont la position s'obtient par une chasse au trésor.",
