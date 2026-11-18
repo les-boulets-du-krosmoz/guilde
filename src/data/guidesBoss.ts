@@ -414,12 +414,12 @@ export const GUIDES_BOSS: GuideBoss[] = [
     mecaniques: [
       "Le Mansot Royal est invulnérable.",
       "Chaque monstre tué lui donne 1 PM et de la puissance.",
-      "À chaque soin reçu par un de vos personnages, ceux qui sont à 2 cases ou moins de lui prennent des dommages.",
+      "À chaque soin reçu par un de vos personnages, ceux qui sont à 2 cases ou moins de lui prennent des dommages. Le vol de vie n'est pas un soin : il ne déclenche rien.",
       "Il vole de la vie et échange sa place avec sa cible (jusqu'à 2 cases). Vulnérable, il frappe d'autant plus fort au contact qu'il a perdu de la vie.",
       "Mamansot : il ressuscite les monstres tués. À éliminer tôt.",
     ],
     delock: [
-      "Soignez un de vos personnages placé au contact du Mansot Royal : il devient vulnérable. Le soin doit rendre de la vie : un personnage déjà au maximum ne compte pas, et le vol de vie ne délocke pas.",
+      "Soignez un de vos personnages placé au contact du Mansot Royal : il devient vulnérable. Le soin doit rendre de la vie : un personnage déjà au maximum ne compte pas, et le vol de vie non plus.",
       "Écartez les autres de ce personnage avant le soin : à 2 cases ou moins de lui, ils prennent des dommages.",
     ],
     strategie: [
@@ -461,7 +461,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "tengu-givrefoux", donjon: "Tanière Givrefoux", niveau: 170, position: "[-80,-75]", dpln: `${DPLN}taniegravere-givrefoux.html`, statut: "brouillon",
+    slug: "tengu-givrefoux", donjon: "Tanière Givrefoux", niveau: 170, position: "[-80,-75]", dpln: `${DPLN}taniegravere-givrefoux.html`, statut: "relu",
     acces: [
       "Au fond des Cavernes Givrefoux, dans la Crevasse Perge : la zone s'ouvre une fois l'Obsidiantre vaincu.",
       "Clef par le trousseau, ou à fabriquer avec des ressources des Givrefoux de la zone.",
@@ -504,7 +504,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "korriandre", donjon: "Antre du Korriandre", niveau: 180, position: "[-73,-69]", dpln: `${DPLN}antre-du-korriandre.html`, statut: "brouillon",
+    slug: "korriandre", donjon: "Antre du Korriandre", niveau: 180, position: "[-73,-69]", dpln: `${DPLN}antre-du-korriandre.html`, statut: "relu",
     acces: [
       "Dans la Forêt Pétrifiée, après le Tengu Givrefoux. Le plus rapide : le Transporteur Frigostien de la Forêt Pétrifiée, en [-76,-66].",
       "Clef par le trousseau, ou à fabriquer avec des ressources des monstres du donjon.",
@@ -541,7 +541,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "glourseleste", donjon: "Antichambre des Gloursons", niveau: 190, position: "[-63,-75]", dpln: `${DPLN}antichambre-des-gloursons.html`, statut: "brouillon",
+    slug: "glourseleste", donjon: "Antichambre des Gloursons", niveau: 190, position: "[-63,-75]", dpln: `${DPLN}antichambre-des-gloursons.html`, statut: "relu",
     acces: [
       "Dans la Ruche des Gloursons, au Mont Torrideau : la zone s'ouvre après les Cavernes du Kolosso.",
       "Clef par le trousseau, ou à fabriquer avec des ressources des Gloursons.",
@@ -578,7 +578,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "grolloum", donjon: "Donjon de la mine de Sakaï", niveau: 190, position: "[-52,-45]", dpln: `${DPLN}donjon-de-la-mine-de-sakaiuml.html`, statut: "brouillon",
+    slug: "grolloum", donjon: "Donjon de la mine de Sakaï", niveau: 190, position: "[-52,-45]", dpln: `${DPLN}donjon-de-la-mine-de-sakaiuml.html`, statut: "relu",
     acces: [
       "Dans la Forêt Enneigée de l'île de Sakaï.",
       "Clef par le trousseau, ou à fabriquer avec des ressources des monstres de l'île.",

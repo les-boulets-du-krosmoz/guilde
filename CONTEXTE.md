@@ -58,9 +58,10 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
 - Statut des guides de boss : « relu » (validé par un joueur qui a fait le boss, étiquette « ✓ Guide relu », plus de
   bandeau « à relire »), « brouillon », « a-rediger ». Relus le 18 novembre : Royalmouth (tuent d'un coup : celui qui lui
   inflige des dommages de poussée et celui qui en subit contre lui ; seul le Boufmouth légendaire pousse, d'après les
-  données), Mansot Royal (dommages autour du soigné à chaque soin ; le vol de vie ne délocke pas ; la mort de ses monstres le
+  données), Mansot Royal (dommages autour du soigné à chaque soin ; le vol de vie n'est pas un soin, il ne déclenche ni dommages ni délock ; la mort de ses monstres le
   renforce, celle de vos personnages reste à vérifier), Obsidiantre (8 cases
-  autour de la Pougnette, explosion au 5e tour). Les fiches niveau 200 restent en brouillon, doutes en avertissement.
+  autour de la Pougnette, explosion au 5e tour), puis Tengu, Korriandre, Glourséleste, Grolloum (points ouverts gardés
+  en avertissement). Les fiches niveau 200 restent en brouillon, doutes en avertissement.
 - Prochains guides de boss, dans cet ordre : 1) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro, Orukam) ;
   2) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
 - Combats tactiques : inventaire dans docs/combats-tactiques.md (245 combats classés d'après les données du jeu :
