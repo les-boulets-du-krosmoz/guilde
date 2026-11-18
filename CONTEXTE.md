@@ -43,15 +43,14 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   Corrigé d'après un joueur : Yokaï à pousser ou attirer (déjà en diagonale ne compte pas), Yokaï et Yomi transformés
   quand ils ont l'état, délock au tour du Tengu, garder ses invocations et tuer ceux de la salle ; Fongeur sans danger à
   2 cases ou moins (frappe toute la carte au-delà) ; explosion du Gobus mortelle.
-- À revoir : depuis la 3.7, les données du jeu décrivent la mécanique de certains boss (sort initial, ex. Cohobation de
-  Nileza, Chambranle de Sylargh, Congère de Missiz Frizz). Ces textes contredisent en partie nos fiches Nileza (échange
-  seulement à distance, Pacifiste si trop loin, mort au contact d'un allié), Sylargh (Pacifiste pour les alliés à 90 % de
-  vie ou plus) et Missiz Frizz : à comparer avant de les passer en relu.
-  Même chose pour Sufokia (4 donjons, tous avec fiche) : Meno n'est pas invulnérable (il réduit les dommages, ses
-  monstres invulnérables le soignent quand on les frappe et meurent après 4 tours), Dantinéa tue tous les personnages
-  encore liés à un Grokillage tous les 5 tours, Merkator est décrit autrement (Indéplaçable, poussées au contact).
+- Textes du jeu : depuis la 3.7, les données décrivent la mécanique de beaucoup de boss (description d'un sort,
+  ex. Cohobation de Nileza, Chambranle de Sylargh, Congère de Missiz Frizz). Fiches revues avec ces textes le
+  18 novembre : Nileza, Sylargh, Missiz Frizz, Merkator, Capitaine Meno, Dantinéa. Dans ces textes, « alliés » =
+  vos personnages, « ennemis » = les monstres. Encore à comparer (texte disponible) : Klime, Comte Harebourg, Tal
+  Kasha, Vortex, Solar, Ilyzaelle, Reine des Voleurs, Bethel, Protozorreur, Chalœil, Anerice, Larve de Koutoulou.
+  Point ouvert Meno : « augmente les dommages finaux des alliés » (vos personnages ou ses monstres ?).
 - Tête de mort des guides de boss : écrire « {os} » juste après le nom du monstre qui peut tuer d'un coup
-  (src/components/TeteDeMort.tsx). Posée sur Tengu, Fuji, Glourmand, Glourséleste, Gobus, Kimbo, Solar.
+  (src/components/TeteDeMort.tsx). Posée sur Tengu, Fuji, Glourmand, Glourséleste, Gobus, Kimbo, Solar, Nileza, Dantinéa.
 - Prochains guides de boss, dans cet ordre : 1) récents niv. 200 (Éliocalypse, Belladone, Kabahal, Déchireuse,
   Vénérable, Aurore Pourpre, Marteaux-Aigris, Torkélonia) ; 2) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro,
   Orukam) ; 3) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
