@@ -1191,6 +1191,8 @@ a.jauge__nom:hover { color: var(--or); }
 /* Montants en kamas : le nombre suivi du symbole du jeu (vectoriel) */
 .montant-kamas { display: inline-flex; align-items: center; gap: 0.25em; white-space: nowrap; }
 .kamas { display: inline-block; vertical-align: -0.15em; flex-shrink: 0; }
+/* Tête de mort des guides de boss : collée au nom du monstre qui peut tuer d'un coup */
+.tete-de-mort { display: inline-block; vertical-align: -0.15em; margin-left: 0.2em; flex-shrink: 0; }
 .vente__hdv.montant-kamas { text-decoration: line-through; }
 
 /* Accueil : la liste des recherches de groupe défile dans la carte au lieu de l'agrandir */

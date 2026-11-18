@@ -1,6 +1,7 @@
 // Guides des boss (page Donjons > Guides). Textes rédigés par la guilde, dans nos mots : les mécaniques sont des faits
 // de jeu, vérifiés en croisant plusieurs sources ; le lien « Guide détaillé » renvoie vers Dofus pour les Noobs.
 // statut « brouillon » : première version à faire relire par un membre qui a fait le boss ; « a-rediger » : fiche du jeu seule.
+// « {os} » juste après le nom d'un monstre affiche une tête de mort : il peut tuer un personnage d'un coup.
 
 export type GuideBoss = {
   slug: string; // image public/icones/boss/<slug>.webp et caractéristiques dans bossStats.ts
@@ -158,7 +159,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "L'élément de vos coups sur le Kimbo décide du type de glyphe : Terre ou Eau donnent un glyphe impair, Feu ou Air un glyphe pair. Le Neutre ne fait rien.",
       "Seul le dernier élément joué compte : frapper Eau puis Feu remplace l'effet de l'Eau par celui du Feu.",
       "Le glyphe reste en place tant qu'on continue de frapper avec un élément de la même paire.",
-      "Un allié qui commence son tour sur le même glyphe que le Kimbo meurt d'un coup.",
+      "Un allié qui commence son tour sur le même glyphe que le Kimbo{os} meurt d'un coup.",
       "Le Kimbo repousse de 2 cases : une poussée de 2 cases vous laisse sur la même parité, mais une poussée bloquée à 1 case vous fait changer de parité.",
     ],
     delock: [
@@ -216,7 +217,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     slug: "solar", donjon: "Tour de Solar", niveau: 200, position: "[-31,15]", dpln: `${DPLN}tour-de-solar.html`, statut: "brouillon",
     mecaniques: [
       "Tant que le Solar est en vie, ses alliés reviennent à la vie.",
-      "Quand il meurt, il tue toute votre équipe d'un coup… sauf s'il était sous Nécronyx.",
+      "Quand le Solar{os} meurt, il tue toute votre équipe d'un coup… sauf s'il était sous Nécronyx.",
     ],
     delock: [
       "Lancez le sort Nécronyx sur le Solar avant de lui porter le coup fatal : il meurt alors sans emporter l'équipe.",
@@ -339,19 +340,19 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Au tour 2, puis tous les 3 tours, il invoque un Yokaï ou un Yomi Givrefoux : toujours celui des deux qui manque sur le terrain.",
       "Yomi : au contact, il retire 10 PM jusqu'à son prochain tour. Yokaï : il se téléporte et frappe autour de lui, d'autant plus fort qu'il a perdu de la vie.",
       "Kami : elle ne frappe qu'en diagonale, jusqu'à 7 cases. Ne finissez pas votre tour dans ses diagonales.",
-      "Fuji Givrefoux Nourricière : pas d'invulnérabilité, mais au contact elle tue un personnage et le remplace par un Givrefoux (une fois par tour, pas au premier). Elle frappe aussi en diagonale, à 3 ou 4 cases, avec 20 % d'érosion.",
+      "Fuji Givrefoux Nourricière{os} : pas d'invulnérabilité, mais au contact elle tue un personnage et le remplace par un Givrefoux (une fois par tour, pas au premier). Elle frappe aussi en diagonale, à 3 ou 4 cases, avec 20 % d'érosion.",
       "Chaque monstre tué donne 1 PM à tous les monstres pendant un tour (cumulable), et 1 000 dommages au Tengu et à la Fuji. Tous les 3 tours, la Fuji soigne les monstres à 5 cases autour d'elle et leur donne 200 dommages pendant 2 tours.",
     ],
     delock: [
-      "Dans le même tour, il faut faire deux choses : pousser ou attirer un Yokaï en diagonale du Tengu, et frapper à l'arme un Yomi aligné avec le Tengu.",
-      "Un Yokaï déjà en diagonale ne compte pas : il faut l'y amener par une poussée ou une attirance.",
-      "Quand la condition est remplie, le monstre se transforme : c'est le signe qu'il a l'état qui délocke le Tengu, pour le Yokaï comme pour le Yomi. Pas de transformation, pas de délock.",
+      "Dans le même tour, il faut faire deux choses : pousser un Yokaï en diagonale du Tengu, et frapper à l'arme un Yomi aligné avec le Tengu.",
+      "Ce qui compte, c'est que le Yokaï soit transformé : il se transforme quand on le pousse en diagonale du Tengu. Un Yokaï en diagonale mais pas transformé ne délocke rien.",
+      "Le Yomi se transforme lui aussi quand il est frappé comme il faut : la transformation montre que le monstre a l'état qui délocke le Tengu. Pas de transformation, pas de délock.",
       "Le Tengu se délocke ensuite à son propre tour de jeu : il change d'apparence et reste vulnérable pendant 4 tours.",
-      "Une seule des deux conditions ne suffit pas, et elle est punie : selon celle qui manque, il tue un personnage au contact ou érode toute l'équipe de 30 % pendant un tour.",
+      "Une seule des deux conditions ne suffit pas, et elle est punie : selon celle qui manque, le Tengu{os} tue un personnage au contact ou érode toute l'équipe de 30 % pendant un tour.",
       "Si le Tengu invoque un Yokaï ou un Yomi, gardez l'invocation en vie et tuez le monstre du même type venu avec la salle : un exemplaire de chaque suffit, et il y a moins de monstres sur le terrain.",
     ],
     strategie: [
-      "Décidez avant le combat qui pousse ou attire le Yokaï et qui frappe le Yomi à l'arme : une arme qui porte à plusieurs cases évite d'aller au contact du Yomi.",
+      "Décidez avant le combat qui pousse le Yokaï et qui frappe le Yomi à l'arme : une arme qui porte à plusieurs cases évite d'aller au contact du Yomi.",
       "Tenez le Yomi à distance en dehors du délock : ses 10 PM retirés bloquent un personnage tout un tour.",
       "Avec la Fuji, restez à plus de 5 cases d'elle et hors de ses diagonales, et davantage quand des monstres viennent de mourir (1 PM de plus par mort).",
       "Elle n'est pas invulnérable : on peut commencer par elle pendant que le Tengu est protégé. Évitez seulement d'enchaîner plusieurs morts juste avant le tour des monstres.",
@@ -365,6 +366,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: [
       "Les guides détaillés de ce donjon datent d'avant Dofus 3, sauf pour les invocations du Tengu (revues en 2024) : chiffres à confirmer en jeu.",
       "La durée de vulnérabilité (4 tours) est lue dans les données du jeu : à vérifier en combat.",
+      "Attirer le Yokaï (au lieu de le pousser) le transforme-t-il aussi ? Les anciens guides le disent : à vérifier en combat.",
       "« Dans le même tour » : faut-il un seul personnage, ou deux personnages qui jouent avant le Tengu suffisent-ils ? À vérifier en combat.",
       "On ne sait pas ce qui fait tomber sur la version avec la Fuji : si tu le sais, dis-le aux officiers.",
     ],
@@ -377,7 +379,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     mecaniques: [
       "Au début du tour de chaque personnage, un glyphe apparaît sous lui et reste jusqu'à la fin du combat. Commencer ou finir son tour sur un glyphe tue, invocations et compagnons compris.",
-      "Votre case de départ devient donc un glyphe dès votre premier tour : il faut bouger à chaque tour, et la place libre diminue à mesure que le combat dure.",
+      "Votre case de départ devient donc un glyphe dès votre premier tour : il faut bouger à chaque tour. La place libre diminue avec les tours, mais lentement : on a plusieurs tours de marge.",
       "Le Korriandre est invulnérable au début du combat (changement de la mise à jour 3.6, en juin 2026). Tant qu'il l'est, il invoque une Sporakne : au premier tour, puis au plus tous les 3 tours.",
       "La Sporakne a 5 PM et en perd 1 à chaque coup reçu (3 au plus). Quand on la pousse ou qu'on l'attire, elle repousse d'une case tout ce qui est aligné avec elle.",
       "Le Korriandre attire de 3 cases en ligne (jusqu'à 4 cases de distance) en retirant de la fuite, et frappe d'autant plus fort qu'il a perdu de la vie.",
@@ -393,8 +395,8 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Avant de finir votre tour, vérifiez qu'aucune poussée (Sporakne, sorts alliés) ni l'attirance du Korriandre ne peut vous déposer sur un glyphe avant votre prochain tour : vous mourriez en le commençant.",
       "Ne frappez jamais la Mérulette à distance, et prévenez l'équipe avant la salle du boss, où elle est aussi.",
       "Commencez par l'Abrazif (retrait de PA) et la Dramanite (poison selon les PA dépensés).",
-      "Le Fongeur frappe toute la carte à partir de 3 cases de lui, mais rien à 2 cases ou moins : restez à son contact et bloquez-le dans un coin, il ne pourra rien faire. Dans la salle du boss, les glyphes occupent vite les cases sûres autour de lui : tuez-le tant qu'il en reste.",
-      "Ne laissez pas traîner le combat : chaque tour ajoute des glyphes, et la carte devient vite un piège.",
+      "Le Fongeur frappe toute la carte à partir de 3 cases de lui, mais rien à 2 cases ou moins : restez à son contact et bloquez-le dans un coin, il ne pourra rien faire.",
+      "Un des donjons les plus abordables de Frigost pour son niveau, tant que chacun bouge à chaque tour et garde la Mérulette en tête.",
     ],
     succes: [
       "Succès du donjon : Mystique (sorts seulement, pas d'arme), Zombie (exactement 1 PM par tour), Duo (15 tours), Spécial « Pas dans mes pattes » (chaque allié finit son tour à plus de 3 cases d'un autre).",
@@ -414,11 +416,11 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Le vaincre une fois ouvre Frigost III.",
     ],
     mecaniques: [
-      "Pendant tout le combat, subir des dommages de poussée tue sur le coup. Le Glourmand pousse : ne restez jamais entre lui et un obstacle ou un allié.",
+      "Pendant tout le combat, subir des dommages de poussée tue sur le coup. Le Glourmand{os} pousse : ne restez jamais entre lui et un obstacle ou un allié.",
       "Le Glourséleste est invulnérable.",
       "Le déplacer (poussée, attirance, échange de place) ou lui retirer des PM ou de la portée lui fait ressusciter les monstres déjà tués, avec toute leur vie.",
       "Le Glouragan attire tout ce qui est aligné avec lui quand on le frappe : s'il est aligné avec le Glourséleste, il le déplace, et les monstres reviennent.",
-      "Tous les 2 tours, le Glourséleste alourdit ses monstres et leur donne du tacle : quitter le contact de l'un d'eux tue alors, sauf à fuir sans rien perdre.",
+      "Tous les 2 tours, le Glourséleste{os} alourdit ses monstres et leur donne du tacle : quitter le contact de l'un d'eux tue alors, sauf à fuir sans rien perdre.",
       "Il frappe d'autant plus fort au contact qu'il a perdu de la vie, et jusqu'à 5 cases il échange sa place avec sa cible.",
       "Meliglours : il encaisse les coups destinés à un allié et lui donne 1 000 de vitalité.",
     ],
@@ -454,7 +456,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Le Grolloum est invulnérable. Lui retirer des PM (même une simple tentative) lui donne d'énormes résistances pendant un tour.",
       "Tous les 2 tours, il ressuscite le dernier monstre tué (de 5 à 10 cases de lui), avec un quart de sa vie. Le monstre revient en Zombi : il mourra avec le Grolloum.",
       "Invulnérable, il frappe au contact sur une ligne (vol de vie Eau, retrait de portée) et se soigne. Vulnérable, il échange sa place avec un personnage à 1 à 4 cases et le frappe (Feu).",
-      "Gobus : il ne bouge pas. Dès son deuxième tour, il peut exploser et tue alors d'un coup chaque personnage aligné avec lui, à n'importe quelle distance et même derrière un obstacle. Il meurt dans l'explosion. Le Perkü en invoque d'autres.",
+      "Gobus{os} : il ne bouge pas. Dès son deuxième tour, il peut exploser et tue alors d'un coup chaque personnage aligné avec lui, à n'importe quelle distance et même derrière un obstacle. Il meurt dans l'explosion. Le Perkü en invoque d'autres.",
       "Gobosteur et Marôdeur retirent ou volent des PA et des PM ; le Courtilieur attire de 4 cases et frappe fort au contact.",
     ],
     delock: [

@@ -4,6 +4,7 @@ import { Fenetre } from "../components/Fenetre";
 import { STATS_BOSS } from "../data/bossStats";
 import { GUIDES_BOSS, type GuideBoss } from "../data/guidesBoss";
 import { SuiviQuetesDonjons } from "../components/SuiviQuetesDonjons";
+import { TexteGuide } from "../components/TeteDeMort";
 import { cibleBoss, compterVisite } from "../lib/visites";
 import { Quetes } from "./Quetes";
 
@@ -71,7 +72,7 @@ export function FicheBoss({ guide }: { guide: GuideBoss }) {
   const s = STATS_BOSS[guide.slug];
   useEffect(() => compterVisite(cibleBoss(guide.slug)), [guide.slug]);
   const section = (titre: string, lignes?: string[]) => lignes?.length ? (
-    <section className="fiche-boss__section"><h3>{titre}</h3><ul>{lignes.map((l, k) => <li key={k}>{l}</li>)}</ul></section>
+    <section className="fiche-boss__section"><h3>{titre}</h3><ul>{lignes.map((l, k) => <li key={k}><TexteGuide texte={l} /></li>)}</ul></section>
   ) : null;
   return (
     <div className="fiche-boss">

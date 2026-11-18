@@ -47,6 +47,11 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   Nileza, Chambranle de Sylargh, Congère de Missiz Frizz). Ces textes contredisent en partie nos fiches Nileza (échange
   seulement à distance, Pacifiste si trop loin, mort au contact d'un allié), Sylargh (Pacifiste pour les alliés à 90 % de
   vie ou plus) et Missiz Frizz : à comparer avant de les passer en relu.
+  Même chose pour Sufokia (4 donjons, tous avec fiche) : Meno n'est pas invulnérable (il réduit les dommages, ses
+  monstres invulnérables le soignent quand on les frappe et meurent après 4 tours), Dantinéa tue tous les personnages
+  encore liés à un Grokillage tous les 5 tours, Merkator est décrit autrement (Indéplaçable, poussées au contact).
+- Tête de mort des guides de boss : écrire « {os} » juste après le nom du monstre qui peut tuer d'un coup
+  (src/components/TeteDeMort.tsx). Posée sur Tengu, Fuji, Glourmand, Glourséleste, Gobus, Kimbo, Solar.
 - Prochains guides de boss, dans cet ordre : 1) récents niv. 200 (Éliocalypse, Belladone, Kabahal, Déchireuse,
   Vénérable, Aurore Pourpre, Marteaux-Aigris, Torkélonia) ; 2) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro,
   Orukam) ; 3) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
