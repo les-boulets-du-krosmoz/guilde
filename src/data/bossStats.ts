@@ -421,5 +421,47 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
    -5,
    24
   ]
+ },
+ "royalmouth": {
+  "nom": "Royalmouth",
+  "niveau": 120,
+  "pv": 7200,
+  "pa": 15,
+  "pm": 5,
+  "res": [
+   23,
+   33,
+   26,
+   -11,
+   48
+  ]
+ },
+ "mansot-royal": {
+  "nom": "Mansot Royal",
+  "niveau": 140,
+  "pv": 9200,
+  "pa": 15,
+  "pm": 4,
+  "res": [
+   29,
+   25,
+   24,
+   34,
+   22
+  ]
+ },
+ "obsidiantre": {
+  "nom": "Obsidiantre",
+  "niveau": 160,
+  "pv": 13000,
+  "pa": 16,
+  "pm": 6,
+  "res": [
+   25,
+   23,
+   27,
+   21,
+   26
+  ]
  }
 };

@@ -382,6 +382,87 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
+    slug: "royalmouth", donjon: "Serre du Royalmouth", niveau: 120, position: "[-84,-49]", dpln: `${DPLN}serre-du-royalmouth.html`, statut: "brouillon",
+    acces: [
+      "Dans les Champs de glace, près de la Bourgade : un des deux premiers donjons de Frigost, avec le Mansot Royal.",
+      "Clef par le trousseau, ou à fabriquer avec des ressources des Boufmouths.",
+    ],
+    mecaniques: [
+      "Le Royalmouth{os} est invulnérable. Dès qu'il y a des dommages de poussée entre lui et quelqu'un (vous le poussez contre un obstacle, ou un personnage est poussé contre lui), il tue d'un coup les personnages alignés avec lui.",
+      "Tous les 3 tours, il invoque un Boufmouth de la zone au hasard, près de lui.",
+      "Il attire en croix autour de lui (jusqu'à 3 cases) en retirant 1 PM, et vole de la vie au contact.",
+      "Boufmouth Légendaire : il repousse de 4 cases et peut vous envoyer contre le Royalmouth.",
+    ],
+    delock: ["Poussez-le, sans le cogner contre un obstacle ni contre quelqu'un : la poussée lui retire son invulnérabilité."],
+    strategie: [
+      "Avant chaque poussée, regardez derrière lui : case libre, vous le délockez ; case occupée, tous ceux qui sont alignés avec lui meurent.",
+      "Ne restez pas aligné avec lui quand un monstre peut pousser quelqu'un dans sa direction. Tuez le Boufmouth Légendaire en premier.",
+    ],
+    succes: [
+      "Succès du donjon : Premier, Mains propres, Duo (20 tours), Spécial « Parcimonie royale » (un allié qui déplace un ennemi ne doit plus lui infliger de dommages pendant le reste de son tour).",
+      "Parcimonie royale : celui qui pousse le Royalmouth pour le délocker ne peut plus le frapper ce tour-là ; ce sont les suivants qui tapent.",
+      "Mains propres : les dommages de poussée sont autorisés pour achever, mais pas sur lui.",
+    ],
+    avertissements: ["Le délock (le pousser sans dommages de poussée) vient d'anciens guides : à confirmer en jeu."],
+  },
+  {
+    slug: "mansot-royal", donjon: "Excavation du Mansot Royal", niveau: 140, position: "[-64,-55]", dpln: `${DPLN}excavation-du-mansot-royal.html`, statut: "brouillon",
+    acces: [
+      "Au milieu du Lac gelé : un des deux premiers donjons de Frigost, avec le Royalmouth.",
+      "Clef par le trousseau, ou à fabriquer avec des ressources des Mansots.",
+    ],
+    mecaniques: [
+      "Le Mansot Royal est invulnérable.",
+      "Chaque monstre tué lui donne 1 PM et de la puissance.",
+      "Quand un de vos personnages est soigné, ceux qui sont à 2 cases ou moins de lui prennent des dommages.",
+      "Il vole de la vie et échange sa place avec sa cible (jusqu'à 2 cases). Vulnérable, il frappe d'autant plus fort au contact qu'il a perdu de la vie.",
+      "Mamansot : il ressuscite les monstres tués. À éliminer tôt.",
+    ],
+    delock: [
+      "Soignez un de vos personnages placé au contact du Mansot Royal : il devient vulnérable. Le soin doit rendre de la vie : un personnage déjà au maximum ne compte pas.",
+      "Écartez les autres de ce personnage avant le soin : à 2 cases ou moins de lui, ils prennent des dommages.",
+    ],
+    strategie: [
+      "Placez à son contact un personnage solide et déjà entamé, et soignez-le quand ceux qui jouent ensuite peuvent taper.",
+      "Chaque monstre tué le rend plus rapide et plus fort : gardez de quoi le tuer vite une fois vulnérable.",
+    ],
+    succes: [
+      "Succès du donjon : Collant, Dernier, Duo (20 tours), Compagnon (à 4 au moins, avec Inferno, Styx, Mandrin ou Will Killson), Spécial « Privilège royal » (chaque début de tour, le Mansot désigne un allié : lui seul peut être soigné).",
+      "Privilège royal : le délock ne marche alors qu'avec le personnage désigné. Amenez-le au contact du Mansot.",
+      "Collant : il faut finir son tour collé à un allié, alors qu'un soin blesse ceux qui sont à 2 cases. Soignez pour délocker seulement quand le personnage au contact est isolé.",
+      "Dernier : tous ses monstres meurent avant lui, donc il arrive à la fin avec beaucoup de PM et de puissance.",
+    ],
+    avertissements: [
+      "Les dommages autour du personnage soigné : pour tous les soins, ou seulement celui qui délocke ? À préciser.",
+      "D'après les anciens guides, la mort d'un de vos personnages le renforce aussi.",
+    ],
+  },
+  {
+    slug: "obsidiantre", donjon: "Hypogée de l'Obsidiantre", niveau: 160, position: "[-71,-83]", dpln: `${DPLN}hypogeacutee-de-lobsidiantre.html`, statut: "brouillon",
+    acces: [
+      "Dans les Larmes d'Ouronigride, après Ben le Ripate.",
+      "Clef par le trousseau, ou à fabriquer.",
+    ],
+    mecaniques: [
+      "L'Obsidiantre est invulnérable. Tant qu'il l'est, il invoque une Pougnette, puis une autre tous les 3 tours.",
+      "Chaque Pougnette{os} explose à son 5e tour : elle tue d'un coup tous vos personnages à plus de 9 cases d'elle, puis meurt.",
+      "À distance, il vous repousse de 2 cases (de 4 à 10 cases de lui) et vole de la vie (Feu) jusqu'à 10 cases.",
+      "Vulnérable, il frappe d'autant plus fort qu'il a perdu de la vie, échange sa place avec sa cible (1 à 3 cases) et ressuscite le dernier monstre tué avec 10 % de sa vie.",
+    ],
+    delock: ["Poussez un de vos personnages contre l'Obsidiantre : les dommages de poussée lui retirent son invulnérabilité."],
+    strategie: [
+      "Restez tous à 9 cases ou moins de chaque Pougnette (8 pour garder de la marge), et comptez ses tours : elle explose au 5e.",
+      "Plus le combat traîne, plus il y a de Pougnettes à surveiller en même temps : délockez tôt.",
+      "Le délock demande deux rôles : un personnage qui pousse, et un personnage poussé, aligné avec le boss. Préparez les deux avant le tour.",
+    ],
+    succes: [
+      "Succès du donjon : Premier, Statue, Duo (20 tours), Spécial « À son hypogée » (aucun ennemi ne doit être attiré ni poussé).",
+      "À son hypogée : on ne pousse que ses propres personnages, ce qui laisse le délock possible.",
+      "Statue : chacun finit ses tours sur sa case de départ, à 9 cases ou moins des Pougnettes. Choisissez bien le placement de départ.",
+    ],
+    avertissements: ["Explosion au 5e tour de la Pougnette : à confirmer. Les données du jeu donnent une zone sûre de 8 cases plutôt que 9."],
+  },
+  {
     slug: "tengu-givrefoux", donjon: "Tanière Givrefoux", niveau: 170, position: "[-80,-75]", dpln: `${DPLN}taniegravere-givrefoux.html`, statut: "brouillon",
     acces: [
       "Au fond des Cavernes Givrefoux, dans la Crevasse Perge : la zone s'ouvre une fois l'Obsidiantre vaincu.",
