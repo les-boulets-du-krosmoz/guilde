@@ -26,6 +26,8 @@ export type GuideBoss = {
   /** Astuces pour les challenges du donjon (Duo, Statue, Focus…). */
   succes?: string[];
   /** Encart affiché sous les mécaniques : tableau à deux colonnes, étapes, schéma (public/guides) et remarques. */
+  /** Outil interactif affiché dans la fiche, repliable (ex. le viseur du Comte Harebourg). */
+  outil?: "viseur-harebourg";
   encart?: { titre: string; colonnes?: [string, string]; lignes?: [string, string][]; etapes?: string[]; image?: { src: string; alt: string; legende?: string }; notes?: string[] };
 };
 
@@ -162,7 +164,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "comte-harebourg", donjon: "Donjon du Comte Harebourg", niveau: 200, zone: "Frigost", position: "[-61,-79]", dpln: `${DPLN}donjon-du-comte-harebourg.html`, statut: "brouillon",
+    slug: "comte-harebourg", donjon: "Donjon du Comte Harebourg", niveau: 200, zone: "Frigost", position: "[-61,-79]", dpln: `${DPLN}donjon-du-comte-harebourg.html`, statut: "brouillon", outil: "viseur-harebourg",
     acces: ["Au sommet de la Tour de la Clepsydre, au centre de Frigost III. C'est le dernier donjon avant le Dofus des Glaces."],
     mecaniques: [
       "Le Comte Harebourg est invulnérable. Il change d'état à chaque tour, et c'est cet état qui décide de qui est téléporté quand on le frappe.",
@@ -197,17 +199,16 @@ export const GUIDES_BOSS: GuideBoss[] = [
     },
     delock: [
       "En tour pair, frappez le Comte avec un allié placé sur sa case d'arrivée, en symétrie par rapport à vous : il échange sa place avec lui et perd son invulnérabilité. Le Comte et l'allié gagnent 100 dommages pendant un tour.",
+      "Repère simple : celui qui frappe se met pile au milieu, entre le Comte et l'allié. Il faut donc un nombre pair de cases entre eux (2, 4, 6…), en ligne ou en diagonale.",
       "Il reste vulnérable jusqu'au début du prochain tour de celui qui l'a délocké. Le délock n'est possible qu'un tour sur deux.",
       "Une invocation sur la case d'arrivée délocke aussi, mais elle explose : elle tue vos personnages à 3 cases ou moins d'elle.",
     ],
     strategie: [
-      "Le Comte joue en dernier : juste après son tour, il est difficile de préparer le délock. Le premier allié à jouer se place donc en symétrie, et le deuxième frappe pour délocker.",
-      "Le Comte reste vulnérable jusqu'au prochain tour du deuxième allié : le premier pourra encore le frapper au tour suivant, avec ses 100 dommages en plus.",
+      "Astuce pour délocker sans se presser : le premier allié à jouer après le Comte se place en symétrie, et le deuxième frappe. Le Comte reste vulnérable jusqu'au prochain tour du deuxième, donc le premier pourra encore le frapper au tour suivant.",
       "Faites frapper les monstres par vos invocations : elles ne sont pas déviées.",
     ],
     succes: [
       "Succès du donjon : Versatile, Statue et Duo (40 tours).",
-      "Statue : en tour impair, frapper le Comte vous téléporte. Frappez-le en tour pair, ou gardez de quoi revenir sur votre case de départ.",
     ],
   },
   {

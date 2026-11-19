@@ -74,6 +74,10 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   anti-horaire ; Pendultimatum (3643) : +¼ horaire par coup au corps à corps. Confirmé par le joueur : décor, glyphe (croix
   de 3 cases autour du Comte, posé à son tour), +¼ au corps à corps, +100 dommages. Délock : le 1er allié après le Comte
   se place en symétrie, le 2e frappe.
+- Viseur du Comte (19 novembre) : src/components/ViseurHarebourg.tsx (chargé à la demande) et src/lib/viseur.ts
+  (carte de 560 cases en quinconce, coordonnées logiques, rotation, ligne de vue exacte case par case, prudente sur
+  les coins). Grille vide pour l'instant : le plan de la salle du Comte viendra du propriétaire du site (les données
+  du jeu ne contiennent pas les plans). Champ outil: "viseur-harebourg" dans la fiche.
 - Statut des guides de boss : « relu » (validé par un joueur qui a fait le boss, étiquette « ✓ Guide relu », plus de
   bandeau « à relire »), « brouillon », « a-rediger ». Relus le 18 novembre : Royalmouth (tuent d'un coup : celui qui lui
   inflige des dommages de poussée et celui qui en subit contre lui ; seul le Boufmouth légendaire pousse, d'après les

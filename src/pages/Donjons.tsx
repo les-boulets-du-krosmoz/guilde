@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Fenetre } from "../components/Fenetre";
 import { STATS_BOSS } from "../data/bossStats";
@@ -120,6 +120,8 @@ function IconeStat({ id, nom }: { id: number; nom: string }) {
   return <img className="icone-stat" src={`/icones/stats/${id}.webp`} alt={nom} title={nom} width={18} height={18} />;
 }
 
+const ViseurHarebourg = lazy(() => import("../components/ViseurHarebourg"));
+
 /** Encart d'une fiche : tableau, étapes numérotées, schéma et remarques (ex. viser malgré la confusion du Comte Harebourg). */
 function Encart({ encart: e }: { encart: NonNullable<GuideBoss["encart"]> }) {
   return (
@@ -183,6 +185,12 @@ export function FicheBoss({ guide }: { guide: GuideBoss }) {
       ) : null}
       {section("Mécaniques", guide.mecaniques)}
       {guide.encart && <Encart encart={guide.encart} />}
+      {guide.outil === "viseur-harebourg" && (
+        <details className="fiche-boss__section fiche-boss__repli">
+          <summary><h3>Viseur : où cliquer pour toucher</h3></summary>
+          <Suspense fallback={<p className="discret">Chargement du viseur…</p>}><ViseurHarebourg /></Suspense>
+        </details>
+      )}
       {section("Rendre vulnérable (délock)", guide.delock)}
       {section("Comment s'y prendre", guide.strategie)}
       {section("Pour les succès", guide.succes)}
