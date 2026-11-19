@@ -397,13 +397,12 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     succes: [
       "Succès du donjon : Premier (le Professeur Xa achevé en premier), Duo (20 tours), Spécial « Alliés passés au futur » (aucun allié ne doit recevoir de soin).",
-      "Premier : Xa doit mourir en premier. Descendez ses PV, puis achevez-le et tuez le Croleur dans la foulée, juste avant son tour : renforcé, il ne doit pas jouer.",
+      "Premier : Xa doit mourir en premier. Descendez ses PV, puis achevez-le et tuez le Croleur dans la foulée, juste avant son tour : renforcé, il ne doit pas jouer. Le Kolosso, lui, garde son bonus de la mort de Xa jusqu'à la fin du combat.",
       "Spécial : pendant l'effet de Xa, chaque coup sur un monstre soigne vos personnages autour de lui. Frappez quand aucun allié n'est près de la cible, ou attendez la fin de l'effet.",
     ],
     avertissements: [
       "Délock par une invocation qui frappe à distance : les données du jeu ne demandent pas le contact, à vérifier en jeu.",
       "Renfort des monstres à la mort de Xa : à chiffrer en jeu (400 dommages d'après d'anciens guides).",
-      "Bonus du Kolosso (1 PM, 200 de puissance) : à la mort de Xa d'après les données du jeu, quand il reste seul d'après un joueur. Les deux tombent ensemble si Xa meurt en dernier ; avec le succès Premier, à vérifier.",
       "Spécial : le soin de l'effet de Xa fait-il échouer le succès, et jusqu'à quelle distance soigne-t-il (5 cases d'après les données) ? À vérifier.",
     ],
   },
