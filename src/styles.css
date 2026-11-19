@@ -1382,7 +1382,10 @@ a.jauge__nom:hover { color: var(--or); }
 /* Page Donjons */
 .donjons__tete { padding-bottom: 0 !important; }
 .donjons__tete h1 { margin-bottom: 10px; }
-.guides-boss { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.guides-boss__outils { display: flex; flex-direction: column; gap: 10px; margin: 14px 0 4px; }
+.guides-boss__outils input[type="search"] { max-width: 480px; }
+.guides-boss__groupe h2 { margin: 22px 0 0; font-size: 18px; display: flex; align-items: baseline; gap: 8px; }
+.guides-boss { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
 .guides-boss__carte { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 14px; text-align: left; cursor: pointer; font: inherit; color: inherit; }
 .guides-boss__carte:hover { border-color: var(--trait-fort); }
 .guides-boss__carte img { object-fit: contain; flex-shrink: 0; }
@@ -1391,9 +1394,16 @@ a.jauge__nom:hover { color: var(--or); }
 .fiche-boss__tete { display: flex; gap: 16px; align-items: flex-start; padding-right: 36px; }
 .fiche-boss__tete h2 { margin: 0; }
 .fiche-boss__tete p { margin: 2px 0 8px; }
-.fiche-boss__stats { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.fiche-boss__stats li { display: flex; flex-direction: column; align-items: center; min-width: 58px; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--trait); font-size: 12px; }
+.fiche-boss__stats { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; font-size: 13px; }
+.fiche-boss__stats li { display: inline-flex; align-items: center; gap: 5px; }
 .fiche-boss__stats strong { font-size: 14px; }
+.fiche-boss__stats-nom { color: var(--texte-2); }
+.fiche-boss__res { gap: 12px !important; flex-wrap: wrap; }
+.fiche-boss__res > span { display: inline-flex; align-items: center; gap: 4px; }
+.fiche-boss__neutre { display: inline-block; width: 16px; height: 16px; margin: 1px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #d8d2c6, #8f887c 60%, #5d584f); box-shadow: 0 0 0 1px #3d3a34; flex-shrink: 0; }
+.fiche-boss__repli > summary { cursor: pointer; width: fit-content; }
+.fiche-boss__repli > summary h3 { display: inline; margin: 0; }
+.fiche-boss__repli[open] > summary { margin-bottom: 6px; }
 .fiche-boss__statut { margin: 0; padding: 8px 12px; border-radius: 10px; background: rgba(224, 178, 92, 0.1); font-size: 14px; }
 .fiche-boss__section h3 { margin: 0 0 6px; font-size: 15px; color: var(--or-clair); }
 .fiche-boss__section ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 5px; line-height: 1.55; }
@@ -1508,3 +1518,19 @@ a.jauge__nom:hover { color: var(--or); }
 .stats__moi { display: flex; gap: 12px; align-items: flex-start; margin: 0 0 16px; padding: 12px 14px; border: 1px solid var(--trait-fort); border-radius: 10px; cursor: pointer; }
 .stats__moi input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--vert); flex: none; }
 .stats__moi > span { display: grid; gap: 2px; }
+
+/* Guides de boss sur mobile : une ligne par boss et un en-tête de fiche plus court */
+@media (max-width: 700px) {
+  .guides-boss__carte { flex-direction: row; padding: 10px 12px; gap: 12px; }
+  .guides-boss__carte img { width: 48px; height: 48px; }
+  .guides-boss__carte .etiquette { font-size: 11px; white-space: nowrap; }
+  .fiche-boss { padding: 18px 16px; }
+  /* les caractéristiques passent sous le portrait, sur toute la largeur : deux lignes au lieu de quatre */
+  .fiche-boss__tete { display: grid; grid-template-columns: 64px 1fr; column-gap: 12px; padding-right: 0; }
+  .fiche-boss__tete > div { display: contents; }
+  .fiche-boss__tete > img { width: 64px; height: 64px; grid-row: 1 / span 2; }
+  .fiche-boss__tete h2 { grid-column: 2; padding-right: 36px; }
+  .fiche-boss__tete > div > p { grid-column: 2; }
+  .fiche-boss__stats { grid-column: 1 / -1; margin-top: 6px; gap: 6px 12px; }
+  .fiche-boss__res { gap: 9px !important; }
+}

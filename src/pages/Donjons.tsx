@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Fenetre } from "../components/Fenetre";
 import { STATS_BOSS } from "../data/bossStats";
-import { GUIDES_BOSS, type GuideBoss } from "../data/guidesBoss";
+import { GUIDES_BOSS, nomDuGuide, type GuideBoss } from "../data/guidesBoss";
 import { SuiviQuetesDonjons } from "../components/SuiviQuetesDonjons";
 import { TexteGuide } from "../components/TeteDeMort";
 import { cibleBoss, compterVisite } from "../lib/visites";
@@ -47,31 +47,77 @@ const ETIQUETTE: Record<GuideBoss["statut"], { texte: string; classe: string }> 
   "a-rediger": { texte: "Fiche du jeu", classe: "" },
 };
 
+/** Regroupement de la liste : zones de jeu proches réunies, les zones à un seul donjon dans « Autres zones ». */
+const GROUPES: { nom: string; zones: string[] }[] = [
+  { nom: "Frigost", zones: ["Frigost", "Île de Sakaï"] },
+  { nom: "Éliocalypse", zones: ["Éliocalypse"] },
+  { nom: "Dimensions divines", zones: ["Xélorium", "Srambad", "Écaflipus", "Osavora"] },
+  { nom: "Sufokia", zones: ["Baie de Sufokia", "Profondeurs de Sufokia"] },
+  { nom: "Archipel de Valonia", zones: ["Archipel de Valonia"] },
+];
+const AUTRES = "Autres zones";
+const groupeDe = (g: GuideBoss) => GROUPES.find((x) => x.zones.includes(g.zone))?.nom ?? AUTRES;
+const sansAccents = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
 function Guides() {
   const [params, setParams] = useSearchParams();
+  const [recherche, setRecherche] = useState("");
+  const [niv200, setNiv200] = useState(false);
+  const [groupe, setGroupe] = useState<string | null>(null);
   const ouvert = GUIDES_BOSS.find((g) => g.slug === params.get("boss")) ?? null;
   const setOuvert = (g: GuideBoss | null) => setParams(g ? { onglet: "guides", boss: g.slug } : { onglet: "guides" }, { replace: true });
-  const tries = [...GUIDES_BOSS].sort((a, b) => Number(a.statut === "a-rediger") - Number(b.statut === "a-rediger") || (STATS_BOSS[a.slug]?.nom ?? "").localeCompare(STATS_BOSS[b.slug]?.nom ?? ""));
+  const mots = sansAccents(recherche).split(/\s+/).filter(Boolean);
+  const retenus = GUIDES_BOSS.filter((g) => {
+    if (niv200 && g.niveau < 200) return false;
+    if (groupe && groupeDe(g) !== groupe) return false;
+    const texte = sansAccents([nomDuGuide(g), STATS_BOSS[g.slug]?.nom, g.donjon, g.zone, groupeDe(g)].join(" "));
+    return mots.every((m) => texte.includes(m));
+  }).sort((a, b) => Number(a.statut === "a-rediger") - Number(b.statut === "a-rediger") || nomDuGuide(a).localeCompare(nomDuGuide(b)));
+  const parGroupe = [...GROUPES.map((x) => x.nom), AUTRES]
+    .map((nom) => [nom, retenus.filter((g) => groupeDe(g) === nom)] as const)
+    .filter(([, liste]) => liste.length > 0);
   return (
     <main className="page">
       <p className="discret">Les boss qui demandent une stratégie : accès, mécaniques et astuces, rédigés par la guilde. Les caractéristiques viennent des données du jeu.</p>
-      <ul className="guides-boss">
-        {tries.map((g) => {
-          const s = STATS_BOSS[g.slug];
-          return (
-            <li key={g.slug}>
-              <button type="button" className="carte guides-boss__carte" onClick={() => setOuvert(g)}>
-                <img src={`/icones/boss/${g.slug}.webp`} alt="" width={72} height={72} loading="lazy" />
-                <span className="guides-boss__nom"><strong>{s?.nom ?? g.slug}</strong><span className="discret-taille">{g.donjon} · niv. {g.niveau}</span></span>
-                <span className={`etiquette ${ETIQUETTE[g.statut].classe}`}>{ETIQUETTE[g.statut].texte}</span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      {ouvert && <Fenetre titre={STATS_BOSS[ouvert.slug]?.nom ?? ouvert.slug} onFermer={() => setOuvert(null)} large><FicheBoss guide={ouvert} /></Fenetre>}
+      <div className="guides-boss__outils">
+        <input type="search" placeholder="Rechercher un boss, un donjon ou une zone…" value={recherche} onChange={(e) => setRecherche(e.target.value)} aria-label="Rechercher un boss, un donjon ou une zone" />
+        <div className="fa-puces" role="group" aria-label="Filtres rapides">
+          <button type="button" className={`fa-puce ${niv200 ? "actif" : ""}`} aria-pressed={niv200} onClick={() => setNiv200(!niv200)}>Niv. 200 et +</button>
+          {[...GROUPES.map((x) => x.nom), AUTRES].map((nom) => (
+            <button key={nom} type="button" className={`fa-puce ${groupe === nom ? "actif" : ""}`} aria-pressed={groupe === nom} onClick={() => setGroupe(groupe === nom ? null : nom)}>{nom}</button>
+          ))}
+        </div>
+      </div>
+      {parGroupe.length === 0 && <p className="vide">Aucun boss ne correspond.</p>}
+      {parGroupe.map(([nom, liste]) => (
+        <section key={nom} className="guides-boss__groupe" aria-label={nom}>
+          <h2>{nom} <span className="discret-taille">{liste.length}</span></h2>
+          <ul className="guides-boss">
+            {liste.map((g) => (
+              <li key={g.slug}>
+                <button type="button" className="carte guides-boss__carte" onClick={() => setOuvert(g)}>
+                  <img src={`/icones/boss/${g.slug}.webp`} alt="" width={72} height={72} loading="lazy" />
+                  <span className="guides-boss__nom">
+                    <strong>{nomDuGuide(g)}</strong>
+                    <span className="discret-taille">{g.donjon} · niv. {g.niveau}{nom === AUTRES ? ` · ${g.zone}` : ""}</span>
+                  </span>
+                  <span className={`etiquette ${ETIQUETTE[g.statut].classe}`}>{ETIQUETTE[g.statut].texte}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      {ouvert && <Fenetre titre={nomDuGuide(ouvert)} onFermer={() => setOuvert(null)} large><FicheBoss guide={ouvert} /></Fenetre>}
     </main>
   );
+}
+
+/** Icônes des caractéristiques, comme en jeu (public/icones/stats). Pas d'icône Neutre dans les données : pastille grise. */
+const ICONE_STAT = { pv: 3, pa: 4, pm: 5, res: [0, 8, 9, 10, 11] };
+function IconeStat({ id, nom }: { id: number; nom: string }) {
+  if (!id) return <span className="fiche-boss__neutre" role="img" aria-label={nom} title={nom} />;
+  return <img className="icone-stat" src={`/icones/stats/${id}.webp`} alt={nom} title={nom} width={18} height={18} />;
 }
 
 export function FicheBoss({ guide }: { guide: GuideBoss }) {
@@ -85,15 +131,18 @@ export function FicheBoss({ guide }: { guide: GuideBoss }) {
       <div className="fiche-boss__tete">
         <img src={`/icones/boss/${guide.slug}.webp`} alt="" width={112} height={112} />
         <div>
-          <h2>{s?.nom}</h2>
+          <h2>{nomDuGuide(guide)}</h2>
           <p className="discret">{guide.donjon} · donjon niv. {guide.niveau} · {guide.position}</p>
           {s && (
-            <ul className="fiche-boss__stats">
-              <li><span>Niveau</span><strong>{s.niveau}</strong></li>
-              <li title="Points de vie en groupe de 4 personnages (plus à 8)"><span>PV à 4</span><strong>{s.pv.toLocaleString("fr-FR")}</strong></li>
-              <li><span>PA</span><strong>{s.pa}</strong></li>
-              <li><span>PM</span><strong>{s.pm}</strong></li>
-              {s.res.map((r, k) => <li key={k} title={`Résistance ${ELEMENTS[k].nom}`}><span style={{ color: ELEMENTS[k].couleur }}>{ELEMENTS[k].nom}</span><strong>{r} %</strong></li>)}
+            <ul className="fiche-boss__stats" aria-label={guide.nom ? `Caractéristiques de ${s.nom}` : "Caractéristiques"}>
+              {guide.nom && <li className="fiche-boss__stats-nom">{s.nom}</li>}
+              <li title="Niveau du boss">Niv. <strong>{s.niveau}</strong></li>
+              <li title="Points de vie en groupe de 4 personnages (plus à 8)"><IconeStat id={ICONE_STAT.pv} nom="Points de vie" /><strong>{s.pv.toLocaleString("fr-FR")}</strong><span className="discret-taille">à 4</span></li>
+              <li><IconeStat id={ICONE_STAT.pa} nom="PA" /><strong>{s.pa}</strong></li>
+              <li><IconeStat id={ICONE_STAT.pm} nom="PM" /><strong>{s.pm}</strong></li>
+              <li className="fiche-boss__res">
+                {s.res.map((r, k) => <span key={k} title={`Résistance ${ELEMENTS[k].nom}`}><IconeStat id={ICONE_STAT.res[k]} nom={`Résistance ${ELEMENTS[k].nom}`} /><strong>{r} %</strong></span>)}
+              </li>
             </ul>
           )}
         </div>
@@ -103,7 +152,12 @@ export function FicheBoss({ guide }: { guide: GuideBoss }) {
       {guide.avertissements?.length ? (
         <div className="fiche-boss__alerte" role="note">{guide.avertissements.map((x, k) => <p key={k}>⚠ {x}</p>)}</div>
       ) : null}
-      {section("Accès", guide.acces)}
+      {guide.acces?.length ? (
+        <details className="fiche-boss__section fiche-boss__repli">
+          <summary><h3>Accès</h3></summary>
+          <ul>{guide.acces.map((l, k) => <li key={k}><TexteGuide texte={l} /></li>)}</ul>
+        </details>
+      ) : null}
       {section("Mécaniques", guide.mecaniques)}
       {section("Rendre vulnérable (délock)", guide.delock)}
       {section("Comment s'y prendre", guide.strategie)}

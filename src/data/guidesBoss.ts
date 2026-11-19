@@ -2,11 +2,16 @@
 // de jeu, vérifiés en croisant plusieurs sources ; le lien « Guide détaillé » renvoie vers Dofus pour les Noobs.
 // statut « relu » : validé par un membre qui a fait le boss ; « brouillon » : première version à faire relire ; « a-rediger » : fiche du jeu seule.
 // « {os} » juste après le nom d'un monstre affiche une tête de mort : il peut tuer un personnage d'un coup.
+import { STATS_BOSS } from "./bossStats";
 
 export type GuideBoss = {
   slug: string; // image public/icones/boss/<slug>.webp et caractéristiques dans bossStats.ts
+  /** Nom affiché, quand ce n'est pas celui du monstre de la fiche du jeu (ex. un combat contre plusieurs boss). */
+  nom?: string;
   donjon: string;
   niveau: number;
+  /** Zone de jeu de l'entrée (données du jeu : subareas puis areas), sert au regroupement et à la recherche. */
+  zone: string;
   position: string;
   dpln: string;
   statut: "relu" | "brouillon" | "a-rediger";
@@ -24,9 +29,12 @@ export type GuideBoss = {
 
 const DPLN = "https://www.dofuspourlesnoobs.com/";
 
+/** Nom affiché d'une fiche : son nom propre, sinon celui du monstre dont elle montre les caractéristiques. */
+export const nomDuGuide = (g: GuideBoss) => g.nom ?? STATS_BOSS[g.slug]?.nom ?? g.slug;
+
 export const GUIDES_BOSS: GuideBoss[] = [
   {
-    slug: "tal-kasha", donjon: "Chambre de Tal Kasha", niveau: 200, position: "[12,-77]", dpln: `${DPLN}chambre-de-tal-kasha.html`, statut: "brouillon",
+    slug: "tal-kasha", donjon: "Chambre de Tal Kasha", niveau: 200, zone: "Saharach", position: "[12,-77]", dpln: `${DPLN}chambre-de-tal-kasha.html`, statut: "brouillon",
     acces: [
       "Il faut être 4 : l'ouverture de la pyramide demande deux binômes en même temps.",
       "Entrez dans la Pyramide Maudite en [9,-72] (Zaap du Port de Sarakech en [14,-55]), puis séparez l'équipe en deux groupes de deux.",
@@ -59,7 +67,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "missiz-frizz", donjon: "Forgefroide de Missiz Frizz", niveau: 200, position: "[-70,-81]", dpln: `${DPLN}forgefroide-de-missiz-frizz.html`, statut: "brouillon",
+    slug: "missiz-frizz", donjon: "Forgefroide de Missiz Frizz", niveau: 200, zone: "Frigost", position: "[-70,-81]", dpln: `${DPLN}forgefroide-de-missiz-frizz.html`, statut: "brouillon",
     acces: ["Clef par le trousseau, ou à fabriquer (avec le Sang de Ventrublion des salles du donjon)."],
     mecaniques: [
       "Missiz Frizz et ses monstres sont invulnérables et lourds (impossibles à porter).",
@@ -86,7 +94,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Fiche revue d'après la description du combat dans le jeu (mise à jour 3.7). Le soin de 15 % vient des données du jeu : à vérifier en combat."],
   },
   {
-    slug: "nileza", donjon: "Laboratoire de Nileza", niveau: 200, position: "[-61,-74]", dpln: `${DPLN}laboratoire-de-nileza.html`, statut: "brouillon",
+    slug: "nileza", donjon: "Laboratoire de Nileza", niveau: 200, zone: "Frigost", position: "[-61,-74]", dpln: `${DPLN}laboratoire-de-nileza.html`, statut: "brouillon",
     acces: ["Dans les Jardins d'Hiver (château de Harebourg). Clef par le trousseau, ou à fabriquer avec les ressources des Alchillusions du donjon."],
     mecaniques: [
       "Quand on le frappe à distance, il échange sa place avec l'attaquant et laisse sur sa case de départ un glyphe qui blesse vos personnages (selon leur vie érodée) et leur retire du tacle et de la fuite. Le frapper au contact ne déclenche rien de tout ça.",
@@ -110,7 +118,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Fiche revue d'après la description du combat dans le jeu (mise à jour 3.7). Les distances du Pacifiste (12, 10, 8 puis 6 cases) viennent des données du jeu : à vérifier en combat."],
   },
   {
-    slug: "sylargh", donjon: "Transporteur de Sylargh", niveau: 200, position: "[-53,-84]", dpln: `${DPLN}transporteur-de-sylargh.html`, statut: "brouillon",
+    slug: "sylargh", donjon: "Transporteur de Sylargh", niveau: 200, zone: "Frigost", position: "[-53,-84]", dpln: `${DPLN}transporteur-de-sylargh.html`, statut: "brouillon",
     mecaniques: [
       "Le Sylargh est invulnérable et lourd.",
       "Chaque monstre tué revient en invocation au début du tour du monstre suivant, entre 6 et 10 cases de ce monstre, avec 10 % de sa vie. Il gagne des dommages, devient Indéplaçable et passe son prochain tour.",
@@ -133,7 +141,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Fiche revue d'après la description du combat dans le jeu (mise à jour 3.7) : l'ancienne règle de distance pour le Pacifiste n'existe plus. La durée d'un tour (vulnérabilité, Pacifiste) vient des données du jeu."],
   },
   {
-    slug: "klime", donjon: "Salons privés de Klime", niveau: 200, position: "[-63,-86]", dpln: `${DPLN}salons-priveacutes-de-klime.html`, statut: "brouillon",
+    slug: "klime", donjon: "Salons privés de Klime", niveau: 200, zone: "Frigost", position: "[-63,-86]", dpln: `${DPLN}salons-priveacutes-de-klime.html`, statut: "brouillon",
     acces: ["Dans la Tannerie Écarlate (château de Harebourg). Clef par le trousseau, ou à fabriquer avec les cuirs des monstres du donjon et un Œil de Harrogant."],
     mecaniques: [
       "Dans la dernière salle, deux mécaniques se mettent en place : l'invulnérabilité de Klime, et l'état Pacifiste qui entre en jeu après les premiers tours.",
@@ -152,7 +160,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "comte-harebourg", donjon: "Donjon du Comte Harebourg", niveau: 200, position: "[-61,-79]", dpln: `${DPLN}donjon-du-comte-harebourg.html`, statut: "brouillon",
+    slug: "comte-harebourg", donjon: "Donjon du Comte Harebourg", niveau: 200, zone: "Frigost", position: "[-61,-79]", dpln: `${DPLN}donjon-du-comte-harebourg.html`, statut: "brouillon",
     acces: ["Au sommet de la Tour de la Clepsydre, au centre de Frigost III. C'est le dernier donjon avant le Dofus des Glaces."],
     mecaniques: [
       "Confusions horaires : vos attaques sont déviées selon un angle (exprimé en degrés ou en π). Calculez où part réellement votre sort avant de le lancer.",
@@ -168,7 +176,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     succes: ["Succès du donjon : Versatile, Statue et Duo (40 tours)."],
   },
   {
-    slug: "kimbo", donjon: "Canopée du Kimbo", niveau: 160, position: "[-54,16]", dpln: `${DPLN}canopeacutee-du-kimbo.html`, statut: "brouillon",
+    slug: "kimbo", donjon: "Canopée du Kimbo", niveau: 160, zone: "Île d'Otomaï", position: "[-54,16]", dpln: `${DPLN}canopeacutee-du-kimbo.html`, statut: "brouillon",
     mecaniques: [
       "Ce sont les Disciples qui posent les glyphes, chacun à son tour.",
       "Un glyphe quadrille toute la carte, comme un damier : un glyphe impair couvre toutes les cases impaires, un glyphe pair toutes les cases paires. Impossible d'y échapper autrement qu'en étant sur une case de l'autre parité.",
@@ -191,7 +199,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "merkator", donjon: "Aquadôme de Merkator", niveau: 200, position: "[21,18]", dpln: `${DPLN}aquadocircme-de-merkator.html`, statut: "brouillon",
+    slug: "merkator", donjon: "Aquadôme de Merkator", niveau: 200, zone: "Baie de Sufokia", position: "[21,18]", dpln: `${DPLN}aquadocircme-de-merkator.html`, statut: "brouillon",
     acces: [
       "Dans la Base Abyssale : le succès d'exploration « Salles des Abîmes » permet d'être téléporté directement vers le donjon.",
       "Sinon, il faut traverser les trois étages (ascenseurs, leviers) en consommant des Piles Steamer (une quinzaine). Les Salles des Courants demandent de se coordonner à plusieurs.",
@@ -216,7 +224,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Fiche revue d'après la description du combat dans le jeu (mise à jour 3.7). La poussée de 3 cases et la résurrection (tour 7, puis tous les 5 tours) viennent des données du jeu : à vérifier en combat."],
   },
   {
-    slug: "vortex", donjon: "Œil de Vortex", niveau: 200, position: "Lendemains incertains", dpln: `${DPLN}oeil-de-vortex.html`, statut: "brouillon",
+    slug: "vortex", donjon: "Œil de Vortex", niveau: 200, zone: "Xélorium", position: "Lendemains incertains", dpln: `${DPLN}oeil-de-vortex.html`, statut: "brouillon",
     mecaniques: [
       "Tout le donjon tient en une seule salle : 5 vagues de monstres, une tous les 5 tours. Vos boosts et invocations restent en place d'une vague à l'autre.",
       "L'Auroraire est une horloge : sa position sur la carte indique l'heure, et elle avance d'une heure au début du tour de chaque personnage. À 3, 4 ou 6 joueurs, son cycle est régulier.",
@@ -238,7 +246,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     succes: ["« Heure de la mort » : tous les ennemis doivent être achevés à la même heure."],
   },
   {
-    slug: "solar", donjon: "Tour de Solar", niveau: 200, position: "[-31,15]", dpln: `${DPLN}tour-de-solar.html`, statut: "brouillon",
+    slug: "solar", donjon: "Tour de Solar", niveau: 200, zone: "Landes de Sidimote", position: "[-31,15]", dpln: `${DPLN}tour-de-solar.html`, statut: "brouillon",
     mecaniques: [
       "Tant que le Solar est en vie, ses alliés reviennent à la vie.",
       "Quand le Solar{os} meurt, il tue toute votre équipe d'un coup… sauf s'il était sous Nécronyx.",
@@ -253,7 +261,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Point à vérifier : Nécronyx empêche-t-il aussi ses alliés de revenir à la vie ?"],
   },
   {
-    slug: "capitaine-meno", donjon: "Vaisseau du Capitaine Meno", niveau: 200, position: "[24,27]", dpln: `${DPLN}vaisseau-du-capitaine-meno.html`, statut: "brouillon",
+    slug: "capitaine-meno", donjon: "Vaisseau du Capitaine Meno", niveau: 200, zone: "Profondeurs de Sufokia", position: "[24,27]", dpln: `${DPLN}vaisseau-du-capitaine-meno.html`, statut: "brouillon",
     acces: ["Clef par le trousseau, ou à fabriquer (Baves de Mol Usk, Pinces de Crabe Yoloniste, Écailles de Gambaf, et des ressources de la mer). Le vaisseau est hors de l'eau : montures autorisées."],
     mecaniques: [
       "Il réduit de moitié les dommages qu'il subit.",
@@ -278,7 +286,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "ilyzaelle", donjon: "Belvédère d'Ilyzaelle", niveau: 200, position: "[-72,-77]", dpln: `${DPLN}belvedere-d-ilyzaelle.html`, statut: "brouillon",
+    slug: "ilyzaelle", donjon: "Belvédère d'Ilyzaelle", niveau: 200, zone: "Frigost", position: "[-72,-77]", dpln: `${DPLN}belvedere-d-ilyzaelle.html`, statut: "brouillon",
     acces: ["Dans la Caserne du Jour Sans Fin."],
     mecaniques: [
       "Ilyzaelle est possédée par les Brûlâmes. Les monstres de la zone partagent l'état Brûlure.",
@@ -299,7 +307,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Ce qui la fait passer sous emprise la première fois reste à préciser.", "Le retour dans votre camp à 50 % de PV vient d'une source jugée peu fiable : à vérifier."],
   },
   {
-    slug: "dantinea", donjon: "Palais de Dantinéa", niveau: 200, position: "Sufokia (profondeurs)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "dantinea", donjon: "Palais de Dantinéa", niveau: 200, zone: "Profondeurs de Sufokia", position: "Sufokia (profondeurs)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
     mecaniques: [
       "Au début du combat, Dantinéa invoque un Grokillage par personnage, sur des cases fixes. Chacun se lie à un personnage (même numéro que lui).",
       "Tant que votre Grokillage est en vie, vos dommages sont réduits et vous perdez des PM au début de chaque tour (non esquivables).",
@@ -323,7 +331,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Fiche revue d'après la description du combat dans le jeu (mise à jour 3.7) : les anciens guides ne parlaient pas de la mort au tour 5. L'échange de place avec un Grokillage vient des données du jeu."],
   },
   {
-    slug: "protozorreur", donjon: "Ventre de la Baleine", niveau: 200, position: "Roc des Salbatroces (Frigost)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "protozorreur", donjon: "Ventre de la Baleine", niveau: 200, zone: "Frigost", position: "Roc des Salbatroces (Frigost)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
     mecaniques: [
       "Le Protozorreur et tous les Krobes de la zone sont invulnérables. Chacun a sa propre condition pour être vaincu.",
       "Il faut remplir cette condition à chaque tour, plusieurs tours de suite : le monstre meurt alors. Si on rate un tour, le compteur repart à zéro.",
@@ -347,7 +355,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "ben-le-ripate", donjon: "Épave du Grolandais violent", niveau: 150, position: "Frigost", dpln: `${DPLN}epave-du-grolandais-violent.html`, statut: "brouillon",
+    slug: "ben-le-ripate", donjon: "Épave du Grolandais violent", niveau: 150, zone: "Frigost", position: "Frigost", dpln: `${DPLN}epave-du-grolandais-violent.html`, statut: "brouillon",
     mecaniques: [
       "Ben le Ripate invoque un monstre qui cherche à rejoindre son corps-à-corps.",
       "L'invocation ne peut être déplacée d'aucune manière (ni poussée, ni attirée, ni échangée).",
@@ -361,7 +369,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "kolosso", donjon: "Cavernes du Kolosso", niveau: 190, position: "[-61,-69]", dpln: `${DPLN}cavernes-du-kolosso.html`, statut: "brouillon",
+    slug: "kolosso", donjon: "Cavernes du Kolosso", niveau: 190, zone: "Frigost", position: "[-61,-69]", dpln: `${DPLN}cavernes-du-kolosso.html`, statut: "brouillon",
     acces: [
       "Dans les Crocs de Verre. Le Transporteur Frigostien des Crocs de Verre, en [-66,-65], est le plus proche.",
       "Clef par le trousseau, ou à fabriquer.",
@@ -400,7 +408,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "royalmouth", donjon: "Serre du Royalmouth", niveau: 120, position: "[-84,-49]", dpln: `${DPLN}serre-du-royalmouth.html`, statut: "relu",
+    slug: "royalmouth", donjon: "Serre du Royalmouth", niveau: 120, zone: "Frigost", position: "[-84,-49]", dpln: `${DPLN}serre-du-royalmouth.html`, statut: "relu",
     acces: [
       "Dans les Champs de glace, près de la Bourgade : un des deux premiers donjons de Frigost, avec le Mansot Royal.",
       "Clef par le trousseau, ou à fabriquer avec des ressources des Boufmouths.",
@@ -423,7 +431,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "mansot-royal", donjon: "Excavation du Mansot Royal", niveau: 140, position: "[-64,-55]", dpln: `${DPLN}excavation-du-mansot-royal.html`, statut: "relu",
+    slug: "mansot-royal", donjon: "Excavation du Mansot Royal", niveau: 140, zone: "Frigost", position: "[-64,-55]", dpln: `${DPLN}excavation-du-mansot-royal.html`, statut: "relu",
     acces: [
       "Au milieu du Lac gelé : un des deux premiers donjons de Frigost, avec le Royalmouth.",
       "Clef par le trousseau, ou à fabriquer avec des ressources des Mansots.",
@@ -453,7 +461,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "obsidiantre", donjon: "Hypogée de l'Obsidiantre", niveau: 160, position: "[-71,-83]", dpln: `${DPLN}hypogeacutee-de-lobsidiantre.html`, statut: "relu",
+    slug: "obsidiantre", donjon: "Hypogée de l'Obsidiantre", niveau: 160, zone: "Frigost", position: "[-71,-83]", dpln: `${DPLN}hypogeacutee-de-lobsidiantre.html`, statut: "relu",
     acces: [
       "Dans les Larmes d'Ouronigride, après Ben le Ripate.",
       "Clef par le trousseau, ou à fabriquer.",
@@ -476,7 +484,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "tengu-givrefoux", donjon: "Tanière Givrefoux", niveau: 170, position: "[-80,-75]", dpln: `${DPLN}taniegravere-givrefoux.html`, statut: "relu",
+    slug: "tengu-givrefoux", donjon: "Tanière Givrefoux", niveau: 170, zone: "Frigost", position: "[-80,-75]", dpln: `${DPLN}taniegravere-givrefoux.html`, statut: "relu",
     acces: [
       "Au fond des Cavernes Givrefoux, dans la Crevasse Perge : la zone s'ouvre une fois l'Obsidiantre vaincu.",
       "Clef par le trousseau, ou à fabriquer avec des ressources des Givrefoux de la zone.",
@@ -518,7 +526,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "korriandre", donjon: "Antre du Korriandre", niveau: 180, position: "[-73,-69]", dpln: `${DPLN}antre-du-korriandre.html`, statut: "relu",
+    slug: "korriandre", donjon: "Antre du Korriandre", niveau: 180, zone: "Frigost", position: "[-73,-69]", dpln: `${DPLN}antre-du-korriandre.html`, statut: "relu",
     acces: [
       "Dans la Forêt Pétrifiée, après le Tengu Givrefoux. Le plus rapide : le Transporteur Frigostien de la Forêt Pétrifiée, en [-76,-66].",
       "Clef par le trousseau, ou à fabriquer avec des ressources des monstres du donjon.",
@@ -555,7 +563,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "glourseleste", donjon: "Antichambre des Gloursons", niveau: 190, position: "[-63,-75]", dpln: `${DPLN}antichambre-des-gloursons.html`, statut: "relu",
+    slug: "glourseleste", donjon: "Antichambre des Gloursons", niveau: 190, zone: "Frigost", position: "[-63,-75]", dpln: `${DPLN}antichambre-des-gloursons.html`, statut: "relu",
     acces: [
       "Dans la Ruche des Gloursons, au Mont Torrideau : la zone s'ouvre après les Cavernes du Kolosso.",
       "Clef par le trousseau, ou à fabriquer avec des ressources des Gloursons.",
@@ -591,7 +599,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "grolloum", donjon: "Donjon de la mine de Sakaï", niveau: 190, position: "[-52,-45]", dpln: `${DPLN}donjon-de-la-mine-de-sakaiuml.html`, statut: "relu",
+    slug: "grolloum", donjon: "Donjon de la mine de Sakaï", niveau: 190, zone: "Île de Sakaï", position: "[-52,-45]", dpln: `${DPLN}donjon-de-la-mine-de-sakaiuml.html`, statut: "relu",
     acces: [
       "Dans la Forêt Enneigée de l'île de Sakaï.",
       "Clef par le trousseau, ou à fabriquer avec des ressources des monstres de l'île.",
@@ -624,7 +632,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "reine-des-voleurs", donjon: "Trône de la Cour Sombre", niveau: 200, position: "Hauts Ténébreux (Srambad)", dpln: `${DPLN}trone-de-la-cour-sombre.html`, statut: "brouillon",
+    slug: "reine-des-voleurs", donjon: "Trône de la Cour Sombre", niveau: 200, zone: "Srambad", position: "Hauts Ténébreux (Srambad)", dpln: `${DPLN}trone-de-la-cour-sombre.html`, statut: "brouillon",
     acces: [
       "Au sommet de la pyramide de Srambad, dans les Hauts Ténébreux. On entre dans la dimension par le portail de Srambad, dont la position s'obtient par une chasse au trésor.",
       "L'Étoffe de la Cour Sombre (pour la clef) s'échange contre 5 Orichors au PNJ de l'entrée de la dimension, à côté des avis de recherche.",
@@ -644,7 +652,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Le détail du système des bonbombes (comment les désamorcer, et un éventuel délock de la Reine) reste à compléter."],
   },
   {
-    slug: "dazak-martegel", donjon: "Brasserie du roi Dazak", niveau: 200, position: "[-62,-70]", dpln: `${DPLN}brasserie-du-roi-dazak.html`, statut: "brouillon",
+    slug: "dazak-martegel", donjon: "Brasserie du roi Dazak", niveau: 200, zone: "Frigost", position: "[-62,-70]", dpln: `${DPLN}brasserie-du-roi-dazak.html`, statut: "brouillon",
     acces: ["Sous le Mont Torrideau, dans le Royaume des Martegel. Le plus rapide : le Transporteur Frigostien de la Forêt Pétrifiée, en [-76,-66]."],
     mecaniques: [
       "Ses résistances sont trop hautes pour lui faire des dégâts en début de combat (plus de 100 % partout dans les données du jeu).",
@@ -656,7 +664,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Le moyen de faire baisser ses résistances n'est pas encore renseigné : si tu le connais, dis-le aux officiers."],
   },
   {
-    slug: "bethel", donjon: "Tour de Bethel", niveau: 200, position: "Épaves Silencieuses", dpln: `${DPLN}tour-de-bethel.html`, statut: "brouillon",
+    slug: "bethel", donjon: "Tour de Bethel", niveau: 200, zone: "Frigost", position: "Épaves Silencieuses", dpln: `${DPLN}tour-de-bethel.html`, statut: "brouillon",
     mecaniques: [
       "Bethel Akarna est insensible aux attaques des joueurs : seul le Dagon des Profondeurs, qu'il invoque pendant le combat, peut lui faire des dégâts.",
       "Sous son emprise, le Dagon est très dangereux : gardez-le le plus loin possible de vous.",
@@ -674,7 +682,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     succes: ["Succès du donjon : Mystique, Zombie, Score 150 et 200, Duo (40 tours)."],
   },
   {
-    slug: "xlii", donjon: "Horologium de XLII", niveau: 170, position: "[7,-2] (Xélorium)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "xlii", donjon: "Horologium de XLII", niveau: 170, zone: "Xélorium", position: "[7,-2] (Xélorium)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
     acces: [
       "Dans le Jour Présent, deuxième zone de Xélorium. On entre dans la dimension par le portail Xélorium, dont la position s'obtient par une chasse au portail.",
       "Le chemin jusqu'au donjon demande une Montre en avance et une Montre en retard.",
@@ -702,7 +710,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Le chemin avec les montres et les valeurs de l'Auroraire (40 % au départ, +10 % par tour) n'ont été trouvés que dans un guide d'avant Dofus 3 : à confirmer en jeu."],
   },
   {
-    slug: "toxoliath", donjon: "Cave du Toxoliath", niveau: 180, position: "[8,8] (Srambad)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "toxoliath", donjon: "Cave du Toxoliath", niveau: 180, zone: "Srambad", position: "[8,8] (Srambad)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
     acces: [
       "Dans les Catacombres, deuxième zone de Srambad. On entre dans la dimension par le portail Srambad (chasse au portail).",
       "Pas de trousseau : la clef se fabrique. Les Chitines de Nécrotique de la recette s'échangent contre 2 Orichors au collectionneur de l'avant-poste.",
@@ -727,7 +735,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Le poison calculé sur les PM n'a été trouvé que dans un guide d'avant Dofus 3 : à confirmer en jeu, surtout ce qui compte (PM du tour entier ou seulement après le coup)."],
   },
   {
-    slug: "comte-razof", donjon: "Camp du Comte Razof", niveau: 190, position: "[-68,30] (Nimotopia)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "comte-razof", donjon: "Camp du Comte Razof", niveau: 190, zone: "Nimotopia", position: "[-68,30] (Nimotopia)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
     acces: [
       "Sur l'île de Nimotopia. Le plus rapide : le zaap des Champs de Cania en [-27,-36], puis le Muldobus en [-28,-31], après les questions d'Agathe Mainate.",
       "Clef par le trousseau, ou à fabriquer avec une ressource de chaque monstre du camp (Chevrotine, Brokouillon, Nemroz, Crâmbo).",
@@ -752,7 +760,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["La perte de résistances par invocation n'est chiffrée nulle part, et la mécanique n'a été trouvée que dans un guide d'avant Dofus 3 : à vérifier en jeu."],
   },
   {
-    slug: "ombre", donjon: "Pyramide d'Ombre", niveau: 190, position: "[6,13] (Dimension Obscure)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "ombre", donjon: "Pyramide d'Ombre", niveau: 190, zone: "Dimension Obscure", position: "[6,13] (Dimension Obscure)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
     acces: [
       "Dans la Dimension Obscure, où l'on entre depuis la même position de la forêt d'Amakna. Zaap le plus proche : Bord de la Forêt Maléfique, en [-1,13].",
       "Clef par le trousseau, ou à fabriquer avec les quatre masques des monstres de la zone (Vide, Vengeance, Violence, Vivacité).",
@@ -779,7 +787,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "anerice-la-shushess", donjon: "Manoir des Katrepat", niveau: 200, position: "[-14,25]", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "anerice-la-shushess", donjon: "Manoir des Katrepat", niveau: 200, zone: "Landes de Sidimote", position: "[-14,25]", dpln: `${DPLN}donjons.html`, statut: "brouillon",
     acces: [
       "Dans les Terres Désacrées, juste à côté du zaap des Terres Désacrées en [-15,25].",
       "Clef par le trousseau, ou à fabriquer (dont 5 ressources de chacune des goules de la zone).",
@@ -805,7 +813,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Les chiffres de la réduction (90 %, 10 points par Goule) n'ont été trouvés que dans un guide d'avant Dofus 3 : à vérifier en jeu."],
   },
   {
-    slug: "chaloeil", donjon: "Défi du Chalœil", niveau: 200, position: "Temple de Kérubim (Écaflipus)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "chaloeil", donjon: "Défi du Chalœil", niveau: 200, zone: "Écaflipus", position: "Temple de Kérubim (Écaflipus)", dpln: `${DPLN}donjons.html`, statut: "brouillon",
     acces: [
       "Dans le Temple de Kérubim, dans la dimension Écaflipus, où l'on entre par une chasse au portail.",
       "Pas de trousseau : la clef se fabrique (Carte du Grand Jeu et une ressource de chaque monstre de la zone).",
@@ -827,7 +835,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["L'invulnérabilité jusqu'au tour 21 et le détail des bonus de Gros Yeux n'ont été trouvés que dans un guide d'avant Dofus 3 : à vérifier en jeu."],
   },
   {
-    slug: "larve-de-koutoulou", donjon: "Temple de Koutoulou", niveau: 200, position: "[27,26]", dpln: `${DPLN}donjons.html`, statut: "brouillon",
+    slug: "larve-de-koutoulou", donjon: "Temple de Koutoulou", niveau: 200, zone: "Profondeurs de Sufokia", position: "[27,26]", dpln: `${DPLN}donjons.html`, statut: "brouillon",
     acces: [
       "Sur le Plateau de R'lyugluglu, dans les Abysses de Sufokia. Le plus rapide : le zaapi du quai de la voie du temple, en [22,23].",
       "Clef par le trousseau, ou à fabriquer (tentacules de Grofond et de N'yalg, yeux de Shokkoth et ressources marines).",
@@ -850,7 +858,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["La Folie et les échanges de place n'ont été trouvés que dans un guide d'avant Dofus 3 (mis à jour en 2020) : les paliers sont à vérifier en jeu."],
   },
   {
-    slug: "guerre", donjon: "Trône de Sang", niveau: 200, position: "[4,-2]", dpln: `${DPLN}trone-de-sang.html`, statut: "brouillon",
+    slug: "guerre", donjon: "Trône de Sang", niveau: 200, zone: "Éliocalypse", position: "[4,-2]", dpln: `${DPLN}trone-de-sang.html`, statut: "brouillon",
     acces: [
       "Dans la Blessure de Guerre, une des dimensions de l'Éliocalypse, ouvertes depuis le Sanctuaire du dernier espoir ([15,-20]).",
       "L'entrée en [4,-2] n'est pas sur la carte du village : montez jusqu'à une grotte, redescendez, puis prenez les escaliers sur la gauche.",
@@ -874,7 +882,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Les guides de ce donjon datent de sa sortie (2019), avant Dofus 3 : à confirmer en jeu, surtout les armes."],
   },
   {
-    slug: "servitude", donjon: "Fers de la Tyrannie", niveau: 200, position: "[4,-3]", dpln: `${DPLN}fers-de-la-tyrannie.html`, statut: "brouillon",
+    slug: "servitude", donjon: "Fers de la Tyrannie", niveau: 200, zone: "Éliocalypse", position: "[4,-3]", dpln: `${DPLN}fers-de-la-tyrannie.html`, statut: "brouillon",
     acces: ["Dans la Galère de Servitude, une des dimensions de l'Éliocalypse, ouvertes depuis le Sanctuaire du dernier espoir ([15,-20]). Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "Servitude renvoie les dommages qu'on lui inflige (200 %). Pour le frapper sans risque, il faut l'état Traître.",
@@ -894,7 +902,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Guides d'avant Dofus 3, complétés avec les changements de la 3.6 (6 Armécréantes au maximum). Le nombre d'attaques par glyphe vient d'un autre combat contre Servitude : à confirmer."],
   },
   {
-    slug: "misere", donjon: "Sentence de la Balance", niveau: 200, position: "[1,0]", dpln: `${DPLN}sentence-de-la-balance.html`, statut: "brouillon",
+    slug: "misere", donjon: "Sentence de la Balance", niveau: 200, zone: "Éliocalypse", position: "[1,0]", dpln: `${DPLN}sentence-de-la-balance.html`, statut: "brouillon",
     acces: ["Dans le Désert de Misère, une des dimensions de l'Éliocalypse, ouvertes depuis le Sanctuaire du dernier espoir ([15,-20]). Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "Au début, Misère n'est pas sur sa monture. À 50 % de sa vie, elle monte dessus, change de sorts et devient invulnérable pendant un tour entier.",
@@ -913,7 +921,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Guides d'avant Dofus 3, en partie faits sur la version bêta : à confirmer en jeu (dépouilles, invulnérabilité au début du combat)."],
   },
   {
-    slug: "corruption", donjon: "Arbre de Mort", niveau: 200, position: "[4,0]", dpln: `${DPLN}arbre-de-mort.html`, statut: "brouillon",
+    slug: "corruption", donjon: "Arbre de Mort", niveau: 200, zone: "Éliocalypse", position: "[4,0]", dpln: `${DPLN}arbre-de-mort.html`, statut: "brouillon",
     acces: ["Dans le Royaume Corrompu, une des dimensions de l'Éliocalypse, ouvertes depuis le Sanctuaire du dernier espoir ([15,-20]). Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "Corruption a l'état Kissiphrot Sipike : le frapper vous fait prendre un coup en retour. Ses monstres l'ont aussi.",
@@ -935,7 +943,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Guides d'avant Dofus 3 : à confirmer en jeu."],
   },
   {
-    slug: "tempete-eliocalypse", donjon: "Tempête de l'Eliocalypse", niveau: 200, position: "Éliocalypse", dpln: `${DPLN}tempete-de-l-eliocalypse.html`, statut: "brouillon",
+    slug: "tempete-eliocalypse", nom: "Les quatre Cavaliers", donjon: "Tempête de l'Eliocalypse", niveau: 200, zone: "Éliocalypse", position: "Éliocalypse", dpln: `${DPLN}tempete-de-l-eliocalypse.html`, statut: "brouillon",
     acces: ["Les quatre Cavaliers dans le même combat. Chacun garde la mécanique de son donjon : voir les fiches de Guerre, Servitude, Misère et Corruption."],
     mecaniques: [
       "Guerre est invulnérable tant qu'elle n'est pas seule : elle meurt toujours en dernier.",
@@ -950,7 +958,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Fiche faite d'après un seul guide : à confirmer en jeu. La fiche du jeu affichée est celle de Guerre."],
   },
   {
-    slug: "kabahal", donjon: "Rituel de Kabahal", niveau: 200, position: "[43,-57]", dpln: `${DPLN}rituel-de-kabahal.html`, statut: "brouillon",
+    slug: "kabahal", donjon: "Rituel de Kabahal", niveau: 200, zone: "Atoll des Possédés", position: "[43,-57]", dpln: `${DPLN}rituel-de-kabahal.html`, statut: "brouillon",
     acces: ["Sur l'Atoll des Possédés : l'entrée est dans la carcasse de la baleine, en [43,-57]. Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "Kabahal ne se frappe pas directement : il faut passer par les Bras démoniaques.",
@@ -972,7 +980,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Guides de 2021, avant Dofus 3, complétés avec les changements de la 2.71 : à confirmer en jeu, surtout la rune de contrôle."],
   },
   {
-    slug: "belladone", donjon: "Chambre des maléfices", niveau: 200, position: "[29,-88]", dpln: `${DPLN}chambre-des-malefices.html`, statut: "brouillon",
+    slug: "belladone", donjon: "Chambre des maléfices", niveau: 200, zone: "Archipel de Valonia", position: "[29,-88]", dpln: `${DPLN}chambre-des-malefices.html`, statut: "brouillon",
     acces: ["Dans le château en ruine d'Ephedrya, sur l'archipel de Valonia : parlez à Bulbybell en [29,-88]. Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "Phase 1 : Belladone reste sur son îlot, ne bouge pas et est invulnérable. Chaque monstre tué lui donne un niveau d'Ensorcellement (3 au plus), qui renforce ses sorts.",
@@ -993,7 +1001,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Guide de 2022, avant Dofus 3 : à confirmer en jeu (phases et seuil)."],
   },
   {
-    slug: "dechireuse", donjon: "Autel de la Déchireuse", niveau: 200, position: "[12,2]", dpln: `${DPLN}autel-de-la-dechireuse.html`, statut: "brouillon",
+    slug: "dechireuse", donjon: "Autel de la Déchireuse", niveau: 200, zone: "Osavora", position: "[12,2]", dpln: `${DPLN}autel-de-la-dechireuse.html`, statut: "brouillon",
     acces: ["Dans le Village Rhoarim d'Osavora, en [12,2]. Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "Une seule salle et 5 vagues : une tous les 5 tours (tours 1, 6, 11, 16 et 21), ou tout de suite si la précédente est éliminée. Les nouveaux monstres sont invulnérables jusqu'à la fin de leur premier tour.",
@@ -1015,7 +1023,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Le placement exact selon la saison (qui doit être le plus proche de l'Autel) vient d'un seul guide : à confirmer en jeu."],
   },
   {
-    slug: "venerable-endormi", donjon: "Breuil du Vénérable", niveau: 200, position: "[6,9]", dpln: `${DPLN}breuil-du-venerable.html`, statut: "brouillon",
+    slug: "venerable-endormi", donjon: "Breuil du Vénérable", niveau: 200, zone: "Osavora", position: "[6,9]", dpln: `${DPLN}breuil-du-venerable.html`, statut: "brouillon",
     acces: ["Dans la Réserve Touffue d'Osavora, en [6,9]. Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "Le Vénérable Endormi dort, et il est invulnérable.",
@@ -1031,7 +1039,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Guides d'avant la 3.7, qui a changé les Zarbivores : à confirmer en jeu. Ce qui se passe quand un monstre Alerté le réveille (vulnérable ou non) reste à préciser."],
   },
   {
-    slug: "eternel-conflit", donjon: "Bataille de l'Aurore Pourpre", niveau: 200, position: "[1,0]", dpln: `${DPLN}bataille-de-l-aurore-pourpre.html`, statut: "brouillon",
+    slug: "eternel-conflit", donjon: "Bataille de l'Aurore Pourpre", niveau: 200, zone: "Cauchemar des Ravageurs", position: "[1,0]", dpln: `${DPLN}bataille-de-l-aurore-pourpre.html`, statut: "brouillon",
     acces: ["Dans le Cauchemar des Ravageurs, en [1,0]. Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "L'Éternel Conflit est protégé par deux diablotins : tant que le Bonraphin vit, il est invulnérable à distance ; tant que le Brâklotin vit, il est invulnérable au contact.",
@@ -1050,7 +1058,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Donjon très modifié en 2.71, guides d'avant Dofus 3 : à confirmer en jeu, surtout la fin de tour en ligne de vue (ce qui arrive sinon)."],
   },
   {
-    slug: "torkelonia", donjon: "Sanctuaire de Torkélonia", niveau: 200, position: "[-84,-16]", dpln: `${DPLN}sanctuaire-de-torkelonia.html`, statut: "brouillon",
+    slug: "torkelonia", donjon: "Sanctuaire de Torkélonia", niveau: 200, zone: "Archipel des Écailles", position: "[-84,-16]", dpln: `${DPLN}sanctuaire-de-torkelonia.html`, statut: "brouillon",
     acces: ["Sur l'île de Crocuzko, en [-84,-16] : il faut avoir fini la quête « Perdu dans le temps ». Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "Torkélonia invoque au centre une Lunorbe (invulnérable, indéplaçable) qui rend tout le monde invulnérable, elle comme ses monstres.",
@@ -1075,7 +1083,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["Guides de 2019 ; la 3.7 a changé les effets de la Nouvelle et de la Pleine Lune. Achever Torkélonia sans mourir : seulement en Nouvelle Lune, ou aussi en Pleine Lune ? À confirmer."],
   },
   {
-    slug: "barberyl-clochecuivre", donjon: "Bastion des Marteaux-Aigris", niveau: 190, position: "[32,-64]", dpln: `${DPLN}bastion-des-marteaux-aigris.html`, statut: "brouillon",
+    slug: "barberyl-clochecuivre", donjon: "Bastion des Marteaux-Aigris", niveau: 190, zone: "Archipel de Valonia", position: "[32,-64]", dpln: `${DPLN}bastion-des-marteaux-aigris.html`, statut: "brouillon",
     acces: ["Dans les Galeries d'Ereboria, sur l'archipel de Valonia (bateau en [36,-76]). Clef par le trousseau, ou à fabriquer."],
     mecaniques: [
       "Nimpatience : chaque fois qu'un Marteau-Aigri touche un de vos personnages, sa Nimpatience monte (2 fois par tour au plus, 5 niveaux en tout), et elle ne redescend jamais.",

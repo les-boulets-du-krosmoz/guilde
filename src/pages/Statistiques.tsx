@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { STATS_BOSS } from "../data/bossStats";
 import { COMBATS_TACTIQUES } from "../data/combatsTactiques";
-import { GUIDES_BOSS } from "../data/guidesBoss";
+import { GUIDES_BOSS, nomDuGuide } from "../data/guidesBoss";
 import { CATEGORIES, ouEstLaQuete } from "../data/series";
 import { useSession } from "../lib/session";
 import { supabase } from "../lib/supabase";
@@ -70,7 +69,7 @@ function lignesFiches(totaux: Total[], prefixe: string, fiches: { cle: string; l
   return lignes.sort((a, b) => b.vues - a.vues || a.libelle.localeCompare(b.libelle));
 }
 
-const FICHES_BOSS = GUIDES_BOSS.map((g) => ({ cle: cibleBoss(g.slug), libelle: STATS_BOSS[g.slug]?.nom ?? g.slug }));
+const FICHES_BOSS = GUIDES_BOSS.map((g) => ({ cle: cibleBoss(g.slug), libelle: nomDuGuide(g) }));
 const FICHES_STRATS = COMBATS_TACTIQUES.map((g) => {
   const ou = g.quete ? ouEstLaQuete(g.quete) : undefined;
   return { cle: cibleStrat(g), libelle: `${g.adversaire} (${ou ? ou.serie.nom : g.nomQuete ?? "quête"})` };
