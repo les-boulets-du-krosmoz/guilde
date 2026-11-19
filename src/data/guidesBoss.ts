@@ -169,7 +169,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Tours impairs : frapper le Comte téléporte l'attaquant en symétrie par rapport à lui. Si la case est occupée, l'attaquant et l'occupant prennent des dommages Feu.",
       "Tours pairs : frapper le Comte le téléporte, lui, en symétrie par rapport à l'attaquant.",
       "Le Comte Harebourg{os} tue toute l'équipe si une de ces téléportations finit dans le décor : regardez la case d'arrivée avant chaque coup.",
-      "À chaque début de tour, il pose un glyphe : un personnage qui commence son tour dedans meurt.",
+      "Au début de son tour, il pose un glyphe en croix de 3 cases autour de lui : un personnage qui commence son tour dedans meurt.",
       "Confusion horaire : au début de votre tour, vos sorts et armes sont déviés par une rotation autour de votre personnage, qui dépend de vos PV (voir ci-dessous).",
     ],
     encart: {
@@ -201,12 +201,13 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Une invocation sur la case d'arrivée délocke aussi, mais elle explose : elle tue vos personnages à 3 cases ou moins d'elle.",
     ],
     strategie: [
-      "Placez en symétrie l'allié qui joue juste après le Comte : le Comte sera encore vulnérable à son tour suivant, et cet allié pourra le frapper.",
+      "Le Comte joue en dernier : juste après son tour, il est difficile de préparer le délock. Le premier allié à jouer se place donc en symétrie, et le deuxième frappe pour délocker.",
+      "Le Comte reste vulnérable jusqu'au prochain tour du deuxième allié : le premier pourra encore le frapper au tour suivant, avec ses 100 dommages en plus.",
       "Faites frapper les monstres par vos invocations : elles ne sont pas déviées.",
     ],
     succes: [
       "Succès du donjon : Versatile, Statue et Duo (40 tours).",
-      "Statue : ne frappez le Comte qu'en tour pair. En tour impair, c'est vous qui êtes téléporté, donc vous ne finissez pas votre tour sur votre case de départ.",
+      "Statue : en tour impair, frapper le Comte vous téléporte. Frappez-le en tour pair, ou gardez de quoi revenir sur votre case de départ.",
     ],
   },
   {
