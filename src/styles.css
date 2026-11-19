@@ -1401,6 +1401,15 @@ a.jauge__nom:hover { color: var(--or); }
 .fiche-boss__res { gap: 12px !important; flex-wrap: wrap; }
 .fiche-boss__res > span { display: inline-flex; align-items: center; gap: 4px; }
 .fiche-boss__neutre { display: inline-block; width: 16px; height: 16px; margin: 1px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #d8d2c6, #8f887c 60%, #5d584f); box-shadow: 0 0 0 1px #3d3a34; flex-shrink: 0; }
+.fiche-boss__encart { padding: 14px 16px; border: 1px solid var(--trait-fort); border-radius: 12px; background: var(--carte-haute); }
+.fiche-boss__encart ol { margin: 10px 0 0; padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
+.fiche-boss__tableau { border-collapse: collapse; width: 100%; max-width: 560px; font-size: 14px; }
+.fiche-boss__tableau th, .fiche-boss__tableau td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--trait-fort); }
+.fiche-boss__tableau thead th { color: var(--texte-2); font-weight: 600; font-size: 13px; }
+.fiche-boss__tableau tbody th { font-weight: 600; white-space: nowrap; }
+.fiche-boss__schema { margin: 12px 0 4px; }
+.fiche-boss__schema img { display: block; width: 100%; max-width: 600px; height: auto; border-radius: 12px; }
+.fiche-boss__schema figcaption { margin-top: 6px; }
 .fiche-boss__repli > summary { cursor: pointer; width: fit-content; }
 .fiche-boss__repli > summary h3 { display: inline; margin: 0; }
 .fiche-boss__repli[open] > summary { margin-bottom: 6px; }

@@ -66,6 +66,13 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   « Les quatre Cavaliers »). Regroupement de la liste dans GROUPES (src/pages/Donjons.tsx) : une zone absente va dans
   « Autres zones ». Icônes des caractéristiques : public/icones/stats (3 PV, 4 PA, 5 PM, 8 à 11 Terre/Feu/Eau/Air) ;
   pas d'icône Neutre, remplacée par une pastille grise.
+- Champ encart (facultatif) des guides : tableau à deux colonnes, étapes, schéma (public/guides/*.svg) et remarques,
+  affiché sous les mécaniques. Premier usage : Comte Harebourg (schéma harebourg-confusion.svg, vue isométrique).
+- Comte Harebourg refait le 19 novembre d'après un joueur et le texte 3.7 du sort Carillon (états Alternance / Mi-temps,
+  décor qui tue l'équipe, glyphe de début de tour, invocation qui explose en cercle de 3). Paliers de confusion d'après
+  le sort Comtoise (3646) : 90+ ¼ horaire, 75-89 ¼ anti-horaire, 60-74 et 45-59 ½ tour, 30-44 ¾ horaire, <30 ¾
+  anti-horaire ; Pendultimatum (3643) : +¼ horaire par coup au corps à corps. À confirmer : qui doit jouer juste après
+  le Comte (l'allié en symétrie, d'après ma lecture du joueur).
 - Statut des guides de boss : « relu » (validé par un joueur qui a fait le boss, étiquette « ✓ Guide relu », plus de
   bandeau « à relire »), « brouillon », « a-rediger ». Relus le 18 novembre : Royalmouth (tuent d'un coup : celui qui lui
   inflige des dommages de poussée et celui qui en subit contre lui ; seul le Boufmouth légendaire pousse, d'après les

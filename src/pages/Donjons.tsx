@@ -120,6 +120,29 @@ function IconeStat({ id, nom }: { id: number; nom: string }) {
   return <img className="icone-stat" src={`/icones/stats/${id}.webp`} alt={nom} title={nom} width={18} height={18} />;
 }
 
+/** Encart d'une fiche : tableau, étapes numérotées, schéma et remarques (ex. viser malgré la confusion du Comte Harebourg). */
+function Encart({ encart: e }: { encart: NonNullable<GuideBoss["encart"]> }) {
+  return (
+    <section className="fiche-boss__section fiche-boss__encart">
+      <h3>{e.titre}</h3>
+      {e.lignes?.length ? (
+        <table className="fiche-boss__tableau">
+          {e.colonnes && <thead><tr><th scope="col">{e.colonnes[0]}</th><th scope="col">{e.colonnes[1]}</th></tr></thead>}
+          <tbody>{e.lignes.map(([a, b], k) => <tr key={k}><th scope="row">{a}</th><td>{b}</td></tr>)}</tbody>
+        </table>
+      ) : null}
+      {e.etapes?.length ? <ol>{e.etapes.map((l, k) => <li key={k}><TexteGuide texte={l} /></li>)}</ol> : null}
+      {e.image && (
+        <figure className="fiche-boss__schema">
+          <img src={e.image.src} alt={e.image.alt} loading="lazy" />
+          {e.image.legende && <figcaption className="discret-taille">{e.image.legende}</figcaption>}
+        </figure>
+      )}
+      {e.notes?.length ? <ul>{e.notes.map((l, k) => <li key={k}><TexteGuide texte={l} /></li>)}</ul> : null}
+    </section>
+  );
+}
+
 export function FicheBoss({ guide }: { guide: GuideBoss }) {
   const s = STATS_BOSS[guide.slug];
   useEffect(() => compterVisite(cibleBoss(guide.slug)), [guide.slug]);
@@ -159,6 +182,7 @@ export function FicheBoss({ guide }: { guide: GuideBoss }) {
         </details>
       ) : null}
       {section("Mécaniques", guide.mecaniques)}
+      {guide.encart && <Encart encart={guide.encart} />}
       {section("Rendre vulnérable (délock)", guide.delock)}
       {section("Comment s'y prendre", guide.strategie)}
       {section("Pour les succès", guide.succes)}

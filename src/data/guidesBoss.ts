@@ -25,6 +25,8 @@ export type GuideBoss = {
   avertissements?: string[];
   /** Astuces pour les challenges du donjon (Duo, Statue, Focus…). */
   succes?: string[];
+  /** Encart affiché sous les mécaniques : tableau à deux colonnes, étapes, schéma (public/guides) et remarques. */
+  encart?: { titre: string; colonnes?: [string, string]; lignes?: [string, string][]; etapes?: string[]; image?: { src: string; alt: string; legende?: string }; notes?: string[] };
 };
 
 const DPLN = "https://www.dofuspourlesnoobs.com/";
@@ -163,17 +165,49 @@ export const GUIDES_BOSS: GuideBoss[] = [
     slug: "comte-harebourg", donjon: "Donjon du Comte Harebourg", niveau: 200, zone: "Frigost", position: "[-61,-79]", dpln: `${DPLN}donjon-du-comte-harebourg.html`, statut: "brouillon",
     acces: ["Au sommet de la Tour de la Clepsydre, au centre de Frigost III. C'est le dernier donjon avant le Dofus des Glaces."],
     mecaniques: [
-      "Confusions horaires : vos attaques sont déviées selon un angle (exprimé en degrés ou en π). Calculez où part réellement votre sort avant de le lancer.",
-      "Tours impairs : si vous frappez le Comte, c'est vous qui êtes déplacé en symétrie par rapport à lui.",
-      "Tours pairs : si vous frappez le Comte, c'est lui qui est déplacé en symétrie par rapport à vous.",
+      "Le Comte Harebourg est invulnérable. Il change d'état à chaque tour, et c'est cet état qui décide de qui est téléporté quand on le frappe.",
+      "Tours impairs : frapper le Comte téléporte l'attaquant en symétrie par rapport à lui. Si la case est occupée, l'attaquant et l'occupant prennent des dommages Feu.",
+      "Tours pairs : frapper le Comte le téléporte, lui, en symétrie par rapport à l'attaquant.",
+      "Le Comte Harebourg{os} tue toute l'équipe si une de ces téléportations finit dans le décor : regardez la case d'arrivée avant chaque coup.",
+      "À chaque début de tour, il pose un glyphe : un personnage qui commence son tour dedans meurt.",
+      "Confusion horaire : au début de votre tour, vos sorts et armes sont déviés par une rotation autour de votre personnage, qui dépend de vos PV (voir ci-dessous).",
     ],
+    encart: {
+      titre: "Viser malgré la confusion",
+      colonnes: ["Vos PV au début du tour", "Déviation de vos sorts"],
+      lignes: [
+        ["90 % et plus", "¼ de tour horaire"],
+        ["75 à 89 %", "¼ de tour anti-horaire"],
+        ["45 à 74 %", "½ tour"],
+        ["30 à 44 %", "¾ de tour horaire, soit ¼ de tour anti-horaire"],
+        ["Moins de 30 %", "¾ de tour anti-horaire, soit ¼ de tour horaire"],
+      ],
+      etapes: [
+        "Placez-vous en ligne ou en diagonale avec votre cible : la case à viser est alors facile à repérer.",
+        "Imaginez un cercle autour de vous, de rayon la distance jusqu'à la cible.",
+        "Sur ce cercle, visez la case qui retombe sur la cible après la rotation, donc en tournant dans l'autre sens. Avec un ¼ de tour horaire et un monstre à 3 cases en haut à droite, visez 3 cases en haut à gauche.",
+        "La ligne de vue compte aussi sur la case où le sort arrive : sans elle, le sort fait un échec critique.",
+      ],
+      image: { src: "/guides/harebourg-confusion.svg", alt: "Schéma : le personnage vise la case à 3 cases en haut à gauche ; après un quart de tour horaire, le sort arrive sur le monstre à 3 cases en haut à droite.", legende: "Exemple avec un ¼ de tour horaire : même distance, un quart de tour avant la cible." },
+      notes: [
+        "La déviation est fixée au début de votre tour : un soin qui vous fait changer de tranche ne la change pas.",
+        "Chaque coup au corps à corps sur un monstre ajoute un ¼ de tour horaire à votre déviation.",
+        "Les invocations ne sont pas déviées. Un sort qui passe par un portail Éliotrope garde sa déviation.",
+      ],
+    },
     delock: [
-      "Le Comte perd son invulnérabilité pendant un tour complet s'il échange sa place avec un allié (un personnage ou un compagnon, pas une invocation).",
-      "On le fait donc pendant les tours pairs : frappez-le de façon que sa case d'arrivée, symétrique par rapport à vous, soit celle d'un allié.",
+      "En tour pair, frappez le Comte avec un allié placé sur sa case d'arrivée, en symétrie par rapport à vous : il échange sa place avec lui et perd son invulnérabilité. Le Comte et l'allié gagnent 100 dommages pendant un tour.",
+      "Il reste vulnérable jusqu'au début du prochain tour de celui qui l'a délocké. Le délock n'est possible qu'un tour sur deux.",
+      "Une invocation sur la case d'arrivée délocke aussi, mais elle explose : elle tue vos personnages à 3 cases ou moins d'elle.",
     ],
     strategie: [
+      "Placez en symétrie l'allié qui joue juste après le Comte : le Comte sera encore vulnérable à son tour suivant, et cet allié pourra le frapper.",
+      "Faites frapper les monstres par vos invocations : elles ne sont pas déviées.",
     ],
-    succes: ["Succès du donjon : Versatile, Statue et Duo (40 tours)."],
+    succes: [
+      "Succès du donjon : Versatile, Statue et Duo (40 tours).",
+      "Statue : ne frappez le Comte qu'en tour pair. En tour impair, c'est vous qui êtes téléporté, donc vous ne finissez pas votre tour sur votre case de départ.",
+    ],
   },
   {
     slug: "kimbo", donjon: "Canopée du Kimbo", niveau: 160, zone: "Île d'Otomaï", position: "[-54,16]", dpln: `${DPLN}canopeacutee-du-kimbo.html`, statut: "brouillon",
