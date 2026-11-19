@@ -57,7 +57,10 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   Éternel Conflit, Torkélonia, Barbéryl. Sources souvent d'avant Dofus 3 : avertissements dans chaque fiche.
 - Kolosso refait le 19 novembre d'après un joueur (accès par les 4 reliques, mort de Xa qui renforce tous les monstres,
   Croleur vers 1 600 en critique invisible, invocations de Xa qui meurent avec lui) et les données 3.7 (lourd, soins et
-  insoignable, résurrection par Xa, bonus du Kolosso à la mort de Xa). Ouverts : délock à distance, chiffre du renfort.
+  insoignable, résurrection par Xa, bonus du Kolosso à la mort de Xa). Le 19 : reliques confirmées, Croleur dangereux
+  surtout après la mort de Xa, effet de Xa (+100 dommages par coup reçu, soigne les joueurs autour), méthode du Premier
+  (achever Xa puis le Croleur avant son tour). Ouverts : délock à distance, chiffre du renfort, bonus du Kolosso (mort de
+  Xa d'après les données, « seul » d'après un joueur), soin de l'effet de Xa et succès Spécial.
 - Statut des guides de boss : « relu » (validé par un joueur qui a fait le boss, étiquette « ✓ Guide relu », plus de
   bandeau « à relire »), « brouillon », « a-rediger ». Relus le 18 novembre : Royalmouth (tuent d'un coup : celui qui lui
   inflige des dommages de poussée et celui qui en subit contre lui ; seul le Boufmouth légendaire pousse, d'après les
