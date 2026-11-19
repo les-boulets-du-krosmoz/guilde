@@ -53,7 +53,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Vulnérable, elle gagne un saut (1 à 4 cases, en début de tour si elle ne peut frapper personne, tous les 2 tours) : l'état Pesanteur l'en empêche.",
     ],
     succes: [
-      "Focus : les monstres ressuscitent sans cesse ; déplacez-les sans les frapper (libération, poussées sans dommages) et retirez-leur des PM pour les tenir à distance. Une fois Tal Kasha vulnérable, on ne peut plus toucher aux autres.",
+      "Focus : déplacez-les sans les frapper (libération, poussées sans dommages) et retirez-leur des PM pour les tenir à distance. Une fois Tal Kasha vulnérable, on ne peut plus toucher aux autres.",
       "Statue : beaucoup de déplacement et d'entrave chez les alliés, pour bouger les ennemis plutôt que soi.",
       "Duo (40 tours) : il faut des dommages, et du retrait de PM à distance pour la placer vite sur les glyphes.",
     ],
@@ -89,7 +89,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     slug: "nileza", donjon: "Laboratoire de Nileza", niveau: 200, position: "[-61,-74]", dpln: `${DPLN}laboratoire-de-nileza.html`, statut: "brouillon",
     acces: ["Dans les Jardins d'Hiver (château de Harebourg). Clef par le trousseau, ou à fabriquer avec les ressources des Alchillusions du donjon."],
     mecaniques: [
-      "Nileza n'est pas invulnérable.",
       "Quand on le frappe à distance, il échange sa place avec l'attaquant et laisse sur sa case de départ un glyphe qui blesse vos personnages (selon leur vie érodée) et leur retire du tacle et de la fuite. Le frapper au contact ne déclenche rien de tout ça.",
       "À son arrivée, il érode et inflige des dommages Air à tout ce qui est à 2 cases autour de lui, ses monstres compris, selon les dommages qu'il vient de subir.",
       "Avec Nileza{os}, un personnage qui finit son tour au contact d'un allié tue cet allié (les invocations ne comptent pas).",
@@ -103,11 +102,10 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "À distance, retournez sa mécanique contre son camp : frappez-le depuis une case entourée de ses monstres. Il atterrit à votre place et sa zone de 2 cases les blesse. Vérifiez avant où vous atterrissez.",
       "Prévenez toute l'équipe : ne finissez jamais votre tour au contact d'un allié.",
       "Restez de plus en plus près de lui à mesure que les tours passent, sans vous coller entre vous.",
-      "Finissez vite : à partir du tour 8, plus personne ne peut être soigné. Sous Amer, évitez de soigner ; sous Aigre, un critique vous coûte des PM.",
+      "Finissez vite : à partir du tour 8, plus personne ne peut être soigné. Sous Amer, évitez de soigner.",
     ],
     succes: [
       "Succès du donjon : Prudent, Dernier, Duo (40 tours), Compagnon (à 4 au moins, avec Mirh, Rekto Topi, Traçon ou Logram), Spécial « Alchi-pludent » (aucun allié ne doit devenir Pacifiste).",
-      "Alchi-pludent : tout le monde reste dans le rayon qui rétrécit ; plus le combat dure, plus c'est dur.",
     ],
     avertissements: ["Fiche revue d'après la description du combat dans le jeu (mise à jour 3.7). Les distances du Pacifiste (12, 10, 8 puis 6 cases) viennent des données du jeu : à vérifier en combat."],
   },
@@ -150,7 +148,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     avertissements: ["La limite du tour 3 ne vient que d'une seule source : à confirmer en jeu."],
     strategie: [
       "Prévoyez au moins deux personnages capables de pousser, et une invocation pour servir d'appui si besoin.",
-      "Organisez l'ordre de jeu : celui qui délocke joue juste avant les gros frappeurs.",
       "Méfiez-vous de Cuir à feu doux : ne restez pas sur la case de départ d'un ennemi à la fin de votre tour.",
     ],
   },
@@ -167,9 +164,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "On le fait donc pendant les tours pairs : frappez-le de façon que sa case d'arrivée, symétrique par rapport à vous, soit celle d'un allié.",
     ],
     strategie: [
-      "Préparez les tours pairs : placez un allié sur la case symétrique au Comte par rapport à celui qui va le frapper.",
-      "Pendant les tours impairs, évitez de le frapper sans réfléchir : c'est vous qui seriez déplacé, parfois au mauvais endroit.",
-      "Une fois délocké, il reste vulnérable un tour complet : enchaînez les gros dégâts avec toute l'équipe.",
     ],
     succes: ["Succès du donjon : Versatile, Statue et Duo (40 tours)."],
   },
@@ -262,13 +256,13 @@ export const GUIDES_BOSS: GuideBoss[] = [
     slug: "capitaine-meno", donjon: "Vaisseau du Capitaine Meno", niveau: 200, position: "[24,27]", dpln: `${DPLN}vaisseau-du-capitaine-meno.html`, statut: "brouillon",
     acces: ["Clef par le trousseau, ou à fabriquer (Baves de Mol Usk, Pinces de Crabe Yoloniste, Écailles de Gambaf, et des ressources de la mer). Le vaisseau est hors de l'eau : montures autorisées."],
     mecaniques: [
-      "Le Capitaine Meno n'est pas invulnérable, mais il réduit de moitié les dommages qu'il subit, et il a 60 000 PV.",
+      "Il réduit de moitié les dommages qu'il subit.",
       "Ses monstres sont invulnérables. Il en invoque de nouveaux à chaque tour, sur des cases fixes. Chacun perd 1 PM par tour et meurt au bout de 4 tours.",
       "Chaque fois qu'un de vos personnages subit des dommages, le Capitaine se soigne d'autant.",
       "Il pose des glyphes sur vos personnages : au début de son tour, chacun inflige des dommages Feu autour de lui et dévoile les invisibles ; celui qui est dessus reçoit un bouclier.",
       "À partir de la fin de son 2e tour, les dommages finaux augmentent à chaque tour, sans limite.",
     ],
-    delock: ["Le Capitaine Meno n'est pas invulnérable : pas de délock. Le combat se gagne en prenant le moins de coups possible, puisque chacun le soigne."],
+    delock: ["Le Capitaine Meno n'est pas invulnérable : pas de délock."],
     strategie: [
       "Concentrez tous les dégâts sur le Capitaine : ses monstres sont invulnérables et meurent seuls au bout de 4 tours. Tenez-les à distance plutôt que de les frapper.",
       "Écartez-vous des personnages qui portent un de ses glyphes : les dommages Feu touchent ceux qui sont autour, et chaque dommage reçu le soigne.",
@@ -321,7 +315,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Repérez dès le placement le Grokillage qui porte votre numéro.",
       "Commencez par les Grokillages, avant Dantinéa et ses gardes, et aidez un allié en retard : au tour 5, il mourrait.",
       "Ne finissez pas votre tour aligné avec un Grokillage.",
-      "Aux tours 5, 10, 15…, de nouveaux Grokillages arrivent : repassez sur eux en priorité.",
     ],
     succes: [
       "Succès du donjon : Statue, Dernier, Duo (40 tours), Compagnon (à 4 au moins, avec Krosmoglob, Korbax, Masse ou le Chevalier d'Astrub), Spécial « Chasse aux coquillages » (chaque Grokillage ne doit être blessé que par le personnage auquel il est lié).",
@@ -376,7 +369,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Avec les quatre reliques, parlez au PNJ de l'entrée pour aller voir le boss.",
     ],
     mecaniques: [
-      "Deux boss : le Kolosso et le Professeur Xa (8 600 PV chacun en groupe de 4).",
+      "Deux boss : le Kolosso et le Professeur Xa (8 600 PV en groupe de 4).",
       "Le Kolosso est invulnérable, et lourd : on ne peut ni le pousser ni l'attirer.",
       "Au contact, il frappe en cône sur toute la carte : tous ceux qui sont derrière sa cible sont touchés aussi.",
       "Il soigne ses monstres, vous attire de 2 cases et vous rend insoignable pendant un tour.",
@@ -420,7 +413,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     delock: ["Poussez-le, sans le cogner contre un obstacle ni contre quelqu'un : la poussée lui retire son invulnérabilité."],
     strategie: [
-      "Avant chaque poussée, regardez derrière lui : case libre, vous le délockez ; obstacle ou personnage derrière lui, celui qui pousse meurt.",
       "Ne poussez jamais un allié contre lui : celui qui pousse et celui qui est poussé meurent tous les deux.",
       "Ne restez pas entre un Boufmouth Légendaire et le Royalmouth : sa poussée vous envoie contre le boss. Tuez le Légendaire en premier.",
     ],
@@ -455,7 +447,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Succès du donjon : Collant, Dernier, Duo (20 tours), Compagnon (à 4 au moins, avec Inferno, Styx, Mandrin ou Will Killson), Spécial « Privilège royal » (chaque début de tour, le Mansot désigne un allié : lui seul peut être soigné).",
       "Privilège royal : le délock ne marche alors qu'avec le personnage désigné. Amenez-le au contact du Mansot.",
       "Collant : il faut finir son tour collé à un allié, alors qu'un soin blesse ceux qui sont à 2 cases. Soignez pour délocker seulement quand le personnage au contact est isolé.",
-      "Dernier : tous ses monstres meurent avant lui, donc il arrive à la fin avec beaucoup de PM et de puissance.",
     ],
     avertissements: [
       "La mort d'un de vos personnages le renforce-t-elle aussi, comme celle de ses monstres ? Aucune confirmation récente : à vérifier en jeu.",
@@ -481,7 +472,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     succes: [
       "Succès du donjon : Premier, Statue, Duo (20 tours), Spécial « À son hypogée » (aucun ennemi ne doit être attiré ni poussé).",
-      "À son hypogée : on ne pousse que ses propres personnages, ce qui laisse le délock possible.",
       "Statue : chacun finit ses tours sur sa case de départ, à 8 cases ou moins des Pougnettes. Choisissez bien le placement de départ.",
     ],
   },
@@ -518,7 +508,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Succès du Tengu : Premier, Statue, Duo (15 tours), Spécial « Autonomie givrée » (chaque allié finit son tour à plus de 4 cases de tous les autres).",
       "Succès de la Fuji : Dernier, Statue, Duo (20 tours), Compagnon (à 4 au moins, avec Rapiat, Rapine, Ougicle ou Hulkrap), Spécial « Émancipation maternelle » (ne jamais finir son tour en ligne d'un ennemi).",
       "Premier : délockez le Tengu dès les premiers tours, avec le Yokaï et le Yomi de la salle.",
-      "Émancipation maternelle : la carte est étroite, et un Yomi au contact (10 PM en moins) peut vous laisser coincé en ligne d'un ennemi. Gardez-le loin.",
     ],
     avertissements: [
       "Les guides détaillés de ce donjon datent d'avant Dofus 3, sauf pour les invocations du Tengu (revues en 2024) : chiffres à confirmer en jeu.",
@@ -595,7 +584,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     succes: [
       "Succès du donjon : Premier, Collant, Duo (20 tours), Compagnon (à 4 au moins, avec Inferno, Styx, Mandrin ou Will Killson), Spécial « Complaisance gloursonne » (aucun retrait de PM, de PA ou de portée et aucun déplacement sur les ennemis).",
       "Premier : il faut le tuer avec tous ses monstres en vie. Prévoyez beaucoup de protection et du désenvoûtement.",
-      "Collant : très difficile, car les poussées du Glourmand et celle du délock séparent l'équipe.",
     ],
     avertissements: [
       "Les guides détaillés de ce donjon datent d'avant Dofus 3 : chiffres à confirmer en jeu.",
@@ -663,7 +651,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "La Nimpatience monte par stades : à chaque stade, il gagne 1 PM et 50 % de dommages finaux. Au stade 3, il gagne 3 PM pendant 2 tours, et son Coup de Cornes retire 25 % de vitalité à sa cible.",
       "Attention : lui infliger des dommages de poussée lui fait gagner des résistances.",
     ],
-    strategie: ["Ne le poussez pas avec des dommages de poussée.", "Finissez le combat avant que la Nimpatience ne monte trop."],
+    strategie: ["Finissez le combat avant que la Nimpatience ne monte trop."],
     succes: ["Succès du donjon : Premier, Liberté, Score 150 et 200, Duo (40 tours)."],
     avertissements: ["Le moyen de faire baisser ses résistances n'est pas encore renseigné : si tu le connais, dis-le aux officiers."],
   },
@@ -721,11 +709,11 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     mecaniques: [
       "Une seule salle : 5 vagues, une tous les 5 tours. Vider une vague fait venir la suivante, invulnérable jusqu'à son premier tour.",
-      "Le Toxoliath n'a ni invulnérabilité ni résistances hors normes. Mais chaque coup qu'on lui porte pose sur l'attaquant un poison de 2 tours, cumulable, qui frappe selon les PM utilisés pendant le tour, avant comme après le coup.",
+      "Chaque coup qu'on lui porte pose sur l'attaquant un poison de 2 tours, cumulable, qui frappe selon les PM utilisés pendant le tour, avant comme après le coup.",
       "Venin Salvateur : tous vos personnages subissent 50 % de dommages en plus.",
       "Les Nécrotiques aussi empoisonnent : le Scoliopode tue les invocations à son contact et rend insoignable celui qui le frappe ; le Lucrane retire la moitié de la vie de sa cible pour un tour.",
     ],
-    delock: ["Pas d'invulnérabilité : le danger, c'est le poison qu'il renvoie à chaque coup."],
+    delock: ["Le Toxoliath n'est pas invulnérable : pas de délock."],
     strategie: [
       "Frappez-le sans bouger : mettez-vous en place un tour avant, puis restez immobile pendant les 2 tours du poison.",
       "Les portails d'un Éliotrope permettent de le toucher sans se déplacer.",
@@ -783,7 +771,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     strategie: [
       "Tuez d'abord les autres monstres, en commençant par le Sombléro, et gardez Ombre à distance.",
-      "Installez ensuite la Silhouette dans le glyphe, puis frappez Ombre.",
     ],
     succes: ["Succès du donjon : Collant, Premier, Compagnon, Spécial « Jeux d'ombres » (aucune attaque à distance sur les ennemis), Duo (26 tours)."],
     avertissements: [
@@ -825,7 +812,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     mecaniques: [
       "Une seule salle : 5 vagues, une tous les 5 tours (tours 1, 6, 11, 16, 21). Vider une vague fait venir la suivante, à l'emplacement de départ des monstres.",
-      "Le Chalœil est invulnérable jusqu'au tour 21.",
       "Le sol est couvert de dés de 1 à 6 : finir son tour sur une case donne l'état de son chiffre. Quand un monstre commence son tour sur le même chiffre qu'un personnage, celui-ci prend 200 à 300 dégâts Neutre et 20 % d'érosion (le Chalœil ne le fait pas).",
       "Gros Yeux, tous les 3 tours : le Chalœil et ses alliés gagnent un bonus selon le chiffre de leur case (esquive PM, portée, Indéplaçable, PM, soin, puissance).",
       "À la fin de son tour, des dés (obstacles) et des glyphes blancs apparaissent sur toutes les cases du même chiffre que la sienne. Passer sur un glyphe blanc soigne.",
@@ -836,8 +822,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     strategie: [
       "Avant de finir votre tour, comparez le chiffre de votre case à celui des monstres proches.",
       "Retirez-lui des PM, ou bloquez-le dans un coin avec un double de Sram ou un personnage résistant.",
-      "Servez-vous des glyphes blancs pour vous soigner.",
-      "Repérez le tour où un monstre a 100 % de critique : ses sorts font plus de choses ce tour-là.",
     ],
     succes: ["Succès du donjon : Liberté, Prudent, Compagnon, Spécial « Les bons comptes font les bons ennemis » (finir chaque tour sur le chiffre de sa case de départ), Trio (80 tours)."],
     avertissements: ["L'invulnérabilité jusqu'au tour 21 et le détail des bonus de Gros Yeux n'ont été trouvés que dans un guide d'avant Dofus 3 : à vérifier en jeu."],
@@ -859,7 +843,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     strategie: [
       "Finissez chaque tour caché derrière un obstacle, un monstre ou une invocation.",
       "Avec du retrait de PM et du placement, coincez la Larve dans un coin derrière des obstacles.",
-      "Avant de frapper, regardez qui est le plus proche de vous : c'est avec lui que vous changerez de place.",
       "Tuez d'abord le Klûtiste (zone, retrait de PM, bonus aux alliés), puis le Shokkoth.",
       "Quand votre Folie monte, éloignez-vous du combat pour la faire redescendre.",
     ],
@@ -883,11 +866,10 @@ export const GUIDES_BOSS: GuideBoss[] = [
     delock: ["Tuez tous les monstres qui l'accompagnent : elle devient vulnérable."],
     strategie: [
       "Repoussez Guerre loin de vous pendant que vous nettoyez ses monstres.",
-      "Une fois vulnérable, chaque tranche de 20 % fait apparaître une arme : regardez sa zone avant de finir votre tour.",
+      "Avant de finir votre tour, sortez de la zone des armes.",
     ],
     succes: [
       "Succès du donjon : Zombie, Misanthrope, Duo (40 tours), Spécial « Arsenal total » (aucune arme de Guerre ne doit être achevée ni déplacée par un allié).",
-      "Arsenal total : laissez les armes en place et jouez autour de leurs zones.",
     ],
     avertissements: ["Les guides de ce donjon datent de sa sortie (2019), avant Dofus 3 : à confirmer en jeu, surtout les armes."],
   },
@@ -901,15 +883,13 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Une Armécréante qui n'a pris aucun coup direct avant son tour invoque un Iopprimé (2 au maximum chacune).",
       "Quand il tombe à 1 PV, il revient en arrière et se soigne de 25 % de sa vie.",
     ],
-    delock: ["Servitude n'est pas invulnérable, mais sans l'état Traître, chaque coup vous revient en double."],
+    delock: ["Servitude n'est pas invulnérable : pas de délock."],
     strategie: [
-      "Ceux qui vont frapper Servitude finissent leur tour précédent dans un glyphe.",
       "Touchez chaque Armécréante à chaque tour, même un peu : sinon elle invoque des Iopprimés.",
       "Gardez assez de dégâts pour le dernier quart de sa vie, après son retour en arrière.",
     ],
     succes: [
       "Succès du donjon : Versatile, Focus, Duo (40 tours), Spécial « Bain de foule » (aucune Armécréante invoquée ne doit être achevée par un allié).",
-      "Bain de foule : sans tuer les Armécréantes, continuez à les toucher chaque tour pour éviter les Iopprimés.",
     ],
     avertissements: ["Guides d'avant Dofus 3, complétés avec les changements de la 3.6 (6 Armécréantes au maximum). Le nombre d'attaques par glyphe vient d'un autre combat contre Servitude : à confirmer."],
   },
@@ -923,7 +903,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Chaque coup de Balance-Fléau lui donne 200 de puissance, cumulables.",
       "Ses monstres volent des caractéristiques à chaque coup, jusqu'à leur mort. Chaque mort laisse une dépouille qu'un monstre proche peut manger pour reprendre de la vie.",
     ],
-    delock: ["Pas de délock à faire : il faut seulement passer son tour d'invulnérabilité, quand elle monte sur sa monture à 50 %."],
+    delock: ["Pas de délock à faire."],
     strategie: [
       "Tuez-la vite : elle prend de la puissance à chaque coup de Balance-Fléau.",
       "Préparez le passage à 50 % : pendant son tour d'invulnérabilité, replacez-vous et soignez.",
@@ -951,7 +931,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     succes: [
       "Succès du donjon : Collant, Mains propres, Duo (40 tours), Spécial « Immunité collective » (seuls les alliés sans maladie peuvent infliger des dommages).",
-      "Immunité collective : soignez 3 fois un frappeur malade avant qu'il tape.",
     ],
     avertissements: ["Guides d'avant Dofus 3 : à confirmer en jeu."],
   },
@@ -966,7 +945,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     delock: ["Chaque Cavalier se traite comme dans son donjon. Guerre ne devient vulnérable qu'une fois les trois autres tombés."],
     strategie: [
-      "Commencez par Corruption, le plus simple à concentrer, et ne laissez pas traîner Misère, qui prend de la puissance à chaque coup. Guerre en dernier, forcément.",
+      "Commencez par Corruption, le plus simple à concentrer, et ne laissez pas traîner Misère, qui prend de la puissance à chaque coup.",
     ],
     avertissements: ["Fiche faite d'après un seul guide : à confirmer en jeu. La fiche du jeu affichée est celle de Guerre."],
   },
@@ -1002,7 +981,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Si vous êtes dans sa ligne de vue au début de son tour, elle pose autour de vous un glyphe en étoile sur toute la carte et vous empoisonne selon les PA que vous dépensez. Le glyphe de Belladone{os} tue les personnages qui commencent leur tour dedans.",
       "Son Déchaînement fantasmagorique frappe en croix et en diagonale (3 cases) et rend Insoignable le personnage au centre.",
     ],
-    delock: ["Tuez tous ses monstres pour la faire descendre de son îlot. Ensuite, elle n'est vulnérable qu'après la fin de son tour."],
+    delock: ["Tuez tous ses monstres pour la faire descendre de son îlot."],
     strategie: [
       "Chaque monstre tué la renforce : préparez la phase sur le terrain avant de tuer le dernier.",
       "Au début de son tour, sortez de sa ligne de vue. Si elle pose son glyphe, tout le monde en sort avant la fin de son tour.",
@@ -1031,7 +1010,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     strategie: [
       "Un personnage qui a déjà Espèce menacée finit son tour hors de sa ligne de vue, ou derrière quelqu'un de plus proche d'elle qui ne l'a pas encore.",
       "Tenez ses monstres hors de ses lignes : chacun lui donne 1 PM.",
-      "Prévoyez des dégâts pour ses deux vies : à 1 PV, elle repart avec toute sa vie, en plus fort.",
     ],
     succes: ["Succès du donjon : Nomade, En ligne de mire, Trio (80 tours), Spécial « Autelière » (aucun ennemi autre que la Déchireuse ne doit subir les effets de l'Autel de la Chasse)."],
     avertissements: ["Le placement exact selon la saison (qui doit être le plus proche de l'Autel) vient d'un seul guide : à confirmer en jeu."],
@@ -1063,7 +1041,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     delock: ["Tuez le Bonraphin pour pouvoir le frapper à distance, le Brâklotin pour le frapper au contact, ou les deux."],
     strategie: [
-      "Choisissez le diablotin selon votre équipe : plutôt le Bonraphin si vous frappez à distance.",
       "Avant d'achever un monstre, regardez qui est dans sa ligne de vue : ceux-là disparaissent un tour.",
     ],
     succes: [
@@ -1094,7 +1071,6 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     succes: [
       "Succès du donjon : Statue, Dernier, Duo (40 tours), Compagnon (à 4 au moins, avec Flamme, Goutte, Nuage, Feuille ou Ténèbre), Spécial « Lunatique » (chaque ennemi achevé en Nouvelle Lune ou en Pleine Lune, sans jamais frapper la Lunorbe pour accélérer le cycle).",
-      "Dernier : avec Torkélonia en dernier, chaque monstre se délocke par le glyphe. C'est long, mais faisable.",
     ],
     avertissements: ["Guides de 2019 ; la 3.7 a changé les effets de la Nouvelle et de la Pleine Lune. Achever Torkélonia sans mourir : seulement en Nouvelle Lune, ou aussi en Pleine Lune ? À confirmer."],
   },
@@ -1106,11 +1082,10 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Chaque niveau augmente ses caractéristiques. Au niveau III, il gagne un sort spécial utilisable une fois ; au niveau V, une version plus forte, utilisable à chaque tour.",
       "Barbéryl échange sa place avec les personnages marqués Clochecuivre et leur retire 100 PM pendant un tour. Si l'échange est impossible (elle ou eux sous Pesanteur), rien ne se passe.",
     ],
-    delock: ["Barbéryl n'est pas invulnérable : la difficulté vient de la Nimpatience, qui ne fait que monter."],
+    delock: ["Barbéryl n'est pas invulnérable : pas de délock."],
     strategie: [
       "Prenez le moins de coups possible : chaque coup reçu fait monter la Nimpatience du monstre qui l'a donné.",
       "Tuez Barbéryl tôt, idéalement au tour 2, puis les monstres les plus proches du niveau V.",
-      "La Pesanteur protège de son échange de place et du retrait de 100 PM.",
     ],
     succes: ["Succès du donjon : Versatile, Dernier, Duo (20 tours), Compagnon (à 4 au moins, avec Haku, Manitou Zoth, Karotz, Grouillot ou Phong Huss), Spécial « Antioxydant » (aucun ennemi ne doit atteindre la Nimpatience V)."],
     avertissements: ["Guides de 2022, avant Dofus 3 ; la 3.1 a réduit ses PA (20) et la durée du retrait de PM. Vulnérable dès le début ? À confirmer en jeu."],
