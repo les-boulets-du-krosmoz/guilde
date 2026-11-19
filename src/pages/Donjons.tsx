@@ -90,7 +90,7 @@ export function FicheBoss({ guide }: { guide: GuideBoss }) {
           {s && (
             <ul className="fiche-boss__stats">
               <li><span>Niveau</span><strong>{s.niveau}</strong></li>
-              <li><span>PV</span><strong>{s.pv.toLocaleString("fr-FR")}</strong></li>
+              <li title="Points de vie en groupe de 4 personnages (plus à 8)"><span>PV à 4</span><strong>{s.pv.toLocaleString("fr-FR")}</strong></li>
               <li><span>PA</span><strong>{s.pa}</strong></li>
               <li><span>PM</span><strong>{s.pm}</strong></li>
               {s.res.map((r, k) => <li key={k} title={`Résistance ${ELEMENTS[k].nom}`}><span style={{ color: ELEMENTS[k].couleur }}>{ELEMENTS[k].nom}</span><strong>{r} %</strong></li>)}

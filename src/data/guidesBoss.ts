@@ -368,17 +368,40 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "kolosso", donjon: "Cavernes du Kolosso", niveau: 190, position: "Frigost", dpln: `${DPLN}cavernes-du-kolosso.html`, statut: "brouillon",
-    mecaniques: [
-      "La zone de frappe du Kolosso est énorme, en cône : s'il frappe au contact, tous les alliés placés derrière la cible sont touchés aussi.",
-      "Le Professeur Xa est dans le combat : à sa mort, tous les monstres gagnent 400 dommages.",
-      "Le Croleur peut se rendre invisible.",
+    slug: "kolosso", donjon: "Cavernes du Kolosso", niveau: 190, position: "[-61,-69]", dpln: `${DPLN}cavernes-du-kolosso.html`, statut: "brouillon",
+    acces: [
+      "Dans les Crocs de Verre. Le Transporteur Frigostien des Crocs de Verre, en [-66,-65], est le plus proche.",
+      "Clef par le trousseau, ou à fabriquer.",
+      "Quatre salles à l'entrée : chacune donne la relique du monstre le plus présent dans le combat (Blérauve, Blérice, Blérom, Fleuro).",
+      "Avec les quatre reliques, parlez au PNJ de l'entrée pour aller voir le boss.",
     ],
-    delock: ["Frappez le Kolosso avec une invocation placée à son contact : c'est ce qui le rend vulnérable."],
+    mecaniques: [
+      "Deux boss : le Kolosso et le Professeur Xa (8 600 PV chacun en groupe de 4).",
+      "Le Kolosso est invulnérable, et lourd : on ne peut ni le pousser ni l'attirer.",
+      "Au contact, il frappe en cône sur toute la carte : tous ceux qui sont derrière sa cible sont touchés aussi.",
+      "Il soigne ses monstres, vous attire de 2 cases et vous rend insoignable pendant un tour.",
+      "Tous les 3 tours, le Professeur Xa ressuscite le dernier monstre mort avec 25 % de sa vie. Tuer Xa emporte ses invocations avec lui.",
+      "Tous les 2 tours, Xa donne +100 dommages pendant un tour à chacun de ses monstres que vous frappez.",
+      "À la mort de Xa, tous les monstres sont renforcés. Le Kolosso gagne en plus 1 PM, de la puissance et un vol de vie à distance (jusqu'à 8 cases) qui retire de la fuite.",
+      "Croleur : quand on le frappe, il devient invisible et esquive les coups au corps à corps en reculant d'une case. Invisible, il frappe très fort, autour de 1 600 en coup critique.",
+    ],
+    delock: [
+      "Une invocation doit infliger des dommages au Kolosso : il perd son invulnérabilité pendant un tour, jusqu'au prochain tour de cette invocation.",
+      "Faites-le frapper au contact : c'est la méthode qui marche à coup sûr.",
+    ],
     strategie: [
-      "Tuez le Croleur avant le Professeur Xa : invisible et boosté de 400 dommages, il frapperait à plus de 1 200 par coup.",
-      "Ne vous alignez pas derrière un allié au contact du Kolosso : son cône vous toucherait tous.",
-      "Gardez une invocation en réserve pour le délock.",
+      "Ordre conseillé : le Croleur, puis le Professeur Xa, puis le Kolosso. Le Croleur meurt avant que Xa ne renforce les monstres en mourant.",
+      "Si Xa ressuscite le Croleur, ne le retuez pas : tuez Xa, il l'emporte avec lui.",
+      "Ne vous placez pas derrière un allié au contact du Kolosso : son cône vous toucherait tous.",
+      "Gardez une invocation en vie pour le délock, et préparez les frappes du tour qui suit.",
+    ],
+    succes: [
+      "Succès du donjon : Premier (le Professeur Xa achevé en premier), Duo (20 tours), Spécial « Alliés passés au futur » (aucun allié ne doit recevoir de soin).",
+      "Premier : Xa meurt en premier, donc le Croleur et le Kolosso sont renforcés pour le reste du combat. Gardez de quoi tuer vite le Croleur.",
+    ],
+    avertissements: [
+      "Délock par une invocation qui frappe à distance : les données du jeu ne demandent pas le contact, à vérifier en jeu.",
+      "Renfort des monstres à la mort de Xa : à chiffrer en jeu (400 dommages d'après d'anciens guides).",
     ],
   },
   {

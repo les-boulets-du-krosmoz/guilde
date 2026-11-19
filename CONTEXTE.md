@@ -55,6 +55,9 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
 - 18 novembre, suite : Royalmouth, Mansot Royal, Obsidiantre (d'après un joueur), les 4 Cavaliers + Tempête de
   l'Eliocalypse (fiche du jeu de Guerre affichée pour la Tempête), Kabahal, Belladone, Déchireuse, Vénérable Endormi,
   Éternel Conflit, Torkélonia, Barbéryl. Sources souvent d'avant Dofus 3 : avertissements dans chaque fiche.
+- Kolosso refait le 19 novembre d'après un joueur (accès par les 4 reliques, mort de Xa qui renforce tous les monstres,
+  Croleur vers 1 600 en critique invisible, invocations de Xa qui meurent avec lui) et les données 3.7 (lourd, soins et
+  insoignable, résurrection par Xa, bonus du Kolosso à la mort de Xa). Ouverts : délock à distance, chiffre du renfort.
 - Statut des guides de boss : « relu » (validé par un joueur qui a fait le boss, étiquette « ✓ Guide relu », plus de
   bandeau « à relire »), « brouillon », « a-rediger ». Relus le 18 novembre : Royalmouth (tuent d'un coup : celui qui lui
   inflige des dommages de poussée et celui qui en subit contre lui ; seul le Boufmouth légendaire pousse, d'après les
@@ -105,5 +108,9 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
 - Fiche du jeu d'un boss (caractéristiques + portrait) : python3 scripts/generer-boss.py <version> slug=idMonstre
   (3.7.14.18 par défaut ; données 3.6 et 3.7 lues toutes les deux, cache par version dans /tmp/d3/<version>).
   Les 26 fiches existantes sont identiques en 3.7.
+  Depuis le 19 novembre : caractéristiques au grade 1 = combat à 4 personnages (grade 5 = 8 ; vérifié sur le Maître
+  Corbac, 4 500 PV « butin 4 » / 6 600 « butin 8 »). Seuls les PV changent, sauf les résistances de XLII. Les Cavaliers
+  de l'Éliocalypse ont 10 grades (deux barèmes de 5) : avant, la fiche montrait le grade 10, qui n'est pas celui à 8.
+  Sans slug=id, le script retrouve les monstres par leur nom et signale les noms en double (Cavaliers : 6014/6785…).
 - Icônes de caractéristiques manquantes (Brocante) : attendre les numéros donnés par le propriétaire du site.
 - Idées validées sur le principe, à cadrer : niveau et hauts faits de la guilde.

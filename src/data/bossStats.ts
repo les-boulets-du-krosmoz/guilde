@@ -1,11 +1,11 @@
-// Généré depuis les données du jeu (monsters.json, version 3.7) : caractéristiques au grade le plus haut.
+// Généré depuis les données du jeu (monsters.json, version 3.7) : caractéristiques au grade 1, celui d'un combat à 4 personnages.
 // res = résistances en % : Neutre, Terre, Feu, Eau, Air. Images dans public/icones/boss.
 export type StatsBoss = { nom: string; niveau: number; pv: number; pa: number; pm: number; res: number[] };
 export const STATS_BOSS: Record<string, StatsBoss> = {
  "nileza": {
   "nom": "Nileza",
   "niveau": 220,
-  "pv": 19000,
+  "pv": 13000,
   "pa": 20,
   "pm": 7,
   "res": [
@@ -19,7 +19,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "sylargh": {
   "nom": "Sylargh",
   "niveau": 220,
-  "pv": 19000,
+  "pv": 13000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -33,7 +33,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "klime": {
   "nom": "Klime",
   "niveau": 220,
-  "pv": 19000,
+  "pv": 13000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -47,7 +47,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "missiz-frizz": {
   "nom": "Missiz Frizz",
   "niveau": 220,
-  "pv": 19000,
+  "pv": 13000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -61,7 +61,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "comte-harebourg": {
   "nom": "Comte Harebourg",
   "niveau": 220,
-  "pv": 20000,
+  "pv": 13000,
   "pa": 20,
   "pm": 5,
   "res": [
@@ -75,7 +75,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "kimbo": {
   "nom": "Kimbo",
   "niveau": 160,
-  "pv": 10000,
+  "pv": 6900,
   "pa": 10,
   "pm": 7,
   "res": [
@@ -89,7 +89,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "tal-kasha": {
   "nom": "Tal Kasha",
   "niveau": 220,
-  "pv": 26000,
+  "pv": 18000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -103,7 +103,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "merkator": {
   "nom": "Merkator",
   "niveau": 220,
-  "pv": 19000,
+  "pv": 13000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -117,7 +117,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "vortex": {
   "nom": "Vortex",
   "niveau": 220,
-  "pv": 22000,
+  "pv": 15000,
   "pa": 16,
   "pm": 5,
   "res": [
@@ -131,7 +131,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "solar": {
   "nom": "Solar",
   "niveau": 220,
-  "pv": 19000,
+  "pv": 13000,
   "pa": 15,
   "pm": 6,
   "res": [
@@ -145,7 +145,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "capitaine-meno": {
   "nom": "Capitaine Meno",
   "niveau": 220,
-  "pv": 60000,
+  "pv": 40000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -159,7 +159,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "ilyzaelle": {
   "nom": "Ilyzaelle",
   "niveau": 220,
-  "pv": 60000,
+  "pv": 42000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -173,7 +173,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "reine-des-voleurs": {
   "nom": "Reine des Voleurs",
   "niveau": 220,
-  "pv": 22000,
+  "pv": 15000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -187,7 +187,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "dazak-martegel": {
   "nom": "Dazak Martegel",
   "niveau": 220,
-  "pv": 26000,
+  "pv": 18000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -201,7 +201,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "bethel": {
   "nom": "Bethel Akarna",
   "niveau": 220,
-  "pv": 9600,
+  "pv": 6500,
   "pa": 15,
   "pm": 6,
   "res": [
@@ -215,7 +215,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "dantinea": {
   "nom": "Dantinéa",
   "niveau": 220,
-  "pv": 26000,
+  "pv": 18000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -243,7 +243,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "ben-le-ripate": {
   "nom": "Ben le Ripate",
   "niveau": 150,
-  "pv": 10000,
+  "pv": 7200,
   "pa": 16,
   "pm": 5,
   "res": [
@@ -257,7 +257,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "kolosso": {
   "nom": "Kolosso",
   "niveau": 190,
-  "pv": 13000,
+  "pv": 8600,
   "pa": 15,
   "pm": 6,
   "res": [
@@ -271,21 +271,21 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "xlii": {
   "nom": "XLII",
   "niveau": 170,
-  "pv": 13000,
+  "pv": 8800,
   "pa": 14,
   "pm": 5,
   "res": [
-   10,
    6,
-   22,
-   12,
-   30
+   2,
+   18,
+   8,
+   26
   ]
  },
  "toxoliath": {
   "nom": "Toxoliath",
   "niveau": 180,
-  "pv": 14000,
+  "pv": 9700,
   "pa": 16,
   "pm": 4,
   "res": [
@@ -299,7 +299,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "comte-razof": {
   "nom": "Comte Razof",
   "niveau": 190,
-  "pv": 17000,
+  "pv": 11000,
   "pa": 13,
   "pm": 6,
   "res": [
@@ -313,7 +313,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "ombre": {
   "nom": "Ombre",
   "niveau": 190,
-  "pv": 17000,
+  "pv": 11000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -327,7 +327,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "chaloeil": {
   "nom": "Chalœil",
   "niveau": 220,
-  "pv": 22000,
+  "pv": 15000,
   "pa": 20,
   "pm": 4,
   "res": [
@@ -341,7 +341,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "anerice-la-shushess": {
   "nom": "Anerice la Shushess",
   "niveau": 220,
-  "pv": 26000,
+  "pv": 18000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -355,7 +355,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "larve-de-koutoulou": {
   "nom": "Larve de Koutoulou",
   "niveau": 220,
-  "pv": 26000,
+  "pv": 18000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -369,7 +369,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "tengu-givrefoux": {
   "nom": "Tengu Givrefoux",
   "niveau": 170,
-  "pv": 13000,
+  "pv": 8800,
   "pa": 15,
   "pm": 5,
   "res": [
@@ -383,7 +383,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "korriandre": {
   "nom": "Korriandre",
   "niveau": 180,
-  "pv": 14000,
+  "pv": 9700,
   "pa": 15,
   "pm": 6,
   "res": [
@@ -397,7 +397,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "glourseleste": {
   "nom": "Glourséleste",
   "niveau": 190,
-  "pv": 15000,
+  "pv": 11000,
   "pa": 20,
   "pm": 8,
   "res": [
@@ -411,7 +411,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "grolloum": {
   "nom": "Grolloum",
   "niveau": 190,
-  "pv": 15000,
+  "pv": 11000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -425,7 +425,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "royalmouth": {
   "nom": "Royalmouth",
   "niveau": 120,
-  "pv": 7200,
+  "pv": 5000,
   "pa": 15,
   "pm": 5,
   "res": [
@@ -439,7 +439,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "mansot-royal": {
   "nom": "Mansot Royal",
   "niveau": 140,
-  "pv": 9200,
+  "pv": 6500,
   "pa": 15,
   "pm": 4,
   "res": [
@@ -453,7 +453,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "obsidiantre": {
   "nom": "Obsidiantre",
   "niveau": 160,
-  "pv": 13000,
+  "pv": 8000,
   "pa": 16,
   "pm": 6,
   "res": [
@@ -467,7 +467,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "guerre": {
   "nom": "Guerre",
   "niveau": 220,
-  "pv": 25000,
+  "pv": 22000,
   "pa": 12,
   "pm": 6,
   "res": [
@@ -481,7 +481,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "servitude": {
   "nom": "Servitude",
   "niveau": 220,
-  "pv": 28000,
+  "pv": 26000,
   "pa": 11,
   "pm": 7,
   "res": [
@@ -495,7 +495,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "misere": {
   "nom": "Misère",
   "niveau": 220,
-  "pv": 24000,
+  "pv": 18000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -509,7 +509,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "corruption": {
   "nom": "Corruption",
   "niveau": 220,
-  "pv": 25000,
+  "pv": 21000,
   "pa": 20,
   "pm": 4,
   "res": [
@@ -523,7 +523,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "tempete-eliocalypse": {
   "nom": "Guerre",
   "niveau": 220,
-  "pv": 25000,
+  "pv": 22000,
   "pa": 12,
   "pm": 6,
   "res": [
@@ -537,7 +537,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "kabahal": {
   "nom": "Kabahal",
   "niveau": 220,
-  "pv": 20000,
+  "pv": 14000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -551,7 +551,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "belladone": {
   "nom": "Belladone",
   "niveau": 220,
-  "pv": 33000,
+  "pv": 29000,
   "pa": 25,
   "pm": 10,
   "res": [
@@ -565,7 +565,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "dechireuse": {
   "nom": "Déchireuse",
   "niveau": 220,
-  "pv": 18000,
+  "pv": 13000,
   "pa": 12,
   "pm": 6,
   "res": [
@@ -579,7 +579,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "venerable-endormi": {
   "nom": "Vénérable Endormi",
   "niveau": 220,
-  "pv": 32000,
+  "pv": 27000,
   "pa": 16,
   "pm": 4,
   "res": [
@@ -593,7 +593,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "eternel-conflit": {
   "nom": "L'Éternel Conflit",
   "niveau": 220,
-  "pv": 31000,
+  "pv": 20000,
   "pa": 20,
   "pm": 4,
   "res": [
@@ -607,7 +607,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "torkelonia": {
   "nom": "Torkélonia",
   "niveau": 220,
-  "pv": 22000,
+  "pv": 14000,
   "pa": 20,
   "pm": 6,
   "res": [
@@ -621,7 +621,7 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
  "barberyl-clochecuivre": {
   "nom": "Barbéryl Clochecuivre",
   "niveau": 190,
-  "pv": 22000,
+  "pv": 18000,
   "pa": 20,
   "pm": 5,
   "res": [
