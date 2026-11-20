@@ -1134,6 +1134,140 @@ export const GUIDES_BOSS: GuideBoss[] = [
     succes: ["Succès du donjon : Versatile, Dernier, Duo (20 tours), Compagnon (à 4 au moins, avec Haku, Manitou Zoth, Karotz, Grouillot ou Phong Huss), Spécial « Antioxydant » (aucun ennemi ne doit atteindre la Nimpatience V)."],
     avertissements: ["Guides de 2022, avant Dofus 3 ; la 3.1 a réduit ses PA (20) et la durée du retrait de PM. Vulnérable dès le début ? À confirmer en jeu."],
   },
+  {
+    slug: "bworker", donjon: "Grotte du Bworker", niveau: 180, zone: "Landes de Sidimote", position: "[-15,14]", dpln: `${DPLN}grotte-du-bworker.html`, statut: "brouillon",
+    acces: [
+      "À Gisgoul, dans les Landes de Sidimote. Le zaap le plus proche est celui de la Route des Roulottes, en [-25,12].",
+      "Clef par le trousseau, ou à fabriquer. 5 salles, boss compris.",
+    ],
+    mecaniques: [
+      "Le Bworker ne frappe qu'au corps à corps, mais très fort, et ses 9 PM lui permettent de vous rattraper vite.",
+      "Sanction Bwork : des dommages Neutre égaux à 30 % de ses PV actuels, soit près de 2 900 avant résistances en groupe de 4 quand il est en pleine vie.",
+      "Correction Bwork : des dommages Neutre égaux à 30 % des PV qu'il a perdus, de plus en plus forte à mesure qu'il baisse. Ces deux sorts se relancent tous les 2 tours.",
+      "Fauchoir : il frappe et repousse de 2 cases.",
+      "Cybwork : il encaisse les coups à la place de ses alliés proches et les protège avec un bouclier.",
+      "Mama Bwork : elle soigne ses alliés et peut rendre toute sa vie à un monstre, qui devient alors insoignable 3 tours.",
+      "Bworks élémentaires : chacun invoque une Flammèche, qui explose d'autant plus fort que son Bwork a de vie.",
+    ],
+    delock: ["Le Bworker n'est pas invulnérable : pas de délock."],
+    strategie: [
+      "Gardez-le à distance : retirez-lui des PM et repoussez-le pendant que le reste de l'équipe s'occupe des autres monstres.",
+      "Tuez la Mama Bwork tôt : ses soins défont tout votre travail.",
+    ],
+    succes: [
+      "Succès du donjon : Hardi, Blitzkrieg, Duo (15 tours) et Spécial « Baston équitable » (aucun retrait de PA, PM ou PO sur les monstres, aucune tentative de les déplacer).",
+      "Hardi : prévoyez de la protection et du soin, il frappe très fort au contact.",
+      "Baston équitable : sans retrait ni poussée, impossible de le garder à distance. Bloquez-le avec des invocations ou un personnage solide, ou tuez-le très vite.",
+    ],
+    avertissements: ["Sorts d'après les données du jeu ; le reste vient de guides d'avant Dofus 3 : à confirmer en jeu."],
+  },
+  {
+    slug: "ougah", donjon: "Temple du Grand Ougah", niveau: 180, zone: "Landes de Sidimote", position: "[-9,29]", dpln: `${DPLN}temple-du-grand-ougah.html`, statut: "brouillon",
+    acces: [
+      "Dans la Caverne des Fungus, en [-9,29]. Le zaap des Katrepat et la diligence en [-12,29] sont les plus proches.",
+      "Clef par le trousseau, ou à fabriquer.",
+      "Deux salles séparent l'équipe en deux groupes : venez à 4 au moins.",
+    ],
+    mecaniques: [
+      "Spore Hanchambre, à partir du 2e tour : l'Ougah gagne des chances de coup critique quand on le frappe, et se soigne d'environ 5 000 PV quand on le frappe ou qu'on lui retire des PA ou des PM.",
+      "Bizarrerie : quand le personnage visé prend des dommages, les monstres en croix à 2 cases ou moins de lui gagnent 300 de puissance.",
+      "Sirop Spore : un poison qui vous inflige des dommages Neutre à la fin du tour, pour chaque PA utilisé.",
+      "Opiniâtreté : de lourds dommages Feu et Terre en zone, avec un vol de vie Air et un malus de résistance Air.",
+      "Les Coprins d'abord : il invoque un monstre de la caverne à chaque tour.",
+    ],
+    delock: ["L'Ougah n'est pas invulnérable : pas de délock."],
+    strategie: [
+      "Désenvoûtez-le dès qu'il a lancé Spore Hanchambre, avant de le frapper ou de lui retirer des PA ou des PM.",
+      "Prévoyez de quoi vous désenvoûter : le combat empile les poisons.",
+    ],
+    succes: [
+      "Succès du donjon : Collant, Dernier, Duo (15 tours), Compagnon (à 4 au moins, avec Kloug, Klüme, Grizou ou Laikteur) et Spécial « Mycologie » (ne pas finir son tour en ligne ou en diagonale d'un monstre).",
+      "Dernier : tuez ses invocations au fur et à mesure.",
+      "Collant : collez-vous à vos invocations plutôt qu'à vos personnages, ses attaques frappent en zone.",
+    ],
+    avertissements: ["Sorts d'après les données du jeu ; le reste vient de guides d'avant Dofus 3. Le soin de Spore Hanchambre se déclenche-t-il à chaque fois, ou sur un seul des trois cas tiré au hasard ? À confirmer en jeu."],
+  },
+  {
+    slug: "roi-nidas", donjon: "Palais du roi Nidas", niveau: 200, zone: "Enutrosor", position: "[-5,-5]", dpln: `${DPLN}palais-du-roi-nidas.html`, statut: "brouillon",
+    acces: [
+      "Dans la Retraite des Éternels, au nord d'Enutrosor. On entre dans la dimension par un portail, à trouver par une chasse au portail. Pas de téléportation dans la dimension.",
+      "Le trousseau ne marche pas : la clef se fabrique. Ses poils de barbe d'Enutrofor s'échangent contre de l'Orichor à l'entrée de la dimension.",
+      "Une seule salle : 5 vagues de monstres, une tous les 5 tours. Si vous videz une vague avant, la suivante arrive aussitôt.",
+    ],
+    mecaniques: [
+      "Au premier tour, le Roi Nidas invoque la Boubourse. De votre côté, elle donne du bouclier à l'équipe ; chez les monstres, elle n'a plus d'effet.",
+      "Elle change de camp selon qui la tue : tuée par un de vos personnages alors qu'elle est chez les monstres, elle revient chez vous ; tuée par un monstre, elle passe chez eux. Elle tue les invocations à son contact au début de son tour.",
+      "Mon précieux, à partir du 3e tour puis tous les 2 tours : le Roi échange sa place avec la Boubourse, jusqu'à 10 cases.",
+      "Attrape-Mutin vous attire de 6 cases ; Confusion raccourcit de 2 tours la durée de vos effets.",
+      "Lévitrof{os} : il marque un personnage avec Reflets placides. Si ce personnage n'est pas le premier à le frapper, il meurt au tour suivant du Lévitrof.",
+      "Paspartou : il rend invulnérables les monstres à son contact. Piloztère : le frapper de près donne du bouclier autour de lui, et il tue les invocations d'un coup.",
+      "Barbétoal : ses dommages augmentent à chaque attaque dans le même tour.",
+    ],
+    delock: ["Le Roi Nidas n'est pas invulnérable : pas de délock."],
+    strategie: [
+      "Gardez la Boubourse de votre côté ; si elle passe chez les monstres, tuez-la avec un personnage pour la récupérer.",
+      "Si vous ne visez pas le succès Premier, tuez le Lévitrof tôt.",
+    ],
+    succes: [
+      "Succès du donjon : Premier (le Roi achevé en premier), Statue, Trio (80 tours), Compagnon (à 4 au moins, avec Rapiat, Rapine, Ougicle ou Hulkrap) et Spécial « Pingrerie » (frapper seulement en ligne ou en diagonale de sa cible).",
+      "Statue : prenez un personnage qui replace les autres, et de la portée pour gérer le Lévitrof.",
+      "Trio : profitez des boucliers de la Boubourse.",
+    ],
+    avertissements: ["Mon précieux d'après les données du jeu ; le reste vient de guides de 2017 à 2019, surtout pour la Boubourse : à confirmer en jeu."],
+  },
+  {
+    slug: "roi-imagami", donjon: "Mémoire d'Orukam", niveau: 200, zone: "Wukin et Wukang", position: "[-3,-1]", dpln: `${DPLN}memoire-d-orukam.html`, statut: "brouillon",
+    acces: [
+      "Dans le Royaume d'Encre, en [-3,-1]. Le plus rapide : le zaap du village de Pandala, puis le temple du Wukin et du Wukang, après avoir parlé à Daoh.",
+      "Le trousseau ne marche pas : la clef se fabrique, avec des ressources des monstres de la zone.",
+      "Combat à vagues. Pour le lancer, parlez à la Reine Amirukam au fond de la salle d'accueil.",
+    ],
+    mecaniques: [
+      "À trois seuils de PV, le Roi Imagami passe en Lotus : invulnérable et enraciné pendant 5 tours, il regagne de la vie à chaque tour jusqu'à revenir au maximum.",
+      "À chaque Lotus, il invoque la Reine Amirukam dans votre camp, près du personnage le plus proche de lui. Ce joueur la contrôle pendant 5 tours au plus.",
+      "Quand il passe en Lotus, il donne du bouclier à ses monstres et à la Reine.",
+      "Un monstre frappé à distance gagne 6 PM et deux fois plus de dommages pendant un tour (une fois par tour) : frappez les monstres au corps à corps.",
+      "Monstres : sous 10 % de PV, un monstre passe en Lotus, devient invulnérable et invoque son double de papier. Tuez ce double vite, sinon le monstre se relève.",
+    ],
+    delock: ["Il est invulnérable pendant ses Lotus. Pour l'en sortir plus tôt, la Reine doit mourir : faites-lui lancer Extinction du Wukin, qui la tue, quand votre équipe est prête à frapper le Roi."],
+    strategie: ["Rendez le Roi insoignable pendant ses Lotus : il regagnera moins de vie."],
+    succes: [
+      "Succès du donjon : Hardi, Trio (80 tours), Mains propres (achever les monstres par poison, poussée, glyphes, pièges, invocations…) et Spécial « Régence d'encre » (un de vos personnages achève la Reine avant que le Roi ne sorte du Lotus).",
+      "Régence d'encre : Extinction du Wukin fait l'affaire.",
+      "Mains propres : la Reine est une invocation, laissez-la achever les monstres.",
+    ],
+    avertissements: [
+      "Premier seuil : 80 % ou 75 % de ses PV selon les versions ; les deux autres, 50 % et 25 %. Délai pour tuer le double d'un monstre en Lotus : de 2 à 4 tours selon les versions. À confirmer en jeu.",
+      "À la mort de la Reine, une zone en carré de 3, 2 puis 1 case selon la phase décide qui meurt : les monstres d'encre à l'intérieur, ou les combattants restés dehors ? Les deux versions circulent : à vérifier avant de s'y fier.",
+    ],
+  },
+  {
+    slug: "reine-amirukam", donjon: "Souvenir d'Imagiro", niveau: 200, zone: "Wukin et Wukang", position: "[2,0]", dpln: `${DPLN}souvenir-d-imagiro.html`, statut: "brouillon",
+    acces: [
+      "Dans le Royaume de Papier, en [2,0]. Le plus rapide : le zaap du village de Pandala, puis le temple du Wukin et du Wukang, après avoir parlé à Daoh.",
+      "Le trousseau ne marche pas : la clef se fabrique, avec des ressources des monstres de la zone.",
+      "Combat à vagues. Pour le lancer, parlez à la Reine Amirukam au fond de la salle d'accueil.",
+    ],
+    mecaniques: [
+      "À trois seuils de PV, la Reine Amirukam passe en Lotus : invulnérable et enracinée pendant 5 tours, elle regagne de la vie à chaque tour jusqu'à revenir au maximum.",
+      "À chaque Lotus, elle invoque le Roi Imagami dans votre camp, près du personnage le plus proche d'elle. Ce joueur le contrôle pendant 5 tours au plus.",
+      "Quand elle passe en Lotus, elle donne du bouclier à ses monstres et au Roi.",
+      "Un monstre frappé au corps à corps gagne 6 PM et deux fois plus de dommages pendant un tour (une fois par tour) : frappez les monstres à distance.",
+      "Toner Deubraiste : un poison Eau qui augmente aussi les dommages que vous subissez, cumulable.",
+      "Monstres : sous 10 % de PV, un monstre passe en Lotus, devient invulnérable et invoque son double d'encre. Tuez ce double vite, sinon le monstre se relève.",
+    ],
+    delock: ["Elle est invulnérable pendant ses Lotus. Pour l'en sortir plus tôt, le Roi doit mourir : faites-lui lancer Extinction du Wukang, qui le tue, quand votre équipe est prête à frapper la Reine."],
+    strategie: ["Rendez la Reine insoignable pendant ses Lotus : elle regagnera moins de vie."],
+    succes: [
+      "Succès du donjon : Prudent, Trio (80 tours), Mains propres, Compagnon (à 4 au moins, avec Mirh, Rekto Topi, Traçon ou Logram) et Spécial « Régence de papier » (un de vos personnages achève le Roi avant que la Reine ne sorte du Lotus).",
+      "Régence de papier : Extinction du Wukang fait l'affaire.",
+      "Prudent : les monstres en Lotus ne bougent plus, ne finissez pas votre tour à leur contact.",
+    ],
+    avertissements: [
+      "Premier seuil : 80 % ou 75 % de ses PV selon les versions ; les deux autres, 50 % et 25 %. Délai pour tuer le double d'un monstre en Lotus : de 2 à 4 tours selon les versions. À confirmer en jeu.",
+      "À la mort du Roi, une zone en étoile de 3, 2 puis 1 case selon la phase décide qui meurt : les monstres de papier à l'intérieur, ou les combattants restés dehors ? Les deux versions circulent : à vérifier avant de s'y fier.",
+    ],
+  },
 ];
 
 const simple = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");

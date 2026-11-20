@@ -90,8 +90,15 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   renforce, celle de vos personnages reste à vérifier), Obsidiantre (8 cases
   autour de la Pougnette, explosion au 5e tour), puis Tengu, Korriandre, Glourséleste, Grolloum (points ouverts gardés
   en avertissement). Les fiches niveau 200 restent en brouillon, doutes en avertissement.
-- Prochains guides de boss, dans cet ordre : 1) liés aux Dofus (Bworker, Ougah, Roi Nidas, Imagiro, Orukam) ;
-  2) secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
+- Guides liés aux Dofus écrits le 20 novembre, en brouillon : Bworker, Ougah, Roi Nidas, Roi Imagami (Mémoire
+  d'Orukam), Reine Amirukam (Souvenir d'Imagiro). Sources : sorts et textes 3.7, guides de 2015 à 2020, vérifiés par
+  les pages détaillées. Ouverts : soin de Spore Hanchambre (à chaque fois ou au hasard), Boubourse (guides de 2017),
+  premier seuil Lotus (80 ou 75 %), délai du double en Lotus (2 ou 4 tours), et surtout la zone de la mort de
+  l'invoqué : texte du jeu « Cauchemar » (tue les combattants hors du carré/étoile) contre les guides (le glyphe tue les
+  monstres de l'autre couleur dedans). Textes « Aberration » et « Cauchemar du Bworker » : variantes, pas le donjon
+  normal, laissés de côté. Nouveaux groupes de la liste : Landes de Sidimote, Wukin et Wukang ; Enutrosor rejoint les
+  Dimensions divines.
+- Prochains guides de boss : secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
 - Combats tactiques : inventaire dans docs/combats-tactiques.md (245 combats classés d'après les données du jeu :
   10 confirmés dont 2 avec fiche, 124 à vérifier, 111 écartés). Les données ne marquent pas les combats tactiques :
   « monstre de quête » est un filtre, pas une preuve. Vérifier Dofus par Dofus (un guide de quêtes couvre toute la série).

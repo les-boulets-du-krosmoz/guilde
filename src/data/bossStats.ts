@@ -631,5 +631,75 @@ export const STATS_BOSS: Record<string, StatsBoss> = {
    4,
    -7
   ]
+ },
+ "bworker": {
+  "nom": "Bworker",
+  "niveau": 180,
+  "pv": 9600,
+  "pa": 12,
+  "pm": 9,
+  "res": [
+   20,
+   30,
+   25,
+   20,
+   -15
+  ]
+ },
+ "ougah": {
+  "nom": "Ougah",
+  "niveau": 180,
+  "pv": 8400,
+  "pa": 16,
+  "pm": 6,
+  "res": [
+   18,
+   13,
+   15,
+   20,
+   20
+  ]
+ },
+ "roi-nidas": {
+  "nom": "Roi Nidas",
+  "niveau": 220,
+  "pv": 15000,
+  "pa": 20,
+  "pm": 5,
+  "res": [
+   16,
+   42,
+   25,
+   20,
+   12
+  ]
+ },
+ "roi-imagami": {
+  "nom": "Roi Imagami",
+  "niveau": 220,
+  "pv": 27000,
+  "pa": 20,
+  "pm": 6,
+  "res": [
+   22,
+   18,
+   -11,
+   -8,
+   -21
+  ]
+ },
+ "reine-amirukam": {
+  "nom": "Reine Amirukam",
+  "niveau": 220,
+  "pv": 27000,
+  "pa": 20,
+  "pm": 6,
+  "res": [
+   22,
+   18,
+   -11,
+   -8,
+   -21
+  ]
  }
 };

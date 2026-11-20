@@ -51,8 +51,10 @@ const ETIQUETTE: Record<GuideBoss["statut"], { texte: string; classe: string }> 
 const GROUPES: { nom: string; zones: string[] }[] = [
   { nom: "Frigost", zones: ["Frigost", "Île de Sakaï"] },
   { nom: "Éliocalypse", zones: ["Éliocalypse"] },
-  { nom: "Dimensions divines", zones: ["Xélorium", "Srambad", "Écaflipus", "Osavora"] },
+  { nom: "Dimensions divines", zones: ["Xélorium", "Srambad", "Écaflipus", "Osavora", "Enutrosor"] },
   { nom: "Sufokia", zones: ["Baie de Sufokia", "Profondeurs de Sufokia"] },
+  { nom: "Landes de Sidimote", zones: ["Landes de Sidimote"] },
+  { nom: "Wukin et Wukang", zones: ["Wukin et Wukang"] },
   { nom: "Archipel de Valonia", zones: ["Archipel de Valonia"] },
 ];
 const AUTRES = "Autres zones";
