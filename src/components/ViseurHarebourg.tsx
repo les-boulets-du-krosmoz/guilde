@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { LARGEUR, TRANCHES, nomDeviation, caseAViser, bloqueur, direction } from "../lib/viseur";
+import { LARGEUR, TRANCHES, nomDeviation, caseAViser, bloqueur, direction, coord } from "../lib/viseur";
 import { SALLE_HAREBOURG as SALLE } from "../data/salleHarebourg";
 
 // Viseur du Comte Harebourg, sur le plan de sa salle : on place son personnage, les monstres et les alliés, on choisit sa
@@ -121,7 +121,8 @@ export default function ViseurHarebourg() {
       <svg className="viseur__carte" viewBox={`${CADRE.x} ${CADRE.y} ${CADRE.l} ${CADRE.h}`} role="img" aria-label="Plan de la salle du Comte Harebourg">
         <g>
           {SALLE_CASES.map((id) => {
-            const fond = murs.has(id) ? " viseur__case--mur" : TROUS.has(id) ? " viseur__case--trou" : ORANGE.has(id) ? " viseur__case--orange" : BLEU.has(id) ? " viseur__case--bleu" : "";
+            const { i, j } = coord(id);
+            const fond = murs.has(id) ? " viseur__case--mur" : TROUS.has(id) ? " viseur__case--trou" : ORANGE.has(id) ? " viseur__case--orange" : BLEU.has(id) ? " viseur__case--bleu" : (i + j) % 2 ? " viseur__case--clair" : "";
             const classe = id === resultat?.viser ? `viseur__case viseur__case--viser${resultat.problemes.length ? " viseur__case--bloquee" : ""}` : `viseur__case${fond}`;
             return <path key={id} d={losange(id)} className={classe} onClick={() => cliquer(id)} />;
           })}
@@ -136,8 +137,8 @@ export default function ViseurHarebourg() {
         </g>
       </svg>
       <p className="discret-taille">
-        Gros rond bleu : vous. Rouge : les monstres (cerclé d'or : la cible). Petits ronds bleus : vos alliés. Cases sombres : les blocs,
-        cases claires : les trous. Cases orange et bleues : les cases de départ, pour vous repérer. Blocs, alliés et autres monstres
+        Gros rond bleu : vous. Rouge : les monstres (cerclé d'or : la cible). Petits ronds bleus : vos alliés. Cases marron foncé : les blocs,
+        cases blanches : les trous. Cases orange et bleues : les cases de départ, pour vous repérer. Blocs, alliés et autres monstres
         coupent la ligne de vue, pas les trous ; on voit entre deux obstacles placés en diagonale. Les invocations ne sont pas déviées.
         Plan relevé sur une capture : signalez toute case fausse.
       </p>

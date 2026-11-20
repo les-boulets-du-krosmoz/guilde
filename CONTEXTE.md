@@ -78,7 +78,9 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   (carte de 560 cases en quinconce, coordonnées logiques, rotation, ligne de vue case par case). Règle des coins,
   donnée par un joueur : une ligne qui passe pile sur un coin file en diagonale, on voit entre deux obstacles en
   diagonale. Plan de la salle : src/data/salleHarebourg.ts, relevé le 20 novembre sur une capture du combat (grille
-  calée : case de 55,17 × 27,59 px, image de 800 px de large) ; 4 gros blocs, 2 petits, 8 trous, cases de départ.
+  calée : case de 55,17 × 27,59 px, image de 800 px de large) ; 4 gros blocs, 2 petits, 7 trous, cases de départ.
+  Corrigé par un joueur : 131, 133, 225, 238, 253, 266, 280, 293 et 321 sont du sol ; 222 et 377 sont hors de la salle.
+  Couleurs reprises du jeu : damier #9a5a38 / #bc7856 (selon la parité de i + j), blocs #5e3018, trous blancs, neige.
   Les données du jeu ne contiennent pas les plans. Champ outil: "viseur-harebourg" dans la fiche.
 - Statut des guides de boss : « relu » (validé par un joueur qui a fait le boss, étiquette « ✓ Guide relu », plus de
   bandeau « à relire »), « brouillon », « a-rediger ». Relus le 18 novembre : Royalmouth (tuent d'un coup : celui qui lui

@@ -1415,23 +1415,25 @@ a.jauge__nom:hover { color: var(--or); }
 .viseur__ligne { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
 .viseur__deviation { margin-left: 8px; color: var(--or-clair); }
 .viseur__resultat { margin: 0; padding: 8px 12px; border-radius: 10px; background: var(--carte-haute); border: 1px solid var(--trait-fort); }
-.viseur__carte { width: 100%; max-width: 720px; height: auto; display: block; background: var(--fond); border-radius: 12px; touch-action: manipulation; }
-.viseur__case { fill: #24211b; stroke: #3d382f; stroke-width: 1; cursor: pointer; }
-.viseur__case:hover { fill: #322d25; }
-.viseur__case--mur { fill: #0b0a08; stroke: #5a5246; }
-.viseur__case--trou { fill: #cfc8bc; stroke: #8f887c; cursor: default; }
-.viseur__case--orange { fill: #5c2f17; stroke: #8a4a26; }
-.viseur__case--bleu { fill: #1d3550; stroke: #2f5a84; }
-.viseur__case--viser { fill: rgba(var(--or-rgb), 0.55); stroke: var(--or); stroke-width: 2; }
-.viseur__case--bloquee { fill: rgba(228, 104, 63, 0.35); stroke: #e4683f; }
-.viseur__trait { stroke-width: 1.5; stroke-dasharray: 4 4; pointer-events: none; }
-.viseur__trait--viser { stroke: var(--or); }
-.viseur__trait--cible { stroke: #e4683f; }
-.viseur__vous { fill: #4fa3e0; stroke: #eaf5ff; stroke-width: 2; }
-.viseur__allie { fill: #7fc4f0; stroke: #0e2436; stroke-width: 1.5; }
-.viseur__monstre { fill: #e4683f; stroke: #3a1408; stroke-width: 1.5; }
-.viseur__monstre--cible { stroke: var(--or); stroke-width: 3; }
-.viseur__mire { fill: var(--or-clair); stroke: #1b1914; stroke-width: 1.5; }
+/* couleurs de la salle du Comte en jeu : damier de sol, blocs marron foncé, trous blancs, neige autour */
+.viseur__carte { width: 100%; max-width: 760px; height: auto; display: block; background: #e9ecf2; border-radius: 12px; touch-action: manipulation; }
+.viseur__case { fill: #9a5a38; stroke: #6e3d22; stroke-width: 0.8; cursor: pointer; }
+.viseur__case--clair { fill: #bc7856; }
+.viseur__case:hover { stroke: #fff8e6; stroke-width: 2; }
+.viseur__case--mur { fill: #5e3018; stroke: #3b1d0c; stroke-width: 1.2; }
+.viseur__case--trou { fill: #f4f5f8; stroke: #b9bcc4; cursor: default; }
+.viseur__case--orange { fill: #d2511a; stroke: #8f3209; }
+.viseur__case--bleu { fill: #2e659d; stroke: #1b3f66; }
+.viseur__case--viser { fill: #ffd24a; stroke: #3a2a00; stroke-width: 2.2; }
+.viseur__case--bloquee { fill: #ff7a6b; stroke: #5a0a00; }
+.viseur__trait { stroke-width: 2; stroke-dasharray: 5 4; pointer-events: none; }
+.viseur__trait--viser { stroke: #ffe38a; }
+.viseur__trait--cible { stroke: #fff1ec; }
+.viseur__vous { fill: #4fa3e0; stroke: #ffffff; stroke-width: 2.5; }
+.viseur__allie { fill: #8fdcff; stroke: #0e2436; stroke-width: 2; }
+.viseur__monstre { fill: #c4222b; stroke: #ffffff; stroke-width: 2; }
+.viseur__monstre--cible { stroke: #ffd24a; stroke-width: 3.5; }
+.viseur__mire { fill: #3a2a00; stroke: #ffd24a; stroke-width: 1.5; }
 .fiche-boss__repli > summary { cursor: pointer; width: fit-content; }
 .fiche-boss__repli > summary h3 { display: inline; margin: 0; }
 .fiche-boss__repli[open] > summary { margin-bottom: 6px; }
