@@ -164,7 +164,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "comte-harebourg", donjon: "Donjon du Comte Harebourg", niveau: 200, zone: "Frigost", position: "[-61,-79]", dpln: `${DPLN}donjon-du-comte-harebourg.html`, statut: "brouillon", outil: "viseur-harebourg",
+    slug: "comte-harebourg", donjon: "Donjon du Comte Harebourg", niveau: 200, zone: "Frigost", position: "[-61,-79]", dpln: `${DPLN}donjon-du-comte-harebourg.html`, statut: "relu", outil: "viseur-harebourg",
     acces: ["Au sommet de la Tour de la Clepsydre, au centre de Frigost III. C'est le dernier donjon avant le Dofus des Glaces."],
     mecaniques: [
       "Le Comte Harebourg est invulnérable. Il change d'état à chaque tour, et c'est cet état qui décide de qui est téléporté quand on le frappe.",
@@ -405,7 +405,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
   },
   {
-    slug: "kolosso", donjon: "Cavernes du Kolosso", niveau: 190, zone: "Frigost", position: "[-61,-69]", dpln: `${DPLN}cavernes-du-kolosso.html`, statut: "brouillon",
+    slug: "kolosso", donjon: "Cavernes du Kolosso", niveau: 190, zone: "Frigost", position: "[-61,-69]", dpln: `${DPLN}cavernes-du-kolosso.html`, statut: "relu",
     acces: [
       "Dans les Crocs de Verre. Le Transporteur Frigostien des Crocs de Verre, en [-66,-65], est le plus proche.",
       "Clef par le trousseau, ou à fabriquer.",

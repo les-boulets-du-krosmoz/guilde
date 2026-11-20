@@ -61,6 +61,7 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   surtout après la mort de Xa, effet de Xa (+100 dommages par coup reçu, soigne les joueurs autour), méthode du Premier
   (achever Xa puis le Croleur avant son tour). Ouverts : délock à distance, chiffre du renfort, soin de l'effet de Xa et
   succès Spécial. Bonus du Kolosso (1 PM, 200 de puissance) à la mort de Xa : confirmé.
+- Kolosso et Comte Harebourg passés en « relu » le 20 novembre (points ouverts gardés en avertissement).
 - Guides de boss, champs ajoutés le 19 novembre : zone (obligatoire, zone de jeu de l'entrée d'après subareas/areas,
   ex. « Frigost », « Osavora ») et nom (facultatif, nom affiché quand ce n'est pas celui du monstre de la fiche du jeu :
   « Les quatre Cavaliers »). Regroupement de la liste dans GROUPES (src/pages/Donjons.tsx) : une zone absente va dans
