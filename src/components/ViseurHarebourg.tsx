@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
-import { NB_CASES, LARGEUR, TRANCHES, nomDeviation, caseAViser, bloqueur, direction } from "../lib/viseur";
+import { LARGEUR, TRANCHES, nomDeviation, caseAViser, bloqueur, direction } from "../lib/viseur";
+import { SALLE_HAREBOURG as SALLE } from "../data/salleHarebourg";
 
-// Viseur du Comte Harebourg : on place son personnage, les monstres, les murs et les alliés, on choisit sa tranche de PV,
-// et la case à viser s'allume. La ligne de vue doit être libre jusqu'à la case visée et jusqu'à la case d'arrivée.
+// Viseur du Comte Harebourg, sur le plan de sa salle : on place son personnage, les monstres et les alliés, on choisit sa
+// tranche de PV, et la case à viser s'allume. La ligne de vue doit être libre jusqu'à la case visée et jusqu'à la case
+// d'arrivée. Les blocs de la salle sont des murs (on peut en ajouter ou en retirer) ; les trous ne coupent pas la vue.
 
 type Outil = "vous" | "monstre" | "mur" | "allie" | "gomme";
 const OUTILS: { id: Outil; libelle: string }[] = [
@@ -22,13 +24,19 @@ const losange = (id: number) => {
   const { x, y } = centre(id);
   return `M${x} ${y - H / 2}L${x + W / 2} ${y}L${x} ${y + H / 2}L${x - W / 2} ${y}Z`;
 };
-const CASES = Array.from({ length: NB_CASES }, (_, id) => id);
+const SALLE_CASES = [...SALLE.sol, ...SALLE.blocs, ...SALLE.trous].sort((a, b) => a - b);
+const DANS_SALLE = new Set(SALLE_CASES);
+const TROUS = new Set(SALLE.trous);
+const ORANGE = new Set(SALLE.departs.orange), BLEU = new Set(SALLE.departs.bleu);
+// cadre de la carte : la salle seule, avec une demi-case de marge
+const XS = SALLE_CASES.map((id) => centre(id).x), YS = SALLE_CASES.map((id) => centre(id).y);
+const CADRE = { x: Math.min(...XS) - W / 2 - 4, y: Math.min(...YS) - H / 2 - 4, l: Math.max(...XS) - Math.min(...XS) + W + 8, h: Math.max(...YS) - Math.min(...YS) + H + 8 };
 
 export default function ViseurHarebourg() {
-  const [vous, setVous] = useState(286);
+  const [vous, setVous] = useState(286); // case bleue de départ, à côté du bloc central
   const [monstres, setMonstres] = useState<number[]>([]);
   const [cible, setCible] = useState<number | null>(null);
-  const [murs, setMurs] = useState<Set<number>>(new Set());
+  const [murs, setMurs] = useState<Set<number>>(() => new Set(SALLE.blocs));
   const [allies, setAllies] = useState<Set<number>>(new Set());
   const [outil, setOutil] = useState<Outil>("monstre");
   const [tranche, setTranche] = useState(0);
@@ -47,6 +55,7 @@ export default function ViseurHarebourg() {
 
   const cliquer = (id: number) => {
     if (outil !== "gomme" && monstres.includes(id)) { setCible(id); return; }
+    if (TROUS.has(id) && outil !== "gomme" && outil !== "mur") return;
     if (outil === "gomme") { if (id !== vous) vider(id); return; }
     if (id === vous) return;
     if (outil === "vous") { vider(id); setVous(id); return; }
@@ -62,16 +71,17 @@ export default function ViseurHarebourg() {
     // murs, alliés et autres monstres coupent la ligne de vue ; la case de départ et celle d'arrivée ne comptent pas
     const bloquantes = new Set([...murs, ...allies, ...monstres]);
     const problemes: string[] = [];
-    if (viser === null) problemes.push("La case à viser est hors de la carte : changez de position.");
+    if (viser === null || !DANS_SALLE.has(viser)) problemes.push("La case à viser est hors de la salle : changez de position.");
     else {
-      if (murs.has(viser)) problemes.push("La case à viser est un mur : changez de position.");
+      if (murs.has(viser)) problemes.push("La case à viser est un bloc : changez de position.");
+      if (TROUS.has(viser)) problemes.push("La case à viser est un trou, on ne peut pas y lancer de sort : changez de position.");
       if (bloqueur(vous, viser, bloquantes) !== null) problemes.push("Pas de ligne de vue sur la case à viser.");
     }
     if (bloqueur(vous, cible, bloquantes) !== null) problemes.push("Pas de ligne de vue sur le monstre : le sort ferait un échec critique.");
     return { viser, problemes };
   }, [vous, cible, quarts, murs, allies, monstres]);
 
-  const toutEffacer = () => { setMonstres([]); setCible(null); setMurs(new Set()); setAllies(new Set()); };
+  const toutEffacer = () => { setMonstres([]); setCible(null); setMurs(new Set(SALLE.blocs)); setAllies(new Set()); };
   const lieu = resultat?.viser != null ? direction(vous, resultat.viser) : null;
   const pv = centre(vous), pc = cible !== null ? centre(cible) : null, pa = resultat?.viser != null ? centre(resultat.viser) : null;
 
@@ -108,10 +118,11 @@ export default function ViseurHarebourg() {
             : resultat?.problemes.join(" ")}
       </p>
 
-      <svg className="viseur__carte" viewBox={`0 0 ${LARGEUR * W + W / 2} ${20 * H + H / 2}`} role="img" aria-label="Carte du combat">
+      <svg className="viseur__carte" viewBox={`${CADRE.x} ${CADRE.y} ${CADRE.l} ${CADRE.h}`} role="img" aria-label="Plan de la salle du Comte Harebourg">
         <g>
-          {CASES.map((id) => {
-            const classe = murs.has(id) ? "viseur__case viseur__case--mur" : id === resultat?.viser ? `viseur__case viseur__case--viser${resultat.problemes.length ? " viseur__case--bloquee" : ""}` : "viseur__case";
+          {SALLE_CASES.map((id) => {
+            const fond = murs.has(id) ? " viseur__case--mur" : TROUS.has(id) ? " viseur__case--trou" : ORANGE.has(id) ? " viseur__case--orange" : BLEU.has(id) ? " viseur__case--bleu" : "";
+            const classe = id === resultat?.viser ? `viseur__case viseur__case--viser${resultat.problemes.length ? " viseur__case--bloquee" : ""}` : `viseur__case${fond}`;
             return <path key={id} d={losange(id)} className={classe} onClick={() => cliquer(id)} />;
           })}
         </g>
@@ -125,8 +136,10 @@ export default function ViseurHarebourg() {
         </g>
       </svg>
       <p className="discret-taille">
-        Bleu : vous. Rouge : les monstres (cerclé d'or : la cible). Petits ronds bleus : vos alliés. Cases sombres : les murs.
-        Murs, alliés et autres monstres coupent la ligne de vue. Le calcul est prudent : une ligne qui passe pile sur un coin est considérée comme coupée si une des deux cases voisines est occupée. Les invocations ne sont pas déviées.
+        Gros rond bleu : vous. Rouge : les monstres (cerclé d'or : la cible). Petits ronds bleus : vos alliés. Cases sombres : les blocs,
+        cases claires : les trous. Cases orange et bleues : les cases de départ, pour vous repérer. Blocs, alliés et autres monstres
+        coupent la ligne de vue, pas les trous ; on voit entre deux obstacles placés en diagonale. Les invocations ne sont pas déviées.
+        Plan relevé sur une capture : signalez toute case fausse.
       </p>
     </div>
   );

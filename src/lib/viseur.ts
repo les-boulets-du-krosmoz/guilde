@@ -49,7 +49,8 @@ export function caseAViser(lanceur: number, cible: number, quarts: number): numb
   return caseEn({ i: p.i + v.i, j: p.j + v.j });
 }
 
-/** Cases traversées entre deux cases, sans les extrémités. Prudent : un passage pile sur un coin compte les deux cases voisines. */
+/** Cases traversées entre deux cases, sans les extrémités. Une ligne qui passe pile sur un coin file en diagonale : elle ne
+ *  touche pas les deux cases voisines, comme en jeu (on voit entre deux obstacles placés en diagonale). */
 export function casesTraversees(de: number, vers: number): number[] {
   const a = coord(de), b = coord(vers);
   const ni = Math.abs(b.i - a.i), nj = Math.abs(b.j - a.j);
@@ -59,7 +60,7 @@ export function casesTraversees(de: number, vers: number): number[] {
   // parcours exact des cases (carrés unité centrés sur les coordonnées entières) que coupe le segment centre à centre
   for (let pi = 0, pj = 0; pi < ni || pj < nj; ) {
     const choix = (1 + 2 * pi) * nj - (1 + 2 * pj) * ni;
-    if (choix === 0) { vues.push({ i: i + si, j }, { i, j: j + sj }); i += si; j += sj; pi++; pj++; }
+    if (choix === 0) { i += si; j += sj; pi++; pj++; }
     else if (choix < 0) { i += si; pi++; }
     else { j += sj; pj++; }
     vues.push({ i, j });

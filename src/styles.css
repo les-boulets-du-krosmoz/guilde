@@ -1419,6 +1419,9 @@ a.jauge__nom:hover { color: var(--or); }
 .viseur__case { fill: #24211b; stroke: #3d382f; stroke-width: 1; cursor: pointer; }
 .viseur__case:hover { fill: #322d25; }
 .viseur__case--mur { fill: #0b0a08; stroke: #5a5246; }
+.viseur__case--trou { fill: #cfc8bc; stroke: #8f887c; cursor: default; }
+.viseur__case--orange { fill: #5c2f17; stroke: #8a4a26; }
+.viseur__case--bleu { fill: #1d3550; stroke: #2f5a84; }
 .viseur__case--viser { fill: rgba(var(--or-rgb), 0.55); stroke: var(--or); stroke-width: 2; }
 .viseur__case--bloquee { fill: rgba(228, 104, 63, 0.35); stroke: #e4683f; }
 .viseur__trait { stroke-width: 1.5; stroke-dasharray: 4 4; pointer-events: none; }

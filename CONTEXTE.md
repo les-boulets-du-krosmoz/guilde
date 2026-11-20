@@ -75,9 +75,11 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   de 3 cases autour du Comte, posé à son tour), +¼ au corps à corps, +100 dommages. Délock : le 1er allié après le Comte
   se place en symétrie, le 2e frappe.
 - Viseur du Comte (19 novembre) : src/components/ViseurHarebourg.tsx (chargé à la demande) et src/lib/viseur.ts
-  (carte de 560 cases en quinconce, coordonnées logiques, rotation, ligne de vue exacte case par case, prudente sur
-  les coins). Grille vide pour l'instant : le plan de la salle du Comte viendra du propriétaire du site (les données
-  du jeu ne contiennent pas les plans). Champ outil: "viseur-harebourg" dans la fiche.
+  (carte de 560 cases en quinconce, coordonnées logiques, rotation, ligne de vue case par case). Règle des coins,
+  donnée par un joueur : une ligne qui passe pile sur un coin file en diagonale, on voit entre deux obstacles en
+  diagonale. Plan de la salle : src/data/salleHarebourg.ts, relevé le 20 novembre sur une capture du combat (grille
+  calée : case de 55,17 × 27,59 px, image de 800 px de large) ; 4 gros blocs, 2 petits, 8 trous, cases de départ.
+  Les données du jeu ne contiennent pas les plans. Champ outil: "viseur-harebourg" dans la fiche.
 - Statut des guides de boss : « relu » (validé par un joueur qui a fait le boss, étiquette « ✓ Guide relu », plus de
   bandeau « à relire »), « brouillon », « a-rediger ». Relus le 18 novembre : Royalmouth (tuent d'un coup : celui qui lui
   inflige des dommages de poussée et celui qui en subit contre lui ; seul le Boufmouth légendaire pousse, d'après les
