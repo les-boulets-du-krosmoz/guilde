@@ -92,11 +92,14 @@ dépôt les-boulets-du-krosmoz/guilde. Site public, connexion réservée aux mem
   en avertissement). Les fiches niveau 200 restent en brouillon, doutes en avertissement.
 - Guides liés aux Dofus écrits le 20 novembre, en brouillon : Bworker, Ougah, Roi Nidas, Roi Imagami (Mémoire
   d'Orukam), Reine Amirukam (Souvenir d'Imagiro). Sources : sorts et textes 3.7, guides de 2015 à 2020, vérifiés par
-  les pages détaillées. Ouverts : soin de Spore Hanchambre (à chaque fois ou au hasard), Boubourse (guides de 2017),
-  premier seuil Lotus (80 ou 75 %), délai du double en Lotus (2 ou 4 tours), et surtout la zone de la mort de
-  l'invoqué : texte du jeu « Cauchemar » (tue les combattants hors du carré/étoile) contre les guides (le glyphe tue les
-  monstres de l'autre couleur dedans). Textes « Aberration » et « Cauchemar du Bworker » : variantes, pas le donjon
-  normal, laissés de côté. Nouveaux groupes de la liste : Landes de Sidimote, Wukin et Wukang ; Enutrosor rejoint les
+  les pages détaillées. Ouverts : soin de Spore Hanchambre sur retrait PA/PM (sur un coup : vérifié par un joueur), Boubourse (retour chez nous quand on la tue : vérifié ; le reste date de 2017), niveau du Bworker (un joueur dit 120, les données 3.7 disent 180 à tous les grades ; Tour du Monde laissé à 120 en attendant), entrée de l'Ougah (un joueur pense à une entrée plus proche, à voir en jeu),
+  premier seuil Lotus (80 ou 75 %), délai du double en Lotus (2 ou 4 tours), effet exact du glyphe à la mort de
+  l'invoqué sur les monstres. Corrigé par un joueur le 20 novembre : les deux donjons marchent pareil ; le glyphe ne
+  tue pas l'équipe restée dehors (le texte « Cauchemar » était donc une variante) ; l'invoqué frappe 3,5 à 5 k, 4 fois
+  par tour à 4, une fois par monstre (données : 4 250 fixes, 4 lancers par tour au grade 1, 1 par cible) ; Lotus et
+  invoqué vont ensemble (sa mort fait sortir le boss du Lotus, la fin du Lotus le tue) ; monstres à environ 18 000 PV
+  (données : 5 500 + 225 % de vitalité dans la salle du boss), doubles à environ 5 000. Textes « Aberration » et
+  « Cauchemar du Bworker » : variantes, pas le donjon normal, laissés de côté. Nouveaux groupes de la liste : Landes de Sidimote, Wukin et Wukang ; Enutrosor rejoint les
   Dimensions divines.
 - Prochains guides de boss : secondaires (Père Ver, Koumiho, Supervizœuf, Kralamoure, Papa Nowel, Kao).
 - Combats tactiques : inventaire dans docs/combats-tactiques.md (245 combats classés d'après les données du jeu :

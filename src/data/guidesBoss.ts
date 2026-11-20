@@ -1169,7 +1169,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Deux salles séparent l'équipe en deux groupes : venez à 4 au moins.",
     ],
     mecaniques: [
-      "Spore Hanchambre, à partir du 2e tour : l'Ougah gagne des chances de coup critique quand on le frappe, et se soigne d'environ 5 000 PV quand on le frappe ou qu'on lui retire des PA ou des PM.",
+      "Spore Hanchambre, à partir du 2e tour : l'Ougah gagne des chances de coup critique quand on le frappe, et se soigne d'environ 5 000 PV quand on le frappe, et peut-être aussi quand on lui retire des PA ou des PM.",
       "Bizarrerie : quand le personnage visé prend des dommages, les monstres en croix à 2 cases ou moins de lui gagnent 300 de puissance.",
       "Sirop Spore : un poison qui vous inflige des dommages Neutre à la fin du tour, pour chaque PA utilisé.",
       "Opiniâtreté : de lourds dommages Feu et Terre en zone, avec un vol de vie Air et un malus de résistance Air.",
@@ -1185,7 +1185,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Dernier : tuez ses invocations au fur et à mesure.",
       "Collant : collez-vous à vos invocations plutôt qu'à vos personnages, ses attaques frappent en zone.",
     ],
-    avertissements: ["Sorts d'après les données du jeu ; le reste vient de guides d'avant Dofus 3. Le soin de Spore Hanchambre se déclenche-t-il à chaque fois, ou sur un seul des trois cas tiré au hasard ? À confirmer en jeu."],
+    avertissements: ["Sorts d'après les données du jeu ; le reste vient de guides d'avant Dofus 3. Le soin de Spore Hanchambre quand on le frappe est vérifié ; sur un retrait de PA ou de PM, à confirmer en jeu."],
   },
   {
     slug: "roi-nidas", donjon: "Palais du roi Nidas", niveau: 200, zone: "Enutrosor", position: "[-5,-5]", dpln: `${DPLN}palais-du-roi-nidas.html`, statut: "brouillon",
@@ -1213,7 +1213,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
       "Statue : prenez un personnage qui replace les autres, et de la portée pour gérer le Lévitrof.",
       "Trio : profitez des boucliers de la Boubourse.",
     ],
-    avertissements: ["Mon précieux d'après les données du jeu ; le reste vient de guides de 2017 à 2019, surtout pour la Boubourse : à confirmer en jeu."],
+    avertissements: ["Mon précieux d'après les données du jeu. Boubourse : son retour dans votre camp quand vous la tuez est vérifié ; le reste (bouclier, passage chez les monstres, invocations tuées) date d'avant Dofus 3 : à confirmer en jeu."],
   },
   {
     slug: "roi-imagami", donjon: "Mémoire d'Orukam", niveau: 200, zone: "Wukin et Wukang", position: "[-3,-1]", dpln: `${DPLN}memoire-d-orukam.html`, statut: "brouillon",
@@ -1224,12 +1224,13 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     mecaniques: [
       "À trois seuils de PV, le Roi Imagami passe en Lotus : invulnérable et enraciné pendant 5 tours, il regagne de la vie à chaque tour jusqu'à revenir au maximum.",
-      "À chaque Lotus, il invoque la Reine Amirukam dans votre camp, près du personnage le plus proche de lui. Ce joueur la contrôle pendant 5 tours au plus.",
+      "À chaque Lotus, il invoque la Reine Amirukam, de papier, dans votre camp, près du personnage le plus proche de lui. Ce joueur la contrôle jusqu'à la fin du Lotus : en sortant, le Roi la tue.",
+      "La Reine frappe très fort : 3 500 à 5 000 dommages par coup, de 2 à 11 cases, 4 coups par tour au plus dans un combat à 4 et un seul par monstre.",
       "Quand il passe en Lotus, il donne du bouclier à ses monstres et à la Reine.",
       "Un monstre frappé à distance gagne 6 PM et deux fois plus de dommages pendant un tour (une fois par tour) : frappez les monstres au corps à corps.",
-      "Monstres : sous 10 % de PV, un monstre passe en Lotus, devient invulnérable et invoque son double de papier. Tuez ce double vite, sinon le monstre se relève.",
+      "Monstres : environ 18 000 PV chacun. Sous 10 % de PV, un monstre passe en Lotus, devient invulnérable et invoque son double de papier, d'environ 5 000 PV. Tuez ce double vite, sinon le monstre se relève.",
     ],
-    delock: ["Il est invulnérable pendant ses Lotus. Pour l'en sortir plus tôt, la Reine doit mourir : faites-lui lancer Extinction du Wukin, qui la tue, quand votre équipe est prête à frapper le Roi."],
+    delock: ["Il est invulnérable pendant ses Lotus. Pour l'en sortir plus tôt, la Reine doit mourir : faites-lui lancer Extinction du Wukin, qui la tue, quand votre équipe est prête à frapper le Roi. Si les monstres la tuent, il sort aussi du Lotus : protégez-la jusque-là."],
     strategie: ["Rendez le Roi insoignable pendant ses Lotus : il regagnera moins de vie."],
     succes: [
       "Succès du donjon : Hardi, Trio (80 tours), Mains propres (achever les monstres par poison, poussée, glyphes, pièges, invocations…) et Spécial « Régence d'encre » (un de vos personnages achève la Reine avant que le Roi ne sorte du Lotus).",
@@ -1238,7 +1239,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     avertissements: [
       "Premier seuil : 80 % ou 75 % de ses PV selon les versions ; les deux autres, 50 % et 25 %. Délai pour tuer le double d'un monstre en Lotus : de 2 à 4 tours selon les versions. À confirmer en jeu.",
-      "À la mort de la Reine, une zone en carré de 3, 2 puis 1 case selon la phase décide qui meurt : les monstres d'encre à l'intérieur, ou les combattants restés dehors ? Les deux versions circulent : à vérifier avant de s'y fier.",
+      "À la mort de la Reine, un glyphe apparaît ; votre équipe ne risque rien en restant dehors. Avant Dofus 3, il tuait les monstres d'encre restés dedans : à vérifier.",
     ],
   },
   {
@@ -1250,13 +1251,14 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     mecaniques: [
       "À trois seuils de PV, la Reine Amirukam passe en Lotus : invulnérable et enracinée pendant 5 tours, elle regagne de la vie à chaque tour jusqu'à revenir au maximum.",
-      "À chaque Lotus, elle invoque le Roi Imagami dans votre camp, près du personnage le plus proche d'elle. Ce joueur le contrôle pendant 5 tours au plus.",
+      "À chaque Lotus, elle invoque le Roi Imagami, d'encre, dans votre camp, près du personnage le plus proche d'elle. Ce joueur le contrôle jusqu'à la fin du Lotus : en sortant, la Reine le tue.",
+      "Le Roi frappe très fort : 3 500 à 5 000 dommages par coup, de 1 à 4 cases, 4 coups par tour au plus dans un combat à 4 et un seul par monstre.",
       "Quand elle passe en Lotus, elle donne du bouclier à ses monstres et au Roi.",
       "Un monstre frappé au corps à corps gagne 6 PM et deux fois plus de dommages pendant un tour (une fois par tour) : frappez les monstres à distance.",
       "Toner Deubraiste : un poison Eau qui augmente aussi les dommages que vous subissez, cumulable.",
-      "Monstres : sous 10 % de PV, un monstre passe en Lotus, devient invulnérable et invoque son double d'encre. Tuez ce double vite, sinon le monstre se relève.",
+      "Monstres : environ 18 000 PV chacun. Sous 10 % de PV, un monstre passe en Lotus, devient invulnérable et invoque son double d'encre, d'environ 5 000 PV. Tuez ce double vite, sinon le monstre se relève.",
     ],
-    delock: ["Elle est invulnérable pendant ses Lotus. Pour l'en sortir plus tôt, le Roi doit mourir : faites-lui lancer Extinction du Wukang, qui le tue, quand votre équipe est prête à frapper la Reine."],
+    delock: ["Elle est invulnérable pendant ses Lotus. Pour l'en sortir plus tôt, le Roi doit mourir : faites-lui lancer Extinction du Wukang, qui le tue, quand votre équipe est prête à frapper la Reine. Si les monstres le tuent, elle sort aussi du Lotus : protégez-le jusque-là."],
     strategie: ["Rendez la Reine insoignable pendant ses Lotus : elle regagnera moins de vie."],
     succes: [
       "Succès du donjon : Prudent, Trio (80 tours), Mains propres, Compagnon (à 4 au moins, avec Mirh, Rekto Topi, Traçon ou Logram) et Spécial « Régence de papier » (un de vos personnages achève le Roi avant que la Reine ne sorte du Lotus).",
@@ -1265,7 +1267,7 @@ export const GUIDES_BOSS: GuideBoss[] = [
     ],
     avertissements: [
       "Premier seuil : 80 % ou 75 % de ses PV selon les versions ; les deux autres, 50 % et 25 %. Délai pour tuer le double d'un monstre en Lotus : de 2 à 4 tours selon les versions. À confirmer en jeu.",
-      "À la mort du Roi, une zone en étoile de 3, 2 puis 1 case selon la phase décide qui meurt : les monstres de papier à l'intérieur, ou les combattants restés dehors ? Les deux versions circulent : à vérifier avant de s'y fier.",
+      "À la mort du Roi, un glyphe apparaît ; votre équipe ne risque rien en restant dehors. Avant Dofus 3, il tuait les monstres de papier restés dedans : à vérifier.",
     ],
   },
 ];
